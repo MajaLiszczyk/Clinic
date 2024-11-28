@@ -1,4 +1,6 @@
 ﻿using ClinicAPI.Dtos;
+using ClinicAPI.Models;
+using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,32 +8,41 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClinicAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _patientService;
 
-        /*public PatientController(IPatientService service)
+        public PatientController(IPatientService service)
         {
             _patientService = service;
-        }*/
+        }
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return Ok();
-/*
+
             var result = await _patientService.GetPatientAsync(id);
             if (result != null)
                 return Ok(result);
-            return NotFound();
-  */      }
+             return NotFound();
+              
+        }
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
+
+            /*var measuresDtos = _patientService.Get();
+
+            if (measuresDtos == null)
+            {
+                return new ForbidResult();
+            }
+            return Ok(measuresDtos); */
+            Console.WriteLine("ok");
             return Ok();
 /*
             var result = await _patientService.GetAllPatientsAsync();
@@ -42,15 +53,16 @@ namespace ClinicAPI.Controllers
 
         //[HttpPost, Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(CreatePatientDto request)
+        public async Task<IActionResult> Create(Patient request)
+        //public async Task<IActionResult> Create(CreatePatientDto request)
         {
-            return Ok();
-/*
+            //return Ok();
+
             var result = await _patientService.CreatePatientAsync(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]

@@ -1,7 +1,13 @@
 using ClinicAPI.DB;
+using ClinicAPI.Repositories;
+using ClinicAPI.Repositories.Interfaces;
+using ClinicAPI.Services;
+using ClinicAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 
 // Add services to the container.
 
@@ -38,13 +44,24 @@ builder.Services.AddSwaggerGen(); //dodalam - swagger
         });
 });*/
 //MOJE KONIEC
+builder.Services.AddScoped<IRegistrantService, RegistrantService>(); //dodalam
+builder.Services.AddScoped<IRegistrantRepository, RegistrantRepository>(); //dodalam
+builder.Services.AddScoped<IPatientService, PatientService>(); //dodalam
+builder.Services.AddScoped<IPatientRepository, PatientRepository>(); //dodalam
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+                      });
+});
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 //MOJE POCZATEK
-//app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(MyAllowSpecificOrigins);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

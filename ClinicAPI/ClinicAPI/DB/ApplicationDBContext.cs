@@ -26,6 +26,7 @@ namespace ClinicAPI.DB
         public DbSet<LaboratoryTest> LaboratoryTest {  get; set; }
         public DbSet<MedicalAppointment> MedicalAppointment {  get; set; }
         public DbSet<Patient> Patient {  get; set; }
+        public DbSet<Registrant> Registrant {  get; set; }
         public DbSet<Role> Role {  get; set; }
     }
 }
