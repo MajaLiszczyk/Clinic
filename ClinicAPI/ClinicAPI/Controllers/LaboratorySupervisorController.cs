@@ -11,70 +11,60 @@ namespace ClinicAPI.Controllers
     {
         private readonly ILaboratorySupervisorService _laboratorySupervisorService;
 
-        /*public LaboratorySupervisorController(ILaboratorySupervisorService service)
+        public LaboratorySupervisorController(ILaboratorySupervisorService service)
         {
             _laboratorySupervisorService = service;
-        }*/
+        }
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return Ok();
-/*
-            var result = await _laboratorySupervisorService.GetLaboratorySupervisorAsync(id);
+            var result = await _laboratorySupervisorService.GetLaboratorySupervisor(id);
             if (result != null)
                 return Ok(result);
-            return NotFound();*/
+            return NotFound();
         }
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
-/*
-            var result = await _laboratorySupervisorService.GetAllLaboratorySupervisorsAsync();
+            var result = await _laboratorySupervisorService.GetAllLaboratorySupervisors();
             if (result != null)
                 return Ok(result);
-            return NotFound();*/
+            return NotFound();
         }
 
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratorySupervisorDto request)
         {
-            return Ok();
-/*
-            var result = await _laboratorySupervisorService.CreateLaboratorySupervisorAsync(request);
+            var result = await _laboratorySupervisorService.CreateLaboratorySupervisor(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateLaboratorySupervisorDto request, int id)
+        public async Task<IActionResult> Update(UpdateLaboratorySupervisorDto request)
         {
-            return Ok();
-/*
-            var result = await _laboratorySupervisorService.UpdateLaboratorySupervisorAsync(request, id);
+            var result = await _laboratorySupervisorService.UpdateLaboratorySupervisor(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
-/*
-            var result = await _laboratorySupervisorService.DeleteLaboratorySupervisorAsync(id);
+            var result = await _laboratorySupervisorService.DeleteLaboratorySupervisor(id);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
 
     }

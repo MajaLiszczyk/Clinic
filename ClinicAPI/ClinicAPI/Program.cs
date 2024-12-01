@@ -44,10 +44,36 @@ builder.Services.AddSwaggerGen(); //dodalam - swagger
         });
 });*/
 //MOJE KONIEC
-builder.Services.AddScoped<IRegistrantService, RegistrantService>(); //dodalam
-builder.Services.AddScoped<IRegistrantRepository, RegistrantRepository>(); //dodalam
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+ 
+builder.Services.AddScoped<IDiagnosticTestService, DiagnosticTestService>(); //dodalam
+builder.Services.AddScoped<IDiagnosticTestRepository, DiagnosticTestRepository>(); //dodalam
+
+builder.Services.AddScoped<IDoctorService, DoctorService>(); //dodalam
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>(); //dodalam
+
+builder.Services.AddScoped<ILaboratorySupervisorService, LaboratorySupervisorService>(); //dodalam
+builder.Services.AddScoped<ILaboratorySupervisorRepository, LaboratorySupervisorRepository>(); //dodalam
+
+builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>(); //dodalam
+builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>(); //dodalam
+
+builder.Services.AddScoped<ILaboratoryWorkerService, LaboratoryWorkerService>(); //dodalam
+builder.Services.AddScoped<ILaboratoryWorkerRepository, LaboratoryWorkerRepository>(); //dodalam
+
+builder.Services.AddScoped<IMedicalAppointmentService, MedicalAppointmentService>(); //dodalam
+builder.Services.AddScoped<IMedicalAppointmentRepository, MedicalAppointmentRepository>(); //dodalam
+
 builder.Services.AddScoped<IPatientService, PatientService>(); //dodalam
 builder.Services.AddScoped<IPatientRepository, PatientRepository>(); //dodalam
+
+
+builder.Services.AddScoped<IRegistrantService, RegistrantService>(); //dodalam
+builder.Services.AddScoped<IRegistrantRepository, RegistrantRepository>(); //dodalam
+
+
+
 
 builder.Services.AddCors(options =>
 {

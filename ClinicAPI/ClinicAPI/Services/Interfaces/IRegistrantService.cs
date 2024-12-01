@@ -5,11 +5,10 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface IRegistrantService
     {
-        public Task<Registrant?> GetRegistrantAsync(int id);
-        public Task<(bool Confirmed, string Response, Registrant? registrant)> CreateRegistrantAsync(Registrant registrat);
-        /*public Task<List<ReturnRegistrantDto>> GetAllRegistrantsAsync();
-        public Task<(bool Confirmed, string Response)> CreateRegistrantAsync(CreateRegistrantDto request);
-        public Task<(bool Confirmed, string Response)> UpdateRegistrantAsync(UpdateRegistrantDto request, int id);
-        public Task<(bool Confirmed, string Response)> DeleteRegistrantAsync(int id);*/
+        public Task<ReturnRegistrantDto?> GetRegistrant(int id);
+        public Task<List<ReturnRegistrantDto>> GetAllRegistrants();
+        public Task<(bool Confirmed, string Response, ReturnRegistrantDto? registrant)> CreateRegistrant(CreateRegistrantDto registrat);
+        public Task<(bool Confirmed, string Response)> UpdateRegistrant(UpdateRegistrantDto request);
+        public Task<(bool Confirmed, string Response)> DeleteRegistrant(int id);
     }
 }

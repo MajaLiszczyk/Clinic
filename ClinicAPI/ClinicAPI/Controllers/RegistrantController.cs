@@ -21,9 +21,7 @@ namespace ClinicAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            //return Ok();
-
-            var result = await _registrantService.GetRegistrantAsync(id);
+            var result = await _registrantService.GetRegistrant(id);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -33,22 +31,20 @@ namespace ClinicAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
-/*
-            var result = await _registrantService.GetAllRegistrantsAsync();
+            var result = await _registrantService.GetAllRegistrants();
             if (result != null)
                 return Ok(result);
             return NotFound();
-  */      }
+        }
 
         //[HttpPost, Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(Registrant request)
+        public async Task<IActionResult> Create(CreateRegistrantDto request)
         //public async Task<IActionResult> Create(CreateRegistrantDto request)
         {
             //return Ok();
 
-            var result = await _registrantService.CreateRegistrantAsync(request);
+            var result = await _registrantService.CreateRegistrant(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
@@ -56,26 +52,22 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateRegistrantDto request, int id)
+        public async Task<IActionResult> Update(UpdateRegistrantDto request)
         {
-            return Ok();
-/*
-            var result = await _registrantService.UpdateRegistrantAsync(request, id);
+            var result = await _registrantService.UpdateRegistrant(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
-/*
-            var result = await _registrantService.DeleteRegistrantAsync(id);
+            var result = await _registrantService.DeleteRegistrant(id);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
     }
 }

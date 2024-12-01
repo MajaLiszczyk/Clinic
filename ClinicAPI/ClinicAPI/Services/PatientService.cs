@@ -1,53 +1,89 @@
-﻿using ClinicAPI.Dtos;
+﻿using AutoMapper;
+using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using System.Numerics;
 
 namespace ClinicAPI.Services
 {
+    //SERWIS powinien przygotować dane w postaci odpowiedniej dla kontrolera (dto) - mapuje encje odebrane z repo na dto. 
+    //Obsługuje sytuacje, w których wynik zapytania jest null, ale nie powinien jeszcze zwracać kodów HTTP (to rola kontrolera).
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository _patientRepository;
-        public PatientService(IPatientRepository patientRepository)
+        private readonly IMapper _mapper;
+
+        public PatientService(IPatientRepository patientRepository, IMapper mapper)
         {
             _patientRepository = patientRepository;
+            _mapper = mapper;
 
         }
 
 
        // public Task<ReturnPatientDto?> GetPatientAsync(int id)
-        public async Task<Patient?> GetPatientAsync(int id)
+        public async Task<ReturnPatientDto?> GetPatient(int id)
         {
-            var patient = await _patientRepository.GetPatientByIdAsync(id);
-            return patient;
+            var patient = await _patientRepository.GetPatientById(id);
+            return _mapper.Map<ReturnPatientDto>(patient);
+        }
+        public async Task<List<ReturnPatientDto>> GetAllPatients()
+        {
+            var patients = await _patientRepository.GetAllPatients();
+            return _mapper.Map<List<ReturnPatientDto>>(patients);
+
+            //return _mapper.Map<List<ReturnMessageDto>>(messages);
 
         }
-        /*public Task<List<ReturnPatientDto>> GetAllPatientsAsync()
-        {
-
-        }*/
         //public Task<(bool Confirmed, string Response, Patient? patient)> CreatePatientAsync(CreatePatientDto patient)
-        public async Task<(bool Confirmed, string Response, Patient? patient)> CreatePatientAsync(Patient patient)
+        //TO DO : PRZY TWRZENIEU PESEL NIE MOZE SIE POWTORZYC W BAZIE
+        public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 
         {
-            var _patient = new Patient
+            Patient _patient = new Patient
             {
                 Pesel = patient.Pesel,
                 Name = patient.Name,
                 Surname = patient.Surname,
             };
-            await _patientRepository.CreatePatientAsync(_patient);
+            Patient? p = await _patientRepository.CreatePatient(_patient);
+            if (p != null) {
+                ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
+                return await Task.FromResult((true, "Patient successfully created.", r));
+            }
+            else
+            {
+                ReturnPatientDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                return await Task.FromResult((false, "Patient was not created.", k));
 
-            return await Task.FromResult((true, "Patient successfully created.", patient));
+            }
+
 
         }
-        /*public Task<(bool Confirmed, string Response)> UpdatePatientAsync(UpdatePatientDto request, int id)
+        public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
+            Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
 
+            if (_patient == null) {
+                return await Task.FromResult((false, "Patient with given id does not exist."));
+            }
+            else{
+                Patient r = _mapper.Map<Patient>(patient);
+                var p = await _patientRepository.UpdatePatient(_patient);
+                return await Task.FromResult((true, "Patient succesfully uptated"));
+            }
         }
-        public Task<(bool Confirmed, string Response)> DeletePatientAsync(int id)
-        {
 
-        }*/
+        public async Task<(bool Confirmed, string Response)> DeletePatient(int id)
+        {
+            var patient = await _patientRepository.GetPatientById(id);
+            if (patient == null) return await Task.FromResult((false, "Patient with given id does not exist."));
+            else
+            {
+                await _patientRepository.DeletePatient(id);
+                return await Task.FromResult((true, "Patient successfully deleted."));
+            }
+        }
     }
 }

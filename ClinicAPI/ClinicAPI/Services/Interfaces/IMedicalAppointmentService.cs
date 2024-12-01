@@ -4,10 +4,10 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface IMedicalAppointmentService
     {
-        public Task<ReturnMedicalAppointmentDto?> GetMedicalAppointmentAsync(int id);
-        public Task<List<ReturnMedicalAppointmentDto>> GetAllMedicalAppointmentsAsync();
-        public Task<(bool Confirmed, string Response)> CreateMedicalAppointmentAsync(CreateMedicalAppointmentDto request);
-        public Task<(bool Confirmed, string Response)> UpdateMedicalAppointmentAsync(UpdateMedicalAppointmentDto request, int id);
-        public Task<(bool Confirmed, string Response)> DeleteMedicalAppointmentAsync(int id);
+        public Task<ReturnMedicalAppointmentDto?> GetMedicalAppointment(int id);
+        public Task<List<ReturnMedicalAppointmentDto>> GetAllMedicalAppointments();
+        public Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto request);
+        public Task<(bool Confirmed, string Response)> UpdateMedicalAppointment(UpdateMedicalAppointmentDto request);
+        public Task<(bool Confirmed, string Response)> DeleteMedicalAppointment(int id);
     }
 }

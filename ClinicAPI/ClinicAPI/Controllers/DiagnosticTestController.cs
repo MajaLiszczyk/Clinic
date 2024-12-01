@@ -1,4 +1,5 @@
 ﻿using ClinicAPI.Dtos;
+using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -9,75 +10,65 @@ namespace ClinicAPI.Controllers
     [Route("[controller]/[action]")]
     public class DiagnosticTestController : ControllerBase
     {
-        //private readonly IDiagnosticTestService _diagnosticTestService;
+        private readonly IDiagnosticTestService _diagnosticTestService;
 
-        /*public DiagnosticTestController(IDiagnosticTestService service)
+        public DiagnosticTestController(IDiagnosticTestService service)
         {
             _diagnosticTestService = service;
-        }*/
-        public DiagnosticTestController()
-        {
         }
+
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return Ok();
 
-            /*
-            var result = await _diagnosticTestService.GetDiagnosticTestAsync(id);
-            if (result != null)
-                return Ok(result);
-            return NotFound();*/
+            ReturnDiagnosticTestDto? diagnosticTest = await _diagnosticTestService.GetDiagnosticTest(id);
+            if (diagnosticTest != null)
+                return Ok(diagnosticTest);
+            return NotFound();
         }
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
-/*
-            var result = await _diagnosticTestService.GetAllDiagnosticTestsAsync();
-            if (result != null)
-                return Ok(result);
-            return NotFound();*/
+            List<ReturnDiagnosticTestDto> diagnosticTests = await _diagnosticTestService.GetAllDiagnosticTests();
+            if (diagnosticTests != null)
+                return Ok(diagnosticTests);
+            return NotFound();
         }
 
         //[HttpPost, Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateDiagnosticTestDto request)
-        {
-            return Ok();
-            /*
-            var result = await _diagnosticTestService.CreateDiagnosticTestAsync(request);
-            if (result.Confirmed)
-                return Ok(result.Response);
-            else return BadRequest(result.Response);*/
+        public async Task<IActionResult> Create(CreateDiagnosticTestDto diagnosticTest)
+        {            
+            var _diagnosticTest = await _diagnosticTestService.CreateDiagnosticTest(diagnosticTest);
+            if (_diagnosticTest.Confirmed)
+                return Ok(_diagnosticTest.Response);
+            else return BadRequest(_diagnosticTest.Response);
         }
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateDiagnosticTestDto request, int id)
+        public async Task<IActionResult> Update(UpdateDiagnosticTestDto diagnosticTest)
         {
-            return Ok();
-/*
-            var result = await _diagnosticTestService.UpdateDiagnosticTestAsync(request, id);
-            if (result.Confirmed)
-                return Ok(result.Response);
-            else return BadRequest(result.Response);*/
+          
+           var _diagnosticTest = await _diagnosticTestService.UpdateDiagnosticTest(diagnosticTest);
+           if (_diagnosticTest.Confirmed)
+                return Ok(_diagnosticTest.Response);
+           else return BadRequest(_diagnosticTest.Response);
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
-/*
-            var result = await _diagnosticTestService.DeleteDiagnosticTestAsync(id);
-            if (result.Confirmed)
-                return Ok(result.Response);
-            else return BadRequest(result.Response);*/
+
+            var diagnosticTest = await _diagnosticTestService.DeleteDiagnosticTest(id);
+            if (diagnosticTest.Confirmed)
+                return Ok(diagnosticTest.Response);
+            else return BadRequest(diagnosticTest.Response);
         }
 
     }

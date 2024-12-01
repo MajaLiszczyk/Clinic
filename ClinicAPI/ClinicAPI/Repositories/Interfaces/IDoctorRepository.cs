@@ -1,6 +1,14 @@
-﻿namespace ClinicAPI.Repositories.Interfaces
+﻿using ClinicAPI.Models;
+
+namespace ClinicAPI.Repositories.Interfaces
 {
-    public class IDoctorRepository
+    public interface IDoctorRepository
     {
+        public Task<Doctor?> GetDoctorById(int id);
+        public Task<List<Doctor>> GetAllDoctors();
+        public Task<Doctor> CreateDoctor(Doctor doctor);
+        public Task<Doctor?> UpdateDoctor(Doctor doctor);
+        public Task<bool> DeleteDoctor(int id);
+
     }
 }

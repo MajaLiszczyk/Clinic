@@ -1,6 +1,13 @@
-﻿namespace ClinicAPI.Repositories.Interfaces
+﻿using ClinicAPI.Models;
+
+namespace ClinicAPI.Repositories.Interfaces
 {
-    public class IDiagnosticTestRepository
+    public interface IDiagnosticTestRepository
     {
+        public Task<DiagnosticTest?> GetDiagnosticTestById(int id);
+        public Task<List<DiagnosticTest>> GetAllDiagnosticTests();
+        public Task<DiagnosticTest> CreateDiagnosticTest(DiagnosticTest patient);
+        public Task<DiagnosticTest?> UpdateDiagnosticTest(DiagnosticTest patient);
+        public Task<bool> DeleteDiagnosticTest(int id);
     }
 }

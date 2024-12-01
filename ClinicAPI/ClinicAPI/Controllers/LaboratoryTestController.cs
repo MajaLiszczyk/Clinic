@@ -11,70 +11,61 @@ namespace ClinicAPI.Controllers
     {
         private readonly ILaboratoryTestService _laboratoryTestService;
 
-        /*public LaboratoryTestController(ILaboratoryTestService service)
+        public LaboratoryTestController(ILaboratoryTestService service)
         {
             _laboratoryTestService = service;
-        }*/
+        }
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            return Ok();
-/*
-            var result = await _laboratoryTestService.GetLaboratoryTestAsync(id);
+            ReturnLaboratoryTestDto? result = await _laboratoryTestService.GetLaboratoryTest(id);
             if (result != null)
                 return Ok(result);
             return NotFound();
-  */      }
+        }
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            return Ok();
-
-            /*
-            var result = await _laboratoryTestService.GetAllLaboratoryTestsAsync();
+            var result = await _laboratoryTestService.GetAllLaboratoryTests();
             if (result != null)
                 return Ok(result);
             return NotFound();
-        */}
+        }
 
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratoryTestDto request)
         {
-            return Ok();
-/*
-            var result = await _laboratoryTestService.CreateLaboratoryTestAsync(request);
+
+            var result = await _laboratoryTestService.CreateLaboratoryTest(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateLaboratoryTestDto request, int id)
+        public async Task<IActionResult> Update(UpdateLaboratoryTestDto request)
         {
-            return Ok();
-/*
-            var result = await _laboratoryTestService.UpdateLaboratoryTestAsync(request, id);
+
+            var result = await _laboratoryTestService.UpdateLaboratoryTest(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
-/*
-            var result = await _laboratoryTestService.DeleteLaboratoryTestAsync(id);
+            var result = await _laboratoryTestService.DeleteLaboratoryTest(id);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
-  */      }
+        }
     }
 }

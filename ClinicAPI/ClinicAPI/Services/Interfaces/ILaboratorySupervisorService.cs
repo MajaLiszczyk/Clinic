@@ -4,10 +4,10 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface ILaboratorySupervisorService
     {
-        public Task<ReturnLaboratorySupervisorDto?> GetLaboratorySupervisorAsync(int id);
-        public Task<List<ReturnLaboratorySupervisorDto>> GetAllLaboratorySupervisorsAsync();
-        public Task<(bool Confirmed, string Response)> CreateLaboratorySupervisorAsync(CreateLaboratorySupervisorDto request);
-        public Task<(bool Confirmed, string Response)> UpdateLaboratorySupervisorAsync(UpdateLaboratorySupervisorDto request, int id);
-        public Task<(bool Confirmed, string Response)> DeleteLaboratorySupervisorAsync(int id);
+        public Task<ReturnLaboratorySupervisorDto?> GetLaboratorySupervisor(int id);
+        public Task<List<ReturnLaboratorySupervisorDto>> GetAllLaboratorySupervisors();
+        public Task<(bool Confirmed, string Response, ReturnLaboratorySupervisorDto? supervisor)> CreateLaboratorySupervisor(CreateLaboratorySupervisorDto request);
+        public Task<(bool Confirmed, string Response)> UpdateLaboratorySupervisor(UpdateLaboratorySupervisorDto request);
+        public Task<(bool Confirmed, string Response)> DeleteLaboratorySupervisor(int id);
     }
 }

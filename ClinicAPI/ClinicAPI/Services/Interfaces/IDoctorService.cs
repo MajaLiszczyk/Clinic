@@ -4,10 +4,10 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface IDoctorService
     {
-        public Task<ReturnDoctorDto?> GetDoctorAsync(int id);
-        public Task<List<ReturnDoctorDto>> GetAllDoctorsAsync();
-        public Task<(bool Confirmed, string Response)> CreateDoctorAsync(CreateDoctorDto request);
-        public Task<(bool Confirmed, string Response)> UpdateDoctorAsync(UpdateDoctorDto request, int id);
-        public Task<(bool Confirmed, string Response)> DeleteDoctorAsync(int id);
+        public Task<ReturnDoctorDto?> GetDoctor(int id);
+        public Task<List<ReturnDoctorDto>> GetAllDoctors();
+        public Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request);
+        public Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto request);
+        public Task<(bool Confirmed, string Response)> DeleteDoctor(int id);
     }
 }

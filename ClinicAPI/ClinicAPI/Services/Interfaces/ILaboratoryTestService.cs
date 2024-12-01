@@ -4,10 +4,10 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface ILaboratoryTestService
     {
-        public Task<ReturnLaboratoryTestDto?> GetLaboratoryTestAsync(int id);
-        public Task<List<ReturnLaboratoryTestDto>> GetAllLaboratoryTestsAsync();
-        public Task<(bool Confirmed, string Response)> CreateLaboratoryTestAsync(CreateLaboratoryTestDto request);
-        public Task<(bool Confirmed, string Response)> UpdateLaboratoryTestAsync(UpdateLaboratoryTestDto request, int id);
-        public Task<(bool Confirmed, string Response)> DeleteLaboratoryTestAsync(int id);
+        public Task<ReturnLaboratoryTestDto?> GetLaboratoryTest(int id);
+        public Task<List<ReturnLaboratoryTestDto>> GetAllLaboratoryTests();
+        public Task<(bool Confirmed, string Response, ReturnLaboratoryTestDto? laboratoryTest)> CreateLaboratoryTest(CreateLaboratoryTestDto request);
+        public Task<(bool Confirmed, string Response)> UpdateLaboratoryTest(UpdateLaboratoryTestDto request);
+        public Task<(bool Confirmed, string Response)> DeleteLaboratoryTest(int id);
     }
 }
