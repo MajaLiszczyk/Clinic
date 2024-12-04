@@ -64,7 +64,8 @@ namespace ClinicAPI.Controllers
 
             var _patient = await _patientService.CreatePatient(patient);
             if (_patient.Confirmed)
-                return Ok(_patient.Response);
+                return Ok(new { message = _patient.Response });
+                //return Ok(_patient.Response);
             else return BadRequest(_patient.Response);
         }
 

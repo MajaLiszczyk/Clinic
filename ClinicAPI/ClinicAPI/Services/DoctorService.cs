@@ -32,12 +32,14 @@ namespace ClinicAPI.Services
             var doctors = await _doctorRepository.GetAllDoctors();
             return _mapper.Map<List<ReturnDoctorDto>>(doctors);
         }
-        public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request)
+        public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
             Doctor _doctor = new Doctor
             {
                 Name = request.Name,
                 Surname = request.Surname,
+                DoctorNumber = request.DoctorNumber,
+                MedicalSpecialisations = medicalSpecialisations
             };
             Doctor? p = await _doctorRepository.CreateDoctor(_doctor);
             if (p != null)

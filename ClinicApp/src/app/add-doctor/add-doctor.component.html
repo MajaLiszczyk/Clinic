@@ -1,0 +1,73 @@
+<p>add-doctor works!</p>
+
+<form [formGroup]="doctorForm" >
+    <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
+        <label class="col-md-5">Name</label>
+        <div class="input-group col-md-5">
+            <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name" 
+            [class.is-invalid]="formName.invalid">
+            <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
+                <span *ngIf="formName?.errors?.['max']">Max length: 30</span>
+                <span *ngIf="formName?.errors?.['required']">Required</span>
+            </div>
+        </div>
+    </div>
+    <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
+        <label class="col-md-5">Surname</label>
+        <div class="input-group col-md-5">
+            <input formControlName="surname" type="string" class="form-control" aria-label="surname"
+            [class.is-invalid]="formSurname.invalid">
+            <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
+            <div class="invalid-feedback">
+                <span *ngIf="formSurname?.errors?.['min']">Min length: 2</span>
+                <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
+                <span *ngIf="formSurname?.errors?.['required']">Required</span>
+            </div>
+        </div>                
+    </div>
+    <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
+        <label class="col-md-5">Doctor number</label>
+        <div class="input-group col-md-5">
+            <input formControlName="doctorNumber" type="string" class="form-control" aria-label="doctorNumber"
+            [class.is-invalid]="formDoctorNumber.invalid">
+            <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
+            <div class="invalid-feedback">
+                <span *ngIf="formDoctorNumber?.errors?.['min']">Min length: 1</span>
+                <span *ngIf="formDoctorNumber?.errors?.['max']">Max length: 10</span>
+                <span *ngIf="formDoctorNumber?.errors?.['required']">Required</span>
+            </div>
+        </div>                
+    </div>
+
+    <div>
+        <label>Specialisations:</label>
+        <div *ngFor="let specialisation of specialisations">
+          <label>
+            <input
+              type="checkbox"
+              [value]="specialisation.id"
+              (change)="onSpecialisationChange($event)"
+            />
+            {{ specialisation.name }}
+          </label>
+        </div>
+    </div>   
+
+    <div>
+        <label>Selected specialisations:</label>
+        <div *ngFor="let selectedSpec of  MedicalSpecialisationsIds">
+            selected specialisations: {{MedicalSpecialisationsIds}}
+        </div>
+    </div>  
+
+    <div>   
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn  btn-success float-right mx-2" (click)="addDoctor()">Add the new doctor to system</button>
+        </div>
+    </div>
+    <div>
+        Doctor name: {{doctor.name}}
+    </div>
+</form>

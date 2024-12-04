@@ -24,7 +24,14 @@ namespace ClinicAPI
             CreateMap<CreateRegistrantDto, Registrant>();
             CreateMap<UpdateRegistrantDto, Registrant>();
 
-            CreateMap<Doctor, ReturnDoctorDto>();
+            //CreateMap<Doctor, ReturnDoctorDto>();
+            //jesli chce mapowac nazwy , a nie id:
+            /*CreateMap<Doctor, ReturnDoctorDto>()
+                .ForMember(dest => dest.MedicalSpecialisationsIds,
+                    opt => opt.MapFrom(src => src.MedicalSpecialisations.Select(ms => ms.Name)));*/
+            CreateMap<Doctor, ReturnDoctorDto>()
+                .ForMember(dest => dest.MedicalSpecialisationsIds,
+                    opt => opt.MapFrom(src => src.MedicalSpecialisations.Select(ms => ms.Id)));
             CreateMap<CreateDoctorDto, Doctor>();
             CreateMap<UpdateDoctorDto, Doctor>();
 
@@ -39,6 +46,10 @@ namespace ClinicAPI
             CreateMap<MedicalAppointment, ReturnMedicalAppointmentDto>();
             CreateMap<CreateMedicalAppointmentDto, MedicalAppointment>();
             CreateMap<UpdateMedicalAppointmentDto, MedicalAppointment>();
+
+            CreateMap<MedicalSpecialisation, ReturnMedicalSpecialisationDto>();
+            CreateMap<CreateMedicalSpecialisationDto, MedicalSpecialisation>();
+            CreateMap<UpdateMedicalSpecialisationDto, MedicalSpecialisation>();
         }
     }
 }

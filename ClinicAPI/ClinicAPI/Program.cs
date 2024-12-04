@@ -68,9 +68,11 @@ builder.Services.AddScoped<IMedicalAppointmentRepository, MedicalAppointmentRepo
 builder.Services.AddScoped<IPatientService, PatientService>(); //dodalam
 builder.Services.AddScoped<IPatientRepository, PatientRepository>(); //dodalam
 
-
 builder.Services.AddScoped<IRegistrantService, RegistrantService>(); //dodalam
 builder.Services.AddScoped<IRegistrantRepository, RegistrantRepository>(); //dodalam
+
+builder.Services.AddScoped<IMedicalSpecialisationService, MedicalSpecialisationService>(); //dodalam
+builder.Services.AddScoped<IMedicalSpecialisationRepository, MedicalSpecialisationRepository>(); //dodalam
 
 
 

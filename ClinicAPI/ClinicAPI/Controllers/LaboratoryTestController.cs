@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClinicAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class LaboratoryTestController : ControllerBase
     {
         private readonly ILaboratoryTestService _laboratoryTestService;

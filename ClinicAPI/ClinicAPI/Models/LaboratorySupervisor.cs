@@ -10,6 +10,7 @@ namespace ClinicAPI.Models
         public int Id { get; set; } //To samo Id co w ApplicationUserLabortorySupervisor, bo relacja 1:1
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string LaboratorySupervisorNumber { get; set; }
        // public List<LaboratoryTest> laboratoryTests { get; set; }
     }
 }

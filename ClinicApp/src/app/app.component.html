@@ -1,5 +1,25 @@
 <div class="container">
   Plik AppComponent.html.
   To jest tutul - pole tej klasy : {{title}}
-  <app-your-data></app-your-data>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/your-data']" routerLinkActive="active" class="btn btn-success w-50">Find patient</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-patient']" routerLinkActive="active" class="btn btn-success w-50">Add patient</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-specialisation']" routerLinkActive="active" class="btn btn-success w-50">Add medical specialisation</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-doctor']" routerLinkActive="active" class="btn btn-success w-50">Add doctor</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-medical-appointment']" routerLinkActive="active" class="btn btn-success w-50">Add medical appointment</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/make-an-appointment']" routerLinkActive="active" class="btn btn-success w-50">Make an appointment</a>
+  </div>
+
+  <router-outlet></router-outlet>
+  <!-- <app-your-data></app-your-data> -->
 </div>

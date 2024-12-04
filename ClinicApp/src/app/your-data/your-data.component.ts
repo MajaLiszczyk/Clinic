@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ClinicService } from '../../../services/clinic.service';
+import { ClinicService } from '../services/clinic.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Patient } from '../../../model/patient';
+import { Patient } from '../model/patient';
 
 @Component({
   selector: 'app-your-data',

@@ -11,6 +11,33 @@ namespace ClinicAPI.DB
         {
         }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // EF Core automatycznie utworzy tabelę pośredniczącą dla relacji wiele do wielu
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.MedicalSpecialisations)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "DoctorMedicalSpecialisation", // Nazwa tabeli pośredniczącej
+                    j => j.HasOne<MedicalSpecialisation>().WithMany().HasForeignKey("MedicalSpecialisationId"),
+                    j => j.HasOne<Doctor>().WithMany().HasForeignKey("DoctorId")
+                );
+        }
+
+
+
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Doctor>()
+                .HasMany(d => d.MedicalSpecialisations)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("DoctorMedicalSpecialisations")); // Tabela pośrednicząca
+        }*/
+
+        public DbSet<MedicalSpecialisation> MedicalSpecialisations { get; set; }
         public DbSet<ApplicationUser> ApplicationUser {  get; set; }
         public DbSet<ApplicationUserAdmin> ApplicationUserAdmin {  get; set; }
         public DbSet<ApplicationUserDoctor> ApplicationUserDoctor {  get; set; }
@@ -28,5 +55,6 @@ namespace ClinicAPI.DB
         public DbSet<Patient> Patient {  get; set; }
         public DbSet<Registrant> Registrant {  get; set; }
         public DbSet<Role> Role {  get; set; }
+        public DbSet<MedicalSpecialisation> MedicalSpecialisation {  get; set; }
     }
 }

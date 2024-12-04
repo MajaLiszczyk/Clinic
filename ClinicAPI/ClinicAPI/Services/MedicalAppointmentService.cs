@@ -29,17 +29,29 @@ namespace ClinicAPI.Services
             var medicalAppointments = await _medicalAppointmentRepository.GetAllMedicalAppointments();
             return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }
-        
+
+        public async Task<List<ReturnMedicalAppointmentDto>> GetMedicalAppointmentsBySpecialisation(int id)
+        {
+            var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsBySpecialisation(id);
+            return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+        }
+
+
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAppointment)
         {
             MedicalAppointment _medicalAppointment = new MedicalAppointment
             {
-                dateTime = medicalAppointment.dateTime,
-                PatientId = medicalAppointment.PatientId,
+                //dateTime = medicalAppointment.dateTime,
+                dateTime = DateTime.UtcNow,
+                //PatientId = medicalAppointment.PatientId,
+                PatientId = 0,
                 DoctorId = medicalAppointment.DoctorId,
-                Interview = medicalAppointment.Interview,
-                Diagnosis = medicalAppointment.Diagnosis,
-                DiseaseUnit = medicalAppointment.DiseaseUnit
+                //Interview = medicalAppointment.Interview,
+                Interview = "domyslny interview",
+                //Diagnosis = medicalAppointment.Diagnosis,
+                Diagnosis = "domyslne diagnosis",
+                //DiseaseUnit = medicalAppointment.DiseaseUnit
+                DiseaseUnit = 0
             };
             MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
             if (p != null)

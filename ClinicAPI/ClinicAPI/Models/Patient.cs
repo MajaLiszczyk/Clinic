@@ -12,6 +12,7 @@ namespace ClinicAPI.Models
         public string Pesel { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string PatientNumber { get; set; }
         //public List<MedicalAppointment> MedicalAppointments { get; set; } //wszystkie - przyszłe, przeszłe, nieodbyte
         //public List<DiagnosticTest> DiagnosticTests { get; set; } 
         //public List<LaboratoryTest> LaboratoryTests { get; set; } //wszystkie - przyszłe, przeszłe, nieodbyte

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClinicAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class RegistrantController : ControllerBase
     {
         private readonly IRegistrantService _registrantService;

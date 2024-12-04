@@ -1,0 +1,65 @@
+<p>add-medical-appointment works!</p>
+
+
+
+
+
+
+
+
+
+<!-- <div>
+    <label>Doctors:</label>
+    <div *ngFor="let doctor of doctors">
+      <label>
+        <input
+          type="checkbox"
+          [value]="doctor.id"
+          (change)="onDoctorChange($event)"
+        />
+        {{ doctor.name }}
+        {{doctor.surname}}
+        {{doctor.doctorNumber}}
+      </label>
+    </div>
+</div>  -->
+
+<form [formGroup]="medicalAppointmentForm" >
+
+    <div class="form-group">
+        <label for="doctor">Doctors:</label>
+        <select id="doctor" class="form-control" formControlName="doctorId">
+          <option *ngFor="let doctor of doctors" [value]="doctor.id">
+            {{ doctor.name }}
+            {{doctor.surname}}
+          </option>
+        </select>
+    </div>
+
+    <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
+        <label class="col-md-5">PatientId</label>
+        <div class="input-group col-md-5">
+            <input formControlName="patientId" type="number" step="0.01" class="form-control" aria-label="patientId" 
+            [class.is-invalid]="formPatientId.invalid">
+            <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formPatientId?.errors?.['min']">Min length: 1</span>
+                <span *ngIf="formPatientId?.errors?.['max']">Max length: 3</span>
+                <span *ngIf="formPatientId?.errors?.['required']">Required</span>
+            </div>
+        </div>
+    </div>
+   
+    <!--<div>
+        <label>Selected specialisations:</label>
+        <div *ngFor="let selectedSpec of  MedicalSpecialisationsIds">
+            selected specialisations: {{MedicalSpecialisationsIds}}
+        </div>
+    </div> -->  
+
+    <div>   
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn  btn-success float-right mx-2" (click)="addMedicalAppointment()">Add the new medical appointment for doctor id: {{formDoctorId.value}}</button>
+        </div>
+    </div>
+</form>

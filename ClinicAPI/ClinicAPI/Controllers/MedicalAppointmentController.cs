@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClinicAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class MedicalAppointmentController : ControllerBase
     {
         private readonly IMedicalAppointmentService _medicalAppointmentService;
@@ -36,13 +36,24 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        //[HttpGet, Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBySpecialisation([FromRoute] int id)
+        {
+            var result = await _medicalAppointmentService.GetMedicalAppointmentsBySpecialisation(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMedicalAppointmentDto request)
         {
             var result = await _medicalAppointmentService.CreateMedicalAppointment(request);
             if (result.Confirmed)
-                return Ok(result.Response);
+                return Ok(new { message = result.Response, medAppointment = result.medAppointment });
+                //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
 
@@ -52,7 +63,8 @@ namespace ClinicAPI.Controllers
         {
             var result = await _medicalAppointmentService.UpdateMedicalAppointment(request);
             if (result.Confirmed)
-                return Ok(result.Response);
+                return Ok(new { message = result.Response});
+                //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
 

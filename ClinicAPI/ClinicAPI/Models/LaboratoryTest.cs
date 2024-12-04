@@ -10,7 +10,7 @@ namespace ClinicAPI.Models
         Urine
     }
 
-    public class LaboratoryTest
+    public class LaboratoryTest //konkretne jedno badanie o danej godzinie??
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

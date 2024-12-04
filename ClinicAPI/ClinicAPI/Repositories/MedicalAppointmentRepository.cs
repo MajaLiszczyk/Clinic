@@ -47,11 +47,54 @@ namespace ClinicAPI.Repositories
             return medicalAppointments;
         }
 
+
+        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsBySpecialisation(int specialisationId)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                // Pobierz listę MedicalAppointment, w której doktor ma daną specjalizację
+                var medicalAppointments = await _context.MedicalAppointment
+                    .Where(ma => _context.Doctor
+                        .Where(d => d.MedicalSpecialisations.Any(ms => ms.Id == specialisationId)) // Filtr lekarzy według specjalizacji
+                        .Select(d => d.Id) // Pobierz ID lekarzy
+                        .Contains(ma.DoctorId)) // Sprawdź, czy DoctorId w MedicalAppointment pasuje
+                    .ToListAsync();
+
+                scope.Complete();
+                return medicalAppointments;
+            }
+            catch (Exception ex)
+            {
+                // Obsłuż wyjątek (logowanie, etc.)
+                return new List<MedicalAppointment>();
+            }
+        }
+
+        
+
+
         public async Task<MedicalAppointment> CreateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
-            await _context.AddAsync(medicalAppointment);
-            await _context.SaveChangesAsync();
+            try
+            {
+               /* var doctor = await _context.MedicalAppointment
+                .Include(d => d.DoctorId)
+                .FirstOrDefaultAsync(d => d.Id == medicalAppointment.Id);*/
+                await _context.AddAsync(medicalAppointment);
+                await _context.SaveChangesAsync();
+                
+
+            }
+
+            catch (DbUpdateException ex)
+{
+                Console.WriteLine(ex.InnerException?.Message);
+            }
             return medicalAppointment;
+
         }
 
         public async Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment)

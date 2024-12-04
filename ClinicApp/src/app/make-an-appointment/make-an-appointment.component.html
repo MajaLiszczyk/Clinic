@@ -1,0 +1,41 @@
+<p>make-an-appointment works!</p>
+
+
+<form [formGroup]="chooseSpecialisationForm" >
+    <div class="form-group">
+        <label for="specialisation">specialisations:</label>
+        <select id="specialisation" class="form-control" formControlName="specialisationId">
+          <option *ngFor="let specialisation of specialisations" [value]="specialisation.id">
+            {{ specialisation.name }}
+          </option>
+        </select>
+    </div>
+
+    <div>   
+        <div class="d-flex justify-content-center mb-4">
+            <button type="button" class="btn  btn-success float-right mx-2" (click)="search()">Search medical appoinyments with specilisation id: {{formSpecialisationId.value}}</button>
+        </div>
+    </div>
+
+
+</form>
+
+<form [formGroup]="choosePatientForm" >
+
+  <div class="form-group">
+    <label for="patient">Patients:</label>
+    <select id="patient" class="form-control" formControlName="patientId">
+      <option *ngFor="let patient of patients" [value]="patient.id">
+        {{patient.id}}
+        {{patient.pesel}}
+        {{ patient.name }}
+        {{patient.surname}}
+      </option>
+    </select>
+  </div>
+
+  <div *ngFor="let medicalAppointment of medicalAppointments">
+    <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }}</span>
+    <button (click)="chooseAppointment(medicalAppointment.id)">Select</button>
+  </div>
+</form>
