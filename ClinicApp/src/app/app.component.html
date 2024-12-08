@@ -1,6 +1,35 @@
 <div class="container">
   Plik AppComponent.html.
   To jest tutul - pole tej klasy : {{title}}
+
+  <h4>REGISTRANT ZONE</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/get-registrants']" routerLinkActive="active" class="btn btn-success w-50">Get all registrants</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-registrant']" routerLinkActive="active" class="btn btn-success w-50">Add registrant</a>
+  </div>
+
+  <h4>SPECIALISATION ZONE</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/get-specialisations']" routerLinkActive="active" class="btn btn-success w-50">Get all specialisations</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-specialisation']" routerLinkActive="active" class="btn btn-success w-50">Add medical specialisation</a>
+  </div>
+
+  <h4>DOCTOR ZONE</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/get-doctors']" routerLinkActive="active" class="btn btn-success w-50">Get all doctors</a>
+  </div>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/add-doctor']" routerLinkActive="active" class="btn btn-success w-50">Add doctor</a>
+  </div>
+
+  <h4>PATIENT ZONE</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/get-patients']" routerLinkActive="active" class="btn btn-success w-50">Get all patients</a>
+  </div>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
     <a [routerLink]="['/your-data']" routerLinkActive="active" class="btn btn-success w-50">Find patient</a>
   </div>
@@ -8,17 +37,48 @@
     <a [routerLink]="['/add-patient']" routerLinkActive="active" class="btn btn-success w-50">Add patient</a>
   </div>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
-    <a [routerLink]="['/add-specialisation']" routerLinkActive="active" class="btn btn-success w-50">Add medical specialisation</a>
+    <a [routerLink]="['/get-medical-appointments-for-patient']" routerLinkActive="active" class="btn btn-success w-50">Patient Appointment</a>
   </div>
+
+  <h4>MEDICAL APPOINTMENT ZONE</h4>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
-    <a [routerLink]="['/add-doctor']" routerLinkActive="active" class="btn btn-success w-50">Add doctor</a>
+    <a [routerLink]="['/get-medical-appointments']" routerLinkActive="active" class="btn btn-success w-50">Get all medical appointments</a>
   </div>
+
   <div class="w-50 d-flex flex-column align-items-center mb-5">
     <a [routerLink]="['/add-medical-appointment']" routerLinkActive="active" class="btn btn-success w-50">Add medical appointment</a>
   </div>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
     <a [routerLink]="['/make-an-appointment']" routerLinkActive="active" class="btn btn-success w-50">Make an appointment</a>
   </div>
+
+  <!-- <h4>Pacjent rodzic</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/patient']" routerLinkActive="active" class="btn btn-success w-50">Patient menu</a>
+  </div> -->
+
+  <h4>PATIENT-PARENT</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/patient-parent']" routerLinkActive="active" class="btn btn-success w-50">Patient parent</a>
+  </div>
+
+  <h4>REGISTRANT-MENU</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/registrant']" routerLinkActive="active" class="btn btn-success w-50">Registrant menu</a>
+  </div>
+
+  <h4>DOCTOR</h4>
+  <div class="w-50 d-flex flex-column align-items-center mb-5">
+    <a [routerLink]="['/doctor']" routerLinkActive="active" class="btn btn-success w-50">Doctor </a>
+  </div>
+
+
+
+
+
+
+
+
 
   <router-outlet></router-outlet>
   <!-- <app-your-data></app-your-data> -->

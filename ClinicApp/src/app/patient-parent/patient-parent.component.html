@@ -1,0 +1,21 @@
+<p>patient-parent works!</p>
+<div>
+    <form [formGroup]="choosePatientForm">
+        <div class="form-group">
+          <label for="patient">Patient:</label>
+          <select id="patient" class="form-control" formControlName="patientId" (change)="onPatientChange($event)">
+            <option *ngFor="let patient of patients" [value]="patient.id">
+              {{patient.id}}
+              {{patient.pesel}}
+              {{ patient.name }}
+              {{patient.surname}}
+            </option>
+          </select>
+        </div>
+      </form>
+</div>
+
+<div class="w-50 d-flex flex-column align-items-center mt-5 mb-5">
+    <a *ngIf="isPatientChosen" [routerLink]="['/patient', patientId]" class="btn btn-success w-50" >Start</a>   
+</div>
+

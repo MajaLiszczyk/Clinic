@@ -1,0 +1,32 @@
+<p>get-dctors works!</p>
+
+<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Doctor
+                </th>
+                <th>
+                   
+                </th>
+            </tr>
+
+        </thead>
+        <tr *ngFor="let doctor of doctors">
+            <td>
+                {{doctor.doctorNumber}}
+                {{doctor.name}}
+                {{doctor.surname}}
+                {{doctor.specialisation}}
+            </td>
+            <td>
+                <button type="button" class="btn  btn-success float-right" (click)="edit(doctor)">Edit</button>
+                <button type="button" class="btn  btn-success float-right" (click)="delete(doctor.id)">Delete</button>
+            </td>
+        </tr>
+        <tr *ngIf="doctors.length === 0">
+            <td colspan="8">No doctors</td>
+        </tr>
+    </table>
+</div>

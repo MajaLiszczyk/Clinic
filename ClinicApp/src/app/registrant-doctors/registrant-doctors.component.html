@@ -1,0 +1,6 @@
+<p>registrant-doctors works!</p>
+<button (click)="addNewDoctor()">Add new doctor to the system</button>
+<div class="content" *ngIf="isAddNewDoctorVisible">
+    <app-add-doctor></app-add-doctor>
+</div>
+<app-get-doctors></app-get-doctors>

@@ -35,7 +35,8 @@ namespace ClinicAPI.Services
             {
                 MedicalAppointmentId = laboratoryTest.MedicalAppointmentId,
                 date = laboratoryTest.date,
-                laboratoryTestType = laboratoryTest.laboratoryTestType,
+                //laboratoryTestType = laboratoryTest.laboratoryTestType,
+                LaboratoryTestTypeId = laboratoryTest.LaboratoryTestTypeId,
                 LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId,
                 SupervisorId = laboratoryTest.SupervisorId,
                 DoctorNote = laboratoryTest.DoctorNote,

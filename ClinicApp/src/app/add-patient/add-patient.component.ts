@@ -3,11 +3,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Patient } from '../model/patient';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterOutlet } from '@angular/router';
+
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
-  imports: [HttpClientModule, ReactiveFormsModule, CommonModule],
+  imports: [HttpClientModule, ReactiveFormsModule, CommonModule, RouterLink, RouterOutlet],
   templateUrl: './add-patient.component.html',
   styleUrl: './add-patient.component.css'
 })

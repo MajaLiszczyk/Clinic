@@ -71,21 +71,23 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdatePatientDto patient)
+        public async Task<IActionResult> Update([FromBody] UpdatePatientDto patient)
         {
             var _patient = await _patientService.UpdatePatient(patient);
             if (_patient.Confirmed)
-                return Ok(_patient.Response);
+                //return Ok(_patient.Response);
+                return Ok(new { message = _patient.Response });
             else return BadRequest(_patient.Response);
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _patientService.DeletePatient(id);
             if (result.Confirmed)
-                return Ok(result.Response);
+                return Ok(new { message = result.Response });
+                //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
     }

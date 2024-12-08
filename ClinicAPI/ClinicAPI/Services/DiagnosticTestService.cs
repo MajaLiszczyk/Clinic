@@ -36,7 +36,8 @@ namespace ClinicAPI.Services
                 DoctorId = diagnosticTest.DoctorId,
                 date = diagnosticTest.date,
                 Description = diagnosticTest.Description,
-                Type = diagnosticTest.Type,
+                DiagnosticTestTypeId = diagnosticTest.DiagnosticTestTypeId,
+                //Type = diagnosticTest.Type,
             };
             DiagnosticTest? p = await _diagnosticTestRepository.CreateDiagnosticTest(_diagnosticTest);
             if (p != null)

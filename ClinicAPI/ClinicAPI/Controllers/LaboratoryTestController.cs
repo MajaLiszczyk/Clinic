@@ -49,7 +49,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateLaboratoryTestDto request)
+        public async Task<IActionResult> Update([FromBody] UpdateLaboratoryTestDto request)
         {
 
             var result = await _laboratoryTestService.UpdateLaboratoryTest(request);
@@ -59,8 +59,8 @@ namespace ClinicAPI.Controllers
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _laboratoryTestService.DeleteLaboratoryTest(id);
             if (result.Confirmed)

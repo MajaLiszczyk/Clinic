@@ -1,0 +1,10 @@
+<p>registrant-appointments works!</p>
+<button (click)="addNewAppointment()">Add new appointment to the system</button>
+<div class="content" *ngIf="isAddNewAppointmentVisible">
+    <app-add-medical-appointment></app-add-medical-appointment>
+</div>
+
+<button (click)="getAllAppointments()">Get all appointments</button>
+<div class="content" *ngIf="isGetAllAppointmentsVisible">
+    <app-get-medical-appointments></app-get-medical-appointments>
+</div>

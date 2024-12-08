@@ -174,13 +174,13 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("DiagnosticTestTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
                     b.Property<int>("MedicalAppoitmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("date")
@@ -189,6 +189,23 @@ namespace ClinicAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DiagnosticTest");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.DiagnosticTestType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiagnosticTestType");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Doctor", b =>
@@ -253,6 +270,9 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("LaboratoryTestTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("LaboratoryWorkerId")
                         .HasColumnType("integer");
 
@@ -265,12 +285,26 @@ namespace ClinicAPI.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("laboratoryTestType")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.ToTable("LaboratoryTest");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.LaboratoryTestType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LaboratoryTestType");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.LaboratoryWorker", b =>
@@ -307,20 +341,18 @@ namespace ClinicAPI.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Diagnosis")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DiseaseUnit")
+                    b.Property<int?>("DiseaseUnit")
                         .HasColumnType("integer");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Interview")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int?>("PatientId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("dateTime")

@@ -56,5 +56,7 @@ namespace ClinicAPI.DB
         public DbSet<Registrant> Registrant {  get; set; }
         public DbSet<Role> Role {  get; set; }
         public DbSet<MedicalSpecialisation> MedicalSpecialisation {  get; set; }
+        public DbSet<DiagnosticTestType> DiagnosticTestType {  get; set; }
+        public DbSet<LaboratoryTestType> LaboratoryTestType {  get; set; }
     }
 }

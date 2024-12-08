@@ -13,14 +13,19 @@
 
     <div>   
         <div class="d-flex justify-content-center mb-4">
-            <button type="button" class="btn  btn-success float-right mx-2" (click)="search()">Search medical appoinyments with specilisation id: {{formSpecialisationId.value}}</button>
+            <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2" (click)="search()">Search medical appoinyments with specilisation id: {{formSpecialisationId.value}}</button>
         </div>
     </div>
 
 
 </form>
 
-<form [formGroup]="choosePatientForm" >
+<div *ngFor="let medicalAppointment of medicalAppointments">
+  <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time: {{medicalAppointment.dateTime}}</span>
+  <button (click)="chooseAppointment(medicalAppointment.id)">Select</button>
+</div>
+
+<!-- <form [formGroup]="choosePatientForm" >
 
   <div class="form-group">
     <label for="patient">Patients:</label>
@@ -35,7 +40,7 @@
   </div>
 
   <div *ngFor="let medicalAppointment of medicalAppointments">
-    <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }}</span>
+    <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time: {{medicalAppointment.dateTime}}</span>
     <button (click)="chooseAppointment(medicalAppointment.id)">Select</button>
   </div>
-</form>
+</form> -->

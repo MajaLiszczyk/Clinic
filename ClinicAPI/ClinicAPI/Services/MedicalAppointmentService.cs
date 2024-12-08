@@ -36,13 +36,69 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }
 
+        public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByDoctorId(int id)
+        {
+            MedicalAppointmentsOfPatient allAppointments = new MedicalAppointmentsOfPatient();
+            var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsByDoctorId(id);
+            List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+            foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
+            {
+                if (medicalAppointment.dateTime < DateTime.Now)
+                {
+                    allAppointments.pastMedicalAppointments.Add(medicalAppointment);
+                }
+
+                else
+                {
+                    allAppointments.futureMedicalAppointments.Add(medicalAppointment);
+                }
+
+            }
+            return allAppointments;
+        }
+
+        
+
+        //public async Task<List<ReturnMedicalAppointmentDto>> GetMedicalAppointmentsByPatientId(int id)
+        public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByPatientId(int id)
+        {
+            MedicalAppointmentsOfPatient allAppointments = new MedicalAppointmentsOfPatient();
+            //List<ReturnMedicalAppointmentDto> pastAppointment = new List<ReturnMedicalAppointmentDto>();
+            //List<ReturnMedicalAppointmentDto> futureAppointments = new List<ReturnMedicalAppointmentDto>();
+
+            var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsByPatientId(id);
+            List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+            foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
+            {
+                if(medicalAppointment.dateTime < DateTime.Now)
+                {
+                    allAppointments.pastMedicalAppointments.Add(medicalAppointment);
+                }
+
+                else
+                {
+                    allAppointments.futureMedicalAppointments.Add(medicalAppointment);
+                }
+
+            }
+           // allAppointments.pastMedicalAppointments = pastAppointment;
+            //allAppointments.futureMedicalAppointments = futureAppointments;
+
+            return allAppointments;
+
+
+            //return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+        }
+
+        
+
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAppointment)
         {
             MedicalAppointment _medicalAppointment = new MedicalAppointment
             {
-                //dateTime = medicalAppointment.dateTime,
-                dateTime = DateTime.UtcNow,
+                dateTime = medicalAppointment.dateTime,
+                //dateTime = DateTime.UtcNow,
                 //PatientId = medicalAppointment.PatientId,
                 PatientId = 0,
                 DoctorId = medicalAppointment.DoctorId,

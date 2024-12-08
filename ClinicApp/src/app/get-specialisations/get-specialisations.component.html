@@ -1,0 +1,30 @@
+<p>get-specialisations works!</p>
+
+<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Specialisation
+                </th>
+                <th>
+                   
+                </th>
+            </tr>
+
+        </thead>
+        <tr *ngFor="let specialisation of specialisations">
+            <td>
+                {{specialisation.name}}
+
+            </td>
+            <td>
+                <button type="button" class="btn  btn-success float-right" (click)="edit(specialisation)">Edit</button>
+                <button type="button" class="btn  btn-success float-right" (click)="delete(specialisation.id)">Delete</button>
+            </td>
+        </tr>
+        <tr *ngIf="specialisations.length === 0">
+            <td colspan="8">No specialisations</td>
+        </tr>
+    </table>
+</div>

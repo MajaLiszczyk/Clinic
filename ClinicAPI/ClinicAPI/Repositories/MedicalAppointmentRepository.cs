@@ -73,7 +73,73 @@ namespace ClinicAPI.Repositories
             }
         }
 
+        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsByDoctorId(int doctorId)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var appointments = await _context.MedicalAppointment
+                    .Where(ma => ma.DoctorId == doctorId)
+                    .ToListAsync();
+
+                scope.Complete();
+                return appointments;
+
+                /* Jesli bede chciala wiecej danych o pacjencie:
+                   var query = from ma in _context.MedicalAppointments
+                    join p in _context.Patients on ma.PatientId equals p.Id
+                    where ma.PatientId == patientId
+                    select new { Appointment = ma, Patient = p };
+                    var result = await query.ToListAsync();
+                    scope.Complete();
+                 */
+
+            }
+            catch (Exception ex)
+            {
+                // Obsłuż wyjątek (logowanie, etc.)
+                return new List<MedicalAppointment>();
+            }
+        }
         
+
+        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsByPatientId(int patientId)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+
+                // Filtruj wizyty na podstawie patientId
+                var appointments = await _context.MedicalAppointment
+                    .Where(ma => ma.PatientId == patientId)
+                    .ToListAsync();
+
+                scope.Complete();
+                return appointments;
+
+                /* Jesli bede chciala wiecej danych o pacjencie:
+                   var query = from ma in _context.MedicalAppointments
+                    join p in _context.Patients on ma.PatientId equals p.Id
+                    where ma.PatientId == patientId
+                    select new { Appointment = ma, Patient = p };
+                    var result = await query.ToListAsync();
+                    scope.Complete();
+                 */
+
+            }
+            catch (Exception ex)
+            {
+                // Obsłuż wyjątek (logowanie, etc.)
+                return new List<MedicalAppointment>();
+            }
+        }
+        
+
+
 
 
         public async Task<MedicalAppointment> CreateMedicalAppointment(MedicalAppointment medicalAppointment)

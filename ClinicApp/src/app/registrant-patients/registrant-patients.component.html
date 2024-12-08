@@ -1,0 +1,6 @@
+<p>registrant-patients works!</p>
+<button (click)="addNewPatient()">Add new patient to the system</button>
+<div class="content" *ngIf="isAddNewPatientVisible">
+    <app-add-patient></app-add-patient>
+</div>
+<app-get-patients></app-get-patients>

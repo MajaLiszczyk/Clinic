@@ -22,13 +22,16 @@ export class AddMedicalAppointmentComponent {
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){
     this.medicalAppointmentForm = this.formBuilder.group({});
-    this.medicalAppointment = { id: 0, doctorId: 0, patientId: 0}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.medicalAppointment = { id: 0, dateTime: new Date().toISOString(), doctorId: 0, patientId: 0,
+                               diagnosis: '', diseaseUnit: 0, interview: ''}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+
   }
 
 
   ngOnInit(){
     this.getAllDoctors();
     this.medicalAppointmentForm = this.formBuilder.group({
+      medicalAppointmentDate: new FormControl(null, {validators: [Validators.required]}),
       doctorId: new FormControl(null, {validators: [Validators.required]}),
       id: Number,
       patientId: new FormControl(0, {validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required]})
@@ -38,13 +41,19 @@ export class AddMedicalAppointmentComponent {
   get formId(): FormControl {return this.medicalAppointmentForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formPatientId(): FormControl {return this.medicalAppointmentForm?.get("patientId") as FormControl};
   get formDoctorId(): FormControl {return this.medicalAppointmentForm?.get("doctorId") as FormControl};
-  //get formDateTime(): FormControl {return this.medicalAppointmentForm?.get("pesel") as FormControl};
-  //get formInterview(): FormControl {return this.medicalAppointmentForm?.get("pesel") as FormControl};
-  //get formDiagnosis(): FormControl {return this.medicalAppointmentForm?.get("pesel") as FormControl};
-  //get formDiseaseUnit(): FormControl {return this.medicalAppointmentForm?.get("pesel") as FormControl};
+  get formMedicalAppointmentDate(): FormControl {return this.medicalAppointmentForm.get("medicalAppointmentDate") as FormControl};
 
   addMedicalAppointment() {
-    this.http.post<MedicalAppointment>(this.APIUrl + "/create", this.medicalAppointmentForm.getRawValue())
+    const formData = this.medicalAppointmentForm.getRawValue();
+    const formattedDate = new Date(formData.medicalAppointmentDate).toISOString();
+    formData.medicalAppointmentDate = formattedDate;
+    console.log("formatted date:" + formattedDate);
+    
+
+    //this.http.post<MedicalAppointment>(this.APIUrl + "/create", this.medicalAppointmentForm.getRawValue())
+
+
+    this.http.post<MedicalAppointment>(this.APIUrl + "/create", formData)
       .subscribe({
         next: (result: MedicalAppointment) => {
           this.medicalAppointment = result;

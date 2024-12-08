@@ -65,7 +65,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 _laboratoryTest.date = laboratoryTest.date;
-                _laboratoryTest.laboratoryTestType = laboratoryTest.laboratoryTestType;
+                _laboratoryTest.LaboratoryTestTypeId = laboratoryTest.LaboratoryTestTypeId;
                 _laboratoryTest.SupervisorId = laboratoryTest.SupervisorId;
                 _laboratoryTest.LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId;
                 _laboratoryTest.MedicalAppointmentId = laboratoryTest.MedicalAppointmentId;

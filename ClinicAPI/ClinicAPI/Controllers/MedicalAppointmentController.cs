@@ -46,6 +46,26 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByDoctorId([FromRoute] int id)
+        {
+            var result = await _medicalAppointmentService.GetMedicalAppointmentsByDoctorId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        
+
+        //[HttpGet, Authorize(Roles = "Admin")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByPatientId([FromRoute] int id)
+        {
+            var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMedicalAppointmentDto request)
@@ -59,7 +79,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateMedicalAppointmentDto request)
+        public async Task<IActionResult> Update([FromBody] UpdateMedicalAppointmentDto request)
         {
             var result = await _medicalAppointmentService.UpdateMedicalAppointment(request);
             if (result.Confirmed)
@@ -69,8 +89,8 @@ namespace ClinicAPI.Controllers
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _medicalAppointmentService.DeleteMedicalAppointment(id);
             if (result.Confirmed)

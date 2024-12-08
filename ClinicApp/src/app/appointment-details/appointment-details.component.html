@@ -1,0 +1,23 @@
+<p>appointment-details works!</p>
+<label>MEDICAL APPOINTMENT</label>
+<p></p>
+Time: {{medicalAppointment.dateTime}}
+ Patient id: {{medicalAppointment.patientId}}
+<label>Interview: </label>
+<form [formGroup]="myForm">
+    <label for="textbox">Interview:</label>
+    <input id="textbox" type="text" formControlName="interviewText" />
+    <p></p>
+
+    <label for="textbox">Diagnosis:</label>
+    <input id="textbox" type="text" formControlName="diagnosisText" />
+
+</form>
+
+<button (click)="saveAnAppointment()">Finish the appointment</button>
+<a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50" >Cancel</a>  
+
+
+
+  <!--<p>Interview: {{ interview }}</p>
+  <p>Diagnosis: {{ interview }}</p> -->

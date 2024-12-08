@@ -1,0 +1,6 @@
+<p>registrant-specialisations works!</p>
+<button (click)="addNewSpecialisation()">Add new specialisation to the system</button>
+<div class="content" *ngIf="isAddNewSpecialisationVisible">
+    <app-add-specialisation></app-add-specialisation>
+</div>
+<app-get-specialisations></app-get-specialisations>

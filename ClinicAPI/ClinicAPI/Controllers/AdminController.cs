@@ -57,7 +57,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<IActionResult> Update(UpdateAdminDto request, int id)
+        public async Task<IActionResult> Update([FromBody] UpdateAdminDto request, int id)
         {
             /*var result = await _adminService.UpdateAdminAsync(request, id);
             if (result.Confirmed)
@@ -68,8 +68,8 @@ namespace ClinicAPI.Controllers
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             /*var result = await _adminService.DeleteAdminAsync(id);
             if (result.Confirmed)
