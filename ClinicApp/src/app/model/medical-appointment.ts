@@ -1,6 +1,6 @@
 export interface MedicalAppointment{
     id: number;
-    dateTime: string;
+    dateTime: Date;
     patientId: number;
     doctorId: number;
     interview: string;

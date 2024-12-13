@@ -14,16 +14,22 @@
         </div>
       </form>  -->
 
-    <div class="menu">
-       <button (click)="setActiveComponent('makeAnAppointment')">Make an appointment</button>
+
+
+
+
+
+    <div class="w-50 d-flex flex-column align-items-center mt-5 mb-5">
+       <button (click)="setActiveComponent('makeAnAppointment')" class="btn btn-success w-50 mb-5">Make an appointment</button>
         <div class="content">
             <app-make-an-appointment [patientId] = 'patientId' *ngIf="activeComponent === 'makeAnAppointment'"></app-make-an-appointment>
-          </div>
-        <button (click)="setActiveComponent('PatientsVisits')">Patient's visits</button>
+        </div>
+        <button (click)="setActiveComponent('PatientsVisits')" class="btn btn-success w-50 mt-5">Patient's visits</button>
+        <div>
+          <app-get-medical-appointments-for-patient [patientId] = 'patientId' *ngIf="activeComponent === 'PatientsVisits'"></app-get-medical-appointments-for-patient>
+        </div>
       </div>     
-      <div>
-        <app-get-medical-appointments-for-patient [patientId] = 'patientId' *ngIf="activeComponent === 'PatientsVisits'"></app-get-medical-appointments-for-patient>
-      </div>
+
 
 
     <!-- <div class="container">

@@ -1,9 +1,10 @@
 <p>appointment-details works!</p>
-<label>MEDICAL APPOINTMENT</label>
+<h4>MEDICAL APPOINTMENT</h4>
 <p></p>
-Time: {{medicalAppointment.dateTime}}
- Patient id: {{medicalAppointment.patientId}}
-<label>Interview: </label>
+<h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">Time: {{medicalAppointment.dateTime}}
+  Patient id: {{medicalAppointment.patientId}} Is editable: {{isEditable}}</h5>
+
+
 <form [formGroup]="myForm">
     <label for="textbox">Interview:</label>
     <input id="textbox" type="text" formControlName="interviewText" />
@@ -14,8 +15,11 @@ Time: {{medicalAppointment.dateTime}}
 
 </form>
 
-<button (click)="saveAnAppointment()">Finish the appointment</button>
-<a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50" >Cancel</a>  
+<div *ngIf="isEditable">
+  <button (click)="saveAnAppointment()" class="btn btn-success w-50">Finish the appointment</button>
+  <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50" >Cancel</a>  
+</div>
+
 
 
 

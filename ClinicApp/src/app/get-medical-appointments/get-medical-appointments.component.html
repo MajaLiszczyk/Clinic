@@ -21,13 +21,14 @@
         </thead>
         <tr *ngFor="let medicalAppointment of medicalAppointments">
             <td>
-                {{medicalAppointment.id}}
-                {{medicalAppointment.doctorId}}
-                {{medicalAppointment.patientId}}
+                Med Ap Id: {{medicalAppointment.id}}
+                DoctorId: {{medicalAppointment.doctorId}}
+                PatientId: {{medicalAppointment.patientId}}
+                Time: {{medicalAppointment.dateTime}}
 
             </td>
             <td>
-                <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button>
+                <!-- <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button> -->
                 <button type="button" class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
             </td>
         </tr>

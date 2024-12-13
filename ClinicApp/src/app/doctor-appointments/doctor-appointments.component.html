@@ -20,7 +20,9 @@
             </td>
             <td>
                 <!-- <button type="button" class="btn  btn-success float-right" (click)="cancel(futureAppointment)">Cancel</button> -->
-                <a [routerLink]="['/appointment-details', futureAppointment.id]" class="btn btn-success w-50" >Details</a>   
+                <!--<a [routerLink]="['/appointment-details', futureAppointment.id, true]" class="btn btn-success w-50" >Details</a>   -->
+                <a [routerLink]="['/appointment-details', futureAppointment.id]" [queryParams]="{ isEditable: true }" class="btn btn-success w-50">Details</a>
+
             </td>
         </tr>
         <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
@@ -47,7 +49,10 @@
                 Patient Id: {{pastAppointment.patientId}}
             </td>
             <td>
-                <a [routerLink]="['/appointment-details', pastAppointment.id]" class="btn btn-success w-50" >Details</a>   
+                <a [routerLink]="['/appointment-details', pastAppointment.id]" [queryParams]="{ isEditable: false }" class="btn btn-success w-50">Details</a>
+
+
+                <!-- <a [routerLink]="['/appointment-details', pastAppointment.id, false]" class="btn btn-success w-50" >Details</a>   -->
             </td>
         </tr>
         <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">

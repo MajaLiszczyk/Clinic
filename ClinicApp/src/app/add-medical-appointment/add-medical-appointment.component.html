@@ -27,7 +27,7 @@
 <form [formGroup]="medicalAppointmentForm" >
 
     <div class="form-group">
-        <label for="doctor">Doctors:</label>
+        <label for="doctor">Doctor:</label>
         <select id="doctor" class="form-control" formControlName="doctorId">
           <option *ngFor="let doctor of doctors" [value]="doctor.id">
             {{ doctor.name }}
@@ -36,17 +36,57 @@
         </select>
     </div>
 
-  <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
+  <!-- <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
     <label class="col-md-5">Date</label>
     <div class="input-group col-md-5">
-        <input formControlName="medicalAppointmentDate" type="datetime-local" step="60" class="form-control" aria-label="medicalAppointmentDate" 
+        <input formControlName="dateTime" ngbDatepicker #formMedicalAppointmentDatePicker="ngbDatepicker" step="60" class="form-control" aria-label="dateTime" 
         [class.is-invalid]="formMedicalAppointmentDate.invalid">
-        <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
-        <div class="invalid-feedback">
-            <span *ngIf="formMedicalAppointmentDate?.errors?.['required']">Required</span>
-        </div>
+        <div>
+          <button class="btn btn-outline-secondary pi pi-calendar" (click)="formMedicalAppointmentDatePicker.toggle()" type="button"></button>
+      </div>
     </div>
+    <div class="invalid-feedback">
+      <span *ngIf="formMedicalAppointmentDate?.errors?.['required']">Required</span>
   </div>
+  </div> -->
+
+  <!-- <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()"> -->
+
+
+
+
+
+
+<!-- ODKOMENTOWAĆ!!!!! -->
+     <div class="form-group col-md-2 offset-md-5 d-flex justify-content-center">
+      <label class="col-md-5">Date & Time</label>
+      <div class="input-group col-md-5">
+        <input formControlName="date" ngbDatepicker #formMedicalAppointmentDatePicker="ngbDatepicker" class="form-control" aria-label="date"
+               [class.is-invalid]="formMedicalAppointmentDate.invalid">
+        <div>
+          <button class="btn btn-outline-secondary pi pi-calendar" (click)="formMedicalAppointmentDatePicker.toggle()" type="button"></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-5 offset-md-5 d-flex justify-content-center">
+      <ngb-timepicker formControlName="time" [spinners]="true" [seconds]="false" [hourStep]="1" [minuteStep]="1"></ngb-timepicker>
+    </div>
+  
+    <div class="invalid-feedback">
+      <span *ngIf="formMedicalAppointmentDate.get('dateTime')?.errors?.['required']">Required</span>
+    </div> 
+  
+
+
+
+
+
+
+    <!-- Submit button -->
+    <!-- <button type="submit" [disabled]="timeControl.invalid" class="btn btn-success w-100">Submit</button> -->
+
+
 
     <!-- <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
         <label class="col-md-5">PatientId</label>

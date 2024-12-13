@@ -1,6 +1,24 @@
-<p>get-patients works!</p>
 
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <div *ngIf="isVisible">
+        <form [formGroup]="patientForm" >
+            <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
+                <input formControlName="name" type="string" class="form-control w-100" aria-label="name" 
+                    [class.is-invalid]="formName.invalid">
+                    <!-- <div class="invalid-feedback">
+                        <span *ngIf="formWeight?.errors?.['min']">Min value: 10</span>
+                        <span *ngIf="formWeight?.errors?.['max']">Max value: 500</span>
+                        <span *ngIf="formWeight?.errors?.['required']">Required</span>
+                    </div> -->
+                <input formControlName="surname" type="string" class="form-control w-100" aria-label="surname" 
+                    [class.is-invalid]="formSurname.invalid">
+                <input formControlName="pesel" type="string" class="form-control w-100" aria-label="pesel" 
+                    [class.is-invalid]="formPesel.invalid">
+
+            </div>
+            <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
+        </form>
+    </div>
     <table class="table table-striped">
         <thead class="thead-dark">
             <tr>

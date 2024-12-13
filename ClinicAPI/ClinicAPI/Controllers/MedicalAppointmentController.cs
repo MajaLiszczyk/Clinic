@@ -68,7 +68,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPost, Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMedicalAppointmentDto request)
+        public async Task<IActionResult> Create([FromBody] CreateMedicalAppointmentDto request)
         {
             var result = await _medicalAppointmentService.CreateMedicalAppointment(request);
             if (result.Confirmed)

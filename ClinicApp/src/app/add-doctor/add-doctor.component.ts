@@ -4,11 +4,12 @@ import { Doctor } from '../model/doctor';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Specialisation } from '../model/specialisation';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-doctor',
   standalone: true,
-  imports: [HttpClientModule,  ReactiveFormsModule, CommonModule],
+  imports: [HttpClientModule,  ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './add-doctor.component.html',
   styleUrl: './add-doctor.component.css'
 })
@@ -21,6 +22,7 @@ export class AddDoctorComponent {
   doctorForm: FormGroup;
   isDisable = false;
   doctor: Doctor;
+  isFormVisible: boolean = true;
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){
     this.doctorForm = this.formBuilder.group({});
@@ -46,6 +48,10 @@ export class AddDoctorComponent {
   get formSurname(): FormControl {return this.doctorForm?.get("surname") as FormControl};
   get formDoctorNumber(): FormControl {return this.doctorForm?.get("doctorNumber") as FormControl};
   //get formSpecialisations(): FormControl {return this.doctorForm?.get("doctorNumber") as FormControl};
+
+  cancel(){
+    this.isFormVisible = true;
+  }
 
   addDoctor(){
     console.log('Form Value before:', this.doctorForm.getRawValue());

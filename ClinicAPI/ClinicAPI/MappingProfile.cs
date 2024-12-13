@@ -50,6 +50,25 @@ namespace ClinicAPI
             CreateMap<MedicalSpecialisation, ReturnMedicalSpecialisationDto>();
             CreateMap<CreateMedicalSpecialisationDto, MedicalSpecialisation>();
             CreateMap<UpdateMedicalSpecialisationDto, MedicalSpecialisation>();
+
+            CreateMap<DateDto, DateTime>().ConstructUsing((src, _) => new DateTime(src.Year, src.Month, src.Day));
+                /*.ForMember(d => d.Year, d => d.MapFrom(t => t.Year))
+                .ForMember(d => d.Month, d => d.MapFrom(t => t.Month))
+                .ForMember(d => d.Day, d => d.MapFrom(t => t.Day));*/
+
+            CreateMap<DateTime, DateDto>()
+                .ForMember(d => d.Year, d => d.MapFrom(t => t.Year))
+                .ForMember(d => d.Month, d => d.MapFrom(t => t.Month))
+                .ForMember(d => d.Day, d => d.MapFrom(t => t.Day));
+
+
+            CreateMap<TimeDto, DateTime>().ConstructUsing((src, _) => new DateTime(0, 0, 0, src.Hour, src.Minute, 0));
+            /*.ForMember(d => d.Hour, d => d.MapFrom(t => t.Hour))
+            .ForMember(d => d.Minute, d => d.MapFrom(t => t.Minute)); */
+
+            CreateMap<DateTime, TimeDto>()
+                .ForMember(d => d.Hour, d => d.MapFrom(t => t.Hour))
+                .ForMember(d => d.Minute, d => d.MapFrom(t => t.Minute));
         }
     }
 }

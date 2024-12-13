@@ -14,15 +14,34 @@ import { Specialisation } from '../model/specialisation';
 export class GetSpecialisationsComponent {
   readonly APIUrl="https://localhost:5001/api/MedicalSpecialisation";
   specialisations: Specialisation[] = [];
-  //medicalAppointmentForm: FormGroup;
+  specialisationForm: FormGroup;
   isDisable = false;
+  isVisible: boolean = false;
+  //medicalAppointmentForm: FormGroup;
 
-  constructor(private http:HttpClient){
+
+  constructor(private http:HttpClient, private formBuilder: FormBuilder){
+    this.specialisationForm = this.formBuilder.group({});
   }
   
   ngOnInit(){
     this.getAllSpecialisations();
+    this.specialisationForm = this.formBuilder.group({
+      name: new  FormControl('', {validators: [Validators.required]}),
+      id: new  FormControl(0, {validators: [Validators.required]}),
+    });
+    
   }
+
+  get formName(): FormControl {return this.specialisationForm?.get("name") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl {return this.specialisationForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+
+
+    /*get formId(): FormControl {return this.medicalAppointmentForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formPatientId(): FormControl {return this.medicalAppointmentForm?.get("patientId") as FormControl};
+    get formDoctorId(): FormControl {return this.medicalAppointmentForm?.get("doctorId") as FormControl};
+    get formMedicalAppointmentDate(): FormControl {return this.medicalAppointmentForm.get("dateTime") as FormControl};
+    get timeControl(): FormControl {return this.medicalAppointmentForm.get("time") as FormControl};*/
 
   getAllSpecialisations(){
     this.http.get<Specialisation[]>(this.APIUrl+"/Get").subscribe(data =>{
@@ -31,8 +50,27 @@ export class GetSpecialisationsComponent {
 
   }
 
+
   edit(specialisation: Specialisation){
-    this.http.put<Specialisation>(this.APIUrl+"/update", specialisation)
+    this.isVisible = true;  
+    /*this.specialisationForm.reset();
+    this.editableMeasure = measure;
+    this.isFormVisible = true;
+    this.editableMode = true;
+    this.operationResult = null;*/
+    this.formId.setValue(specialisation.id);
+    this.formName.setValue(specialisation.name);
+
+    //this.fillForm(measure);
+  }
+
+
+  update(){
+    if(this.specialisationForm.invalid){
+      this.specialisationForm.markAllAsTouched(); 
+      return;
+    }
+    this.http.put<Specialisation>(this.APIUrl+"/update", this.specialisationForm.getRawValue())
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);

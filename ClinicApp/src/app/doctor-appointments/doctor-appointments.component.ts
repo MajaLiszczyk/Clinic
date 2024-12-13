@@ -35,6 +35,7 @@ export class DoctorAppointmentsComponent {
     this.allMedicalAppointments = {pastMedicalAppointments: [], futureMedicalAppointments: []}
 
   }
+  
 
   ngOnInit(){
     this.route.params.subscribe(params => {
@@ -47,6 +48,7 @@ export class DoctorAppointmentsComponent {
   getMedicalAppointmentsForDoctor(){
     this.http.get<AllMedicalAppointments>(this.APIUrl+"/GetByDoctorId/" + this.doctorId).subscribe(data =>{
       this.allMedicalAppointments=data;
+      //this.allMedicalAppointments.pastMedicalAppointments[0].dateTime = new Date(2024, 12, 24);
     })
   }
 

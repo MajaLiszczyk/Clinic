@@ -150,6 +150,7 @@ namespace ClinicAPI.Repositories
                 .Include(d => d.DoctorId)
                 .FirstOrDefaultAsync(d => d.Id == medicalAppointment.Id);*/
                 await _context.AddAsync(medicalAppointment);
+                medicalAppointment.DateTime = medicalAppointment.DateTime.ToUniversalTime();
                 await _context.SaveChangesAsync();
                 
 
@@ -174,7 +175,7 @@ namespace ClinicAPI.Repositories
             }
             try
             {
-                _medicalAppointment.dateTime = medicalAppointment.dateTime;
+                _medicalAppointment.DateTime = medicalAppointment.DateTime;
                 _medicalAppointment.PatientId = medicalAppointment.PatientId;
                 _medicalAppointment.Interview = medicalAppointment.Interview;
                 _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;

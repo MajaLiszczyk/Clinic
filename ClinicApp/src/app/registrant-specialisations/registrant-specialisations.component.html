@@ -1,6 +1,11 @@
 <p>registrant-specialisations works!</p>
-<button (click)="addNewSpecialisation()">Add new specialisation to the system</button>
+<button (click)="addNewSpecialisation()" class="btn btn-success w-100 mb-5">Add new specialisation to the system</button>
 <div class="content" *ngIf="isAddNewSpecialisationVisible">
     <app-add-specialisation></app-add-specialisation>
 </div>
-<app-get-specialisations></app-get-specialisations>
+<div>
+    <app-get-specialisations></app-get-specialisations>
+</div>
+<div class="mb-4 w-100">
+    <a [routerLink]="['/registrant']" class="btn btn-secondary w-100">Return</a>
+</div>

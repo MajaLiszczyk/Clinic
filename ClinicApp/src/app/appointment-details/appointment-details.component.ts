@@ -1,23 +1,25 @@
 import { Component } from '@angular/core';
 import { MedicalAppointment } from '../model/medical-appointment';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-appointment-details',
   standalone: true,
-  imports: [HttpClientModule, ReactiveFormsModule, RouterLink],
+  imports: [HttpClientModule, ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './appointment-details.component.html',
   styleUrl: './appointment-details.component.css'
 })
 export class AppointmentDetailsComponent {
   appointmentId: number = 0;
-  medicalAppointment: MedicalAppointment = { id: 0, dateTime: '', patientId: 0, doctorId: 0, interview:'', diagnosis: '', diseaseUnit: 0 };
+  medicalAppointment: MedicalAppointment = { id: 0, dateTime: new Date(), patientId: 0, doctorId: 0, interview:'', diagnosis: '', diseaseUnit: 0 };
   readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
+  isEditable: boolean = false;
 
   myForm: FormGroup;
 
@@ -38,22 +40,54 @@ export class AppointmentDetailsComponent {
     this.getMedicalAppointmentsForDoctor(this.medicalAppointment.id)
   } */
 
-  ngOnInit(){
+    ngOnInit() {
+      this.route.params.subscribe(params => {
+        this.appointmentId = +params['id'];
+        console.log('papaap Received appointmentId:', this.appointmentId);
+
+      });
+    
+      this.route.queryParams.subscribe(queryParams => {
+        this.isEditable = queryParams['isEditable'] === 'true';
+        console.log('Is appointment editable:', this.isEditable);
+      });
+
+
+
+      if (this.isEditable) {
+        this.myForm.get('interviewText')?.enable(); // Włączanie kontrolki
+        this.myForm.get('diagnosisText')?.enable();
+      } else {
+        this.myForm.get('interviewText')?.disable(); // Wyłączanie kontrolki
+        this.myForm.get('diagnosisText')?.disable(); // Wyłączanie kontrolki
+
+      }
+    
+      this.getMedicalAppointmentsDetails(this.appointmentId);
+    }
+
+
+  /*ngOnInit(){
     console.log('Received med ap Id :', this.appointmentId);
 
     this.route.params.subscribe(params => {
       this.appointmentId = +params['appointmentId']; // Przypisanie id z URL
-      console.log('Received appointmentId:', this.appointmentId);
+      console.log('papaap Received appointmentId:', this.appointmentId);
+    });
+    this.route.params.subscribe(params => {
+      this.isEditable = params['isEditable']; // Przypisanie id z URL
+      console.log('lalala Is appointment editable:', this.isEditable);
     });
     this.getMedicalAppointmentsDetails(this.appointmentId)
 
-  } 
+  } */
+ 
 
-  get interview(): string {
+  get formInterview(): string {
     return this.myForm.get('interviewText')?.value;
   }
 
-  get diagnosis(): string {
+  get formDiagnosis(): string {
     return this.myForm.get('diagnosisText')?.value;
   }
 
@@ -65,9 +99,11 @@ export class AppointmentDetailsComponent {
   }
 
   saveAnAppointment(){
-    this.medicalAppointment.diagnosis = this.diagnosis;
-    this.medicalAppointment.interview = this.interview;
-    this.http.put<MedicalAppointment>(this.APIUrl+"/update", this.medicalAppointment)
+    this.medicalAppointment.diagnosis = this.formDiagnosis;
+    this.medicalAppointment.interview = this.formInterview;
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    this.http.put<MedicalAppointment>(this.APIUrl+"/update", JSON.stringify(this.medicalAppointment), { headers })
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
@@ -81,9 +117,10 @@ export class AppointmentDetailsComponent {
 
 
   
-  cancelAnAppointment(){
+  /*cancelAnAppointment(){
+    this.myForm.reset();
 
-  }
+  } */
 
 
 }

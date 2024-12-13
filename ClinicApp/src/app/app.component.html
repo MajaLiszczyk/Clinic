@@ -1,8 +1,7 @@
-<div class="container">
-  Plik AppComponent.html.
-  To jest tutul - pole tej klasy : {{title}}
+<!-- <div class="container" > -->
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
 
-  <h4>REGISTRANT ZONE</h4>
+  <!-- <h4>REGISTRANT ZONE</h4>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
     <a [routerLink]="['/get-registrants']" routerLinkActive="active" class="btn btn-success w-50">Get all registrants</a>
   </div>
@@ -50,7 +49,7 @@
   </div>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
     <a [routerLink]="['/make-an-appointment']" routerLinkActive="active" class="btn btn-success w-50">Make an appointment</a>
-  </div>
+  </div> -->
 
   <!-- <h4>Pacjent rodzic</h4>
   <div class="w-50 d-flex flex-column align-items-center mb-5">
@@ -58,18 +57,24 @@
   </div> -->
 
   <h4>PATIENT-PARENT</h4>
-  <div class="w-50 d-flex flex-column align-items-center mb-5">
-    <a [routerLink]="['/patient-parent']" routerLinkActive="active" class="btn btn-success w-50">Patient parent</a>
+<!--  <div class="d-flex flex-column align-items-center mb-5"> -->
+  <div class="mb-4 w-100">
+    <a [routerLink]="['/patient-parent']" routerLinkActive="active" class="btn btn-success w-100">Patient parent</a>
+    <router-outlet></router-outlet>
   </div>
 
   <h4>REGISTRANT-MENU</h4>
-  <div class="w-50 d-flex flex-column align-items-center mb-5">
-    <a [routerLink]="['/registrant']" routerLinkActive="active" class="btn btn-success w-50">Registrant menu</a>
+  <!-- <div class="w-50 d-flex flex-column align-items-center mb-5"> -->
+    <div class="mb-4 w-100">
+    <a [routerLink]="['/registrant']" routerLinkActive="active" class="btn btn-success w-100">Registrant menu</a>
+    <router-outlet></router-outlet>
   </div>
 
   <h4>DOCTOR</h4>
-  <div class="w-50 d-flex flex-column align-items-center mb-5">
-    <a [routerLink]="['/doctor']" routerLinkActive="active" class="btn btn-success w-50">Doctor </a>
+  <!-- <div class="w-50 d-flex flex-column align-items-center mb-5"> -->
+  <div class="mb-4 w-100">
+    <a [routerLink]="['/doctor']" routerLinkActive="active" class="btn btn-success w-100">Doctor </a>
+    <router-outlet></router-outlet>
   </div>
 
 
@@ -80,6 +85,6 @@
 
 
 
-  <router-outlet></router-outlet>
+
   <!-- <app-your-data></app-your-data> -->
 </div>
