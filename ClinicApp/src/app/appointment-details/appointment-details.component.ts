@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -26,7 +26,7 @@ export class AppointmentDetailsComponent {
 
   constructor(private http:HttpClient, private route: ActivatedRoute, private fb: FormBuilder){
     this.myForm = this.fb.group({
-      interviewText: [''], // Domyślna wartość
+      interviewText: new FormControl('', {validators: [Validators.required]}), // Domyślna wartość
       diagnosisText: [''],
     });
   }
@@ -57,13 +57,25 @@ export class AppointmentDetailsComponent {
       if (this.isEditable) {
         this.myForm.get('interviewText')?.enable(); // Włączanie kontrolki
         this.myForm.get('diagnosisText')?.enable();
+        
       } else {
         this.myForm.get('interviewText')?.disable(); // Wyłączanie kontrolki
         this.myForm.get('diagnosisText')?.disable(); // Wyłączanie kontrolki
+        
 
       }
+
+      /*this.http.get<MedicalAppointment>(this.APIUrl+"/Get/" + this.appointmentId).subscribe(data =>{
+        this.medicalAppointment=data;
+        this.fillForm();
+      }) */
     
       this.getMedicalAppointmentsDetails(this.appointmentId);
+      console.log('Wywiad 2: ', this.medicalAppointment.interview);
+
+
+      //this.formInterview.setValue(this.medicalAppointment.interview);
+
     }
 
 
@@ -83,24 +95,32 @@ export class AppointmentDetailsComponent {
   } */
  
 
-  get formInterview(): string {
-    return this.myForm.get('interviewText')?.value;
-  }
+  get formInterview(): FormControl {
+    //return this.myForm.get('interviewText')?.value;
+    return this.myForm.get('interviewText') as FormControl};
 
-  get formDiagnosis(): string {
-    return this.myForm.get('diagnosisText')?.value;
-  }
+  //get formDiagnosis(): string {return this.myForm.get('diagnosisText')?.value;}
+  get formDiagnosis(): FormControl {return this.myForm.get('diagnosisText') as FormControl;}
+
 
 
   getMedicalAppointmentsDetails(appointmentId: number){
     this.http.get<MedicalAppointment>(this.APIUrl+"/Get/" + appointmentId).subscribe(data =>{
       this.medicalAppointment=data;
+      console.log('Wywiad: ', this.medicalAppointment.interview);
+      //this.formInterview.get('interviewText')?.setValue(this.medicalAppointment.interview);
+      this.fillForm();
     })
   }
 
+  fillForm(){
+    this.formInterview.setValue(this.medicalAppointment.interview);
+    this.formDiagnosis.setValue(this.medicalAppointment.diagnosis);
+  }
+
   saveAnAppointment(){
-    this.medicalAppointment.diagnosis = this.formDiagnosis;
-    this.medicalAppointment.interview = this.formInterview;
+    this.medicalAppointment.diagnosis = this.formDiagnosis.value;
+    this.medicalAppointment.interview = this.formInterview.value;
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     this.http.put<MedicalAppointment>(this.APIUrl+"/update", JSON.stringify(this.medicalAppointment), { headers })
