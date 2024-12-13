@@ -1,0 +1,10 @@
+<p>registrant-patients-OLD works!</p>
+<div>
+    <app-add-patient [isAddingMode]="isAddingMode" 
+    (isAddingModeChange)="updateAddingMode($event)">></app-add-patient>
+</div> 
+<div>
+    <app-get-patients [isAddingMode]="isAddingMode"></app-get-patients>
+</div>
+<a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+

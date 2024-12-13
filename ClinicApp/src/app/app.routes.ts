@@ -15,7 +15,9 @@ import { AddRegistrantComponent } from './add-registrant/add-registrant.componen
 import { GetMedicalAppointmentsForPatientComponent } from './get-medical-appointments-for-patient/get-medical-appointments-for-patient.component';
 import { PatientComponent } from './patient/patient.component';
 import { PatientParentComponent } from './patient-parent/patient-parent.component';
+//import { RegistrantPatientsOldComponent } from './registrant-patients-old/registrant-patients-old.component';
 import { RegistrantPatientsComponent } from './registrant-patients/registrant-patients.component';
+
 import { RegistrantComponent } from './registrant/registrant.component';
 import { RegistrantSpecialisationsComponent } from './registrant-specialisations/registrant-specialisations.component';
 import { RegistrantDoctorsComponent } from './registrant-doctors/registrant-doctors.component';
@@ -51,10 +53,6 @@ export const routes: Routes = [
     { path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent},
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent},
-
-
-
-
 
     { path: '**', redirectTo: '' }, // Przekierowanie na stronę główną dla nieznanych tras
     { path: '', redirectTo: '/your-data', pathMatch: 'full' }, // Przekierowanie do konkretnej trasy

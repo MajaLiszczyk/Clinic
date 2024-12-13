@@ -1,10 +1,122 @@
-<p>registrant-patients works!</p>
-<div>
+<p>registranttt-patients works!</p>
+<!-- <div>
     <app-add-patient [isAddingMode]="isAddingMode" 
     (isAddingModeChange)="updateAddingMode($event)">></app-add-patient>
 </div> 
 <div>
     <app-get-patients [isAddingMode]="isAddingMode"></app-get-patients>
-</div>
-<a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+</div> -->
 
+<div>
+    <button [disabled]="isEditableMode" (click)="addNewPatient()" class="btn btn-success w-50 mb-5">Add new patient to the system</button>
+    <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
+            <label class="col-md-5">Name</label>
+            <div class="input-group col-md-5">
+                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                    [class.is-invalid]="formName.invalid">
+                <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+                <div class="invalid-feedback">
+                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
+                    <span *ngIf="formName?.errors?.['max']">Max length: 30</span>
+                    <span *ngIf="formName?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
+            <label class="col-md-5">Surname</label>
+            <div class="input-group col-md-5">
+                <input formControlName="surname" type="string" class="form-control" aria-label="surname"
+                    [class.is-invalid]="formSurname.invalid">
+                <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
+                <div class="invalid-feedback">
+                    <span *ngIf="formSurname?.errors?.['min']">Min length: 2</span>
+                    <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
+                    <span *ngIf="formSurname?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+        <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
+            <label class="col-md-5">PESEL</label>
+            <div class="input-group col-md-5">
+                <input formControlName="pesel" type="string" class="form-control" aria-label="pesel"
+                    [class.is-invalid]="formPesel.invalid">
+                <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
+                <div class="invalid-feedback">
+                    <span *ngIf="formPesel?.errors?.['min']">Min length: 11</span>
+                    <span *ngIf="formPesel?.errors?.['max']">Max length: 11</span>
+                    <span *ngIf="formPesel?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="d-flex justify-content-center mb-4 mt-5">
+                <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+                    (click)="addPatient()">Insert new patient</button>
+                <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
+                <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+                    (click)="update()">Save etitioned patient</button>
+
+
+
+            </div>
+            <div class="mb-5 mt-4">
+            </div>
+        </div>
+    </form>
+
+
+
+    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+        <!--<div *ngIf="isVisible">
+        <form [formGroup]="patientForm" >
+            <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
+                <input formControlName="name" type="string" class="form-control w-100" aria-label="name" 
+                    [class.is-invalid]="formName.invalid">
+                <input formControlName="surname" type="string" class="form-control w-100" aria-label="surname" 
+                    [class.is-invalid]="formSurname.invalid">
+                <input formControlName="pesel" type="string" class="form-control w-100" aria-label="pesel" 
+                    [class.is-invalid]="formPesel.invalid">
+
+            </div>
+            <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
+        </form>
+    </div> -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Patient
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </thead>
+            <tr *ngFor="let patient of patients">
+                <td>
+                    {{patient.pesel}}
+                    {{patient.name}}
+                    {{patient.surname}}
+                </td>
+                <td>
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="edit(patient)">Edit</button>
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="delete(patient.id)">Delete</button>
+                    <a [routerLink]="['/patient', patient.id]" *ngIf="!isAddingMode"
+                        class="btn btn-success w-50">Appointments</a>
+                </td>
+            </tr>
+            <tr *ngIf="patients.length === 0">
+                <td colspan="8">No patients</td>
+            </tr>
+        </table>
+    </div>
+
+
+    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+
+</div>

@@ -59,8 +59,16 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient> CreatePatient(Patient patient)
         {
-            await _context.AddAsync(patient);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.AddAsync(patient);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             return patient;
         }
 
