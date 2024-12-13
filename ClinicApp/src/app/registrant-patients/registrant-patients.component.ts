@@ -14,15 +14,13 @@ import { Doctor } from '../model/doctor';
 @Component({
   selector: 'app-registrant-patients',
   standalone: true,
-  imports: [GetPatientsComponent, AddPatientComponent, HttpClientModule,  ReactiveFormsModule, CommonModule],
+  imports: [GetPatientsComponent, AddPatientComponent, HttpClientModule,  ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './registrant-patients.component.html',
   styleUrl: './registrant-patients.component.css'
 })
 export class RegistrantPatientsComponent {
   isAddNewPatientVisible: boolean = false;
 
-  addNewPatient(){
-    this.isAddNewPatientVisible = true;
-  }
+
 
 }

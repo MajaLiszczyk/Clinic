@@ -14,13 +14,9 @@
     <button (click)="addPatient()">Add the new patient to system</button>
 </div> -->
 
+<button (click)="addNewPatient()" class="btn btn-success w-50 mb-5">Add new patient to the system</button>
 
-
-
-
-
-
-<form [formGroup]="patientForm" >
+<form [formGroup]="patientForm" *ngIf="isFormVisible" >
     <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
         <label class="col-md-5">Name</label>
         <div class="input-group col-md-5">
@@ -64,7 +60,9 @@
     <div>   
         <div class="d-flex justify-content-center mb-4 mt-5">
             <button type="button" class="btn  btn-success float-right mx-2 " (click)="addPatient()">Save</button>   
-            <a [routerLink]="['/registrant-patients']" class="btn btn-secondary">Cancel</a>
+            <button (click)="cancel()" class="btn btn-secondary">Cancel</button>
+
+
 
         </div>
         <div class="mb-5 mt-4">

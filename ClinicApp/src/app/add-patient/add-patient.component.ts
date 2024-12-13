@@ -24,6 +24,7 @@ export class AddPatientComponent {
   pesel: string = '';
   isDisable = false;
   patient: Patient = { id: 0, pesel: '', name: '', surname: '' };
+  isFormVisible: boolean = false;
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){ //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
@@ -49,6 +50,14 @@ export class AddPatientComponent {
     this.http.get<Patient[]>(this.APIUrl+"/GetAll").subscribe(data =>{
       this.patients=data;
     })
+  }
+
+  addNewPatient(){
+    this.isFormVisible = true;
+  }
+
+  cancel(){
+    this.isFormVisible = false;
   }
 
   setName(event: Event){
