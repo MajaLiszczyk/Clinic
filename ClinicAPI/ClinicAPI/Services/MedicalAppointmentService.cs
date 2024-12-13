@@ -122,7 +122,8 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalAppointment(UpdateMedicalAppointmentDto medicalAppointment)
         {
-            MedicalAppointment? _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
+            //MedicalAppointment? _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
+            var _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
 
             if (_medicalAppointment == null)
             {
@@ -130,8 +131,15 @@ namespace ClinicAPI.Services
             }
             else
             {
-                MedicalAppointment r = _mapper.Map<MedicalAppointment>(medicalAppointment);
-                var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(r);
+                _medicalAppointment.DateTime = medicalAppointment.DateTime;
+                _medicalAppointment.PatientId = medicalAppointment.PatientId;
+                _medicalAppointment.Interview = medicalAppointment.Interview;
+                _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;
+                _medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
+                _medicalAppointment.DoctorId = medicalAppointment.DoctorId;
+                //MedicalAppointment r = _mapper.Map<MedicalAppointment>(medicalAppointment);
+                //var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(r);
+                var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(_medicalAppointment);
                 return await Task.FromResult((true, "medicalAppointment succesfully uptated"));
             }
         }

@@ -166,7 +166,20 @@ namespace ClinicAPI.Repositories
 
         public async Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
-            var _medicalAppointment = _context.MedicalAppointment.
+
+            try
+            {
+                _context.MedicalAppointment.Update(medicalAppointment);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Obsłuż wyjątek
+                throw new Exception("An error occurred while updating the medical appointment.", ex);
+            }
+
+
+            /*var _medicalAppointment = _context.MedicalAppointment.
                FirstOrDefault(p => p.Id == medicalAppointment.Id);
 
             if (_medicalAppointment == null)
@@ -185,8 +198,8 @@ namespace ClinicAPI.Repositories
                 _context.SaveChanges();
 
             }
-            catch (Exception ex) { }
-            return _medicalAppointment;
+            catch (Exception ex) { }*/
+            return medicalAppointment;
         }
 
         public async Task<bool> DeleteMedicalAppointment(int id)
