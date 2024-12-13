@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Patient } from '../model/patient';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -25,6 +25,10 @@ export class AddPatientComponent {
   isDisable = false;
   patient: Patient = { id: 0, pesel: '', name: '', surname: '' };
   isFormVisible: boolean = false;
+  
+  @Input() isAddingMode: boolean = false; // Odbiera zmienną od rodzica
+  @Output() isAddingModeChange = new EventEmitter<boolean>(); // Wysyła zmiany do rodzica
+
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){ //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
@@ -41,6 +45,12 @@ export class AddPatientComponent {
     //this.isLoaded = true;
   }
 
+  /*toggleAddingMode() {
+    this.isAddingMode = !this.isAddingMode;
+    this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
+    console.log('isAddingMode in AddPatient:', this.isAddingMode);
+  } */
+
   get formId(): FormControl {return this.patientForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formName(): FormControl {return this.patientForm?.get("name") as FormControl};
   get formSurname(): FormControl {return this.patientForm?.get("surname") as FormControl};
@@ -54,10 +64,17 @@ export class AddPatientComponent {
 
   addNewPatient(){
     this.isFormVisible = true;
+    //this.isAddingMode = !this.isAddingMode;
+    this.isAddingMode = true;
+    this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
+    console.log('isAddingMode in AddPatient:', this.isAddingMode);
   }
 
   cancel(){
     this.isFormVisible = false;
+    this.isAddingMode = false;
+    this.isAddingModeChange.emit(this.isAddingMode);
+
   }
 
   setName(event: Event){

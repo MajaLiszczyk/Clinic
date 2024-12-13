@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,9 @@ export class GetPatientsComponent {
   patientForm: FormGroup;
   isVisible: boolean = false;
 
+  @Input() isAddingMode: boolean = false; // Odbiera zmienną od rodzica
+
+
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){
     this.patientForm = this.formBuilder.group({});
@@ -34,6 +37,10 @@ export class GetPatientsComponent {
       surname: new  FormControl('', {validators: [Validators.required]}),
       pesel: new  FormControl('', {validators: [Validators.required]}),
     });
+  }
+
+  ngOnChanges() {
+    console.log('isAddingMode in GetPatients:', this.isAddingMode);
   }
 
   get formId(): FormControl {return this.patientForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?

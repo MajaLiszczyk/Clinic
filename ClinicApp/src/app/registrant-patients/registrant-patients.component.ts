@@ -19,7 +19,13 @@ import { Doctor } from '../model/doctor';
   styleUrl: './registrant-patients.component.css'
 })
 export class RegistrantPatientsComponent {
-  isAddNewPatientVisible: boolean = false;
+  //isAddNewPatientVisible: boolean = false;
+  isAddingMode: boolean = false;
+
+  updateAddingMode(value: boolean) {
+    this.isAddingMode = value;
+    console.log('isAddingMode in parent:', this.isAddingMode);
+  }
 
 
 

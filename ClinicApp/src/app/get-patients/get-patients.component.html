@@ -38,9 +38,9 @@
                 {{patient.surname}}
             </td>
             <td>
-                <button type="button" class="btn  btn-success float-right" (click)="edit(patient)">Edit</button>
-                <button type="button" class="btn  btn-success float-right" (click)="delete(patient.id)">Delete</button>
-                <a [routerLink]="['/patient', patient.id]" class="btn btn-success w-50" >Appointments</a>   
+                <button [disabled]="isAddingMode" type="button" class="btn  btn-success float-right" (click)="edit(patient)">Edit</button>
+                <button [disabled]="isAddingMode" type="button" class="btn  btn-success float-right" (click)="delete(patient.id)">Delete</button>
+                <a [routerLink]="['/patient', patient.id]" *ngIf="!isAddingMode" class="btn btn-success w-50" >Appointments</a>   
             </td>
         </tr>
         <tr *ngIf="patients.length === 0">
