@@ -1,11 +1,86 @@
 <p>registrant-specialisations works!</p>
-<button (click)="addNewSpecialisation()" class="btn btn-success w-100 mb-5">Add new specialisation to the system</button>
-<div class="content" *ngIf="isAddNewSpecialisationVisible">
-    <app-add-specialisation></app-add-specialisation>
-</div>
+
 <div>
-    <app-get-specialisations></app-get-specialisations>
-</div>
-<div class="mb-4 w-100">
-    <a [routerLink]="['/registrant']" class="btn btn-secondary w-100">Return</a>
+    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewSpecialisation()"
+        class="btn btn-success w-50 mb-5">Add
+        new specialisation to the system</button>
+    <form [formGroup]="specialisationF" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup col-md-4 offset-md-4 d-flex justify-content-center ">
+            <label class="col-md-6 w-100">Name</label>
+            <div class="input-group col-md-6">
+                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                    [class.is-invalid]="formName.invalid">
+                <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+                <div class="invalid-feedback">
+                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
+                    <span *ngIf="formName?.errors?.['max']">Max length: 50</span>
+                    <span *ngIf="formName?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-center mb-4 mt-5">
+            <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+                (click)="addSpecialisation()">Insert new specialisation</button>
+            <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
+            <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+                (click)="update()">Save etitioned specialisation</button>
+
+
+
+        </div>
+
+    </form>
+
+
+
+
+
+
+
+
+
+    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+        <!--<div *ngIf="isVisible">
+             <form [formGroup]="specialisationForm">
+                <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
+                    <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
+                        [class.is-invalid]="formName.invalid">
+                </div>
+                <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
+            </form>
+        </div> -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Specialisation
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </thead>
+            <tr *ngFor="let specialisation of specialisations">
+                <td>
+                    {{specialisation.name}}
+
+                </td>
+                <td>
+
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="edit(specialisation)">Edit</button>
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="delete(specialisation.id)">Delete</button>
+                </td>
+            </tr>
+
+            <tr *ngIf="specialisations.length === 0">
+                <td colspan="8">No specialisations</td>
+            </tr>
+        </table>
+    </div>
+    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
 </div>

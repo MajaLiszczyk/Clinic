@@ -1,0 +1,13 @@
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+
+    <p>registrant-doctors-old works!</p>
+    <button (click)="addNewDoctor()" class="btn  btn-success float-right mx-2 mt-5 w-30">Add new doctor to the
+        system</button>
+    <div class="content" *ngIf="isAddNewDoctorVisible">
+        <app-add-doctor></app-add-doctor>
+    </div>
+    <app-get-doctors></app-get-doctors>
+    <div class="mb-4 w-100 ">
+        <a [routerLink]="['/registrant']" class="btn btn-secondary float-right w-30">Rehturn</a>
+    </div>
+</div>

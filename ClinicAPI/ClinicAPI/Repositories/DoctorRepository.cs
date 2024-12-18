@@ -57,7 +57,7 @@ namespace ClinicAPI.Repositories
 
         public async Task<Doctor?> UpdateDoctor(Doctor doctor)
         {
-            Doctor _doctor = _context.Doctor.
+            Doctor? _doctor = _context.Doctor.
               FirstOrDefault(p => p.Id == doctor.Id);
 
             if (_doctor == null)

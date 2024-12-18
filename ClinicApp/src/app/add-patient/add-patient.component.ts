@@ -23,7 +23,7 @@ export class AddPatientComponent {
   surname: string = '';
   pesel: string = '';
   isDisable = false;
-  patient: Patient = { id: 0, pesel: '', name: '', surname: '' };
+  patient: Patient = { id: 0, pesel: '', patientNumber: '', name: '', surname: '' };
   isFormVisible: boolean = false;
   
   @Input() isAddingMode: boolean = false; // Odbiera zmienną od rodzica
@@ -40,7 +40,9 @@ export class AddPatientComponent {
       id: Number,
       name: new FormControl('', {validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required]}),
       surname: new FormControl('', {validators: [Validators.minLength(2), Validators.maxLength(60), Validators.required]}),
-      pesel: new FormControl('', {validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required]})
+      pesel: new FormControl('', {validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required]}),
+      patientNumber: new FormControl('', {validators: [Validators.minLength(1), Validators.maxLength(10), Validators.required]})
+
     });
     //this.isLoaded = true;
   }
@@ -55,6 +57,9 @@ export class AddPatientComponent {
   get formName(): FormControl {return this.patientForm?.get("name") as FormControl};
   get formSurname(): FormControl {return this.patientForm?.get("surname") as FormControl};
   get formPesel(): FormControl {return this.patientForm?.get("pesel") as FormControl};
+  get formPatientNumber(): FormControl {return this.patientForm?.get("patientNumber") as FormControl};
+
+  
 
   getPatients(){
     this.http.get<Patient[]>(this.APIUrl+"/GetAll").subscribe(data =>{

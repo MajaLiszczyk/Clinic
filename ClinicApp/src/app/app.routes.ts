@@ -19,8 +19,11 @@ import { PatientParentComponent } from './patient-parent/patient-parent.componen
 import { RegistrantPatientsComponent } from './registrant-patients/registrant-patients.component';
 
 import { RegistrantComponent } from './registrant/registrant.component';
+//import { RegistrantSpecialisationsOldComponent } from './registrant-specialisations-old/registrant-specialisations-old.component';
 import { RegistrantSpecialisationsComponent } from './registrant-specialisations/registrant-specialisations.component';
+//import { RegistrantDoctorsComponent } from './registrant-doctors-old/registrant-doctors-old.component';
 import { RegistrantDoctorsComponent } from './registrant-doctors/registrant-doctors.component';
+
 import { RegistrantAppointmentsComponent } from './registrant-appointments/registrant-appointments.component';
 import { DoctorAppointmentsComponent } from './doctor-appointments/doctor-appointments.component';
 import { DoctorComponent } from './doctor/doctor.component';
@@ -47,6 +50,7 @@ export const routes: Routes = [
     { path: 'patient-parent', component: PatientParentComponent},
     { path: 'registrant', component: RegistrantComponent},
     { path: 'registrant-patients', component: RegistrantPatientsComponent},
+    //{ path: 'registrant-specialisations-old', component: RegistrantSpecialisationsOldComponent},
     { path: 'registrant-specialisations', component: RegistrantSpecialisationsComponent},
     { path: 'registrant-doctors', component: RegistrantDoctorsComponent},
     { path: 'registrant-appointments', component: RegistrantAppointmentsComponent},

@@ -58,7 +58,8 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalSpecialisation(UpdateMedicalSpecialisationDto medicalSpecialisation)
         {
-            MedicalSpecialisation? _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
+            //MedicalSpecialisation? _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
+            var _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
 
             if (_medicalSpecialisation == null)
             {
@@ -66,8 +67,10 @@ namespace ClinicAPI.Services
             }
             else
             {
-                MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
-                var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
+                _medicalSpecialisation.Name = medicalSpecialisation.Name;
+                //MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
+                //var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
+                var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(_medicalSpecialisation);
                 return await Task.FromResult((true, "MedicalSpecialisation succesfully uptated"));
             }
         }

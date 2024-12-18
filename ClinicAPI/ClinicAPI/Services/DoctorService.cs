@@ -56,7 +56,8 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor)
         {
-            Doctor? _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
+            //Doctor? _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
+            var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
 
             if (_doctor == null)
             {

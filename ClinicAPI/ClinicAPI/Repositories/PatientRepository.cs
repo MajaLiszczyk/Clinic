@@ -74,28 +74,31 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient?> UpdatePatient(Patient patient)
         {
-            var _patient = _context.Patient.
+            /*var _patient = _context.Patient.
                 FirstOrDefault(p => p.Id == patient.Id);
 
             if (_patient == null)
             {
                 return null;
                 //brak pacjenta
-            }
+            } */
             try
             {
-                _patient.Surname = patient.Surname;
+                _context.Patient.Update(patient);
+                await _context.SaveChangesAsync();
+                /*_patient.Surname = patient.Surname;
                 _patient.Name = patient.Name;
-                _patient.Pesel = patient.Pesel;
-            
-                _context.SaveChanges();
+                _patient.Pesel = patient.Pesel;            
+                _context.SaveChanges(); */
                
             }
             catch (Exception ex)
             {
-                //wyjatek
+                //OBSŁUŻYC
+                throw new Exception("An error occurred while updating the patient.", ex);
+
             }
-            return _patient;
+            return patient;
         }
 
         public async Task<bool> DeletePatient(int id)

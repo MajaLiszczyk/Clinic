@@ -55,7 +55,8 @@ namespace ClinicAPI.Services
         }
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTest(UpdateDiagnosticTestDto diagnosticTest)
         {
-            DiagnosticTest? _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
+            //DiagnosticTest? _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
+            var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
 
             if (_diagnosticTest == null)
             {

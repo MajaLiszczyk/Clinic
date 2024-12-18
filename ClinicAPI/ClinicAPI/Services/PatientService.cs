@@ -47,6 +47,7 @@ namespace ClinicAPI.Services
                 Pesel = patient.Pesel,
                 Name = patient.Name,
                 Surname = patient.Surname,
+                PatientNumber = "domyslnyNumer",
             };
             Patient? p = await _patientRepository.CreatePatient(_patient);
             if (p != null) {
@@ -64,13 +65,18 @@ namespace ClinicAPI.Services
         }
         public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
-            Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
+            //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
+            var _patient = await _patientRepository.GetPatientById(patient.Id);   
 
             if (_patient == null) {
                 return await Task.FromResult((false, "Patient with given id does not exist."));
             }
             else{
-                Patient r = _mapper.Map<Patient>(patient);
+                _patient.Name = patient.Name;
+                _patient.Surname = patient.Surname;
+                _patient.Pesel = patient.Pesel;
+
+                //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _patientRepository.UpdatePatient(_patient);
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }

@@ -22,7 +22,7 @@ export class RegistrantPatientsComponent {
   surname: string = '';
   pesel: string = '';
   isDisable = false;
-  patient: Patient = { id: 0, pesel: '', name: '', surname: '' };
+  patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '' };
   isFormVisible: boolean = false;
   isAddingMode: boolean = false;
 

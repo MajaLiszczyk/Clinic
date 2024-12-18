@@ -57,14 +57,16 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(DiagnosticTestType testType)
         {
-            DiagnosticTestType? _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
+            //DiagnosticTestType? _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
+            var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
 
             if (_testType == null)
             {
                 return await Task.FromResult((false, "Patient with given id does not exist."));
             }
             else
-            {
+            { 
+                _testType.Name = testType.Name;
                 //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
                 return await Task.FromResult((true, "Patient succesfully uptated"));

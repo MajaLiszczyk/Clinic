@@ -8,7 +8,7 @@
 </div> -->
 
 <div>
-    <button [disabled]="isEditableMode" (click)="addNewPatient()" class="btn btn-success w-50 mb-5">Add new patient to the system</button>
+    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewPatient()" class="btn btn-success w-50 mb-5">Add new patient to the system</button>
     <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode">
         <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
             <label class="col-md-5">Name</label>
