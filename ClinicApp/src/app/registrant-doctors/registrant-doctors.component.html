@@ -138,7 +138,9 @@
                 (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
 
             <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
-            <a [routerLink]="['/doctor-appointments', doctor.id]" *ngIf="!isAddingMode && !isEditableMode"
+            <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id]" [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
+
+
                 class="btn btn-success w-50">Doctor's Appointments</a>
             </td>
         </tr>

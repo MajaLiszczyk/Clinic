@@ -76,6 +76,7 @@ export class GetMedicalAppointmentsForPatientComponent {
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
+        this.getAllMedicalAppointments(this.patientId);
       },
       error: (error) => {
         console.error("Error performing action:", error);

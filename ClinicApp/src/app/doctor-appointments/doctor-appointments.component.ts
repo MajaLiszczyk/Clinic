@@ -30,6 +30,7 @@ export class DoctorAppointmentsComponent {
   doctorId: number = 0;
   allMedicalAppointments: AllMedicalAppointments;
   readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
+  isRegistrantMode: boolean = false;
 
   constructor(private http:HttpClient, private route: ActivatedRoute){
     this.allMedicalAppointments = {pastMedicalAppointments: [], futureMedicalAppointments: []}
@@ -41,6 +42,10 @@ export class DoctorAppointmentsComponent {
     this.route.params.subscribe(params => {
       this.doctorId = +params['doctorId']; // Przypisanie id z URL
       console.log('Received doctorId:', this.doctorId);
+    });
+    this.route.queryParams.subscribe(queryParams => {
+      this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
+      console.log('Is registrant mode po params:', this.isRegistrantMode);
     });
     this.getMedicalAppointmentsForDoctor()
   }

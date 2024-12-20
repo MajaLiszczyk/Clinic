@@ -57,6 +57,7 @@ export class MakeAnAppointmentComponent {
       this.isDisabled = !value; // Ustawienie isEnabled na true, jeśli wartość jest wybrana
       console.log('Specialisation selected:', value, 'isDisabled:', this.isDisabled);
     });
+    console.log('pacjent id: ', this.patientId);
   }
 
 
@@ -87,7 +88,7 @@ export class MakeAnAppointmentComponent {
 
   chooseAppointment(medicalAppointmentId: number): void {
     console.log("Selected MedicalAppointment ID:", medicalAppointmentId);
-    for (let i=0; this.medicalAppointments.length-1; ++i) {
+    for (let i=0; i < this.medicalAppointments.length; ++i) {
       if(this.medicalAppointments[i].id == medicalAppointmentId){
         this.selectedAppointment = this.medicalAppointments[i];
         break;

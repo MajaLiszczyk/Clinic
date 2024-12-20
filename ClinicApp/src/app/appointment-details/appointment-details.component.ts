@@ -49,6 +49,7 @@ export class AppointmentDetailsComponent {
     
       this.route.queryParams.subscribe(queryParams => {
         this.isEditable = queryParams['isEditable'] === 'true';
+        
         console.log('Is appointment editable:', this.isEditable);
       });
 
