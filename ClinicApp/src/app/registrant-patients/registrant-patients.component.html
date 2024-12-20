@@ -106,7 +106,7 @@
                         (click)="edit(patient)">Edit</button>
                     <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
                         (click)="delete(patient.id)">Delete</button>
-                    <a [routerLink]="['/patient', patient.id]" *ngIf="!isAddingMode"
+                    <a [routerLink]="['/patient', patient.id]" *ngIf="!isAddingMode && !isEditableMode"
                         class="btn btn-success w-50">Appointments</a>
                 </td>
             </tr>

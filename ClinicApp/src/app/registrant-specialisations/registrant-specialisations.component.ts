@@ -20,7 +20,7 @@ export class RegistrantSpecialisationsComponent {
   specialisations: Specialisation[] = [];
   //specialisationForm: FormGroup;
   specialisationF: FormGroup;
-  specialisation: Specialisation = { id: 0, name: '' };
+  specialisation: Specialisation = { id: 0, name: '', checked: false };
   isDisable = false;
   isVisible: boolean = false;
   isAddingMode: boolean = false;

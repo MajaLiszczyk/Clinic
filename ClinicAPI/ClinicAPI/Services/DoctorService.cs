@@ -32,6 +32,17 @@ namespace ClinicAPI.Services
             var doctors = await _doctorRepository.GetAllDoctors();
             return _mapper.Map<List<ReturnDoctorDto>>(doctors);
         }
+
+
+        public async Task<List<DoctorWithSpecialisations>> GetDoctorsWithSpecialisations()
+        {
+
+            var doctors = await _doctorRepository.GetDoctorsWithSpecialisations();
+            return doctors;
+            //return _mapper.Map<List<ReturnDoctorDto>>(doctors);
+        }
+
+
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
             Doctor _doctor = new Doctor
@@ -65,9 +76,29 @@ namespace ClinicAPI.Services
             }
             else
             {
-                Doctor r = _mapper.Map<Doctor>(doctor);
-                var p = await _doctorRepository.UpdateDoctor(r);
-                return await Task.FromResult((true, "doctor succesfully uptated"));
+                try
+                {
+                    Doctor r = new Doctor
+                    {
+                        Name = doctor.Name,
+                        Surname = doctor.Surname,
+                        DoctorNumber = doctor.DoctorNumber,
+                        MedicalSpecialisations = (ICollection<MedicalSpecialisation>)doctor.SpecialisationsList
+                    };
+
+                    //Doctor r = _mapper.Map<Doctor>(doctor);
+                    var p = await _doctorRepository.UpdateDoctor(r);
+                    return await Task.FromResult((true, "doctor succesfully uptated"));
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return await Task.FromResult((false, "doctor ERROR uptated"));
+
+                }
+
+
             }
         }
         public async Task<(bool Confirmed, string Response)> DeleteDoctor(int id)

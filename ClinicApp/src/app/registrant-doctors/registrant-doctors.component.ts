@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 import { RouterLink } from '@angular/router';
 import { Doctor } from '../model/doctor';
 import { Specialisation } from '../model/specialisation';
+import { DoctorWithSpcecialisations } from '../model/doctor-with-specialisations';
 
 @Component({
   selector: 'app-registrant-doctors',
@@ -17,15 +18,16 @@ export class RegistrantDoctorsComponent {
   //isAddNewDoctorVisible: boolean = false;
   readonly APIUrl = "https://localhost:5001/api/Doctor";
   doctors: Doctor[] = [];
+  doctorsWithSpecialisations: DoctorWithSpcecialisations[] = [];
   doctorForm: FormGroup;
   isDisable = false;
   specialisations: Specialisation[] = [];
-  //isVisible: boolean = false;
-  MedicalSpecialisationsIds: number[] = [];
+  //MedicalSpecialisationsIds: number[] = [];
   doctor: Doctor;
-  //isFormVisible: boolean = true;
+  doctorWithSpecialisations: DoctorWithSpcecialisations;
   isEditableMode = false;  
   isAddingMode = false; //niepotrzebne?
+  doctorSpecialisationsList: number[] = [];
 
 
 
@@ -33,6 +35,7 @@ export class RegistrantDoctorsComponent {
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder) {
     this.doctorForm = this.formBuilder.group({});
+    this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
   }
 
@@ -43,12 +46,17 @@ export class RegistrantDoctorsComponent {
     this.getAllDoctors();
     this.getAllSpecialisations();
     this.doctorForm = this.formBuilder.group({
-      MedicalSpecialisationsIds: new FormArray([], { validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required] }),
+      //medicalSpecialisationsIds: new FormArray([], { validators: [Validators.required] }),
+      medicalSpecialisationsIds: new FormArray([]),
       //MedicalSpecialisationsIds: this.doctorForm.get('specialisationsIdForm'), // Powiązanie
       id: Number,
       name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required] }),
       surname: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(60), Validators.required] }),
-      doctorNumber: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(10), Validators.required] }),
+      //doctorNumber: new FormControl('', { validators: [Validators.required] }), 
+
+      /*name: new FormControl(''),
+      surname: new FormControl(''),*/
+      doctorNumber: new FormControl(''), 
 
     });
   }
@@ -81,26 +89,34 @@ export class RegistrantDoctorsComponent {
       .subscribe({
         next: (result: Doctor) => {
           this.doctor = result;
+          this.getAllDoctors();
+          //this.doctorForm.reset;
         },
         error: (err) => {
           console.error("Error occurred:", err);
         }
       });
+      
   }
 
   // Getter dla FormArray
-  get specialisationsArray(): FormArray {
+  /*get specialisationsArray(): FormArray {
     return this.doctorForm.get('specialisationsIdForm') as FormArray;
-  }
+  } */
 
 
-  onSpecialisationChange(event: Event): void {
+  onSpecialisationChange(event: Event, specialisation: Specialisation): void {
     const checkbox = event.target as HTMLInputElement;
-    const specialisationsArray = this.doctorForm.get('MedicalSpecialisationsIds') as FormArray;
+    const specialisationsArray = this.doctorForm.get('medicalSpecialisationsIds') as FormArray;
+    
+    //this.MedicalSpecialisationsIds = this.doctorForm.get('MedicalSpecialisationsIds') as FormArray;
     //this.specialisationsIds = this.doctorForm.get('specialisationsIdForm') as FormArray;
 
     if (checkbox.checked) {
       specialisationsArray.push(new FormControl(+checkbox.value)); // Zamiana na number
+      specialisation.checked = true;
+      this.doctorSpecialisationsList.push(specialisation.id); //lista starych i nowych specek
+
     } else {
       const index = specialisationsArray.controls.findIndex(
         ctrl => ctrl.value === +checkbox.value
@@ -108,14 +124,15 @@ export class RegistrantDoctorsComponent {
       if (index !== -1) {
         specialisationsArray.removeAt(index);
       }
+      specialisation.checked = false;
     }
     //this.MedicalSpecialisationsIds = specialisationsArray.value;
 
   }
 
   getAllDoctors() {
-    this.http.get<Doctor[]>(this.APIUrl + "/Get").subscribe(data => {
-      this.doctors = data;
+    this.http.get<DoctorWithSpcecialisations[]>(this.APIUrl + "/GetWithSpecialisations").subscribe(data => {
+      this.doctorsWithSpecialisations = data;
     })
   }
 
@@ -131,13 +148,23 @@ export class RegistrantDoctorsComponent {
     })
   }*/
 
-  edit(doctor: Doctor) {
-    //this.isVisible = true;
+  //edit(doctor: Doctor) {
+  edit(doctor: DoctorWithSpcecialisations) {
+    //this.doctorSpecialisations = 
     this.formId.setValue(doctor.id);
     this.formName.setValue(doctor.name);
     this.formSurname.setValue(doctor.surname);
     this.formDoctorNumber.setValue(doctor.doctorNumber);
-    this.formSpecialisations.setValue(doctor.specialisation);
+    //this.formSpecialisations.setValue(doctor.specialisation);
+    for (let specialisation of this.specialisations) {
+      for (let doctorSpecialisation of doctor.specialisationIds) {
+        if(specialisation.id == doctorSpecialisation){
+          specialisation.checked = true;
+          this.doctorSpecialisationsList.push(doctorSpecialisation); //dodanie starych specjalizacji
+        }      
+      }
+    }
+    //this.formSpecialisations.setValue(doctor.specialisationIds);
     this.isEditableMode = true;  
     this.isAddingMode = false; //niepotrzebne?
 
@@ -173,10 +200,21 @@ export class RegistrantDoctorsComponent {
   update() {
     if (this.doctorForm.invalid) {
       this.doctorForm.markAllAsTouched();
+      console.log(this.doctorForm.invalid);
+      console.log(this.doctorForm);
+      console.log('cala lista:', this.doctorSpecialisationsList );
       return;
-    }
-    this.http.put<Doctor>(this.APIUrl + "/update", this.doctorForm.getRawValue())
-      .subscribe({
+    } 
+
+    const requestBody = {
+      ...this.doctorForm.getRawValue(),
+      specialisationsList: this.doctorSpecialisationsList
+    };
+
+
+    //this.http.put<Doctor>(this.APIUrl + "/update", this.doctorForm.getRawValue(), this.doctorSpecialisationsList)
+    this.http.put<Doctor>(this.APIUrl + "/update", requestBody)
+    .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
         },
@@ -184,6 +222,8 @@ export class RegistrantDoctorsComponent {
           console.error("Error performing action:", error);
         }
       })
+
+      this.doctorSpecialisationsList = []; //czyszczenie listy?
 
   }
 

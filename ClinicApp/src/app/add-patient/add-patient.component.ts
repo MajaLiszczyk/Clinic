@@ -53,6 +53,7 @@ export class AddPatientComponent {
     console.log('isAddingMode in AddPatient:', this.isAddingMode);
   } */
 
+
   get formId(): FormControl {return this.patientForm?.get("id") as FormControl}; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formName(): FormControl {return this.patientForm?.get("name") as FormControl};
   get formSurname(): FormControl {return this.patientForm?.get("surname") as FormControl};
