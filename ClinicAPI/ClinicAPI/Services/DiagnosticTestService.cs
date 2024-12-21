@@ -33,8 +33,8 @@ namespace ClinicAPI.Services
             DiagnosticTest _diagnosticTest = new DiagnosticTest
             {
                 MedicalAppoitmentId = diagnosticTest.MedicalAppoitmentId,
-                DoctorId = diagnosticTest.DoctorId,
-                date = diagnosticTest.date,
+                //DoctorId = diagnosticTest.DoctorId,
+                //date = diagnosticTest.date,
                 Description = diagnosticTest.Description,
                 DiagnosticTestTypeId = diagnosticTest.DiagnosticTestTypeId,
                 //Type = diagnosticTest.Type,

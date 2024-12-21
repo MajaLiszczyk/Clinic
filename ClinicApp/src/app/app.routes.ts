@@ -21,6 +21,8 @@ import { RegistrantPatientsComponent } from './registrant-patients/registrant-pa
 import { RegistrantComponent } from './registrant/registrant.component';
 //import { RegistrantSpecialisationsOldComponent } from './registrant-specialisations-old/registrant-specialisations-old.component';
 import { RegistrantSpecialisationsComponent } from './registrant-specialisations/registrant-specialisations.component';
+import { RegistrantDiagnosticTestTypesComponent } from './registrant-diagnostic-test-types/registrant-diagnostic-test-types.component';
+
 //import { RegistrantDoctorsComponent } from './registrant-doctors-old/registrant-doctors-old.component';
 import { RegistrantDoctorsComponent } from './registrant-doctors/registrant-doctors.component';
 
@@ -52,6 +54,7 @@ export const routes: Routes = [
     { path: 'registrant-patients', component: RegistrantPatientsComponent},
     //{ path: 'registrant-specialisations-old', component: RegistrantSpecialisationsOldComponent},
     { path: 'registrant-specialisations', component: RegistrantSpecialisationsComponent},
+    { path: 'registrant-diagnostic-test-types', component: RegistrantDiagnosticTestTypesComponent},
     { path: 'registrant-doctors', component: RegistrantDoctorsComponent},
     { path: 'registrant-appointments', component: RegistrantAppointmentsComponent},
     { path: 'doctor', component: DoctorComponent},

@@ -73,9 +73,9 @@ namespace ClinicAPI.Repositories
             }
             try
             {
-                _diagnosticTest.date = diagnosticTest.date;
+                //_diagnosticTest.date = diagnosticTest.date;
                 _diagnosticTest.Description = diagnosticTest.Description;
-                _diagnosticTest.DoctorId = diagnosticTest.DoctorId;
+                //_diagnosticTest.DoctorId = diagnosticTest.DoctorId;
                 _diagnosticTest.MedicalAppoitmentId = diagnosticTest.MedicalAppoitmentId;
 
                 _context.SaveChanges();

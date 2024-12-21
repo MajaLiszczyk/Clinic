@@ -1,0 +1,62 @@
+<p>appointment-details works!</p>
+<h4>MEDICAL APPOINTMENT</h4>
+<p></p>
+<h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">Time: {{medicalAppointment.dateTime}}
+  Patient id: {{medicalAppointment.patientId}} Is editable: {{isEditable}}</h5>
+
+
+<form [formGroup]="medicalAppointmentForm">
+  <label for="textbox">Interview:</label>
+  <!-- <input id="textbox" type="text" formControlName="interviewText" /> -->
+  <input id="interview" formControlName="interviewText" type="text" class="form-control">
+  <p></p>
+
+  <label for="textbox">Diagnosis:</label>
+  <input id="textbox" type="text" formControlName="diagnosisText" />
+
+</form>
+
+
+<ul>
+  <li *ngFor="let testType of diagnosticTestTypes">
+    <!-- Typ badania: {{testType}}-->
+    Diagnostic test type id: {{testType.id}}
+    Diagnostic test type name : {{testType.name}}
+    <button (click)="addForm(testType)">Select</button>
+    <!-- <button (click)="addForm(testType)">Select</button> -->
+  </li>
+</ul>
+
+
+<h3>Forms</h3>
+<form [formGroup]="mainForm" (ngSubmit)="submitForms()"> <!-- Powiąż formularz główny -->
+  <div formArrayName="formsArray">
+    <div *ngFor="let formGroup of formsArray.controls; let i = index">
+      <!--<div *ngFor="let formGroup of formsArray.controls; let i = index"> -->
+      <div>
+        <label>Test Type:</label>
+        <input formGroup.formControlName="diagnosticTestTypeName" readonly />
+      </div>
+      <div>
+        <label>Description:</label>
+        <input formGroup.formControlName="description" placeholder="Enter description" />
+      </div>
+      <button (click)="removeForm(i)">Remove</button>
+    </div>
+
+    <button (click)="submitForms()">Submit All</button>
+
+
+
+
+
+    <div *ngIf="isEditable">
+      <button (click)="saveAnAppointment()" class="btn btn-success w-50">Finish the appointment</button>
+      <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a>
+    </div>
+
+
+
+
+    <!--<p>Interview: {{ interview }}</p>
+  <p>Diagnosis: {{ interview }}</p> -->

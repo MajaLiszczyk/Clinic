@@ -1,0 +1,85 @@
+<p>registrant-diagnostic-test-types works!</p>
+<div>
+    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewDiagnosticTestType()"
+        class="btn btn-success w-50 mb-5">Add
+        new diagnostic test type to the system</button>
+    <form [formGroup]="diagnosticTestTypesForm" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup col-md-4 offset-md-4 d-flex justify-content-center ">
+            <label class="col-md-6 w-100">Name</label>
+            <div class="input-group col-md-6">
+                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                    [class.is-invalid]="formName.invalid">
+                <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+                <div class="invalid-feedback">
+                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
+                    <span *ngIf="formName?.errors?.['max']">Max length: 50</span>
+                    <span *ngIf="formName?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-center mb-4 mt-5">
+            <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+                (click)="addDiagosticTestType()">Insert new diagnostic test type</button>
+            <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
+            <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+                (click)="update()">Save etitioned diagnostic test type</button>
+
+
+
+        </div>
+
+    </form>
+
+
+
+
+
+
+
+
+
+    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+        <!--<div *ngIf="isVisible">
+             <form [formGroup]="specialisationForm">
+                <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
+                    <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
+                        [class.is-invalid]="formName.invalid">
+                </div>
+                <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
+            </form>
+        </div> -->
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Diagnostic Test Type:
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </thead>
+            <tr *ngFor="let diagnosticTestType of diagnosticTestTypes">
+                <td>
+                    {{diagnosticTestType.name}}
+
+                </td>
+                <td>
+
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="edit(diagnosticTestType)">Edit</button>
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
+                        (click)="delete(diagnosticTestType.id)">Delete</button>
+                </td>
+            </tr>
+
+            <tr *ngIf="diagnosticTestTypes.length === 0">
+                <td colspan="8">No diagnostic test types</td>
+            </tr>
+        </table>
+    </div>
+    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+</div>

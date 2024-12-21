@@ -25,7 +25,6 @@ export class RegistrantPatientsComponent {
   patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '' };
   isFormVisible: boolean = false;
   isAddingMode: boolean = false;
-
   isEditableMode: boolean = false;
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder) { //formbuilder do formGroup
