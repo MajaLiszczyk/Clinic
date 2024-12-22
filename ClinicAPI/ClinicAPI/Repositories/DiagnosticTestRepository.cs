@@ -1,4 +1,5 @@
 ﻿using ClinicAPI.DB;
+using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,49 @@ namespace ClinicAPI.Repositories
             return diagnosticTests;
             //return await Task.Run(() => arr);
         }
+
+        public async Task<List<ReturnDiagnosticTestDto>> GetByMedicalAppointmentId(int medicalAppointmentId)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+            //List<DiagnosticTest> diagnosticTests = new List<DiagnosticTest>();
+            try
+            {
+                var diagnosticTests = await _context.DiagnosticTest
+                    .Where(dt => dt.MedicalAppoitmentId == medicalAppointmentId)
+                    .Join(
+                        _context.DiagnosticTestType, // Druga tabela do połączenia
+                        dt => dt.DiagnosticTestTypeId, // Klucz z DiagnosticTest
+                        dtt => dtt.Id, // Klucz z DiagnosticTestType
+                        (dt, dtt) => new ReturnDiagnosticTestDto // Projekcja wyniku
+                        {
+                            Id = dt.Id,
+                            MedicalAppoitmentId = dt.MedicalAppoitmentId,
+                            DiagnosticTestTypeId = dt.DiagnosticTestTypeId,
+                            DiagnosticTestTypeName = dtt.Name,
+                            Description = dt.Description
+                        }
+                    )
+                    .ToListAsync();
+
+                    scope.Complete();
+                    return diagnosticTests;
+
+                /*var diagnosticTests = await _context.DiagnosticTest
+                    .Where(ma => ma.MedicalAppoitmentId == medicalAppointmentId)
+                    .ToListAsync();
+                scope.Complete();
+                return diagnosticTests; */
+
+            }
+            catch (Exception) {
+                return new List<ReturnDiagnosticTestDto>();
+            }
+        }
+
+
+        
         public async Task<DiagnosticTest> CreateDiagnosticTest(DiagnosticTest diagnosticTest)
         {
             await _context.AddAsync(diagnosticTest);

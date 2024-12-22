@@ -46,18 +46,11 @@ export class RegistrantDoctorsComponent {
     this.getAllDoctors();
     this.getAllSpecialisations();
     this.doctorForm = this.formBuilder.group({
-      //medicalSpecialisationsIds: new FormArray([], { validators: [Validators.required] }),
       medicalSpecialisationsIds: new FormArray([]),
-      //MedicalSpecialisationsIds: this.doctorForm.get('specialisationsIdForm'), // Powiązanie
       id: Number,
       name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required] }),
       surname: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(60), Validators.required] }),
-      //doctorNumber: new FormControl('', { validators: [Validators.required] }), 
-
-      /*name: new FormControl(''),
-      surname: new FormControl(''),*/
       doctorNumber: new FormControl(''), 
-
     });
   }
 

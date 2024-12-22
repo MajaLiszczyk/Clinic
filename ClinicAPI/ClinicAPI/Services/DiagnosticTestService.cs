@@ -28,6 +28,32 @@ namespace ClinicAPI.Services
             var diagnosticTests = await _diagnosticTestRepository.GetAllDiagnosticTests();
             return _mapper.Map<List<ReturnDiagnosticTestDto>>(diagnosticTests);
         }
+
+        public async Task<List<ReturnDiagnosticTestDto>> GetByMedicalAppointmentId(int id)
+        {
+            
+            var tests = await _diagnosticTestRepository.GetByMedicalAppointmentId(id);
+            return tests;
+            /*List<ReturnDiagnosticTestDto> dtoList = new List<ReturnDiagnosticTestDto>();
+            var diagnosticTests = await _diagnosticTestRepository.GetByMedicalAppointmentId(id);
+            //List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+            foreach(DiagnosticTest test in diagnosticTests)
+            {
+                ReturnDiagnosticTestDto dto = new ReturnDiagnosticTestDto()
+                {
+                    Id = test.Id,
+                    MedicalAppoitmentId = test.MedicalAppoitmentId,
+                    DiagnosticTestTypeId = test.DiagnosticTestTypeId,
+                    DiagnosticTestTypeName =
+                    Description = test.Description,
+                };
+                dtoList.Add(dto);
+            }
+
+            return dtoList; */
+        }
+
+
         public async Task<(bool Confirmed, string Response, ReturnDiagnosticTestDto? diagnosticTest)> CreateDiagnosticTest(CreateDiagnosticTestDto diagnosticTest)
         {
             DiagnosticTest _diagnosticTest = new DiagnosticTest

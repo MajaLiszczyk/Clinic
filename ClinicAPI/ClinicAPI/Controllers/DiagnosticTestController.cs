@@ -39,6 +39,16 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByMedicalAppointmentId([FromRoute] int id)
+        {
+            List<ReturnDiagnosticTestDto> diagnosticTests = await _diagnosticTestService.GetByMedicalAppointmentId(id);
+            if (diagnosticTests != null)
+                return Ok(diagnosticTests);
+            return NotFound();
+        }
+        
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateDiagnosticTestDto diagnosticTest)

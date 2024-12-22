@@ -43,7 +43,17 @@ namespace ClinicAPI.Services
             List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
             foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
             {
-                if (medicalAppointment.dateTime < DateTime.Now)
+                if(medicalAppointment.IsFinished || medicalAppointment.IsCancelled)
+                {
+                    allAppointments.pastMedicalAppointments.Add(medicalAppointment);
+
+                }
+                else
+                {
+                    allAppointments.futureMedicalAppointments.Add(medicalAppointment);
+                }
+
+                /*if (medicalAppointment.dateTime < DateTime.Now)
                 {
                     allAppointments.pastMedicalAppointments.Add(medicalAppointment);
                 }
@@ -51,7 +61,7 @@ namespace ClinicAPI.Services
                 else
                 {
                     allAppointments.futureMedicalAppointments.Add(medicalAppointment);
-                }
+                }*/
 
             }
             return allAppointments;
@@ -105,7 +115,10 @@ namespace ClinicAPI.Services
                 DoctorId = medicalAp.DoctorId,
                 Interview = "domyslny interview",
                 Diagnosis = "domyslne diagnosis",
-                DiseaseUnit = 0
+                DiseaseUnit = 0,
+                IsCancelled = false,
+                IsFinished = false
+               
             };
             MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
             if (p != null)
@@ -137,6 +150,8 @@ namespace ClinicAPI.Services
                 _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;
                 _medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
                 _medicalAppointment.DoctorId = medicalAppointment.DoctorId;
+                _medicalAppointment.IsFinished = medicalAppointment.IsFinished;
+                _medicalAppointment.IsCancelled = medicalAppointment.IsCancelled;
                 //MedicalAppointment r = _mapper.Map<MedicalAppointment>(medicalAppointment);
                 //var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(r);
                 var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(_medicalAppointment);

@@ -6,4 +6,6 @@ export interface MedicalAppointment{
     interview: string;
     diagnosis: string;
     diseaseUnit: number;
+    isFinished: boolean;
+    isCancelled: boolean;
 }

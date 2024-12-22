@@ -11,13 +11,6 @@ namespace ClinicAPI.Models
         public string Name { get; set; }
     }
 
-    /*public enum DiagnosticTestType
-    {
-        BloodPressure,
-        Pulse,
-        Usg
-    } */
-
     public class DiagnosticTest // konkretne jedno badanie o danej godzinie??
     {
         [Key]
