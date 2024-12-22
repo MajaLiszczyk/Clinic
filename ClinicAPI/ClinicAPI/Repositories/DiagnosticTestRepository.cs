@@ -66,7 +66,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 var diagnosticTests = await _context.DiagnosticTest
-                    .Where(dt => dt.MedicalAppoitmentId == medicalAppointmentId)
+                    .Where(dt => dt.MedicalAppointmentId == medicalAppointmentId)
                     .Join(
                         _context.DiagnosticTestType, // Druga tabela do połączenia
                         dt => dt.DiagnosticTestTypeId, // Klucz z DiagnosticTest
@@ -74,7 +74,7 @@ namespace ClinicAPI.Repositories
                         (dt, dtt) => new ReturnDiagnosticTestDto // Projekcja wyniku
                         {
                             Id = dt.Id,
-                            MedicalAppoitmentId = dt.MedicalAppoitmentId,
+                            MedicalAppointmentId = dt.MedicalAppointmentId,
                             DiagnosticTestTypeId = dt.DiagnosticTestTypeId,
                             DiagnosticTestTypeName = dtt.Name,
                             Description = dt.Description
@@ -105,6 +105,8 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return diagnosticTest;
         }
+
+
         public async Task<DiagnosticTest?> UpdateDiagnosticTest(DiagnosticTest diagnosticTest)
         {
             var _diagnosticTest = _context.DiagnosticTest.
@@ -120,7 +122,7 @@ namespace ClinicAPI.Repositories
                 //_diagnosticTest.date = diagnosticTest.date;
                 _diagnosticTest.Description = diagnosticTest.Description;
                 //_diagnosticTest.DoctorId = diagnosticTest.DoctorId;
-                _diagnosticTest.MedicalAppoitmentId = diagnosticTest.MedicalAppoitmentId;
+                _diagnosticTest.MedicalAppointmentId = diagnosticTest.MedicalAppointmentId;
 
                 _context.SaveChanges();
 

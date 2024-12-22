@@ -6,7 +6,7 @@ namespace ClinicAPI.Dtos
     public class UpdateDiagnosticTestDto
     {
         public int Id { get; set; }
-        public int MedicalAppoitmentId { get; set; }
+        public int MedicalAppointmentId { get; set; }
         public int DoctorId { get; set; }
         public DateTime date { get; set; } //nie wiem czy ma sens, bo to zawsze jest data wizyty
         //public DiagnosticTestType Type { get; set; }

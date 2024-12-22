@@ -18,7 +18,7 @@ namespace ClinicAPI.Models
         public int Id { get; set; }
 
         [ForeignKey("MedicalAppointment")]
-        public int MedicalAppoitmentId { get; set; }
+        public int MedicalAppointmentId { get; set; }
 
         //[ForeignKey("Doctor")]
         //public int DoctorId { get; set; } //w sumie pole niepotrzebne, bo doktor jest juz w wizycie, ale może tak będzie bardziej pod ręką

@@ -16,7 +16,12 @@ namespace ClinicAPI.Repositories
 
         public async Task<MedicalAppointment?> GetMedicalAppointmentById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
+
+            //return await _context.MedicalAppointment.FirstOrDefaultAsync(ma => ma.Id == id);
+            return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();
+
+            //TRANSAKCJE W SERWISIE
+           /* using var scope = new TransactionScope(TransactionScopeOption.Required,
                                       new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                                       TransactionScopeAsyncFlowOption.Enabled);
             MedicalAppointment? medicalAppointment = null;
@@ -28,7 +33,7 @@ namespace ClinicAPI.Repositories
                 scope.Complete();
             }
             catch (Exception) { }
-            return medicalAppointment;
+            return medicalAppointment; */
         }
 
         public async Task<List<MedicalAppointment>> GetAllMedicalAppointments()
@@ -167,7 +172,12 @@ namespace ClinicAPI.Repositories
         public async Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
 
-            try
+            _context.MedicalAppointment.Update(medicalAppointment);
+            await _context.SaveChangesAsync();
+            return medicalAppointment;
+
+            //TRANSAKCJE W SERWISIE
+            /*try
             {
                 _context.MedicalAppointment.Update(medicalAppointment);
                 await _context.SaveChangesAsync();
@@ -177,29 +187,7 @@ namespace ClinicAPI.Repositories
                 // Obsłuż wyjątek
                 throw new Exception("An error occurred while updating the medical appointment.", ex);
             }
-
-
-            /*var _medicalAppointment = _context.MedicalAppointment.
-               FirstOrDefault(p => p.Id == medicalAppointment.Id);
-
-            if (_medicalAppointment == null)
-            {
-                return null;
-            }
-            try
-            {
-                _medicalAppointment.DateTime = medicalAppointment.DateTime;
-                _medicalAppointment.PatientId = medicalAppointment.PatientId;
-                _medicalAppointment.Interview = medicalAppointment.Interview;
-                _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;
-                _medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
-                _medicalAppointment.DoctorId = medicalAppointment.DoctorId;
-
-                _context.SaveChanges();
-
-            }
-            catch (Exception ex) { }*/
-            return medicalAppointment;
+            return medicalAppointment; */
         }
 
         public async Task<bool> DeleteMedicalAppointment(int id)

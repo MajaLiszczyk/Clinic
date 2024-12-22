@@ -203,16 +203,48 @@ export class AppointmentDetailsComponent {
     this.medicalAppointment.isCancelled = true;
 
   }
-
   saveAnAppointment() {
+    // Tworzenie obiektu FinishMedicalAppointmentDto
+
+    const finishAppointmentDto = {
+      medicalAppointmentDto: {
+        id: this.medicalAppointment.id,
+        dateTime: this.medicalAppointment.dateTime,
+        patientId: this.medicalAppointment.patientId,
+        doctorId: this.medicalAppointment.doctorId,
+        interview: this.formInterview.value, //
+        diagnosis: this.formDiagnosis.value, //
+        diseaseUnit: this.medicalAppointment.diseaseUnit,
+        isFinished: true, //
+        isCancelled: false,
+      },
+      createDiagnosticTestDtos: this.pastDiagnosticTests.map(t => ({
+        medicalAppointmentId: t.medicalAppointmentId,
+        diagnosticTestTypeId: t.diagnosticTestTypeId,
+        description: t.description,
+      }))
+    };
+  
+    // Wysyłanie żądania
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post(this.APIUrl + "/FinishMedicalAppointment", finishAppointmentDto, { headers })
+      .subscribe({
+        next: (response) => {
+          console.log("Operation completed successfully:", response);
+        },
+        error: (error) => {
+          console.error("Error occurred:", error);
+        }
+      });
+  }
+
+
+
+  saveAnAppointmentOld() {
     this.medicalAppointment.diagnosis = this.formDiagnosis.value;
     this.medicalAppointment.interview = this.formInterview.value;
     this.medicalAppointment.isFinished = true;
-
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    //TRZEBA WYKONAC TEŻ DRUGIE ZAPYTANIE Z BADANIAMI
-
     this.http.put<MedicalAppointment>(this.APIUrl + "/update", JSON.stringify(this.medicalAppointment), { headers })
       .subscribe({
         next: (response) => {
@@ -224,10 +256,8 @@ export class AppointmentDetailsComponent {
       });
 
     for (let t of this.pastDiagnosticTests){
-
       const requestBody = {
-        //id: 0,
-        medicalAppoitmentId: t.medicalAppointmentId,
+        medicalAppointmentId: t.medicalAppointmentId,
         diagnosticTestTypeId: t.diagnosticTestTypeId,
         description: t.description,
       };
@@ -241,8 +271,5 @@ export class AppointmentDetailsComponent {
           }
         })
     }
-    
-
   }
-
 }

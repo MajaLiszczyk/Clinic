@@ -55,7 +55,9 @@ namespace ClinicAPI.Controllers
         {            
             var _diagnosticTest = await _diagnosticTestService.CreateDiagnosticTest(diagnosticTest);
             if (_diagnosticTest.Confirmed)
-                return Ok(_diagnosticTest.Response);
+                return Ok(new { message = _diagnosticTest.Response, diagnosticTest = _diagnosticTest.diagnosticTest });
+
+                //return Ok(_diagnosticTest.Response);
             else return BadRequest(_diagnosticTest.Response);
         }
 

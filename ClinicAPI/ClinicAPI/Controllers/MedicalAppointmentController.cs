@@ -1,7 +1,9 @@
 ﻿using ClinicAPI.Dtos;
+using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClinicAPI.Controllers
 {
@@ -10,10 +12,12 @@ namespace ClinicAPI.Controllers
     public class MedicalAppointmentController : ControllerBase
     {
         private readonly IMedicalAppointmentService _medicalAppointmentService;
+        private readonly IMedicalAppointmentDiagnosticTestService _medicalAppointmentDiagnosticTestService;
 
-        public MedicalAppointmentController(IMedicalAppointmentService service)
+        public MedicalAppointmentController(IMedicalAppointmentService service, IMedicalAppointmentDiagnosticTestService medicalAppointmentDiagnosticTestService)
         {
             _medicalAppointmentService = service;
+            _medicalAppointmentDiagnosticTestService = medicalAppointmentDiagnosticTestService;
         }
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
@@ -87,6 +91,51 @@ namespace ClinicAPI.Controllers
                 //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> FinishMedicalAppointment([FromBody] FinishMedicalAppointmentDto request)
+        {
+                try
+                {
+                    var response = await _medicalAppointmentDiagnosticTestService.FinishAppointment(request);
+                    return Ok(new { message = response });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new { message = "An error occurred", details = ex.Message });
+                }
+        }
+            /*using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // Aktualizacja wizyty
+                var updateResult = await _medicalAppointmentService.UpdateMedicalAppointment(request.MedicalAppointmentDto);
+                if (!updateResult.Confirmed)
+                    return BadRequest(updateResult.Response);
+
+                // Tworzenie testów diagnostycznych
+                foreach (var testDto in request.CreateDiagnosticTestDtos)
+                {
+                    var diagnosticTest = new DiagnosticTest
+                    {
+                        MedicalAppoitmentId = testDto.MedicalAppointmentId,
+                        DiagnosticTestTypeId = testDto.DiagnosticTestTypeId,
+                        Description = testDto.Description
+                    };
+                    _context.DiagnosticTest.Add(diagnosticTest);
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Operation completed successfully." });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, new { message = "An error occurred", details = ex.Message });
+            }
+        }*/
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]

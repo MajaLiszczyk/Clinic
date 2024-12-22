@@ -77,6 +77,8 @@ builder.Services.AddScoped<IMedicalSpecialisationRepository, MedicalSpecialisati
 builder.Services.AddScoped<IDiagnosticTestTypeService, DiagnosticTestTypeService>(); //dodalam
 builder.Services.AddScoped<IDiagnosticTestTypeRepository, DiagnosticTestTypeRepository>(); //dodalam
 
+builder.Services.AddScoped<IMedicalAppointmentDiagnosticTestService, MedicalAppointmentDiagnosticTestService>(); //dodalam
+
 
 
 
