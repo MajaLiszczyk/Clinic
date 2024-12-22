@@ -115,9 +115,10 @@ namespace ClinicAPI.Services
                 DoctorId = medicalAp.DoctorId,
                 Interview = "domyslny interview",
                 Diagnosis = "domyslne diagnosis",
-                DiseaseUnit = 0,
+                //DiseaseUnit = 0,
                 IsCancelled = false,
-                IsFinished = false
+                IsFinished = false,
+                CancellingComment = ""
                
             };
             MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
@@ -148,10 +149,11 @@ namespace ClinicAPI.Services
                 _medicalAppointment.PatientId = medicalAppointment.PatientId;
                 _medicalAppointment.Interview = medicalAppointment.Interview;
                 _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;
-                _medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
+                //_medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
                 _medicalAppointment.DoctorId = medicalAppointment.DoctorId;
                 _medicalAppointment.IsFinished = medicalAppointment.IsFinished;
                 _medicalAppointment.IsCancelled = medicalAppointment.IsCancelled;
+                _medicalAppointment.CancellingComment = medicalAppointment.CancellingComment;
                 //MedicalAppointment r = _mapper.Map<MedicalAppointment>(medicalAppointment);
                 //var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(r);
                 var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(_medicalAppointment);

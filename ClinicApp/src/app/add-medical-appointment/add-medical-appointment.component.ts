@@ -31,7 +31,7 @@ export class AddMedicalAppointmentComponent {
   constructor(private http:HttpClient, private formBuilder: FormBuilder, private adapter: NgbDateNativeAdapter){
     this.medicalAppointmentForm = this.formBuilder.group({});
     this.medicalAppointment = { id: 0, dateTime: new Date(), doctorId: 0, patientId: 0,
-                               diagnosis: '', diseaseUnit: 0, interview: '', isFinished: false, isCancelled: false}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+                               diagnosis: '', interview: '', isFinished: false, isCancelled: false, cancellingComment: ''}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     this.createdAppointment = {dateTime: new Date(), doctorId: 0}; 
     //this.createdAppointment = {doctorId: 0}; 
 
@@ -96,6 +96,7 @@ export class AddMedicalAppointmentComponent {
           console.error("Error occurred:", err);
         }
       });
+      //DOROBIĆ WYSAKUJĄCE OKIENKO
 
 
 

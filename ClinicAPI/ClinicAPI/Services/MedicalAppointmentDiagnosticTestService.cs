@@ -40,7 +40,7 @@ namespace ClinicAPI.Services
                 appointment.DoctorId = dto.MedicalAppointmentDto.DoctorId;
                 appointment.Interview = dto.MedicalAppointmentDto.Interview;
                 appointment.Diagnosis = dto.MedicalAppointmentDto.Diagnosis;
-                appointment.DiseaseUnit = dto.MedicalAppointmentDto.DiseaseUnit;
+                //appointment.DiseaseUnit = dto.MedicalAppointmentDto.DiseaseUnit;
                 appointment.IsFinished = dto.MedicalAppointmentDto.IsFinished;
                 appointment.IsCancelled = dto.MedicalAppointmentDto.IsCancelled;
 
