@@ -3,7 +3,7 @@ import { MedicalAppointment } from '../model/medical-appointment';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DiagnosticTestType } from '../model/diagnostic-test-type';
 import { DiagnosticTest } from '../model/diagnostic-test';
@@ -42,7 +42,7 @@ export class AppointmentDetailsComponent {
 
 
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder, private router: Router) {
     this.selectedDiagnosticTestType = { id: 0, name: '' };
     this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0, diagnosticTestTypeName: '', description: '' };
     //this.diagnosticTestType = {id: 0, name: ''};
@@ -231,6 +231,9 @@ export class AppointmentDetailsComponent {
       .subscribe({
         next: (response) => {
           console.log("Operation completed successfully:", response);
+          //this.router.navigateByUrl('/doctor-appointments');
+          this.router.navigate(['/doctor-appointments/'+ this.medicalAppointment.doctorId]);
+
         },
         error: (error) => {
           console.error("Error occurred:", error);
