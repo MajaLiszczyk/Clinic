@@ -1,0 +1,15 @@
+<p>registrant-appointments works!</p>
+<div>
+    <button (click)="addNewAppointment()" class="btn  btn-success float-right mx-2 mt-5">Add new appointment to the
+        system</button>
+    <div class="content" *ngIf="isAddNewAppointmentVisible">
+        <app-add-medical-appointment></app-add-medical-appointment>
+    </div>
+
+    <button (click)="getAllAppointments()" class="btn  btn-success float-right mx-2 mt-5">Get all appointments</button>
+    <div class="content" *ngIf="isGetAllAppointmentsVisible">
+        <app-get-medical-appointments></app-get-medical-appointments>
+    </div>
+    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+
+</div>
