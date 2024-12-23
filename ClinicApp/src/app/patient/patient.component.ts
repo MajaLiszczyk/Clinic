@@ -1,74 +1,171 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Specialisation } from '../model/specialisation';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { GetMedicalAppointmentsForPatientComponent } from '../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component';
+import { MakeAnAppointmentComponent } from '../make-an-appointment/make-an-appointment.component';
 import { Patient } from '../model/patient';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
-import { ActivatedRoute } from '@angular/router';
-
-import { Component, Input } from '@angular/core';
-import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
-import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
+import { Specialisation } from '../model/specialisation';
+import { MedicalAppointment } from '../model/medical-appointment';
+import { AllMedicalAppointments } from '../model/all-medical-appointments';
 
 @Component({
   selector: 'app-patient',
   standalone: true,
-  imports: [MakeAnAppointmentComponent, GetMedicalAppointmentsForPatientComponent, 
-            HttpClientModule,  ReactiveFormsModule, CommonModule],
+  imports: [MakeAnAppointmentComponent, GetMedicalAppointmentsForPatientComponent,
+    HttpClientModule, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './patient.component.html',
   styleUrl: './patient.component.css'
 })
-
 export class PatientComponent {
-  //@Input()
   patientId: number = 0;
   choosePatientForm: FormGroup;
-  patients: Patient[]= [];
-  //isDisabled: boolean = true;
-  isPatientIdSet: boolean = this.patientId!==0;
-  historyPanel: boolean = false;
+  patients: Patient[] = [];
+  isPatientIdSet: boolean = this.patientId !== 0;
+  //historyPanel: boolean = false;
+  readonly APIUrl = "https://localhost:5001/api/MedicalAppointment";
+  medicalAppointments: ReturnMedicalAppointment[] = [];
+  selectedAppointment: ReturnMedicalAppointment;
+  specialisations: Specialisation[] = [];
+  chooseSpecialisationForm: FormGroup;
+  isDisabled = true;
+  selectedSpecialisation: number;
+  isMakeAnAppointmentMode: boolean = false;
+  isRegistrantMode: boolean = false; 
 
-  activeComponent: string = ''; // Nazwa aktywnego komponentu dziecka
+  //get all
+  allMedicalAppointments: AllMedicalAppointments;
+  isVisible = false;
+  //atients: Patient[] = [];
+  selectedPatientId: number = 0;
+  //choosePatientForm: FormGroup;
+  //activeComponent: string = ''; // Nazwa aktywnego komponentu dziecka
 
   // Metoda do ustawienia aktywnego komponentu
-  setActiveComponent(componentName: string): void {
+  /*setActiveComponent(componentName: string): void {
     this.activeComponent = componentName;
-  }
+  }*/
 
-  constructor(private http:HttpClient, private formBuilder: FormBuilder, private route: ActivatedRoute){
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, private route: ActivatedRoute) {
     this.choosePatientForm = this.formBuilder.group({});
-    /*this.route.params.subscribe(params => {
-      this.patientId = params['patientId']; // Odczytanie parametru z URL
-    });*/
+    this.chooseSpecialisationForm = this.formBuilder.group({});
+    this.selectedSpecialisation = 0;
+    this.selectedAppointment = { id: 0, doctorId: 0, patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0, dateTime: new Date() }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
   }
 
-  ngOnInit(){
+  ngOnInit() {
     //jesli w trybie pacjenta - już nie jest 0 :
     //this.patientId = //z logowania
-    this.historyPanel = false;
-    //this.getAllPatients();
-    /*this.choosePatientForm = this.formBuilder.group({
-      patientId: new FormControl(null, {validators: [Validators.required]})
-    }); */
+    //this.historyPanel = false;
     this.route.params.subscribe(params => {
       this.patientId = +params['patientId']; // Przypisanie id z URL
       console.log('Received patientId:', this.patientId);
     });
+
+    this.route.queryParams.subscribe(queryParams => {
+      this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
+      console.log('Is registrant mode po params:', this.isRegistrantMode);
+    });
+
+    this.getAllSpecialisations();
+    this.chooseSpecialisationForm = this.formBuilder.group({
+      specialisationId: new FormControl(null, { validators: [Validators.required] })
+    });
+    this.chooseSpecialisationForm.get('specialisationId')?.valueChanges.subscribe(value => {
+      this.isDisabled = !value; // Ustawienie isEnabled na true, jeśli wartość jest wybrana
+      console.log('Specialisation selected:', value, 'isDisabled:', this.isDisabled);
+    });
+    console.log('pacjent id: ', this.patientId);
+
+    this.getAllMedicalAppointments(this.patientId)
+    this.choosePatientForm = this.formBuilder.group({
+      patientId: new FormControl(null, { validators: [Validators.required] })
+    });
   }
 
-  //get formPatientId(): FormControl {return this.choosePatientForm?.get("patientId") as FormControl};
+  get formSpecialisationId(): FormControl { return this.chooseSpecialisationForm?.get("specialisationId") as FormControl };
+  get formPatientId(): FormControl { return this.choosePatientForm?.get("patientId") as FormControl };
 
-  /*getAllPatients(){
-    this.http.get<Patient[]>("https://localhost:5001/api/patient/Get").subscribe(data =>{
-      this.patients=data;
+
+  getAllSpecialisations() {
+    this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
+      this.specialisations = data;
     })
-  }*/
+  }
 
-  onPatientChange(event: Event): void {
+  getAllMedicalAppointments(patientId: number) {
+    this.http.get<AllMedicalAppointments>(this.APIUrl + "/GetByPatientId/" + patientId).subscribe(data => {
+      this.allMedicalAppointments = data;
+      console.log(this.allMedicalAppointments.pastMedicalAppointments);
+      console.log(this.allMedicalAppointments.pastMedicalAppointments.length);
+    })
+  }
+
+  openAppointmentForm(){
+    this.isMakeAnAppointmentMode = true;
+  }
+
+  cancelAppointmentForm(){
+    this.isMakeAnAppointmentMode = false;
+    this.medicalAppointments.length = 0;
+  }
+
+  cancel(medicalAppointment: MedicalAppointment) {
+    medicalAppointment.patientId = 0;
+    this.http.put<MedicalAppointment>(this.APIUrl + "/update", medicalAppointment)
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllMedicalAppointments(this.patientId);
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      })
+
+  }
+
+  search() {
+    this.selectedSpecialisation = this.formSpecialisationId.value;
+    this.http.get<ReturnMedicalAppointment[]>(this.APIUrl + "/GetBySpecialisation/" + this.selectedSpecialisation).subscribe(data => {
+      this.medicalAppointments = data;
+    })
+  }
+
+  chooseAppointment(medicalAppointmentId: number): void {
+    console.log("Selected MedicalAppointment ID:", medicalAppointmentId);
+    for (let i = 0; i < this.medicalAppointments.length; ++i) {
+      if (this.medicalAppointments[i].id == medicalAppointmentId) {
+        this.selectedAppointment = this.medicalAppointments[i];
+        break;
+      }
+    }
+    this.selectedAppointment.patientId = this.patientId;
+    this.setPatientToAppointment(this.selectedAppointment);
+    this.isMakeAnAppointmentMode = false;
+    this.medicalAppointments.length = 0;//czyszczenie listy żeby nie było widać starych wyszukiwań
+  }
+
+
+  setPatientToAppointment(selectedAppointment: ReturnMedicalAppointment) {
+    this.http.put<MedicalAppointment>(this.APIUrl + "/update", this.selectedAppointment)
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      });
+  }
+
+  /*onPatientChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     this.patientId = parseInt(selectElement.value, 10); // Pobranie wybranego ID pacjenta
     console.log('Selected Patient ID:', this.patientId);
-    //this.isDisabled = false;
-  }
+  } */
 
 }

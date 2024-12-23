@@ -1,41 +1,86 @@
 <p>patient works!</p>
-<div>
-    <!-- <form [formGroup]="choosePatientForm" *ngIf = "!isPatientIdSet">
-        <div class="form-group">
-          <label for="patient">Patient:</label>
-          <select id="patient" class="form-control" formControlName="patientId" (change)="onPatientChange($event)">
-            <option *ngFor="let patient of patients" [value]="patient.id">
-              {{patient.id}}
-              {{patient.pesel}}
-              {{ patient.name }}
-              {{patient.surname}}
+<!-- MAKE APPOINTMENT-->
+<button [disabled]="isMakeAnAppointmentMode" (click)="openAppointmentForm()" class="btn btn-success w-50 mb-5">Make an
+    appointment</button>
+<form [formGroup]="chooseSpecialisationForm" *ngIf="isMakeAnAppointmentMode">
+    <div class="form-group">
+        <label for="specialisation">specialisation:</label>
+        <select id="specialisation" class="form-control" formControlName="specialisationId">
+            <option *ngFor="let specialisation of specialisations" [value]="specialisation.id">
+                {{ specialisation.name }}
             </option>
-          </select>
-        </div>
-      </form>  -->
-
-
-
-
-
-
-    <div class="w-50 d-flex flex-column align-items-center mt-5 mb-5">
-       <button (click)="setActiveComponent('makeAnAppointment')" class="btn btn-success w-50 mb-5">Make an appointment</button>
-        <div class="content">
-            <app-make-an-appointment [patientId] = 'patientId' *ngIf="activeComponent === 'makeAnAppointment'"></app-make-an-appointment>
-        </div>
-        <button (click)="setActiveComponent('PatientsVisits')" class="btn btn-success w-50 mt-5">Patient's visits</button>
-        <div>
-          <app-get-medical-appointments-for-patient [patientId] = 'patientId' *ngIf="activeComponent === 'PatientsVisits'"></app-get-medical-appointments-for-patient>
-        </div>
-      </div>     
-
-
-
-    <!-- <div class="container">
-        <app-make-an-appointment [patientId] = 'patientId'></app-make-an-appointment>
+        </select>
     </div>
-    <div class="container">
-        <app-get-medical-appointments-for-patient></app-get-medical-appointments-for-patient>
-    </div> -->
+
+    <div>
+        <div class="d-flex justify-content-center mb-4">
+            <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+                (click)="search()">Search medical appoinyments with specilisation id:
+                {{formSpecialisationId.value}}</button>
+        </div>
+    </div>
+    <button (click)="cancelAppointmentForm()" class="btn btn-secondary">Cancel</button>
+
+
+    <div *ngFor="let medicalAppointment of medicalAppointments">
+        <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:
+            {{medicalAppointment.dateTime}}</span>
+        <button (click)="chooseAppointment(medicalAppointment.id)" class="btn btn-success">Select</button>
+    </div>
+</form>
+
+<!-- GET ALL-->
+<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Future appointments:
+                </th>
+                <th>
+
+                </th>
+            </tr>
+
+        </thead>
+        <tr *ngFor="let futureAppointment of allMedicalAppointments.futureMedicalAppointments">
+            <td>
+                Time: {{futureAppointment.dateTime}}
+                Doctor Id: {{futureAppointment.doctorId}}
+            </td>
+            <td>
+                <button type="button" class="btn  btn-success float-right" [disabled]="isMakeAnAppointmentMode"
+                    (click)="cancel(futureAppointment)">Cancel</button>
+            </td>
+        </tr>
+        <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
+            <td colspan="8">No future medical appointments</td>
+        </tr>
+    </table>
 </div>
+
+<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Past appointments:
+                </th>
+                <th>
+                </th>
+            </tr>
+
+        </thead>
+        <tr *ngFor="let pastAppointment of allMedicalAppointments.pastMedicalAppointments">
+            <td>
+                Time: {{pastAppointment.dateTime}}
+                Doctor Id: {{pastAppointment.doctorId}}
+            </td>
+        </tr>
+        <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
+            <td colspan="8">No past medical appointments</td>
+        </tr>
+    </table>
+</div>
+
+<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
