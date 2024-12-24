@@ -71,7 +71,7 @@
             </td>
             <td>
                 <!-- <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button> -->
-                <button type="button" [disabled]="isAddingMode" class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
+                <button type="button" [disabled]="medicalAppointment.isFinished || medicalAppointment.isCancelled" class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
             </td>
         </tr>
         <tr *ngIf="medicalAppointments.length === 0">

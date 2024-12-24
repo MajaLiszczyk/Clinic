@@ -143,7 +143,8 @@ namespace ClinicAPI.Controllers
         {
             var result = await _medicalAppointmentService.DeleteMedicalAppointment(id);
             if (result.Confirmed)
-                return Ok(result.Response);
+                return Ok(new { message = result.Response });
+                //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
     }

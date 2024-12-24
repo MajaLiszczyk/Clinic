@@ -84,6 +84,8 @@ export class RegistrantSpecialisationsComponent {
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
+        this.getAllSpecialisations();
+        this.isEditableMode = false;
       },
       error: (error) => {
         console.error("Error performing action:", error);
@@ -138,6 +140,8 @@ export class RegistrantSpecialisationsComponent {
       .subscribe({
         next: (result: Specialisation) => {
           this.specialisation = result; // Zwrócony obiekt przypisany do zmiennej
+          this.getAllSpecialisations();
+          this.isAddingMode = false;
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów

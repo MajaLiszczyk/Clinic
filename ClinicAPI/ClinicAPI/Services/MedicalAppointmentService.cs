@@ -80,11 +80,12 @@ namespace ClinicAPI.Services
             List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
             foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
             {
-                if(medicalAppointment.dateTime < DateTime.Now)
+                //if (medicalAppointment.IsFinished || medicalAppointment.IsCancelled)
+                if (medicalAppointment.IsFinished)
                 {
                     allAppointments.pastMedicalAppointments.Add(medicalAppointment);
-                }
 
+                }
                 else
                 {
                     allAppointments.futureMedicalAppointments.Add(medicalAppointment);

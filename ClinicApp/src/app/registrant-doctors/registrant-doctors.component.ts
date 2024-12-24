@@ -83,6 +83,7 @@ export class RegistrantDoctorsComponent {
         next: (result: Doctor) => {
           this.doctor = result;
           this.getAllDoctors();
+          this.isAddingMode = false;
           //this.doctorForm.reset;
         },
         error: (err) => {
@@ -225,6 +226,8 @@ export class RegistrantDoctorsComponent {
     .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
+          this.getAllDoctors();
+          this.isEditableMode  = false;
         },
         error: (error) => {
           console.error("Error performing action:", error);

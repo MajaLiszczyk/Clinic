@@ -25,7 +25,7 @@
     <div *ngFor="let medicalAppointment of medicalAppointments">
         <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:
             {{medicalAppointment.dateTime}}</span>
-        <button (click)="chooseAppointment(medicalAppointment.id)" class="btn btn-success">Select</button>
+        <button [disabled]="medicalAppointment.patientId != 0" (click)="chooseAppointment(medicalAppointment.id)" class="btn btn-success">Select</button>
     </div>
 </form>
 

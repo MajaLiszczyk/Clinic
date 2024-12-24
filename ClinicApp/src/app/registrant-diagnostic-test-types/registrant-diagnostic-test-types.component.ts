@@ -80,6 +80,8 @@ export class RegistrantDiagnosticTestTypesComponent {
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
+        this.getAllDiagnosticTestTypes();
+        this.isEditableMode = false;
       },
       error: (error) => {
         console.error("Error performing action:", error);

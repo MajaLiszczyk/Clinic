@@ -51,7 +51,7 @@ export class RegistrantAppointmentsComponent {
 
   ngOnInit() {
     this.getAllDoctors();
-    this.getAllMedicalAppointments();
+    //this.getAllMedicalAppointments();
     this.medicalAppointmentForm = this.formBuilder.group({
       date: new FormControl(null, { validators: [Validators.required] }),
       time: new FormControl(null, { validators: [Validators.required] }),
@@ -76,9 +76,10 @@ export class RegistrantAppointmentsComponent {
   addNewAppointment() {
     this.isAddNewAppointmentVisible = true;
   }
-  getAllAppointments() {
+  
+  /*getAllAppointments() {
     this.isGetAllAppointmentsVisible = true;
-  }
+  } */
 
   openAppointmentForm(){
     this.isAddingMode = true;
@@ -89,6 +90,9 @@ export class RegistrantAppointmentsComponent {
     this.clinicService.addMedicalAppointment(appointmentData).subscribe({
       next: (result: MedicalAppointment) => {
         this.medicalAppointment = result;
+        if(this.isShowingAllAppointmentsMode == true){
+          this.getAllMedicalAppointments();
+        }
         console.log('Wizyta została utworzona:', result);
       },
       error: (err) => {
@@ -113,6 +117,7 @@ export class RegistrantAppointmentsComponent {
   }
 
   showAllAppointments(){
+    this.getAllMedicalAppointments();
     this.isShowingAllAppointmentsMode = true;
   }
 

@@ -81,6 +81,8 @@ export class RegistrantPatientsComponent {
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
+        this.getAllPatients();
+        this.isEditableMode = false;
       },
       error: (error) => {
         console.error("Error performing action:", error);
@@ -133,6 +135,8 @@ export class RegistrantPatientsComponent {
       .subscribe({
         next: (result: Patient) => {
           this.patient = result; // Zwrócony obiekt przypisany do zmiennej
+          this.getAllPatients();
+          this.isAddingMode = false;
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów

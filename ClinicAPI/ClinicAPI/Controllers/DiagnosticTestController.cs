@@ -68,8 +68,9 @@ namespace ClinicAPI.Controllers
           
            var _diagnosticTest = await _diagnosticTestService.UpdateDiagnosticTest(diagnosticTest);
            if (_diagnosticTest.Confirmed)
-                return Ok(_diagnosticTest.Response);
-           else return BadRequest(_diagnosticTest.Response);
+               return Ok(new { message = _diagnosticTest.Response });
+                //return Ok(_diagnosticTest.Response);
+            else return BadRequest(_diagnosticTest.Response);
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
@@ -79,7 +80,8 @@ namespace ClinicAPI.Controllers
 
             var diagnosticTest = await _diagnosticTestService.DeleteDiagnosticTest(id);
             if (diagnosticTest.Confirmed)
-                return Ok(diagnosticTest.Response);
+                return Ok(new { message = diagnosticTest.Response });
+            //return Ok(diagnosticTest.Response);
             else return BadRequest(diagnosticTest.Response);
         }
 
