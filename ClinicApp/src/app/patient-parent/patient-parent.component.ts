@@ -10,6 +10,7 @@ import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 import { Component } from '@angular/core';
 import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
 import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
+import { ClinicService } from '../services/clinic.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class PatientParentComponent {
   patients: Patient[]= [];
   isPatientChosen: boolean = false;
   
-  constructor(private http:HttpClient, private formBuilder: FormBuilder){
+  constructor(private http:HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService){
     this.choosePatientForm = this.formBuilder.group({});
   }
 
@@ -39,7 +40,8 @@ export class PatientParentComponent {
   get formPatientId(): FormControl {return this.choosePatientForm?.get("patientId") as FormControl};
 
   getAllPatients(){
-    this.http.get<Patient[]>("https://localhost:5001/api/patient/Get").subscribe(data =>{
+    //this.http.get<Patient[]>("https://localhost:5001/api/patient/Get").subscribe(data =>{
+    this.clinicService.getAllPatients().subscribe(data =>{
       this.patients=data;
     })
   }

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Specialisation } from '../model/specialisation';
 import { Patient } from '../model/patient';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
+import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-make-an-appointment',
@@ -15,7 +16,7 @@ import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
   styleUrl: './make-an-appointment.component.css'
 })
 export class MakeAnAppointmentComponent {
-  readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
+  //readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
   medicalAppointments: ReturnMedicalAppointment[] = [];
   selectedAppointment: ReturnMedicalAppointment;
   specialisations: Specialisation[] = [];
@@ -28,7 +29,7 @@ export class MakeAnAppointmentComponent {
   @Input()
   patientId: number = 0;
 
-  constructor(private http:HttpClient, private formBuilder: FormBuilder){
+  constructor(private http:HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService){
     this.chooseSpecialisationForm = this.formBuilder.group({});
     //this.choosePatientForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
@@ -74,14 +75,16 @@ export class MakeAnAppointmentComponent {
   }*/
 
   getAllSpecialisations(){
-    this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data =>{
+    //this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data =>{
+    this.clinicService.getAllSpecialisations().subscribe(data =>{
       this.specialisations=data;
     })
   }
 
   search(){
     this.selectedSpecialisation = this.formSpecialisationId.value;
-    this.http.get<ReturnMedicalAppointment[]>(this.APIUrl+"/GetBySpecialisation/" + this.selectedSpecialisation).subscribe(data =>{
+    //this.http.get<ReturnMedicalAppointment[]>(this.APIUrl+"/GetBySpecialisation/" + this.selectedSpecialisation).subscribe(data =>{
+    this.clinicService.getMedicalAppointmentsBySpecialisationId(this.selectedSpecialisation).subscribe(data =>{
       this.medicalAppointments=data;
     })   
   }
@@ -101,7 +104,8 @@ export class MakeAnAppointmentComponent {
 
 
   setPatientToAppointment(selectedAppointment: ReturnMedicalAppointment) {
-    this.http.put<MedicalAppointment>(this.APIUrl+"/update", this.selectedAppointment)
+    //this.http.put<MedicalAppointment>(this.APIUrl+"/update", this.selectedAppointment)
+    this.clinicService.editMedicalAppointmentReturnDto(this.selectedAppointment)
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);

@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { Doctor } from '../model/doctor';
 import { Specialisation } from '../model/specialisation';
 import { DoctorWithSpcecialisations } from '../model/doctor-with-specialisations';
+import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-registrant-doctors',
@@ -16,7 +17,7 @@ import { DoctorWithSpcecialisations } from '../model/doctor-with-specialisations
 })
 export class RegistrantDoctorsComponent {
   //isAddNewDoctorVisible: boolean = false;
-  readonly APIUrl = "https://localhost:5001/api/Doctor";
+  //readonly APIUrl = "https://localhost:5001/api/Doctor";
   doctors: Doctor[] = [];
   doctorsWithSpecialisations: DoctorWithSpcecialisations[] = [];
   doctorForm: FormGroup;
@@ -33,7 +34,7 @@ export class RegistrantDoctorsComponent {
 
 
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.doctorForm = this.formBuilder.group({});
     this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
@@ -62,9 +63,12 @@ export class RegistrantDoctorsComponent {
 
 
   getAllSpecialisations() {
-    this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
+    this.clinicService.getAllSpecialisations().subscribe(data => {
       this.specialisations = data;
     })
+    /*this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
+      this.specialisations = data;
+    }) */
   }
 
   /*cancel() {
@@ -74,11 +78,7 @@ export class RegistrantDoctorsComponent {
   addDoctor() {
     console.log('Form Value before:', this.doctorForm.getRawValue());
     const formValue = this.doctorForm.getRawValue();
-    //formValue.MedicalSpecialisationsIds = formValue.specialisationsIdForm;
-    //console.log('Form Value after:', this.doctorForm.getRawValue());
-    //this.http.post<Doctor>(this.APIUrl + "/create", this.doctorForm.getRawValue()) // Bez obiektu opakowującego
-
-    this.http.post<Doctor>(this.APIUrl + "/create", formValue) // Bez obiektu opakowującego
+    this.clinicService.addDoctor(formValue) // Bez obiektu opakowującego
       .subscribe({
         next: (result: Doctor) => {
           this.doctor = result;
@@ -89,6 +89,19 @@ export class RegistrantDoctorsComponent {
           console.error("Error occurred:", err);
         }
       });
+    /*console.log('Form Value before:', this.doctorForm.getRawValue());
+    const formValue = this.doctorForm.getRawValue();
+    this.http.post<Doctor>(this.APIUrl + "/create", formValue) // Bez obiektu opakowującego
+      .subscribe({
+        next: (result: Doctor) => {
+          this.doctor = result;
+          this.getAllDoctors();
+          //this.doctorForm.reset;
+        },
+        error: (err) => {
+          console.error("Error occurred:", err);
+        }
+      });*/
       
   }
 
@@ -124,9 +137,12 @@ export class RegistrantDoctorsComponent {
   }
 
   getAllDoctors() {
-    this.http.get<DoctorWithSpcecialisations[]>(this.APIUrl + "/GetWithSpecialisations").subscribe(data => {
+    this.clinicService.getAllDoctorsWithSpecialisations().subscribe(data => {
       this.doctorsWithSpecialisations = data;
     })
+    /*this.http.get<DoctorWithSpcecialisations[]>(this.APIUrl + "/GetWithSpecialisations").subscribe(data => {
+      this.doctorsWithSpecialisations = data;
+    }) */
   }
 
   /*edit(doctor: Doctor){
@@ -204,9 +220,8 @@ export class RegistrantDoctorsComponent {
       specialisationsList: this.doctorSpecialisationsList
     };
 
-
-    //this.http.put<Doctor>(this.APIUrl + "/update", this.doctorForm.getRawValue(), this.doctorSpecialisationsList)
-    this.http.put<Doctor>(this.APIUrl + "/update", requestBody)
+    //this.http.put<Doctor>(this.APIUrl + "/update", requestBody) //WERSJA BEZ SERWISU
+    this.clinicService.updateDoctor(requestBody)
     .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
@@ -221,7 +236,8 @@ export class RegistrantDoctorsComponent {
   }
 
   delete(doctorId: number) {
-    this.http.delete<string>(this.APIUrl + "/Delete/" + doctorId)
+    //this.http.delete<string>(this.APIUrl + "/Delete/" + doctorId)
+    this.clinicService.deleteDoctor(doctorId)
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);

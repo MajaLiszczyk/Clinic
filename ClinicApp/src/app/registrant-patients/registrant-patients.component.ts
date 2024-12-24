@@ -4,6 +4,8 @@ import { Patient } from '../model/patient';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
+import { ClinicService } from '../services/clinic.service';
+
 
 @Component({
   selector: 'app-registrant-patients',
@@ -14,7 +16,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 })
 export class RegistrantPatientsComponent {
 
-  readonly APIUrl = "https://localhost:5001/api/patient";
+  //readonly APIUrl = "https://localhost:5001/api/patient";
   patients: Patient[] = [];
   patientForm: FormGroup;
   patientId: number = 0;
@@ -27,7 +29,7 @@ export class RegistrantPatientsComponent {
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) { //formbuilder do formGroup
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
   }
 
@@ -47,7 +49,8 @@ export class RegistrantPatientsComponent {
   get formPesel(): FormControl { return this.patientForm?.get("pesel") as FormControl };
 
   getAllPatients(){
-    this.http.get<Patient[]>(this.APIUrl+"/Get").subscribe(data =>{
+    //this.http.get<Patient[]>(this.APIUrl+"/Get").subscribe(data =>{
+    this.clinicService.getAllPatients().subscribe(data =>{
       this.patients=data;
     })
   }
@@ -72,7 +75,9 @@ export class RegistrantPatientsComponent {
       this.patientForm.markAllAsTouched(); 
       return;
     }
-    this.http.put<Patient>(this.APIUrl+"/update", this.patientForm.getRawValue())
+    const patientData = this.patientForm.getRawValue();
+    //this.http.put<Patient>(this.APIUrl+"/update", this.patientForm.getRawValue())
+    this.clinicService.updatePatient(patientData)
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
@@ -86,7 +91,8 @@ export class RegistrantPatientsComponent {
 
 
   delete(patientId: number){
-    this.http.delete<string>(this.APIUrl+"/Delete/"+patientId)
+    //this.http.delete<string>(this.APIUrl+"/Delete/"+patientId)
+    this.clinicService.deletePatient(patientId)
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
@@ -122,7 +128,8 @@ export class RegistrantPatientsComponent {
 
 
   addPatient() {
-    this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    this.clinicService.addPatient(this.patientForm.getRawValue()) // Bez obiektu opakowującego
       .subscribe({
         next: (result: Patient) => {
           this.patient = result; // Zwrócony obiekt przypisany do zmiennej

@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { Specialisation } from '../model/specialisation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-registrant-specialisations',
@@ -16,7 +17,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 })
 export class RegistrantSpecialisationsComponent {
   isAddNewSpecialisationVisible: boolean = false;
-  readonly APIUrl = "https://localhost:5001/api/MedicalSpecialisation";
+  //readonly APIUrl = "https://localhost:5001/api/MedicalSpecialisation";
   specialisations: Specialisation[] = [];
   //specialisationForm: FormGroup;
   specialisationF: FormGroup;
@@ -26,7 +27,7 @@ export class RegistrantSpecialisationsComponent {
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.specialisationF = this.formBuilder.group({});
   }
 
@@ -50,7 +51,8 @@ export class RegistrantSpecialisationsComponent {
   } */
 
   getAllSpecialisations(){
-    this.http.get<Specialisation[]>(this.APIUrl+"/Get").subscribe(data =>{
+    //this.http.get<Specialisation[]>(this.APIUrl+"/Get").subscribe(data =>{
+    this.clinicService.getAllSpecialisations().subscribe(data =>{
       this.specialisations=data;
     })
   }
@@ -77,7 +79,8 @@ export class RegistrantSpecialisationsComponent {
       this.specialisationF.markAllAsTouched(); 
       return;
     }
-    this.http.put<Specialisation>(this.APIUrl+"/update", this.specialisationF.getRawValue())
+    //this.http.put<Specialisation>(this.APIUrl+"/update", this.specialisationF.getRawValue())
+    this.clinicService.updateSpecialisation(this.specialisationF.getRawValue())
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
@@ -90,7 +93,8 @@ export class RegistrantSpecialisationsComponent {
   }
 
   delete(dspecialisationId: number){
-    this.http.delete<string>(this.APIUrl+"/Delete/"+ dspecialisationId)
+    //this.http.delete<string>(this.APIUrl+"/Delete/"+ dspecialisationId)
+    this.clinicService.deleteSpecialisation(dspecialisationId)
     .subscribe({
       next: (response) => {
         console.log("Action performed successfully:", response);
@@ -129,7 +133,8 @@ export class RegistrantSpecialisationsComponent {
 
 
   addSpecialisation() {
-    this.http.post<Specialisation>(this.APIUrl + "/create", this.specialisationF.getRawValue()) // Bez obiektu opakowującego
+    //this.http.post<Specialisation>(this.APIUrl + "/create", this.specialisationF.getRawValue()) // Bez obiektu opakowującego
+    this.clinicService.addSpecialisation(this.specialisationF.getRawValue()) // Bez obiektu opakowującego
       .subscribe({
         next: (result: Specialisation) => {
           this.specialisation = result; // Zwrócony obiekt przypisany do zmiennej

@@ -10,6 +10,7 @@ import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 import { Specialisation } from '../model/specialisation';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
+import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-patient',
@@ -25,7 +26,7 @@ export class PatientComponent {
   patients: Patient[] = [];
   isPatientIdSet: boolean = this.patientId !== 0;
   //historyPanel: boolean = false;
-  readonly APIUrl = "https://localhost:5001/api/MedicalAppointment";
+  //readonly APIUrl = "https://localhost:5001/api/MedicalAppointment";
   medicalAppointments: ReturnMedicalAppointment[] = [];
   selectedAppointment: ReturnMedicalAppointment;
   specialisations: Specialisation[] = [];
@@ -48,7 +49,8 @@ export class PatientComponent {
     this.activeComponent = componentName;
   }*/
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, 
+              private route: ActivatedRoute, private clinicService: ClinicService) {
     this.choosePatientForm = this.formBuilder.group({});
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
@@ -91,13 +93,15 @@ export class PatientComponent {
 
 
   getAllSpecialisations() {
-    this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
+    //this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
+    this.clinicService.getAllSpecialisations().subscribe(data => {
       this.specialisations = data;
     })
   }
 
   getAllMedicalAppointments(patientId: number) {
-    this.http.get<AllMedicalAppointments>(this.APIUrl + "/GetByPatientId/" + patientId).subscribe(data => {
+    //this.http.get<AllMedicalAppointments>(this.APIUrl + "/GetByPatientId/" + patientId).subscribe(data => {
+    this.clinicService.getMedicalAppointmentsByPatientId(patientId).subscribe(data => {
       this.allMedicalAppointments = data;
       console.log(this.allMedicalAppointments.pastMedicalAppointments);
       console.log(this.allMedicalAppointments.pastMedicalAppointments.length);
@@ -115,7 +119,8 @@ export class PatientComponent {
 
   cancel(medicalAppointment: MedicalAppointment) {
     medicalAppointment.patientId = 0;
-    this.http.put<MedicalAppointment>(this.APIUrl + "/update", medicalAppointment)
+    //this.http.put<MedicalAppointment>(this.APIUrl + "/update", medicalAppointment)
+    this.clinicService.editMedicalAppointment(medicalAppointment)
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
@@ -130,7 +135,8 @@ export class PatientComponent {
 
   search() {
     this.selectedSpecialisation = this.formSpecialisationId.value;
-    this.http.get<ReturnMedicalAppointment[]>(this.APIUrl + "/GetBySpecialisation/" + this.selectedSpecialisation).subscribe(data => {
+    //this.http.get<ReturnMedicalAppointment[]>(this.APIUrl + "/GetBySpecialisation/" + this.selectedSpecialisation).subscribe(data => {
+    this.clinicService.getMedicalAppointmentsBySpecialisationId(this.selectedSpecialisation).subscribe(data => {
       this.medicalAppointments = data;
     })
   }
@@ -151,7 +157,8 @@ export class PatientComponent {
 
 
   setPatientToAppointment(selectedAppointment: ReturnMedicalAppointment) {
-    this.http.put<MedicalAppointment>(this.APIUrl + "/update", this.selectedAppointment)
+    //this.http.put<MedicalAppointment>(this.APIUrl + "/update", this.selectedAppointment)
+    this.clinicService.editMedicalAppointmentReturnDto(this.selectedAppointment)
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);

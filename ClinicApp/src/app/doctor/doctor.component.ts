@@ -4,6 +4,7 @@ import { Doctor } from '../model/doctor';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-doctor',
@@ -18,7 +19,7 @@ export class DoctorComponent {
   doctors: Doctor[]= [];
   isDoctorChosen: boolean = false;
 
-  constructor(private http:HttpClient, private formBuilder: FormBuilder){
+  constructor(private http:HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService){
     this.chooseDoctorForm = this.formBuilder.group({});
   }
 
@@ -32,7 +33,8 @@ export class DoctorComponent {
   get formDoctortId(): FormControl {return this.chooseDoctorForm?.get("doctorId") as FormControl};
 
   getAllDoctors(){
-    this.http.get<Doctor[]>("https://localhost:5001/api/doctor/Get").subscribe(data =>{
+    //this.http.get<Doctor[]>("https://localhost:5001/api/doctor/Get").subscribe(data =>{
+    this.clinicService.getAllDoctors().subscribe(data =>{
       this.doctors=data;
     })
   }

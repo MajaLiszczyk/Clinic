@@ -16,6 +16,7 @@ import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appoi
 import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
+import { ClinicService } from '../services/clinic.service';
 
 
 
@@ -29,10 +30,10 @@ import { AllMedicalAppointments } from '../model/all-medical-appointments';
 export class DoctorAppointmentsComponent {
   doctorId: number = 0;
   allMedicalAppointments: AllMedicalAppointments;
-  readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
+  //readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
   isRegistrantMode: boolean = false;
 
-  constructor(private http:HttpClient, private route: ActivatedRoute){
+  constructor(private http:HttpClient, private route: ActivatedRoute, private clinicService: ClinicService){
     this.allMedicalAppointments = {pastMedicalAppointments: [], futureMedicalAppointments: []}
 
   }
@@ -51,7 +52,8 @@ export class DoctorAppointmentsComponent {
   }
 
   getMedicalAppointmentsForDoctor(){
-    this.http.get<AllMedicalAppointments>(this.APIUrl+"/GetByDoctorId/" + this.doctorId).subscribe(data =>{
+    //this.http.get<AllMedicalAppointments>(this.APIUrl+"/GetByDoctorId/" + this.doctorId).subscribe(data =>{
+    this.clinicService.getMedicalAppointmentsForDoctor(this.doctorId).subscribe(data =>{
       this.allMedicalAppointments=data;
       //this.allMedicalAppointments.pastMedicalAppointments[0].dateTime = new Date(2024, 12, 24);
     })
