@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicAPI.Models
 {
-    public class Patient
+    public class Patient //kocham-cie=maja<3
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

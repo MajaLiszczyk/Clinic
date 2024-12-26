@@ -1,14 +1,23 @@
-<p>registrant-doctor works!</p>
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 
 <!-- <div *ngIf="isFormVisible" class="w-100"> -->
-<div>
-    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewDoctor()" class="btn btn-success w-50 mb-5">Add
-        new doctor to the system</button>
-    <form [formGroup]="doctorForm" *ngIf="isAddingMode || isEditableMode">
 
-        <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
-            <label class="col-md-5">Name</label>
-            <div class="input-group col-md-5">
+    <div class="col mb-4 d-flex justify-content-between my-4">
+        <h1>Doctor</h1>
+        <button [disabled]="isEditableMode || isAddingMode" (click)="addNewDoctor()" class="btn btn-success fs-5">
+            + Add new doctor</button>
+    </div>
+    
+<div>
+    <h3 class="my-4" *ngIf="isAddingMode">Add new doctor</h3>
+
+    <h3 class="my-4" *ngIf="isEditableMode">Edit doctor</h3>
+
+    <form class="form-group w-25 mx-auto" [formGroup]="doctorForm" *ngIf="isAddingMode || isEditableMode">
+
+        <div class="formGroup">
+            <label class="form-label">Name</label>
+            <div class="input-group">
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                     [class.is-invalid]="formName.invalid">
                 <div class="invalid-feedback">
@@ -18,9 +27,9 @@
                 </div>
             </div>
         </div>
-        <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
-            <label class="col-md-5">Surname</label>
-            <div class="input-group col-md-5">
+        <div class="formGroup">
+            <label class="form-label">Surname</label>
+            <div class="input-group">
                 <input formControlName="surname" type="string" class="form-control" aria-label="surname"
                     [class.is-invalid]="formSurname.invalid">
                 <div class="invalid-feedback">
@@ -63,10 +72,10 @@
 
         <div class="d-flex justify-content-center mb-4 mt-5">
             <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="addDoctor()">Insert new doctor</button>
+                (click)="addDoctor()">Insert</button>
             <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
             <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="update()">Save etitioned doctor</button>
+                (click)="update()">Save</button>
 
 
 
@@ -83,9 +92,9 @@
     </form>
 </div>
 
-
+  <!--
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
-    <!-- <div *ngIf="isVisible">
+   <div *ngIf="isVisible">
         <form [formGroup]="doctorForm">
             <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
                 <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
@@ -114,43 +123,63 @@
             <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
         </form>
     </div> -->
+
     <table class="table table-striped">
-        <thead class="thead-dark">
+        <thead>
             <tr>
                 <th>
-                    Doctor
+                    #
                 </th>
                 <th>
-
+                    Name
+                </th>
+                <th>
+                    Surname
+                </th>
+                <th>
+                    Doctor number
+                </th>
+                <th>
+                    Specialties
                 </th>
             </tr>
 
         </thead>
         <!-- <tr *ngFor="let doctor of doctors"> -->
-        <tr *ngFor="let doctorWtihSpecialisations of doctorsWithSpecialisations">
-            <td>
-                {{doctorWtihSpecialisations.doctorNumber}}
-                {{doctorWtihSpecialisations.name}}
-                {{doctorWtihSpecialisations.surname}}
-                {{doctorWtihSpecialisations.specialisationIds}}
-            </td>
-            <td>
-                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                (click)="edit(doctorWtihSpecialisations)">Edit</button>
-            <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
+        <tbody>
+            <tr *ngFor="let doctorWtihSpecialisations of doctorsWithSpecialisations">
+                <td>     
+                    {{doctorWtihSpecialisations.id}}
+                </td>
+                <td>
+                    {{doctorWtihSpecialisations.name}}
+                </td>
+                <td>
+                    {{doctorWtihSpecialisations.surname}}
+                </td>
+                <td>
+                    {{doctorWtihSpecialisations.doctorNumber}}
+                </td>
+                <td>
+                    {{doctorWtihSpecialisations.specialisationIds}}
+                </td>
+                <td class="text-end">
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-outline-primary ms-4 me-2"
+                        (click)="edit(doctorWtihSpecialisations)">Edit</button>
 
-            <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
-            <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id]" [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
-
-
-                class="btn btn-success w-50">Doctor's Appointments</a>
-            </td>
-        </tr>
-        <tr *ngIf="doctorsWithSpecialisations.length === 0">
-            <td colspan="8">No doctors</td>
-        </tr>
+                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-outline-danger mx-2"
+                        (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
+        
+                    <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
+                    <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id]" [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
+                        class="btn btn-success ms-2 me-4">Doctor's Appointments</a>
+                </td>
+            </tr>
+            <tr *ngIf="doctorsWithSpecialisations.length === 0">
+                <td colspan="8">No doctors</td>
+            </tr>
+        </tbody>
     </table>
 
-    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
-</div>
+    <!--
+</div>-->

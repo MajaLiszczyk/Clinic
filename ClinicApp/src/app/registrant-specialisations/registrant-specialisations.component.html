@@ -1,13 +1,17 @@
-<p>registrant-specialisations works!</p>
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+
+<h1 class="my-4">Specialties</h1>
+
 
 <div>
-    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewSpecialisation()"
-        class="btn btn-success w-50 mb-5">Add
-        new specialisation to the system</button>
-    <form [formGroup]="specialisationF" *ngIf="isAddingMode || isEditableMode">
-        <div class="formGroup col-md-4 offset-md-4 d-flex justify-content-center ">
-            <label class="col-md-6 w-100">Name</label>
-            <div class="input-group col-md-6">
+    <h3 class="my-4" *ngIf="isAddingMode">Add new specialty</h3>
+
+    <h3 class="my-4" *ngIf="isEditableMode">Edit specialty</h3>
+
+    <form [formGroup]="specialisationF" *ngIf="isAddingMode || isEditableMode" class="w-25 mx-auto">
+        <div class="formGroup">
+            <label class="form-label">Name</label>
+            <div class="input-group">
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                     [class.is-invalid]="formName.invalid">
                 <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
@@ -21,36 +25,75 @@
 
 
         <div class="d-flex justify-content-center mb-4 mt-5">
-            <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="addSpecialisation()">Insert new specialisation</button>
-            <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
-            <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="update()">Save etitioned specialisation</button>
+            <button *ngIf="isAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="addSpecialisation()">Insert</button>
+            <button *ngIf="isEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="update()">Save</button>
+            <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
+
 
 
 
         </div>
 
     </form>
+</div>
+
+
+
+<div class="row mt-4">
+
+    <div class="col text-center" *ngIf="specialisations.length === 0">
+        <h3>No specialties!</h3>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4">
+
+        <button [disabled]="isEditableMode || isAddingMode" class="tile action-tile btn btn-primary"
+            (click)="addNewSpecialisation()">
+
+            <div class="row">
+
+                <span class="col-12 plus-icon">+</span>
+
+                <p class="col-12">Add new specialty</p>
+
+            </div>
+
+        </button>
+
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4" *ngFor="let specialisation of specialisations">
+
+        <div class="tile">
+
+            <h3 class="my-4">{{specialisation.name}}</h3>
+
+            <div class="line-break"></div>
+
+            <div class="mb-4">
+
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-primary mx-2"
+                    (click)="edit(specialisation)">Edit</button>
+
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-danger mx-2"
+                    (click)="delete(specialisation.id)">Delete</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
 
 
-
-
-
-
-
+<!--
+<div>
     <div class="d-flex justify-content-center mx-5 px-5 mb-5">
-        <!--<div *ngIf="isVisible">
-             <form [formGroup]="specialisationForm">
-                <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
-                    <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
-                        [class.is-invalid]="formName.invalid">
-                </div>
-                <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
-            </form>
-        </div> -->
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
@@ -84,3 +127,4 @@
     </div>
     <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
 </div>
+-->

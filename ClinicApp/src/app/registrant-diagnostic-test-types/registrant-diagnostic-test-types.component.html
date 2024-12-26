@@ -1,11 +1,19 @@
-<p>registrant-diagnostic-test-types works!</p>
-<div>
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+
+<div class="col mb-4 d-flex justify-content-between my-4">
+    <h1>Diagnostics</h1>
     <button [disabled]="isEditableMode || isAddingMode" (click)="addNewDiagnosticTestType()"
-        class="btn btn-success w-50 mb-5">Add
-        new diagnostic test type to the system</button>
-    <form [formGroup]="diagnosticTestTypesForm" *ngIf="isAddingMode || isEditableMode">
-        <div class="formGroup col-md-4 offset-md-4 d-flex justify-content-center ">
-            <label class="col-md-6 w-100">Name</label>
+        class="btn btn-success fs-5">Add new diagnostic test type</button>
+</div>
+
+<div>
+    <h3 class="my-4" *ngIf="isAddingMode">Add new diagnostic test type</h3>
+
+    <h3 class="my-4" *ngIf="isEditableMode">Edit diagnostic test type</h3>
+
+    <form class="form-group w-25 mx-auto" [formGroup]="diagnosticTestTypesForm" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup">
+            <label class="form-label">Name</label>
             <div class="input-group col-md-6">
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                     [class.is-invalid]="formName.invalid">
@@ -21,10 +29,10 @@
 
         <div class="d-flex justify-content-center mb-4 mt-5">
             <button *ngIf="isAddingMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="addDiagosticTestType()">Insert new diagnostic test type</button>
+                (click)="addDiagosticTestType()">Insert</button>
             <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
             <button *ngIf="isEditableMode" type="button" class="btn  btn-success float-right mx-2 "
-                (click)="update()">Save etitioned diagnostic test type</button>
+                (click)="update()">Save</button>
 
 
 
@@ -39,9 +47,9 @@
 
 
 
-
+<!--
     <div class="d-flex justify-content-center mx-5 px-5 mb-5">
-        <!--<div *ngIf="isVisible">
+        <div *ngIf="isVisible">
              <form [formGroup]="specialisationForm">
                 <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
                     <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
@@ -49,37 +57,36 @@
                 </div>
                 <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
             </form>
-        </div> -->
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        Diagnostic Test Type:
-                    </th>
-                    <th>
+        </div> 
+        
+    </div>-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Diagnostic Test Type
+                </th>
+                <th>
 
-                    </th>
-                </tr>
-
-            </thead>
-            <tr *ngFor="let diagnosticTestType of diagnosticTestTypes">
-                <td>
-                    {{diagnosticTestType.name}}
-
-                </td>
-                <td>
-
-                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                        (click)="edit(diagnosticTestType)">Edit</button>
-                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                        (click)="delete(diagnosticTestType.id)">Delete</button>
-                </td>
+                </th>
             </tr>
 
-            <tr *ngIf="diagnosticTestTypes.length === 0">
-                <td colspan="8">No diagnostic test types</td>
-            </tr>
-        </table>
-    </div>
-    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+        </thead>
+        <tr *ngFor="let diagnosticTestType of diagnosticTestTypes">
+            <td>
+                {{diagnosticTestType.name}}
+            </td>
+            <td class="text-end">
+
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-outline-primary ms-4 me-2"
+                    (click)="edit(diagnosticTestType)">Edit</button>
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-outline-danger ms-2 me-4"
+                    (click)="delete(diagnosticTestType.id)">Delete</button>
+            </td>
+        </tr>
+
+        <tr *ngIf="diagnosticTestTypes.length === 0">
+            <td colspan="8">No diagnostic test types</td>
+        </tr>
+    </table>
 </div>

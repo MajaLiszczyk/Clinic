@@ -1,0 +1,28 @@
+.tile {
+    width: 100%;
+    height: 12rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.action-tile {
+    transition: transform .3s ease-out;
+}
+
+.action-tile:hover {
+    transform: scale(1.05);
+}
+
+.line-break {
+    width: 100%;
+}
+
+.plus-icon {
+    font-size: 4rem;
+}

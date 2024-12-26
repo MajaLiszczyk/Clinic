@@ -1,5 +1,5 @@
 <p>registrant-appointments works!</p>
-<a [routerLink]="['/registrant']" class="btn btn-secondary mb-4">Return</a>
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 
 <div class=" col-12 mb-5 text-center">
     <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-success">Add new medical
@@ -59,6 +59,8 @@
         appointments</button>
 
 </div>
+<h3 class="my-4" *ngIf="isShowingAllAppointmentsMode">All appointments</h3>
+
 <div *ngIf="isShowingAllAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead class="thead-dark">
@@ -98,7 +100,7 @@
             <td>
                 <!-- <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button> -->
                 <button type="button" [disabled]="medicalAppointment.isFinished || medicalAppointment.isCancelled"
-                    class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
+                    class="btn btn-outline-danger float-right" (click)="delete(medicalAppointment.id)">Delete</button>
             </td>
         </tr>
         <tr *ngIf="medicalAppointments.length === 0">
