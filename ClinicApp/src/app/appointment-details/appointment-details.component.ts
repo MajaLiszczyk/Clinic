@@ -20,10 +20,9 @@ import { ClinicService } from '../services/clinic.service';
   styleUrl: './appointment-details.component.css'
 })
 export class AppointmentDetailsComponent {
-  //readonly APIUrl = "https://localhost:5001/api/MedicalAppointment";
   //OTRZYMANE Z PARAMETRÓW
   appointmentId: number = 0;
-  isEditable: boolean = false; // wizyty zakońćzone/anulowane vs oczekujące 
+  isEditable: boolean = false; // wizyty zakończone/anulowane vs oczekujące 
   isCancelClicked: boolean = false;
   isAppointmentCancelled: boolean = false;
 
@@ -51,11 +50,12 @@ export class AppointmentDetailsComponent {
     this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0, diagnosticTestTypeName: '', description: '' };
     this.medicalAppointmentForm = this.fb.group({
       //interviewText: new FormControl('', { validators: [Validators.required] }), // Domyślna wartość
-      interviewText: new FormControl(''), // Domyślna wartość
-      diagnosisText: [''],
+      interviewText: new FormControl('', { validators: [Validators.minLength(1), Validators.required] }), // Domyślna wartość
+      //diagnosisText: [''],
+      diagnosisText: new FormControl('', { validators: [Validators.minLength(1), Validators.required] })
     });
     this.cancelAppointmentForm = this.fb.group({
-      cancelComment: new FormControl(''),
+      cancelComment: new FormControl('', { validators: [Validators.minLength(1), Validators.required] }),
     });    
     this.chooseDiagnosticTestTypeForm = this.fb.group({});
     this.diagnosticTestForm = this.fb.group({});
@@ -64,7 +64,7 @@ export class AppointmentDetailsComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.appointmentId = +params['id'];
-      console.log('papaap Received appointmentId:', this.appointmentId);
+      console.log('Received appointmentId:', this.appointmentId);
     });
     this.route.queryParams.subscribe(queryParams => {
       this.isEditable = queryParams['isEditable'] === 'true';
@@ -205,6 +205,11 @@ export class AppointmentDetailsComponent {
   }
 
   saveCancelComment(){
+    if(this.cancelAppointmentForm.invalid){
+      this.cancelAppointmentForm.markAllAsTouched(); 
+      return;
+    }
+    
     this.medicalAppointment.cancellingComment = this.cancelAppointmentForm.get('cancelComment')?.value || '';
     this.medicalAppointment.isCancelled = true;
 
@@ -239,6 +244,10 @@ export class AppointmentDetailsComponent {
   }
 
   saveAnAppointment() {
+    if(this.medicalAppointmentForm.invalid){
+      this.medicalAppointmentForm.markAllAsTouched(); 
+      return;
+    }
     const finishAppointmentDto = {
       medicalAppointmentDto: {
         id: this.medicalAppointment.id,

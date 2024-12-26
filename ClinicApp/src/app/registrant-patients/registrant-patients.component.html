@@ -8,45 +8,42 @@
 </div> -->
 
 <div>
-    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewPatient()" class="btn btn-success w-50 mb-5">Add new patient to the system</button>
-    <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode">
-        <div class="formGroup col-md-2  offset-md-5 d-flex justify-content-center">
-            <label class="col-md-5">Name</label>
-            <div class="input-group col-md-5">
-                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
-                    [class.is-invalid]="formName.invalid">
-                <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
-                <div class="invalid-feedback">
-                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
-                    <span *ngIf="formName?.errors?.['max']">Max length: 30</span>
-                    <span *ngIf="formName?.errors?.['required']">Required</span>
-                </div>
+    <div class="col mb-4"> <!-- zajmuje 12 kolumn-->
+        <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
+    </div>
+    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewPatient()" class="btn btn-success">Add new patient to the system</button>
+    <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode" class="w-25 mx-auto">
+        <div class="formGroup mb-3">
+            <label class="form-label">Name</label>
+            <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                [class.is-invalid]="formName.invalid">
+            <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formName?.errors?.['min']">Min length: 1</span>
+                <span *ngIf="formName?.errors?.['max']">Max length: 60</span>
+                <span *ngIf="formName?.errors?.['required']">Required</span>
             </div>
         </div>
-        <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
-            <label class="col-md-5">Surname</label>
-            <div class="input-group col-md-5">
-                <input formControlName="surname" type="string" class="form-control" aria-label="surname"
-                    [class.is-invalid]="formSurname.invalid">
-                <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
-                <div class="invalid-feedback">
-                    <span *ngIf="formSurname?.errors?.['min']">Min length: 2</span>
-                    <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
-                    <span *ngIf="formSurname?.errors?.['required']">Required</span>
-                </div>
+        <div class="formGroup mb-3">
+            <label class="form-label">Surname</label>
+            <input formControlName="surname" type="string" class="form-control" aria-label="surname"
+                [class.is-invalid]="formSurname.invalid">
+            <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
+            <div class="invalid-feedback">
+                <span *ngIf="formSurname?.errors?.['min']">Min length: 1</span>
+                <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
+                <span *ngIf="formSurname?.errors?.['required']">Required</span>
             </div>
         </div>
-        <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center">
-            <label class="col-md-5">PESEL</label>
-            <div class="input-group col-md-5">
-                <input formControlName="pesel" type="string" class="form-control" aria-label="pesel"
-                    [class.is-invalid]="formPesel.invalid">
-                <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
-                <div class="invalid-feedback">
-                    <span *ngIf="formPesel?.errors?.['min']">Min length: 11</span>
-                    <span *ngIf="formPesel?.errors?.['max']">Max length: 11</span>
-                    <span *ngIf="formPesel?.errors?.['required']">Required</span>
-                </div>
+        <div class="formGroup mb-3">
+        <label class="form-label">PESEL</label>
+            <input formControlName="pesel" type="string" class="form-control" aria-label="pesel"
+                [class.is-invalid]="formPesel.invalid">
+            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formPesel?.errors?.['min']">Min length: 11</span>
+                <span *ngIf="formPesel?.errors?.['max']">Max length: 11</span>
+                <span *ngIf="formPesel?.errors?.['required']">Required</span>
             </div>
         </div>
 
@@ -117,6 +114,5 @@
     </div>
 
 
-    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
 
 </div>

@@ -135,6 +135,10 @@ export class RegistrantSpecialisationsComponent {
 
 
   addSpecialisation() {
+    if(this.specialisationF.invalid){
+      this.specialisationF.markAllAsTouched(); 
+      return;
+    }
     //this.http.post<Specialisation>(this.APIUrl + "/create", this.specialisationF.getRawValue()) // Bez obiektu opakowującego
     this.clinicService.addSpecialisation(this.specialisationF.getRawValue()) // Bez obiektu opakowującego
       .subscribe({

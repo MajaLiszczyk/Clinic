@@ -12,8 +12,8 @@
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                     [class.is-invalid]="formName.invalid">
                 <div class="invalid-feedback">
-                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
-                    <span *ngIf="formName?.errors?.['max']">Max length: 30</span>
+                    <span *ngIf="formName?.errors?.['min']">Min length: 1</span>
+                    <span *ngIf="formName?.errors?.['max']">Max length: 60</span>
                     <span *ngIf="formName?.errors?.['required']">Required</span>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <input formControlName="surname" type="string" class="form-control" aria-label="surname"
                     [class.is-invalid]="formSurname.invalid">
                 <div class="invalid-feedback">
-                    <span *ngIf="formSurname?.errors?.['min']">Min length: 2</span>
+                    <span *ngIf="formSurname?.errors?.['min']">Min length: 1</span>
                     <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
                     <span *ngIf="formSurname?.errors?.['required']">Required</span>
                 </div>
@@ -49,6 +49,9 @@
                     {{ specialisation.name }}
                   </label>
             </div>
+        </div>
+        <div class="invalid-feedback" *ngIf="doctorForm.get('medicalSpecialisationsIds')?.errors?.['required'] && doctorForm.get('medicalSpecialisationsIds')?.touched">
+            At least one specialisation must be selected.
         </div>
 
         <div>

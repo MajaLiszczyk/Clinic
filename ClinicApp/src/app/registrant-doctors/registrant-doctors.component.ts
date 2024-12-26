@@ -7,6 +7,7 @@ import { Doctor } from '../model/doctor';
 import { Specialisation } from '../model/specialisation';
 import { DoctorWithSpcecialisations } from '../model/doctor-with-specialisations';
 import { ClinicService } from '../services/clinic.service';
+import { atLeastOneSelectedValidator } from '../validators';
 
 @Component({
   selector: 'app-registrant-doctors',
@@ -47,11 +48,11 @@ export class RegistrantDoctorsComponent {
     this.getAllDoctors();
     this.getAllSpecialisations();
     this.doctorForm = this.formBuilder.group({
-      medicalSpecialisationsIds: new FormArray([]),
+      medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }),
       id: Number,
-      name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required] }),
-      surname: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(60), Validators.required] }),
-      doctorNumber: new FormControl(''), 
+      name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
+      surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
+      doctorNumber: new FormControl(''/*, {validators: [Validators.required]}*/), 
     });
   }
 
@@ -71,11 +72,17 @@ export class RegistrantDoctorsComponent {
     }) */
   }
 
+  
+
   /*cancel() {
     this.isFormVisible = true;
   } */
 
   addDoctor() {
+    if(this.doctorForm.invalid){ 
+      this.doctorForm.markAllAsTouched();
+      return;
+    } 
     console.log('Form Value before:', this.doctorForm.getRawValue());
     const formValue = this.doctorForm.getRawValue();
     this.clinicService.addDoctor(formValue) // Bez obiektu opakowującego

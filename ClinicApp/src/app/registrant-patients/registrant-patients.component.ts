@@ -37,8 +37,8 @@ export class RegistrantPatientsComponent {
     this.getAllPatients();
     this.patientForm = this.formBuilder.group({
       id: Number,
-      name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(30), Validators.required] }),
-      surname: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(60), Validators.required] }),
+      name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
+      surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
       pesel: new FormControl('', { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required] })
     });
   }
@@ -131,6 +131,10 @@ export class RegistrantPatientsComponent {
 
   addPatient() {
     //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
+      return;
+    }
     this.clinicService.addPatient(this.patientForm.getRawValue()) // Bez obiektu opakowującego
       .subscribe({
         next: (result: Patient) => {

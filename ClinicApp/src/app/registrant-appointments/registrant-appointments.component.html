@@ -1,36 +1,49 @@
 <p>registrant-appointments works!</p>
-<button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-success w-50 mb-5">Add new medical appointment to the system</button>
-<form [formGroup]="medicalAppointmentForm" *ngIf="isAddingMode">
-    <div class="form-group">
-        <label for="doctor">Doctor:</label>
+<a [routerLink]="['/registrant']" class="btn btn-secondary mb-4">Return</a>
+
+<div class=" col-12 mb-5 text-center">
+    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-success">Add new medical
+        appointment</button>
+</div>
+<form [formGroup]="medicalAppointmentForm" *ngIf="isAddingMode" class="w-50 mx-auto">
+    <div class="mb-4">
+        <label class="form-label" for="doctor">Doctor:</label>
         <select id="doctor" class="form-control" formControlName="doctorId">
-          <option *ngFor="let doctor of doctors" [value]="doctor.id">
-            {{ doctor.name }}
-            {{doctor.surname}}
-          </option>
+            <option *ngFor="let doctor of doctors" [value]="doctor.id">
+                {{ doctor.name }}
+                {{doctor.surname}}
+            </option>
         </select>
     </div>
-    <div class="form-group col-md-2 offset-md-5 d-flex justify-content-center">
-        <label class="col-md-5">Date & Time</label>
-        <div class="input-group col-md-5">
-          <input formControlName="date" ngbDatepicker #formMedicalAppointmentDatePicker="ngbDatepicker" class="form-control" aria-label="date"
-                 [class.is-invalid]="formMedicalAppointmentDate.invalid">
-          <div>
-            <button class="btn btn-outline-secondary pi pi-calendar" (click)="formMedicalAppointmentDatePicker.toggle()" type="button"></button>
-          </div>
+
+
+
+
+    <div class="mb-4 ">
+        <label class="d-block form-label">Date</label>
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="input-group mr-2">
+                <input formControlName="date" ngbDatepicker #formMedicalAppointmentDatePicker="ngbDatepicker"
+                    class="form-control" aria-label="date" [class.is-invalid]="formMedicalAppointmentDate.invalid"
+                        [readOnly]="true" placeholder="YYYY-MM-DD">
+                
+                    <a class="btn btn-outline-secondary pi pi-calendar"
+                        (click)="formMedicalAppointmentDatePicker.toggle()" type="button">Select date</a>
+            </div>
+            
+            <ngb-timepicker formControlName="time" [spinners]="true" [seconds]="false" [hourStep]="1"
+            [minuteStep]="1"></ngb-timepicker>
         </div>
-      </div>
-      
-      <div class="col-md-5 offset-md-5 d-flex justify-content-center">
-        <ngb-timepicker formControlName="time" [spinners]="true" [seconds]="false" [hourStep]="1" [minuteStep]="1"></ngb-timepicker>
-      </div>
-    
-      <div class="invalid-feedback">
+       
+    </div>
+
+    <div class="invalid-feedback">
         <span *ngIf="formMedicalAppointmentDate.get('dateTime')?.errors?.['required']">Required</span>
-      </div> 
-      <div>   
+    </div>
+    <div>
         <div class="d-flex justify-content-center mb-4">
-            <button type="button" class="btn  btn-success float-right mx-2" (click)="addMedicalAppointment()">Add the new medical appointment for doctor id: {{formDoctorId.value}}</button>
+            <button type="button" class="btn  btn-success float-right mx-2" (click)="addMedicalAppointment()">Add the
+                new medical appointment for doctor id: {{formDoctorId.value}}</button>
             <button (click)="cancelAdding()" class="btn btn-secondary">Cancel</button>
         </div>
     </div>
@@ -41,7 +54,11 @@
 
 <!-- GET ALL -->
 
-<button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-success w-50 mb-5">Show all appointments</button>
+<div class=" col-12 mb-5 text-center">
+    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-success">Show all
+        appointments</button>
+
+</div>
 <div *ngIf="isShowingAllAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead class="thead-dark">
@@ -56,7 +73,11 @@
                     Patient Id
                 </th>
                 <th>
-                   
+                    Time
+                </th>
+                <th>      
+                </th>
+                <th>      
                 </th>
             </tr>
 
@@ -64,14 +85,20 @@
         <tr *ngFor="let medicalAppointment of medicalAppointments">
             <td>
                 Med Ap Id: {{medicalAppointment.id}}
+            </td>
+            <td>
                 DoctorId: {{medicalAppointment.doctorId}}
+            </td>
+            <td>
                 PatientId: {{medicalAppointment.patientId}}
+            </td>
+            <td>
                 Time: {{medicalAppointment.dateTime}}
-
             </td>
             <td>
                 <!-- <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button> -->
-                <button type="button" [disabled]="medicalAppointment.isFinished || medicalAppointment.isCancelled" class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
+                <button type="button" [disabled]="medicalAppointment.isFinished || medicalAppointment.isCancelled"
+                    class="btn  btn-success float-right" (click)="delete(medicalAppointment.id)">Delete</button>
             </td>
         </tr>
         <tr *ngIf="medicalAppointments.length === 0">
@@ -80,5 +107,3 @@
     </table>
     <button (click)="closeAllAppointments()" class="btn btn-secondary">Close</button>
 </div>
-
-<a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>

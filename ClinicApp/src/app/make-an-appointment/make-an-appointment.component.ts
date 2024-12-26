@@ -16,13 +16,10 @@ import { ClinicService } from '../services/clinic.service';
   styleUrl: './make-an-appointment.component.css'
 })
 export class MakeAnAppointmentComponent {
-  //readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
   medicalAppointments: ReturnMedicalAppointment[] = [];
   selectedAppointment: ReturnMedicalAppointment;
   specialisations: Specialisation[] = [];
-  //patients: Patient[]= [];
   chooseSpecialisationForm: FormGroup;
-  //choosePatientForm: FormGroup;
   isDisabled = true;
   selectedSpecialisation: number;
 
@@ -31,21 +28,9 @@ export class MakeAnAppointmentComponent {
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService){
     this.chooseSpecialisationForm = this.formBuilder.group({});
-    //this.choosePatientForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
     this.selectedAppointment = { id: 0, doctorId: 0, patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0, dateTime: new Date()}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
   }
-
-  /*ngOnInit(){
-    this.getAllSpecialisations();
-    //this.getAllPatients();
-    this.chooseSpecialisationForm = this.formBuilder.group({
-      specialisationId: new FormControl(null, {validators: [Validators.required]})
-    });
-    //this.choosePatientForm = this.formBuilder.group({
-    //  patientId: new FormControl(null, {validators: [Validators.required]})
-    //}); 
-  } */
 
   ngOnInit(): void {
     this.getAllSpecialisations();
@@ -63,16 +48,8 @@ export class MakeAnAppointmentComponent {
 
 
 
-
-
   get formSpecialisationId(): FormControl {return this.chooseSpecialisationForm?.get("specialisationId") as FormControl};
   //get formPatientId(): FormControl {return this.choosePatientForm?.get("patientId") as FormControl};
-
-  /*getAllPatients(){
-    this.http.get<Patient[]>("https://localhost:5001/api/patient/Get").subscribe(data =>{
-      this.patients=data;
-    })
-  }*/
 
   getAllSpecialisations(){
     //this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data =>{

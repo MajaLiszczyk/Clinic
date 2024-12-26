@@ -10,7 +10,7 @@
     </div> 
   </ng-template>
   <ng-template #awaitBlock>
-    status: AWAINTING
+    status: AWAITING
   </ng-template> <br/>
 
   Time: {{medicalAppointment.dateTime}} <br/>
@@ -35,12 +35,19 @@
 <div *ngIf="!isAppointmentCancelled && !isCancelClicked">
   <form [formGroup]="medicalAppointmentForm">
     <label for="textbox">Interview:</label>
-    <!-- <input id="textbox" type="text" formControlName="interviewText" /> -->
     <input id="interview" formControlName="interviewText" type="text" class="form-control">
+      <div class="invalid-feedback">
+        <span *ngIf="formInterview?.errors?.['min']">Min length: 1</span>
+        <span *ngIf="formInterview?.errors?.['required']">Required</span>
+    </div>
     <p></p>
 
     <label for="textbox">Diagnosis:</label>
-    <input id="textbox" type="text" formControlName="diagnosisText" />
+    <input id="textbox" type="text" formControlName="diagnosisText" class="form-control" />
+      <div class="invalid-feedback">
+        <span *ngIf="formDiagnosis?.errors?.['min']">Min length: 1</span>
+        <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
+    </div>
 
   </form>
 
@@ -115,8 +122,8 @@
   </div>
 
   <div *ngIf="isEditable">
-    <button (click)="saveAnAppointment()" class="btn btn-success w-50">Finish the appointment</button>
-    <button (click)="cancelAnAppointment()" class="btn btn-success w-50">Cancel the appointment</button>
+    <button [disabled]="medicalAppointment.patientId==0" (click)="saveAnAppointment()" class="btn btn-success w-50">Finish the appointment</button>
+    <button [disabled]="medicalAppointment.patientId==0" (click)="cancelAnAppointment()" class="btn btn-success w-50">Cancel the appointment</button>
 
     <!-- <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a> -->
   </div>

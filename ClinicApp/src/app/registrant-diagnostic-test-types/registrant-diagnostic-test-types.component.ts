@@ -149,6 +149,10 @@ export class RegistrantDiagnosticTestTypesComponent {
 
 
   addDiagosticTestType() {
+    if(this.diagnosticTestTypesForm.invalid){ 
+      this.diagnosticTestTypesForm.markAllAsTouched();
+      return;
+    } 
     const diagnosticTestData = this.diagnosticTestTypesForm.getRawValue();
     this.clinicService.addDiagosticTestType(diagnosticTestData) // Bez obiektu opakowującego
     .subscribe({

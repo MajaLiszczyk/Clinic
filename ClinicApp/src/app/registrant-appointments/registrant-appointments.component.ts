@@ -36,8 +36,6 @@ export class RegistrantAppointmentsComponent {
   medicalAppointments: MedicalAppointment[] = [];
   isAddingMode: boolean = false;
   isShowingAllAppointmentsMode: boolean = false;
-  //medicalAppointmentForm: FormGroup;
-  //isDisable = false;
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, 
               private adapter: NgbDateNativeAdapter, private clinicService: ClinicService) {
@@ -86,6 +84,10 @@ export class RegistrantAppointmentsComponent {
   }
 
   addMedicalAppointment(): void {
+    if(this.medicalAppointmentForm.invalid){ 
+      this.medicalAppointmentForm.markAllAsTouched();
+      return;
+    }
     const appointmentData = this.medicalAppointmentForm.getRawValue(); // Pobranie danych z formularza
     this.clinicService.addMedicalAppointment(appointmentData).subscribe({
       next: (result: MedicalAppointment) => {
