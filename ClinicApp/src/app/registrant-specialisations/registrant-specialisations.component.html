@@ -9,7 +9,7 @@
     <h3 class="my-4" *ngIf="isEditableMode">Edit specialty</h3>
 
     <form [formGroup]="specialisationF" *ngIf="isAddingMode || isEditableMode" class="w-25 mx-auto">
-        <div class="formGroup">
+        <div class="formGroup mb-3">
             <label class="form-label">Name</label>
             <div class="input-group">
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
@@ -23,73 +23,42 @@
             </div>
         </div>
 
-
-        <div class="d-flex justify-content-center mb-4 mt-5">
+        <div class="d-flex justify-content-center mb-5 mt-5">
             <button *ngIf="isAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
-                (click)="addSpecialisation()">Insert</button>
+                (click)="addSpecialisation()">Save</button>
             <button *ngIf="isEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
                 (click)="update()">Save</button>
             <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
-
-
-
-
         </div>
-
     </form>
 </div>
 
-
-
 <div class="row mt-4">
-
     <div class="col text-center" *ngIf="specialisations.length === 0">
         <h3>No specialties!</h3>
     </div>
-
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4">
-
         <button [disabled]="isEditableMode || isAddingMode" class="tile action-tile btn btn-primary"
             (click)="addNewSpecialisation()">
-
             <div class="row">
-
                 <span class="col-12 plus-icon">+</span>
-
                 <p class="col-12">Add new specialty</p>
-
             </div>
-
         </button>
-
     </div>
-
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4" *ngFor="let specialisation of specialisations">
-
         <div class="tile">
-
             <h3 class="my-4">{{specialisation.name}}</h3>
-
             <div class="line-break"></div>
-
             <div class="mb-4">
-
                 <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-primary mx-2"
                     (click)="edit(specialisation)">Edit</button>
-
                 <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-danger mx-2"
                     (click)="delete(specialisation.id)">Delete</button>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
-
-
-
 
 <!--
 <div>

@@ -159,6 +159,7 @@ export class RegistrantDiagnosticTestTypesComponent {
       next: (result: DiagnosticTestType) => {
         this.diagnosticTestType = result; // Zwrócony obiekt przypisany do zmiennej
         this.getAllDiagnosticTestTypes()
+        this.isAddingMode = false;
       },
       error: (err) => {
         console.error("Error occurred:", err); // Obsługa błędów
