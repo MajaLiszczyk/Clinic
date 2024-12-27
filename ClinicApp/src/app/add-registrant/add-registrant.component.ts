@@ -21,7 +21,7 @@ export class AddRegistrantComponent {
   //surname: string = '';
   //pesel: string = '';
   isDisable = false;
-  registrant: Registrant = { id: 0, registrantNumber: '', name: '', surname: '' };
+  registrant: Registrant = { id: 0, registrantNumber: '', name: '', surname: '' , isAvailable: true };
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){ //formbuilder do formGroup
     this.registrantForm = this.formBuilder.group({});

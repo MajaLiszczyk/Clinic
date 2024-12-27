@@ -26,7 +26,7 @@ export class AddDoctorComponent {
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){
     this.doctorForm = this.formBuilder.group({});
-    this.doctor = { id: 0,  name: '', surname: '', doctorNumber: '', specialisation: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.doctor = { id: 0,  name: '', surname: '', doctorNumber: '', specialisation: [], isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
   }
 
   ngOnInit(){

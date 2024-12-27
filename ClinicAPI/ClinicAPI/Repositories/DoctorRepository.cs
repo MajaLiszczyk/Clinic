@@ -49,6 +49,25 @@ namespace ClinicAPI.Repositories
             return doctors;
         }
 
+        public async Task<List<Doctor>> GetAllAvailableDoctors()
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            List<Doctor> doctors = new List<Doctor>();
+            try
+            {
+
+
+                doctors = await _context.Doctor.Where(r => r.IsAvailable == true )
+                    .ToListAsync();
+                scope.Complete();
+            }
+            catch (Exception) { }
+            return doctors;
+        }
+
+
         public async Task<List<DoctorWithSpecialisations>> GetDoctorsWithSpecialisations()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -64,7 +83,8 @@ namespace ClinicAPI.Repositories
                         Name = d.Name,
                         Surname = d.Surname,
                         DoctorNumber = d.DoctorNumber,
-                        SpecialisationIds = d.MedicalSpecialisations.Select(ms => ms.Id).ToList()
+                        SpecialisationIds = d.MedicalSpecialisations.Select(ms => ms.Id).ToList(),
+                        IsAvailable = d.IsAvailable
                     })
                     .ToListAsync();
                 scope.Complete();

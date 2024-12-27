@@ -4,4 +4,6 @@ export interface Patient{
     name: string;
     surname: string;
     patientNumber: string;
+    isAvailable: boolean;
+
 }

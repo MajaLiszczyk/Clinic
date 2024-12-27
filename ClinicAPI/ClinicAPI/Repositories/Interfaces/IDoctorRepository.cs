@@ -6,6 +6,7 @@ namespace ClinicAPI.Repositories.Interfaces
     {
         public Task<Doctor?> GetDoctorById(int id);
         public Task<List<Doctor>> GetAllDoctors();
+        public Task<List<Doctor>> GetAllAvailableDoctors();
         public Task<List<DoctorWithSpecialisations>> GetDoctorsWithSpecialisations();
         public Task<Doctor> CreateDoctor(Doctor doctor);
         public Task<Doctor?> UpdateDoctor(Doctor doctor);

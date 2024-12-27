@@ -1,6 +1,6 @@
 <p>patient works!</p>
 <!-- MAKE APPOINTMENT-->
-<button [disabled]="isMakeAnAppointmentMode" (click)="openAppointmentForm()" class="btn btn-success w-50 mb-5">Make an
+<button [disabled]="isMakeAnAppointmentMode || patient.isAvailable==false " (click)="openAppointmentForm()" class="btn btn-success w-50 mb-5">Make an
     appointment</button>
 <form [formGroup]="chooseSpecialisationForm" *ngIf="isMakeAnAppointmentMode">
     <div class="form-group">

@@ -24,7 +24,7 @@ export class RegistrantPatientsComponent {
   surname: string = '';
   pesel: string = '';
   isDisable = false;
-  patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '' };
+  patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '', isAvailable: true };
   isFormVisible: boolean = false;
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;

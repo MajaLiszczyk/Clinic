@@ -23,7 +23,7 @@ export class AddPatientComponent {
   surname: string = '';
   pesel: string = '';
   isDisable = false;
-  patient: Patient = { id: 0, pesel: '', patientNumber: '', name: '', surname: '' };
+  patient: Patient = { id: 0, pesel: '', patientNumber: '', name: '', surname: '' , isAvailable: true };
   isFormVisible: boolean = false;
   
   @Input() isAddingMode: boolean = false; // Odbiera zmienną od rodzica

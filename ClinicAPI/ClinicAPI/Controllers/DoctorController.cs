@@ -40,6 +40,15 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAvailable()
+        {
+            var result = await _doctorService.GetAllAvailableDoctors();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetWithSpecialisations()
         {
             var result = await _doctorService.GetDoctorsWithSpecialisations();
@@ -75,6 +84,16 @@ namespace ClinicAPI.Controllers
             if (result.Confirmed)
                 //return Ok(result.Response);
                 return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> TransferToArchive([FromRoute] int id)
+        {
+            var result = await _doctorService.TransferToArchive(id);
+            if (result.Confirmed)
+                //return Ok(result.Response); // z tego nie zrobi sie json  -a tego oczekuje angular
+                return Ok(new { message = result.Response }); //tu tworzy sie json
             else return BadRequest(result.Response);
         }
 

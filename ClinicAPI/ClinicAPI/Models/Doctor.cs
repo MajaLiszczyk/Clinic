@@ -9,6 +9,7 @@ namespace ClinicAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsAvailable { get; set; } = true;
     }
 
     public class Doctor
@@ -21,6 +22,8 @@ namespace ClinicAPI.Models
         public string DoctorNumber { get; set; }
         //public MedicalSpecialisation MedicalSpecialisation { get; set; }
         public ICollection<MedicalSpecialisation> MedicalSpecialisations { get; set; } = new List<MedicalSpecialisation>();
+        public bool IsAvailable { get; set; } = true;
+
 
 
         //public List<MedicalAppointment> MedicalAppointments { get; set; } //wszystkie - przyszłe, przeszłe, nieodbyte

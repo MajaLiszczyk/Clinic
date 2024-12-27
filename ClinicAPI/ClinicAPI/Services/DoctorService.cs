@@ -33,6 +33,11 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnDoctorDto>>(doctors);
         }
 
+        public async Task<List<ReturnDoctorDto>> GetAllAvailableDoctors()
+        {
+            var doctors = await _doctorRepository.GetAllAvailableDoctors();
+            return _mapper.Map<List<ReturnDoctorDto>>(doctors);
+        }
 
         public async Task<List<DoctorWithSpecialisations>> GetDoctorsWithSpecialisations()
         {
@@ -101,6 +106,38 @@ namespace ClinicAPI.Services
 
             }
         }
+        
+        public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
+        {
+            var _doctor = await _doctorRepository.GetDoctorById(id);
+            if (_doctor == null)
+            {
+                return await Task.FromResult((false, "doctor with given id does not exist."));
+            }
+            else
+            {               
+                try
+                {
+                    _doctor.IsAvailable = false;
+                   
+
+                    //Doctor r = _mapper.Map<Doctor>(doctor);
+                    var p = await _doctorRepository.UpdateDoctor(_doctor);
+                    return await Task.FromResult((true, "doctor succesfully uptated"));
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return await Task.FromResult((false, "doctor ERROR uptated"));
+
+                }
+
+
+            }
+        }
+
+
         public async Task<(bool Confirmed, string Response)> DeleteDoctor(int id)
         {
             var doctor = await _doctorRepository.GetDoctorById(id);

@@ -23,6 +23,7 @@ import { ClinicService } from '../services/clinic.service';
 export class PatientComponent {
   patientId: number = 0;
   choosePatientForm: FormGroup;
+  patient: Patient;
   patients: Patient[] = [];
   isPatientIdSet: boolean = this.patientId !== 0;
   //historyPanel: boolean = false;
@@ -56,6 +57,7 @@ export class PatientComponent {
     this.selectedSpecialisation = 0;
     this.selectedAppointment = { id: 0, doctorId: 0, patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0, dateTime: new Date() }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
+    this.patient = {name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true};
   }
 
   ngOnInit() {
@@ -65,6 +67,7 @@ export class PatientComponent {
     this.route.params.subscribe(params => {
       this.patientId = +params['patientId']; // Przypisanie id z URL
       console.log('Received patientId:', this.patientId);
+      this.getPatientById(this.patientId);
     });
 
     this.route.queryParams.subscribe(queryParams => {
@@ -96,6 +99,12 @@ export class PatientComponent {
     //this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data => {
     this.clinicService.getAllSpecialisations().subscribe(data => {
       this.specialisations = data;
+    })
+  }
+
+  getPatientById(patientId: number){
+    this.clinicService.getPatientById(patientId).subscribe(data => {
+      this.patient = data;
     })
   }
 

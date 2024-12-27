@@ -26,30 +26,45 @@ export class ClinicService {
   readonly PatientUrl = "https://localhost:5001/api/patient";
   readonly DiagnosticTesttUrl = "https://localhost:5001/api/DiagnosticTest";
 
-  
+
 
 
 
   constructor(private http: HttpClient) { }
 
   //PATIENT
-  getAllPatients(): Observable<Patient[]>{
-     return this.http.get<Patient[]>(this.PatientUrl+"/Get")
+  getPatientById(patientId: number){
+    return this.http.get<Patient>(this.PatientUrl + "/Get/" + patientId);
+  }
+
+  getAllPatients(): Observable<Patient[]> {
+    return this.http.get<Patient[]>(this.PatientUrl + "/Get")
   }
 
   addPatient(patient: any): Observable<Patient> { //inny typ
-    return this.http.post<Patient>(this.PatientUrl + "/create", patient)}
-
-  updatePatient(patient: any): Observable<Patient>{ // inny typ
-    return this.http.put<Patient>(this.PatientUrl+"/update", patient)
+    return this.http.post<Patient>(this.PatientUrl + "/create", patient)
   }
 
-  deletePatient(patientId: number): Observable<string>{
-    return this.http.delete<string>(this.PatientUrl+"/Delete/"+patientId)}
+  updatePatient(patient: any): Observable<Patient> { // inny typ
+    return this.http.put<Patient>(this.PatientUrl + "/update", patient)
+  }
+
+  /*deletePatient(patientId: number): Observable<string> {
+    return this.http.delete<string>(this.PatientUrl + "/Delete/" + patientId)
+  } */
+
+  deletePatient(patientId: number): Observable<string> {
+    const url = `${this.PatientUrl}/TransferToArchive/${patientId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
+  }
 
   //DOCTOR
   getAllDoctors(): Observable<Doctor[]> {
     return this.http.get<Doctor[]>(this.DoctorUrl + "/Get");
+  }
+
+  getAllAvailableDoctors(): Observable<Doctor[]> {
+    return this.http.get<Doctor[]>(this.DoctorUrl + "/GetAvailable");
   }
 
   getAllDoctorsWithSpecialisations(): Observable<DoctorWithSpcecialisations[]> {
@@ -60,29 +75,46 @@ export class ClinicService {
     return this.http.post<Doctor>(this.DoctorUrl + "/create", doctor);
   }
 
-  updateDoctor(doctor: any): Observable<Doctor>{ //inny typ
+  updateDoctor(doctor: any): Observable<Doctor> { //inny typ
     return this.http.put<Doctor>(this.DoctorUrl + "/update", doctor)
   }
 
-  deleteDoctor(doctorId: number): Observable<string>{
+  /*deleteDoctor(doctorId: number): Observable<string> {
     return this.http.delete<string>(this.DoctorUrl + "/Delete/" + doctorId)
+  }*/
+
+  deleteDoctor(doctorId: number): Observable<string> {
+    const url = `${this.DoctorUrl}/TransferToArchive/${doctorId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' });
   }
 
   //SPECIALISATIONS
   getAllSpecialisations(): Observable<Specialisation[]> {
-    return this.http.get<Specialisation[]>(this.SpecialisationUrl+"/Get");
+    return this.http.get<Specialisation[]>(this.SpecialisationUrl + "/Get");
   }
 
   addSpecialisation(specialisation: any): Observable<Specialisation> { //inny typ
     return this.http.post<Specialisation>(this.SpecialisationUrl + "/create", specialisation) // Bez obiektu opakowującego
   }
 
-  updateSpecialisation(specialisation: any): Observable<Specialisation>{ //inny typ
-    return this.http.put<Specialisation>(this.SpecialisationUrl+"/update", specialisation)
+  updateSpecialisation(specialisation: any): Observable<Specialisation> { //inny typ
+    return this.http.put<Specialisation>(this.SpecialisationUrl + "/update", specialisation)
   }
 
-  deleteSpecialisation(dspecialisationId: number): Observable<string>{
-    return this.http.delete<string>(this.SpecialisationUrl+"/Delete/"+ dspecialisationId)}
+  /*deleteSpecialisation(dspecialisationId: number): Observable<string>{
+    return this.http.delete<string>(this.SpecialisationUrl+"/Delete/"+ dspecialisationId)}*/
+
+  //archiwizacja
+  /*deleteSpecialisation(dspecialisationId: number): Observable<string> {
+    return this.http.put<string>(this.SpecialisationUrl + "/TransferToArchive/" + dspecialisationId)
+  }*/
+
+  deleteSpecialisation(dspecialisationId: number): Observable<string> {
+    const url = `${this.SpecialisationUrl}/TransferToArchive/${dspecialisationId}`;
+    // Wywołanie PUT z `null` jako body i `responseType: 'text'` w opcjach
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' });
+  }
+  
 
   //MEDICAL APPOINTMENT
 
@@ -94,16 +126,16 @@ export class ClinicService {
     return this.http.get<MedicalAppointment>(this.MedicalAppointmentUrl + "/Get/" + appointmentId)
   }
 
-  getMedicalAppointmentsForDoctor(doctorId: number): Observable<AllMedicalAppointments>{
-    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl+"/GetByDoctorId/" + doctorId)
+  getMedicalAppointmentsForDoctor(doctorId: number): Observable<AllMedicalAppointments> {
+    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByDoctorId/" + doctorId)
   };
 
-  getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments>{
-    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl+"/GetByPatientId/" + patientId);
+  getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments> {
+    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId/" + patientId);
   }
 
-  getMedicalAppointmentsBySpecialisationId(specialisationId: number): Observable<ReturnMedicalAppointment[]>{
-    return this.http.get<ReturnMedicalAppointment[]>(this.MedicalAppointmentUrl+"/GetBySpecialisation/" + specialisationId);    
+  getMedicalAppointmentsBySpecialisationId(specialisationId: number): Observable<ReturnMedicalAppointment[]> {
+    return this.http.get<ReturnMedicalAppointment[]>(this.MedicalAppointmentUrl + "/GetBySpecialisation/" + specialisationId);
   }
 
   addMedicalAppointment(appointment: MedicalAppointment): Observable<MedicalAppointment> {
@@ -115,19 +147,19 @@ export class ClinicService {
   }
 
   editMedicalAppointmentReturnDto(selectedAppointment: ReturnMedicalAppointment): Observable<MedicalAppointment> { //różnie się tylko dto od powyższego edit
-    return this.http.put<MedicalAppointment>(this.MedicalAppointmentUrl+"/update", selectedAppointment)
+    return this.http.put<MedicalAppointment>(this.MedicalAppointmentUrl + "/update", selectedAppointment)
   }
 
-  editMedicalAppointmentCancel(medicalAppointment: MedicalAppointment): Observable<MedicalAppointment>{
+  editMedicalAppointmentCancel(medicalAppointment: MedicalAppointment): Observable<MedicalAppointment> {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Tworzenie nagłówków
     return this.http.put<MedicalAppointment>(this.MedicalAppointmentUrl + "/update", medicalAppointment, { headers });
   }
 
-  finishMedicalAppointment(finishAppointmentDto: any): Observable<string>{ //inny typ x2
+  finishMedicalAppointment(finishAppointmentDto: any): Observable<string> { //inny typ x2
     const headers = new HttpHeaders().set('Content-Type', 'application/json'); // Tworzenie nagłówków
     //return this.http.post(this.MedicalAppointmentUrl + "/FinishMedicalAppointment", finishAppointmentDto,  {headers})
-    return this.http.post<string>(this.MedicalAppointmentUrl + "/FinishMedicalAppointment", finishAppointmentDto,  {headers})
+    return this.http.post<string>(this.MedicalAppointmentUrl + "/FinishMedicalAppointment", finishAppointmentDto, { headers })
 
   }
 
@@ -138,7 +170,7 @@ export class ClinicService {
   //DIAGNOSTIC TEST
   getDiagnosticTestsByAppointmentId(appointmentId: number): Observable<DiagnosticTest[]> {
     return this.http.get<DiagnosticTest[]>(this.DiagnosticTesttUrl + "/GetByMedicalAppointmentId/" + appointmentId);
-    }
+  }
 
   //DIAGNOSTIC TEST TYPE
 
@@ -150,8 +182,13 @@ export class ClinicService {
     return this.http.put<DiagnosticTestType>(this.DiagnosticTestTypeUrl + "/update", diagnosticTesType);
   }
 
-  deleteDiagnosticTestType(testTypeId: number): Observable<string> {
+  /*deleteDiagnosticTestType(testTypeId: number): Observable<string> {
     return this.http.delete<string>(this.DiagnosticTestTypeUrl + "/Delete/" + testTypeId)
+  } */
+
+  deleteDiagnosticTestType(testTypeId: number): Observable<string> {
+    const url = `${this.DiagnosticTestTypeUrl}/TransferToArchive/${testTypeId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
   }
 
   addDiagosticTestType(diagnosticTestType: any): Observable<DiagnosticTestType> { //może w sumie byc DiagnosticTestType

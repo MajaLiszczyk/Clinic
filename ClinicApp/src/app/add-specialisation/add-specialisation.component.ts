@@ -16,7 +16,7 @@ export class AddSpecialisationComponent {
   readonly APIUrl="https://localhost:5001/api/MedicalSpecialisation";
   specialisations: Specialisation[] = [];
   specialisationForm: FormGroup;
-  specialisation: Specialisation = { id: 0, name: '', checked: false };
+  specialisation: Specialisation = { id: 0, name: '', checked: false , isAvailable: true};
 
   constructor(private http:HttpClient, private formBuilder: FormBuilder){ 
     this.specialisationForm = this.formBuilder.group({});

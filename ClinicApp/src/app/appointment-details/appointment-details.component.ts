@@ -46,7 +46,7 @@ export class AppointmentDetailsComponent {
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private fb: FormBuilder,
               private router: Router, private clinicService: ClinicService) {
-    this.selectedDiagnosticTestType = { id: 0, name: '' };
+    this.selectedDiagnosticTestType = { id: 0, name: '' , isAvailable: true};
     this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0, diagnosticTestTypeName: '', description: '' };
     this.medicalAppointmentForm = this.fb.group({
       //interviewText: new FormControl('', { validators: [Validators.required] }), // Domyślna wartość

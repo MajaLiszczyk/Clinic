@@ -128,7 +128,8 @@ export class RegistrantAppointmentsComponent {
   }
 
   getAllDoctors(){
-    this.clinicService.getAllDoctors().subscribe(data =>{
+    //this.clinicService.getAllDoctors().subscribe(data =>{
+    this.clinicService.getAllAvailableDoctors().subscribe(data =>{
       this.doctors=data;
     })
     /*this.http.get<Doctor[]>("https://localhost:5001/api/doctor/Get").subscribe(data =>{

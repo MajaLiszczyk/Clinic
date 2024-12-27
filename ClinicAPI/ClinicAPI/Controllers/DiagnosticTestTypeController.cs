@@ -56,6 +56,17 @@ namespace ClinicAPI.Controllers
             else return BadRequest(_testType.Response);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> TransferToArchive([FromRoute] int id)
+        {
+            var result = await _testService.TransferToArchive(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

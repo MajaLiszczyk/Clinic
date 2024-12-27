@@ -9,6 +9,8 @@ namespace ClinicAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsAvailable { get; set; } = true;
+
     }
 
     public class DiagnosticTest // konkretne jedno badanie o danej godzinie??

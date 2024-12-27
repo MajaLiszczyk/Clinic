@@ -7,5 +7,7 @@
         public string Name { get; set; }
         public string Surname { get; set; }
         public string PatientNumber { get; set; }
+        public bool isAvailable { get; set; }
+
     }
 }

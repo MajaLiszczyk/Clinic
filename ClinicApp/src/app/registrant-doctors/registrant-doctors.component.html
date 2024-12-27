@@ -141,6 +141,9 @@
                 <th>
                     Specialties
                 </th>
+                <th>
+                    Archived
+                </th>
             </tr>
     
         </thead>
@@ -162,11 +165,14 @@
                 <td>
                     {{doctorWtihSpecialisations.specialisationIds}}
                 </td>
+                <td>
+                    {{!doctorWtihSpecialisations.isAvailable}}
+                </td>
                 <td class="text-end">
-                    <button [disabled]="isAddingMode || isEditableMode" type="button"
+                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable" type="button"
                         class="btn btn-outline-primary ms-4 me-2" (click)="edit(doctorWtihSpecialisations)">Edit</button>
     
-                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-outline-danger mx-2"
+                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable" type="button" class="btn btn-outline-danger mx-2"
                         (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
     
                     <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->

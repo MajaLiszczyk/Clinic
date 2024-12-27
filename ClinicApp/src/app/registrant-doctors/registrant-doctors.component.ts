@@ -37,8 +37,8 @@ export class RegistrantDoctorsComponent {
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.doctorForm = this.formBuilder.group({});
-    this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
-    this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [] }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [] , isAvailable: true}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [] , isAvailable: true}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
   }
 
 
@@ -145,6 +145,7 @@ export class RegistrantDoctorsComponent {
   }
 
   getAllDoctors() {
+    
     this.clinicService.getAllDoctorsWithSpecialisations().subscribe(data => {
       this.doctorsWithSpecialisations = data;
     })

@@ -18,7 +18,7 @@ export class YourDataComponent {
   name: string = 'imie';
   surname: string = 'nazwisko';
   isDisable = false;
-  patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '' };
+  patient: Patient = { id: 0, pesel: '', name: '', surname: '', patientNumber: '' , isAvailable: true};
 
 
   constructor(private service: ClinicService, private http:HttpClient){

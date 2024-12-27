@@ -1,4 +1,5 @@
 ﻿using ClinicAPI.Models;
+using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,15 @@ namespace ClinicAPI.Controllers
                 //return Ok(_patient.Response);
                 return Ok(new { message = _testType.Response });
             else return BadRequest(_testType.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> TransferToArchive([FromRoute] int id)
+        {
+            var result = await _testService.TransferToArchive(id);
+            if (result.Confirmed)
+                return Ok(result.Response);
+            else return BadRequest(result.Response);
         }
 
         [HttpDelete("{id}")]

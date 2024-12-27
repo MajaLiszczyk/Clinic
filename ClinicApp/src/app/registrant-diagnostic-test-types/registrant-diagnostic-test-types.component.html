@@ -87,7 +87,7 @@
     </div>
 
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4" *ngFor="let diagnosticTestType of diagnosticTestTypes">
-        <div class="tile">
+        <div class="tile" *ngIf="diagnosticTestType.isAvailable == true">
             <h3 class="my-4">{{diagnosticTestType.name}}</h3>
             <div class="line-break"></div>
             <div class="mb-4">
@@ -95,6 +95,13 @@
                     (click)="edit(diagnosticTestType)">Edit</button>
                 <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-danger mx-2"
                     (click)="delete(diagnosticTestType.id)">Delete</button>
+            </div>
+        </div>
+        <div class="tile" style="color: grey;" *ngIf="diagnosticTestType.isAvailable == false">
+            <h3 class="my-4">{{diagnosticTestType.name}}</h3>
+            <div class="line-break"></div>
+            <div class="mb-4">
+                Archived
             </div>
         </div>
     </div>

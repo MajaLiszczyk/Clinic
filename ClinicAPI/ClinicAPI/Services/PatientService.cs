@@ -82,6 +82,26 @@ namespace ClinicAPI.Services
             }
         }
 
+        public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
+        {
+            //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
+            var _patient = await _patientRepository.GetPatientById(id);
+
+            if (_patient == null)
+            {
+                return await Task.FromResult((false, "Patient with given id does not exist."));
+            }
+            else
+            {
+                _patient.IsAvailable = false;
+                //Patient r = _mapper.Map<Patient>(patient);
+                var p = await _patientRepository.UpdatePatient(_patient);
+                return await Task.FromResult((true, "Patient succesfully uptated"));
+            }
+        }
+
+
+
         public async Task<(bool Confirmed, string Response)> DeletePatient(int id)
         {
             var patient = await _patientRepository.GetPatientById(id);

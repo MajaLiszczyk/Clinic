@@ -74,7 +74,26 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "MedicalSpecialisation succesfully uptated"));
             }
         }
-        
+
+        public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
+        {
+            var _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(id);
+
+            if (_medicalSpecialisation == null)
+            {
+                return await Task.FromResult((false, "MedicalSpecialisation with given id does not exist."));
+            }
+            else
+            {
+                _medicalSpecialisation.IsAvailable = false;
+                //MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
+                //var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
+                var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(_medicalSpecialisation);
+                return await Task.FromResult((true, "MedicalSpecialisation succesfully uptated"));
+            }
+        }
+
+
         public async Task<(bool Confirmed, string Response)> DeleteMedicalSpecialisation(int id)
         {
             var medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(id);

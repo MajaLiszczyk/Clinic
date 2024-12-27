@@ -4,4 +4,6 @@ export interface Doctor{
     surname: string;
     doctorNumber: string;
     specialisation: number[];
+    isAvailable: boolean;
+
 }

@@ -21,7 +21,7 @@ export class RegistrantSpecialisationsComponent {
   specialisations: Specialisation[] = [];
   //specialisationForm: FormGroup;
   specialisationF: FormGroup;
-  specialisation: Specialisation = { id: 0, name: '', checked: false };
+  specialisation: Specialisation = { id: 0, name: '', checked: false, isAvailable: true };
   isDisable = false;
   isVisible: boolean = false;
   isAddingMode: boolean = false;

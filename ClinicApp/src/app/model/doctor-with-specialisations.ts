@@ -4,4 +4,5 @@ export interface DoctorWithSpcecialisations{
     surname: string;
     doctorNumber: string;
     specialisationIds: number[];
+    isAvailable: boolean;
 }

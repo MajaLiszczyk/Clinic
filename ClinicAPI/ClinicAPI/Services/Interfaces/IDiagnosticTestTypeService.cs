@@ -9,6 +9,7 @@ namespace ClinicAPI.Services.Interfaces
         public Task<List<DiagnosticTestType>> GetAllDiagnosticTestTypes();
         public Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(DiagnosticTestType testType);
         public Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(DiagnosticTestType testType);
+        public Task<(bool Confirmed, string Response)> TransferToArchive(int id);
         public Task<(bool Confirmed, string Response)> DeleteDiagnosticTestType(int id);
     }
 }

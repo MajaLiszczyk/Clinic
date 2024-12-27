@@ -58,6 +58,9 @@ namespace ClinicAPI.Controllers
             else return BadRequest(result.Response);
         }
 
+
+
+
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

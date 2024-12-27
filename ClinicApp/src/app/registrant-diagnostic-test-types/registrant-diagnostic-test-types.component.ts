@@ -21,7 +21,7 @@ export class RegistrantDiagnosticTestTypesComponent {
   diagnosticTestTypes: DiagnosticTestType[] = [];
   //specialisationForm: FormGroup;
   diagnosticTestTypesForm: FormGroup;
-  diagnosticTestType: DiagnosticTestType = { id: 0, name: '' };
+  diagnosticTestType: DiagnosticTestType = { id: 0, name: '' , isAvailable: true};
   isDisable = false;
   isVisible: boolean = false;
   isAddingMode: boolean = false;

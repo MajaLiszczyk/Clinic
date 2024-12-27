@@ -72,7 +72,25 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }
         }
-        
+
+        public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
+        {
+            var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
+
+            if (_testType == null)
+            {
+                return await Task.FromResult((false, "Patient with given id does not exist."));
+            }
+            else
+            {
+                _testType.IsAvailable = false;
+                var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
+                return await Task.FromResult((true, "Patient transfered to archive"));
+            }
+
+        }
+
+
         public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTestType(int id)
         {
             var testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);

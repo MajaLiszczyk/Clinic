@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClinicAPI.Dtos;
 using ClinicAPI.Models;
+using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
 using System.Numerics;
@@ -72,6 +73,24 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "Registrant succesfully uptated"));
             }
         }
+
+        public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
+        {
+            Registrant? _registrant = await _registantRepository.GetRegistrantById(id);
+
+            if (_registrant == null)
+            {
+                return await Task.FromResult((false, "Registrant with given id does not exist."));
+            }
+            else
+            {
+                _registrant.IsAvailable = false;
+                var p = await _registantRepository.UpdateRegistrant(_registrant);
+                return await Task.FromResult((true, "Registrant succesfully uptated"));
+            }
+        }
+
+        
 
         public async Task<(bool Confirmed, string Response)> DeleteRegistrant(int id)
         {
