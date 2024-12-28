@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClinicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241202215141_DodanieTabeliPosredniczacejDoctorMedicalSpecialisation")]
-    partial class DodanieTabeliPosredniczacejDoctorMedicalSpecialisation
+    [Migration("20241228153010_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -177,21 +177,35 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("DoctorId")
+                    b.Property<int>("DiagnosticTestTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MedicalAppoitmentId")
+                    b.Property<int>("MedicalAppointmentId")
                         .HasColumnType("integer");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.ToTable("DiagnosticTest");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.DiagnosticTestType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiagnosticTestType");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Doctor", b =>
@@ -205,6 +219,9 @@ namespace ClinicAPI.Migrations
                     b.Property<string>("DoctorNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -256,6 +273,9 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("LaboratoryTestTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("LaboratoryWorkerId")
                         .HasColumnType("integer");
 
@@ -268,12 +288,29 @@ namespace ClinicAPI.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("laboratoryTestType")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.ToTable("LaboratoryTest");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.LaboratoryTestType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LaboratoryTestType");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.LaboratoryWorker", b =>
@@ -309,25 +346,29 @@ namespace ClinicAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Diagnosis")
-                        .IsRequired()
+                    b.Property<string>("CancellingComment")
                         .HasColumnType("text");
 
-                    b.Property<int>("DiseaseUnit")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Diagnosis")
+                        .HasColumnType("text");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Interview")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("integer");
+                    b.Property<bool?>("IsCancelled")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<bool?>("IsFinished")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -341,6 +382,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -358,6 +402,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -387,6 +434,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -7,6 +7,7 @@ namespace ClinicAPI.Repositories.Interfaces
     {
         public Task<Patient?> GetPatientById(int id);
         public Task<List<Patient>> GetAllPatients(); 
+        public Task<List<Patient>> GetAllAvailablePatients(); 
         public Task<Patient> CreatePatient(Patient patient);
         public Task<Patient?> UpdatePatient(Patient patient);
         public Task<bool> DeletePatient(int id);

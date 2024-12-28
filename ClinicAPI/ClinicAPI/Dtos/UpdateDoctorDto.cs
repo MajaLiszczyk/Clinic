@@ -6,6 +6,8 @@
         public string Name { get; set; }
         public string Surname { get; set; }
         public string DoctorNumber { get; set; }
-        public List<int> SpecialisationsList { get; set; }
+        //public List<int> SpecialisationsList { get; set; }
+        public ICollection<int> MedicalSpecialisationsIds { get; set; } = new List<int>();
+
     }
 }

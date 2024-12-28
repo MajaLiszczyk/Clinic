@@ -41,6 +41,10 @@ export class ClinicService {
     return this.http.get<Patient[]>(this.PatientUrl + "/Get")
   }
 
+  getAllAvailablePatients(): Observable<Patient[]> {
+    return this.http.get<Patient[]>(this.PatientUrl + "/GetAvailable");
+  }
+
   addPatient(patient: any): Observable<Patient> { //inny typ
     return this.http.post<Patient>(this.PatientUrl + "/create", patient)
   }
@@ -91,6 +95,10 @@ export class ClinicService {
   //SPECIALISATIONS
   getAllSpecialisations(): Observable<Specialisation[]> {
     return this.http.get<Specialisation[]>(this.SpecialisationUrl + "/Get");
+  }
+
+  getAllAvailableSpecialisations(): Observable<Specialisation[]> {
+    return this.http.get<Specialisation[]>(this.SpecialisationUrl + "/GetAvailable");
   }
 
   addSpecialisation(specialisation: any): Observable<Specialisation> { //inny typ
@@ -176,6 +184,10 @@ export class ClinicService {
 
   getAllDiagnosticTestTypes(): Observable<DiagnosticTestType[]> {
     return this.http.get<DiagnosticTestType[]>(this.DiagnosticTestTypeUrl + "/Get");
+  }
+
+  getAllAvailableDiagnosticTestTyoes(): Observable<DiagnosticTestType[]> {
+    return this.http.get<DiagnosticTestType[]>(this.DiagnosticTestTypeUrl + "/GetAvailable");
   }
 
   updateDiagnosticTestType(diagnosticTesType: any): Observable<DiagnosticTestType> { //może w sumie byc DiagnosticTestType

@@ -48,6 +48,24 @@ namespace ClinicAPI.Repositories
             catch (Exception) { }
             return medicalSpecialisations;
         }
+
+        public async Task<List<MedicalSpecialisation>> GetAllAvailableMedicalSpecialisations()
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                 new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                 TransactionScopeAsyncFlowOption.Enabled);
+            List<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+            try
+            {
+                medicalSpecialisations = await _context.MedicalSpecialisation.Where(r => r.IsAvailable == true).
+                    ToListAsync();
+                scope.Complete();
+            }
+            catch (Exception) { }
+            return medicalSpecialisations;
+        }
+
+        
         
         public async Task<MedicalSpecialisation> CreateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation)
         {

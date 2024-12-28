@@ -57,6 +57,25 @@ namespace ClinicAPI.Repositories
             //return await Task.Run(() => arr);
         }
 
+        public async Task<List<Patient>> GetAllAvailablePatients()
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+            List<Patient> patientList = new List<Patient>();
+            try
+            {
+                patientList = await _context.Patient.Where(r => r.IsAvailable == true).
+                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                scope.Complete();
+            }
+            catch (Exception) { }
+            return patientList;
+            //return await Task.Run(() => arr);
+        }
+
+        
+
         public async Task<Patient> CreatePatient(Patient patient)
         {
             try

@@ -80,7 +80,17 @@ namespace ClinicAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateDoctorDto request)
         {
-            var result = await _doctorService.UpdateDoctor(request);
+
+            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+            MedicalSpecialisation specialisation;
+            foreach (int id in medicalSpecialisationsIds)
+            {
+                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                medicalSpecialisations.Add(specialisation);
+            }
+
+            var result = await _doctorService.UpdateDoctor(request, medicalSpecialisations);
             if (result.Confirmed)
                 //return Ok(result.Response);
                 return Ok(new { message = result.Response });

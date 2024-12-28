@@ -51,7 +51,26 @@ namespace ClinicAPI.Repositories
             catch (Exception) { }
             return testTypes;
         }
+
+        public async Task<List<DiagnosticTestType>> GetAllAvailableDiagnosticTestTypes()
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+            List<DiagnosticTestType> testTypes = new List<DiagnosticTestType>();
+            try
+            {
+                testTypes = await _context.DiagnosticTestType.Where(r => r.IsAvailable == true).
+                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                scope.Complete();
+            }
+            catch (Exception) { }
+            return testTypes;
+        }
+
+
         
+
         public async Task<DiagnosticTestType> CreateDiagnosticTestType(DiagnosticTestType type)
         {
             await _context.AddAsync(type);

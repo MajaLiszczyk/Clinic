@@ -36,6 +36,15 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAvailable()
+        {
+            var result = await _medicalSpecialisationService.GetAllAvailableMedicalSpecialisations();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMedicalSpecialisationDto request)

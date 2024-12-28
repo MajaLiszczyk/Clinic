@@ -33,7 +33,7 @@ export class MakeAnAppointmentComponent {
   }
 
   ngOnInit(): void {
-    this.getAllSpecialisations();
+    this.getAllAvailableSpecialisations();
     this.chooseSpecialisationForm = this.formBuilder.group({
       //specialisationId: [null, Validators.required]
       specialisationId: new FormControl(null, {validators: [Validators.required]})
@@ -51,9 +51,9 @@ export class MakeAnAppointmentComponent {
   get formSpecialisationId(): FormControl {return this.chooseSpecialisationForm?.get("specialisationId") as FormControl};
   //get formPatientId(): FormControl {return this.choosePatientForm?.get("patientId") as FormControl};
 
-  getAllSpecialisations(){
+  getAllAvailableSpecialisations(){
     //this.http.get<Specialisation[]>("https://localhost:5001/api/medicalSpecialisation/Get").subscribe(data =>{
-    this.clinicService.getAllSpecialisations().subscribe(data =>{
+    this.clinicService.getAllAvailableSpecialisations().subscribe(data =>{
       this.specialisations=data;
     })
   }

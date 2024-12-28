@@ -55,6 +55,16 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAvailable()
+        {
+
+            List<ReturnPatientDto> patients = await _patientService.GetAllAvailablePatients();
+            if (patients != null)
+                return Ok(patients);
+            return NotFound();
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreatePatientDto patient)

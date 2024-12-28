@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClinicAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -125,15 +125,27 @@ namespace ClinicAPI.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MedicalAppoitmentId = table.Column<int>(type: "integer", nullable: false),
-                    DoctorId = table.Column<int>(type: "integer", nullable: false),
-                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    MedicalAppointmentId = table.Column<int>(type: "integer", nullable: false),
+                    DiagnosticTestTypeId = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiagnosticTest", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DiagnosticTestType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DiagnosticTestType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,7 +155,9 @@ namespace ClinicAPI.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Surname = table.Column<string>(type: "text", nullable: false)
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    DoctorNumber = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,7 +171,8 @@ namespace ClinicAPI.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Surname = table.Column<string>(type: "text", nullable: false)
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    LaboratorySupervisorNumber = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,7 +187,7 @@ namespace ClinicAPI.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MedicalAppointmentId = table.Column<int>(type: "integer", nullable: false),
                     date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    laboratoryTestType = table.Column<int>(type: "integer", nullable: false),
+                    LaboratoryTestTypeId = table.Column<int>(type: "integer", nullable: false),
                     LaboratoryWorkerId = table.Column<int>(type: "integer", nullable: false),
                     SupervisorId = table.Column<int>(type: "integer", nullable: false),
                     DoctorNote = table.Column<string>(type: "text", nullable: false)
@@ -183,13 +198,28 @@ namespace ClinicAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LaboratoryTestType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LaboratoryTestType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LaboratoryWorker",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Surname = table.Column<string>(type: "text", nullable: false)
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    LaboratoryWorkerNumber = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -202,16 +232,32 @@ namespace ClinicAPI.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    dateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PatientId = table.Column<int>(type: "integer", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PatientId = table.Column<int>(type: "integer", nullable: true),
                     DoctorId = table.Column<int>(type: "integer", nullable: false),
-                    Interview = table.Column<string>(type: "text", nullable: false),
-                    Diagnosis = table.Column<string>(type: "text", nullable: false),
-                    DiseaseUnit = table.Column<int>(type: "integer", nullable: false)
+                    Interview = table.Column<string>(type: "text", nullable: true),
+                    Diagnosis = table.Column<string>(type: "text", nullable: true),
+                    IsFinished = table.Column<bool>(type: "boolean", nullable: true),
+                    IsCancelled = table.Column<bool>(type: "boolean", nullable: true),
+                    CancellingComment = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MedicalAppointment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MedicalSpecialisation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalSpecialisation", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,11 +268,29 @@ namespace ClinicAPI.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Pesel = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Surname = table.Column<string>(type: "text", nullable: false)
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    PatientNumber = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patient", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Registrant",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: false),
+                    RegistrantNumber = table.Column<string>(type: "text", nullable: false),
+                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Registrant", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,6 +305,35 @@ namespace ClinicAPI.Migrations
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "DoctorMedicalSpecialisation",
+                columns: table => new
+                {
+                    DoctorId = table.Column<int>(type: "integer", nullable: false),
+                    MedicalSpecialisationId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoctorMedicalSpecialisation", x => new { x.DoctorId, x.MedicalSpecialisationId });
+                    table.ForeignKey(
+                        name: "FK_DoctorMedicalSpecialisation_Doctor_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctor",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DoctorMedicalSpecialisation_MedicalSpecialisation_MedicalSp~",
+                        column: x => x.MedicalSpecialisationId,
+                        principalTable: "MedicalSpecialisation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoctorMedicalSpecialisation_MedicalSpecialisationId",
+                table: "DoctorMedicalSpecialisation",
+                column: "MedicalSpecialisationId");
         }
 
         /// <inheritdoc />
@@ -274,13 +367,19 @@ namespace ClinicAPI.Migrations
                 name: "DiagnosticTest");
 
             migrationBuilder.DropTable(
-                name: "Doctor");
+                name: "DiagnosticTestType");
+
+            migrationBuilder.DropTable(
+                name: "DoctorMedicalSpecialisation");
 
             migrationBuilder.DropTable(
                 name: "LaboratorySupervisor");
 
             migrationBuilder.DropTable(
                 name: "LaboratoryTest");
+
+            migrationBuilder.DropTable(
+                name: "LaboratoryTestType");
 
             migrationBuilder.DropTable(
                 name: "LaboratoryWorker");
@@ -292,7 +391,16 @@ namespace ClinicAPI.Migrations
                 name: "Patient");
 
             migrationBuilder.DropTable(
+                name: "Registrant");
+
+            migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Doctor");
+
+            migrationBuilder.DropTable(
+                name: "MedicalSpecialisation");
         }
     }
 }

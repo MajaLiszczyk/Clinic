@@ -33,7 +33,14 @@ namespace ClinicAPI.Services
             //return _mapper.Map<List<ReturnPatientDto>>(patients);
             return testTypes;
         }
-        
+
+        public async Task<List<DiagnosticTestType>> GetAllAvailableDiagnosticTestTypes()
+        {
+            var testTypes = await _diagnosticTestTypeRepository.GetAllAvailableDiagnosticTestTypes();
+            //return _mapper.Map<List<ReturnPatientDto>>(patients);
+            return testTypes;
+        }
+
         public async Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(DiagnosticTestType testType)
         {
             DiagnosticTestType _testType = new DiagnosticTestType

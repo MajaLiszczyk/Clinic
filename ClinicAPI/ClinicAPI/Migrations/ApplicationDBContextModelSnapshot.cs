@@ -177,14 +177,8 @@ namespace ClinicAPI.Migrations
                     b.Property<int>("DiagnosticTestTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DoctorId")
+                    b.Property<int>("MedicalAppointmentId")
                         .HasColumnType("integer");
-
-                    b.Property<int>("MedicalAppoitmentId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -198,6 +192,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -219,6 +216,9 @@ namespace ClinicAPI.Migrations
                     b.Property<string>("DoctorNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -298,6 +298,9 @@ namespace ClinicAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -340,20 +343,26 @@ namespace ClinicAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CancellingComment")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Diagnosis")
                         .HasColumnType("text");
 
-                    b.Property<int?>("DiseaseUnit")
-                        .HasColumnType("integer");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Interview")
                         .HasColumnType("text");
+
+                    b.Property<bool?>("IsCancelled")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsFinished")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("PatientId")
                         .HasColumnType("integer");
@@ -371,6 +380,9 @@ namespace ClinicAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -387,6 +399,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -416,6 +431,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()

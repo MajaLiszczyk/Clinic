@@ -38,6 +38,14 @@ namespace ClinicAPI.Services
             //return _mapper.Map<List<ReturnMessageDto>>(messages);
 
         }
+
+        public async Task<List<ReturnPatientDto>> GetAllAvailablePatients()
+        {
+            var patients = await _patientRepository.GetAllAvailablePatients();
+            return _mapper.Map<List<ReturnPatientDto>>(patients);
+        }
+
+        
         //public Task<(bool Confirmed, string Response, Patient? patient)> CreatePatientAsync(CreatePatientDto patient)
         //TO DO : PRZY TWRZENIEU PESEL NIE MOZE SIE POWTORZYC W BAZIE
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 

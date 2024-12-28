@@ -57,8 +57,6 @@ namespace ClinicAPI.Repositories
             List<Doctor> doctors = new List<Doctor>();
             try
             {
-
-
                 doctors = await _context.Doctor.Where(r => r.IsAvailable == true )
                     .ToListAsync();
                 scope.Complete();
@@ -129,27 +127,18 @@ namespace ClinicAPI.Repositories
 
         public async Task<Doctor?> UpdateDoctor(Doctor doctor)
         {
-            Doctor? _doctor = _context.Doctor.
-              FirstOrDefault(p => p.Id == doctor.Id);
-
-            if (_doctor == null)
-            {
-                return null;
-                //brak pacjenta
-            }
+           
             try
             {
-                _doctor.Name = doctor.Name;
-                _doctor.Surname = doctor.Surname;
-
-                _context.SaveChanges();
+                _context.Doctor.Update(doctor);
+                await _context.SaveChangesAsync();
 
             }
             catch (Exception ex)
             {
-                //wyjatek
+                throw new Exception("An error occurred while updating the patient.", ex);
             }
-            return _doctor;
+            return doctor;
         }
 
         public async Task<bool> DeleteDoctor(int id)

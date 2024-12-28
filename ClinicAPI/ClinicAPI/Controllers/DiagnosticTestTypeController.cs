@@ -37,6 +37,17 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAvailable()
+        {
+
+            List<DiagnosticTestType> testTypes = await _testService.GetAllAvailableDiagnosticTestTypes();
+            if (testTypes != null)
+                return Ok(testTypes);
+            return NotFound();
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Create(DiagnosticTestType testType)
         {

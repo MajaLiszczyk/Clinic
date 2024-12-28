@@ -8,6 +8,7 @@ namespace ClinicAPI.Services.Interfaces
         public Task<ReturnMedicalSpecialisationDto?> GetMedicalSpecialisation(int id);
         public Task<MedicalSpecialisation?> GetRawSpecialisation(int id);
         public Task<List<ReturnMedicalSpecialisationDto>> GetAllMedicalSpecialisations();
+        public Task<List<ReturnMedicalSpecialisationDto>> GetAllAvailableMedicalSpecialisations();
         public Task<(bool Confirmed, string Response, ReturnMedicalSpecialisationDto? medSpecialisation)> CreateMedicalSpecialisation(CreateMedicalSpecialisationDto request);
         public Task<(bool Confirmed, string Response)> UpdateMedicalSpecialisation(UpdateMedicalSpecialisationDto request);
         public Task<(bool Confirmed, string Response)> TransferToArchive(int id); 

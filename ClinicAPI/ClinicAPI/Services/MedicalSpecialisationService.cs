@@ -36,7 +36,14 @@ namespace ClinicAPI.Services
             var medicalSpecialisations = await _medicalSpecialisationRepository.GetAllMedicalSpecialisations();
             return _mapper.Map<List<ReturnMedicalSpecialisationDto>>(medicalSpecialisations);
         }
-        
+
+        public async Task<List<ReturnMedicalSpecialisationDto>> GetAllAvailableMedicalSpecialisations()
+        {
+            var medicalSpecialisations = await _medicalSpecialisationRepository.GetAllAvailableMedicalSpecialisations();
+            return _mapper.Map<List<ReturnMedicalSpecialisationDto>>(medicalSpecialisations);
+        }
+
+
         public async Task<(bool Confirmed, string Response, ReturnMedicalSpecialisationDto? medSpecialisation)> CreateMedicalSpecialisation(CreateMedicalSpecialisationDto medicalSpecialisation)
         {
             MedicalSpecialisation _medicalSpecialisation = new MedicalSpecialisation

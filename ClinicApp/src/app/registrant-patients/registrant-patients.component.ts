@@ -93,7 +93,6 @@ export class RegistrantPatientsComponent {
 
 
   delete(patientId: number){
-    //this.http.delete<string>(this.APIUrl+"/Delete/"+patientId)
     this.clinicService.deletePatient(patientId)
     .subscribe({
       next: (response) => {

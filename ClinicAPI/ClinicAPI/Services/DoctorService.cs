@@ -70,7 +70,7 @@ namespace ClinicAPI.Services
             }
         }
 
-        public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor)
+        public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
             //Doctor? _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
             var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
@@ -83,16 +83,14 @@ namespace ClinicAPI.Services
             {
                 try
                 {
-                    Doctor r = new Doctor
-                    {
-                        Name = doctor.Name,
-                        Surname = doctor.Surname,
-                        DoctorNumber = doctor.DoctorNumber,
-                        MedicalSpecialisations = (ICollection<MedicalSpecialisation>)doctor.SpecialisationsList
-                    };
+
+                    _doctor.Name = doctor.Name;
+                    _doctor.Surname = doctor.Surname;
+                    _doctor.DoctorNumber = doctor.DoctorNumber;
+                    _doctor.MedicalSpecialisations = medicalSpecialisations;
 
                     //Doctor r = _mapper.Map<Doctor>(doctor);
-                    var p = await _doctorRepository.UpdateDoctor(r);
+                    var p = await _doctorRepository.UpdateDoctor(_doctor);
                     return await Task.FromResult((true, "doctor succesfully uptated"));
 
                 }
