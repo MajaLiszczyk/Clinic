@@ -36,6 +36,28 @@ namespace ClinicAPI.Repositories
             return patient;
         }
 
+        public async Task<Patient?> GetPatientByUserId(string id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                        TransactionScopeAsyncFlowOption.Enabled);
+            Patient? patient = null;
+            try
+            {
+                patient = await _context.Patient.Where(r => r.UserId == id)
+                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                scope.Complete();
+            }
+            catch (Exception)
+            {
+                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
+            }
+            //return await Task.Run(() => patient);
+            return patient;
+        }
+
+        
+
         public async Task<List<Patient>> GetAllPatients()
         {
             //TransactionScope tworzy obszar transakcji. Gdy wywołasz scope.Complete(), wszystkie operacje w transakcji zostaną zatwierdzone.

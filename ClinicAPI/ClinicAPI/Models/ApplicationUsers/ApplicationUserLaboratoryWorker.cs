@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicAPI.Models.ApplicationUsers
@@ -13,3 +13,4 @@ namespace ClinicAPI.Models.ApplicationUsers
         public int LaboratoryWorkerId { get; set; } // klucz główny
     }
 }
+*/

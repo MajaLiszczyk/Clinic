@@ -1,6 +1,7 @@
 ﻿using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -28,6 +29,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
 
@@ -49,6 +51,7 @@ namespace ClinicAPI.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create(DiagnosticTestType testType)
         {
             var _testType = await _testService.CreateDiagnosticTestType(testType);

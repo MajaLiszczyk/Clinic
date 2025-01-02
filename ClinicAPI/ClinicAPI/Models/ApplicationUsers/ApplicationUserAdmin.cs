@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicAPI.Models.ApplicationUsers
@@ -12,4 +12,4 @@ namespace ClinicAPI.Models.ApplicationUsers
         [ForeignKey("Admin")]
         public int AdminId { get; set; } // klucz główny
     }
-}
+} */

@@ -7,6 +7,7 @@ namespace ClinicAPI.Services.Interfaces
     {
         //public Task<ReturnPatientDto?> GetPatientAsync(int id);
         public Task<ReturnPatientDto?> GetPatient(int id);
+        public Task<ReturnPatientDto?> GetPatientByUserId(string id);
         //public Task<List<ReturnPatientDto>> GetAllPatientsAsync();
         public Task<List<ReturnPatientDto>> GetAllPatients();
         public Task<List<ReturnPatientDto>> GetAllAvailablePatients();

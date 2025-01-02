@@ -3,6 +3,7 @@ using System;
 using ClinicAPI.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClinicAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241229232916_IdentityPart2")]
+    partial class IdentityPart2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,10 +33,6 @@ namespace ClinicAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -42,17 +41,128 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Admin");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Login")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Password")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.ToTable("ApplicationUser");
+                });
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserAdmin", b =>
+                {
+                    b.Property<int>("AdminId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.ToTable("Admin");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("AdminId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AdminId");
+
+                    b.ToTable("ApplicationUserAdmin");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserDoctor", b =>
+                {
+                    b.Property<int>("DoctorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DoctorId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DoctorId");
+
+                    b.ToTable("ApplicationUserDoctor");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserLaboratorySupervisor", b =>
+                {
+                    b.Property<int>("LaboratorySupervisorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LaboratorySupervisorId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("LaboratorySupervisorId");
+
+                    b.ToTable("ApplicationUserLaboratorySupervisor");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserLaboratoryWorker", b =>
+                {
+                    b.Property<int>("LaboratoryWorkerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LaboratoryWorkerId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("LaboratoryWorkerId");
+
+                    b.ToTable("ApplicationUserLaboratoryWorker");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserPatient", b =>
+                {
+                    b.Property<int>("PatientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PatientId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PatientId");
+
+                    b.ToTable("ApplicationUserPatient");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.ApplicationUsers.ApplicationUserRegistrant", b =>
+                {
+                    b.Property<int>("RegistrantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RegistrantId"));
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RegistrantId");
+
+                    b.ToTable("ApplicationUserRegistrant");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.DiagnosticTest", b =>
@@ -121,13 +231,7 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Doctor");
                 });
@@ -152,13 +256,7 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("LaboratorySupervisor");
                 });
@@ -235,13 +333,7 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("LaboratoryWorker");
                 });
@@ -330,13 +422,7 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Patient");
                 });
@@ -364,13 +450,7 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Registrant");
                 });
@@ -588,68 +668,6 @@ namespace ClinicAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.Admin", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.Admin", "UserId");
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.Doctor", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.Doctor", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.LaboratorySupervisor", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.LaboratorySupervisor", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.LaboratoryWorker", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.LaboratoryWorker", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.Patient", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.Patient", "UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClinicAPI.Models.Registrant", b =>
-                {
-                    b.HasOne("ClinicAPI.Models.User", "User")
-                        .WithOne()
-                        .HasForeignKey("ClinicAPI.Models.Registrant", "UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DoctorMedicalSpecialisation", b =>

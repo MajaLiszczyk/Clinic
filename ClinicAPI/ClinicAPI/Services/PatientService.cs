@@ -30,6 +30,12 @@ namespace ClinicAPI.Services
             return _mapper.Map<ReturnPatientDto>(patient);
         }
 
+        public async Task<ReturnPatientDto?> GetPatientByUserId(string id)
+        {
+            var patient = await _patientRepository.GetPatientByUserId(id);
+            return _mapper.Map<ReturnPatientDto>(patient);
+        }
+
         public async Task<List<ReturnPatientDto>> GetAllPatients()
         {
             var patients = await _patientRepository.GetAllPatients();

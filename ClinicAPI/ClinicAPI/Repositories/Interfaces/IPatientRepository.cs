@@ -6,6 +6,7 @@ namespace ClinicAPI.Repositories.Interfaces
     public interface IPatientRepository
     {
         public Task<Patient?> GetPatientById(int id);
+        public Task<Patient?> GetPatientByUserId(string id);
         public Task<List<Patient>> GetAllPatients(); 
         public Task<List<Patient>> GetAllAvailablePatients(); 
         public Task<Patient> CreatePatient(Patient patient);

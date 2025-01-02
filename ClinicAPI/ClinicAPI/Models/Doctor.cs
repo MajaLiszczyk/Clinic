@@ -17,6 +17,9 @@ namespace ClinicAPI.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; } //To samo Id co w ApplicationUserDoctor, bo relacja 1:1
+        [ForeignKey("User")]
+        public string? UserId { get; set; } // Nullable klucz obcy do User
+        public User? User { get; set; } // Opcjonalna właściwość nawigacyjna do User
         public string Name { get; set; }
         public string Surname { get; set; }
         public string DoctorNumber { get; set; }

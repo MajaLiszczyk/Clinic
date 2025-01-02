@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿/*using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 
@@ -15,9 +15,9 @@ namespace ClinicAPI.Models.ApplicationUsers
         //public string Name { get; set; }
         //public string Surname { get; set; }
         public string Email { get; set; }
-        private List<Role> Roles { get; set; } = new List<Role>(); //nie wiem czy potrzebne
+        //private List<Role> Roles { get; set; } = new List<Role>(); //nie wiem czy potrzebne
     }
-}
+} */
 
 /*
  Mam takie klasy:

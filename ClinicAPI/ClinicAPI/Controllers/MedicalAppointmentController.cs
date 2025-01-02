@@ -2,6 +2,8 @@
 using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
+using ClinicAPI.UserFeatures;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +14,19 @@ namespace ClinicAPI.Controllers
     public class MedicalAppointmentController : ControllerBase
     {
         private readonly IMedicalAppointmentService _medicalAppointmentService;
+        private readonly IPatientService _patientService;
         private readonly IMedicalAppointmentDiagnosticTestService _medicalAppointmentDiagnosticTestService;
+        private readonly IUserContext _userContext;
 
-        public MedicalAppointmentController(IMedicalAppointmentService service, IMedicalAppointmentDiagnosticTestService medicalAppointmentDiagnosticTestService)
+        public MedicalAppointmentController(IMedicalAppointmentService service
+                                            ,IPatientService patientService
+                                            ,IMedicalAppointmentDiagnosticTestService medicalAppointmentDiagnosticTestService
+                                            ,IUserContext userContext)
         {
             _medicalAppointmentService = service;
+            _patientService = patientService;
             _medicalAppointmentDiagnosticTestService = medicalAppointmentDiagnosticTestService;
+            _userContext = userContext;
         }
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
@@ -58,13 +67,22 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
-        
+
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByPatientId([FromRoute] int id)
+        [Authorize(Roles = UserRole.Patient)]
+        public async Task<IActionResult> GetByPatientId([FromRoute] string id)
         {
-            var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(id);
+            var currentUser = _userContext.GetCurrentUser();
+            if (currentUser == null || currentUser.Id != id) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
+            {
+                return Forbid(); // Zwraca 403, jeśli użytkownik próbuje uzyskać dane innego użytkownika
+            }
+
+            var patient = _patientService.GetPatientByUserId(id);
+
+            var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(patient.Id);
             if (result != null)
                 return Ok(result);
             return NotFound();
