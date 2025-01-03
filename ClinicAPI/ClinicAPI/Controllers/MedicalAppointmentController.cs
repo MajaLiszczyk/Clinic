@@ -75,15 +75,17 @@ namespace ClinicAPI.Controllers
         public async Task<IActionResult> GetByPatientId()
         //public async Task<IActionResult> GetByPatientId([FromRoute] string id)
         {
-            var currentUser = _userContext.GetCurrentUser();
+            //var currentUser = _userContext.GetCurrentUser();
+            var currentUserId = _userContext.GetCurrentUserId();
             //if (currentUser == null || currentUser.Id != id) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
-            if (currentUser == null) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
+            if (currentUserId == null) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
             {
                 return Forbid(); // Zwraca 403, jeśli użytkownik próbuje uzyskać dane innego użytkownika
             }
 
             //var patient = _patientService.GetPatientByUserId(id);
-            var patient = _patientService.GetPatientByUserId(currentUser.Id);
+            //var patient = _patientService.GetPatientByUserId(currentUser.Id);
+            var patient = await _patientService.GetPatientByUserId(currentUserId);
 
             var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(patient.Id);
             if (result != null)

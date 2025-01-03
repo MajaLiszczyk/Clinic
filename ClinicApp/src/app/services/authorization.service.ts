@@ -15,7 +15,7 @@ export class AuthorizationService {
   constructor(private http: HttpClient) { }
 
   logIn(loginRequest: UserLoginRequest): Observable<any> {
-    return this.http.post(this.LogInUrl, loginRequest);
+    return this.http.post(this.LogInUrl, loginRequest); //CO TO ZWRACA?
   }
 
   setToken(token: string) {
@@ -38,7 +38,9 @@ export class AuthorizationService {
 
     try {
       const decodedToken: any = jwtDecode(token);
-      return decodedToken.sub || decodedToken.userId || null; // 'sub' to standardowe pole w JWT
+      console.log(decodedToken.sub); 
+      console.log(decodedToken.userId); 
+      return decodedToken.sub || decodedToken.userId || null; //MYSLE, ZE POWINNAM BRAC USERID 'sub' to standardowe pole w JWT
     } catch (error) {
       console.error('Failed to decode token', error);
       return null;

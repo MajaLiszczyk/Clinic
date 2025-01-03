@@ -86,7 +86,7 @@ export class PatientComponent {
     });
     console.log('pacjent id: ', this.patientId);
 
-    const userId = this.authorizationService.getUserId();
+    const userId = this.authorizationService.getUserId(); //NIEPOTRZEBNE, BO BACKEND SAM ODCZYTUJE...
 
     this.getAllMedicalAppointments()
     this.choosePatientForm = this.formBuilder.group({

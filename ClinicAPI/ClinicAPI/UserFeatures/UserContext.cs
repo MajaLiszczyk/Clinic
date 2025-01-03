@@ -4,12 +4,32 @@ namespace ClinicAPI.UserFeatures
 {
     public interface IUserContext
     {
-        CurrentUser? GetCurrentUser();
+        //CurrentUser? GetCurrentUser();
+        ClaimsPrincipal GetCurrentUser();
+        string? GetCurrentUserId();
+        string? GetCurrentUserEmail();
+        public string? GetCurrentUserRole();
     }
 
     public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
     {
-        public CurrentUser? GetCurrentUser()
+        public string? GetCurrentUserId()
+        {
+            return httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        }
+
+        public string? GetCurrentUserEmail()
+        {
+            return httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value;
+        }
+
+        public string? GetCurrentUserRole() //NIE WIEM CZY NIE CALA LISTA?
+        {
+            return httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
+        }
+
+        //public CurrentUser? GetCurrentUser()
+        public ClaimsPrincipal GetCurrentUser()
         {
             var user = httpContextAccessor?.HttpContext?.User;
             if (user == null)
@@ -29,7 +49,8 @@ namespace ClinicAPI.UserFeatures
             var email = user.FindFirst(ClaimTypes.Email)?.Value;
             var roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);*/
 
-            return new CurrentUser(userId, email, roles); //email! z wykrzyknikiem
+            //return new CurrentUser(userId, email, roles); //email! z wykrzyknikiem
+            return user; //email! z wykrzyknikiem
         }
     }
 }

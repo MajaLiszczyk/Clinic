@@ -42,19 +42,25 @@ export class LoginComponent {
       this.authorizationService.logIn(this.logInForm.getRawValue()) // Bez obiektu opakowującego
         .subscribe({
           next: (result) => {
-            const {token, role, id } = result;
-            this.authorizationService.setToken(token);
+            console.log('Token:', result.token);
+            console.log('Role:', result.role);
+            console.log('UserId:', result.userId);
+            console.log('Id:', result.id);
+            const {token, role, id, userId } = result;
+            this.authorizationService.setToken(result.token);
             //this.res = result; // Zwrócony obiekt przypisany do zmiennej
-            if (role === 'Patient') {
+            if (result.role === 'Patient') {
               this.router.navigate(['/patient', id], { queryParams: { isRegistrantMode: false } });
-            } else if (role === 'Doctor') {
+            } else if (result.role === 'Doctor') {
               this.router.navigate(['/doctor-appointments', id]);
-            } else if (role === 'Registrant') {
+            } else if (result.role === 'Registrant') {
               this.router.navigate(['/registrant']);
             }
           },
           error: (error) => {
             this.errorMessage = 'Invalid username or password';
+            console.error('Login failed:', error);
+            alert('Login failed: Invalid email or password');
           },
         });
     }

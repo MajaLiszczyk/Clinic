@@ -1,6 +1,7 @@
 ﻿using ClinicAPI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 using System.Security.Principal;
 
 namespace ClinicAPI.UserFeatures.Commands.UpdateUserDetails
@@ -11,9 +12,10 @@ namespace ClinicAPI.UserFeatures.Commands.UpdateUserDetails
         public async Task Handle(UpdateUserDetailsCommand request, CancellationToken cancellationToken)
         {
             var user = userContext.GetCurrentUser();
-            logger.LogInformation("Updating user: {UserId}, with {@Request}", user!.Id, request);
+            var userId = userContext.GetCurrentUserId();
+            logger.LogInformation("Updating user: {UserId}, with {@Request}", user!.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value, request);
 
-            var dbUser = await userStore.FindByIdAsync(user!.Id, cancellationToken);
+            var dbUser = await userStore.FindByIdAsync(userId, cancellationToken);
 
             if (dbUser == null)
             {

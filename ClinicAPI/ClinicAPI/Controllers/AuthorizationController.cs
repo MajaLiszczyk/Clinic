@@ -35,7 +35,16 @@ namespace ClinicAPI.Controllers
             _dbContext = dbContext;
         }
 
-        [HttpPost]
+
+
+        /*Metoda login zwraca obiekt JSON:
+        {
+            "Token": "string",   // JWT token
+            "Role": "string",    // Rola użytkownika, np. "Patient" lub "Doctor"
+            "UserId": "string",  // Unikalny identyfikator użytkownika
+            "Id": 0              // Id pacjenta lub lekarza (jeśli rola to "Patient" lub "Doctor"), inaczej 0
+        } */
+    [   HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             var user = await userManager.FindByEmailAsync(request.Email);
@@ -88,6 +97,14 @@ namespace ClinicAPI.Controllers
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
+            //alternatyw:
+            //new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "User")
+            // Dodanie niestandardowego claimu
+            /*if (user.PatientId != null)
+            {
+                claims.Add(new Claim("patientId", user.PatientId.ToString()));
+            }*/
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsA32CharacterLongSecretKey!"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //po co?
             var token = new JwtSecurityToken(
