@@ -1,6 +1,8 @@
 ﻿using ClinicAPI.Dtos;
+using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -18,6 +20,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var result = await _medicalSpecialisationService.GetMedicalSpecialisation(id);
@@ -28,6 +31,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var result = await _medicalSpecialisationService.GetAllMedicalSpecialisations();
@@ -37,6 +41,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAvailable()
         {
             var result = await _medicalSpecialisationService.GetAllAvailableMedicalSpecialisations();
@@ -47,6 +52,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPost, Authorize]
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create(CreateMedicalSpecialisationDto request)
         {
             var result = await _medicalSpecialisationService.CreateMedicalSpecialisation(request);
@@ -58,6 +64,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Update([FromBody] UpdateMedicalSpecialisationDto request)
         {
             var result = await _medicalSpecialisationService.UpdateMedicalSpecialisation(request);
@@ -69,6 +76,7 @@ namespace ClinicAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> TransferToArchive([FromRoute] int id)
         {
             var result = await _medicalSpecialisationService.TransferToArchive(id);
@@ -80,6 +88,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _medicalSpecialisationService.DeleteMedicalSpecialisation(id);

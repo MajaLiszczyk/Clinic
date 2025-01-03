@@ -35,7 +35,7 @@ import { AuthorizationGuard } from './authorization/authorization-guard';
 
 
 export const routes: Routes = [
-    //{ path: '', component: AppComponent }, // Strona główna
+    { path: '', component: LoginComponent  }, // Strona główna
     { path: 'log-in', component: LoginComponent },
     { path: 'your-data', component: YourDataComponent }, // Strona "your-data"
     { path: 'add-patient', component: AddPatientComponent }, // Strona "Add Patient"
@@ -43,7 +43,7 @@ export const routes: Routes = [
     { path: 'add-medical-appointment', component: AddMedicalAppointmentComponent }, // Strona "Add Patient"
     { path: 'add-specialisation', component: AddSpecialisationComponent},
     { path: 'your-data', component: AddMedicalAppointmentComponent }, // Strona "Add Patient"
-    { path: 'make-an-appointment', component: MakeAnAppointmentComponent},
+    { path: 'make-an-appointment', component: MakeAnAppointmentComponent, canActivate: [AuthorizationGuard] },
     { path: 'get-patients', component: GetPatientsComponent},
     { path: 'get-doctors', component: GetDoctorsComponent},
     { path: 'get-specialisations', component: GetSpecialisationsComponent},
@@ -54,16 +54,16 @@ export const routes: Routes = [
     //{ path: 'patient/:patientId', component: PatientComponent},
     { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
     { path: 'patient-parent', component: PatientParentComponent},
-    { path: 'registrant', component: RegistrantComponent},
-    { path: 'registrant-patients', component: RegistrantPatientsComponent},
+    { path: 'registrant', component: RegistrantComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-patients', component: RegistrantPatientsComponent, canActivate: [AuthorizationGuard] },
     //{ path: 'registrant-specialisations-old', component: RegistrantSpecialisationsOldComponent},
-    { path: 'registrant-specialisations', component: RegistrantSpecialisationsComponent},
-    { path: 'registrant-diagnostic-test-types', component: RegistrantDiagnosticTestTypesComponent},
-    { path: 'registrant-doctors', component: RegistrantDoctorsComponent},
-    { path: 'registrant-appointments', component: RegistrantAppointmentsComponent},
+    { path: 'registrant-specialisations', component: RegistrantSpecialisationsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-diagnostic-test-types', component: RegistrantDiagnosticTestTypesComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-doctors', component: RegistrantDoctorsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-appointments', component: RegistrantAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'doctor', component: DoctorComponent},
-    { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent},
-    { path: 'appointment-details/:id', component: AppointmentDetailsComponent},
+    { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'appointment-details/:id', component: AppointmentDetailsComponent, canActivate: [AuthorizationGuard] },
 
     { path: '**', redirectTo: '' }, // Przekierowanie na stronę główną dla nieznanych tras
     { path: '', redirectTo: '/your-data', pathMatch: 'full' }, // Przekierowanie do konkretnej trasy

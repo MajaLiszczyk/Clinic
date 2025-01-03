@@ -18,6 +18,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize] 
         public async Task<IActionResult> Get([FromRoute] int id)
         {
 
@@ -61,6 +62,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Update([FromBody] DiagnosticTestType testType)
         {
             var _testType = await _testService.UpdateDiagnosticTestType(testType);
@@ -71,6 +73,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> TransferToArchive([FromRoute] int id)
         {
             var result = await _testService.TransferToArchive(id);
@@ -82,6 +85,7 @@ namespace ClinicAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _testService.DeleteDiagnosticTestType(id);

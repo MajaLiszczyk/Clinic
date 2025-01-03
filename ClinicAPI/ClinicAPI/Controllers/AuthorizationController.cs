@@ -44,7 +44,7 @@ namespace ClinicAPI.Controllers
             "UserId": "string",  // Unikalny identyfikator użytkownika
             "Id": 0              // Id pacjenta lub lekarza (jeśli rola to "Patient" lub "Doctor"), inaczej 0
         } */
-    [   HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             var user = await userManager.FindByEmailAsync(request.Email);
@@ -117,6 +117,7 @@ namespace ClinicAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        //TESTOWA, DO WYRZUCENIA POTEM
         [HttpGet("auth")]
         [Authorize]
         public IActionResult GetAuthenticated()

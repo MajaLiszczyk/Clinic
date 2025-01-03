@@ -2,6 +2,7 @@
 using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -20,6 +21,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
 
@@ -31,6 +33,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Get()
         {
             List<ReturnDiagnosticTestDto> diagnosticTests = await _diagnosticTestService.GetAllDiagnosticTests();
@@ -40,6 +43,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> GetByMedicalAppointmentId([FromRoute] int id)
         {
             List<ReturnDiagnosticTestDto> diagnosticTests = await _diagnosticTestService.GetByMedicalAppointmentId(id);
@@ -51,6 +55,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPost, Authorize]
         [HttpPost]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Create(CreateDiagnosticTestDto diagnosticTest)
         {            
             var _diagnosticTest = await _diagnosticTestService.CreateDiagnosticTest(diagnosticTest);
@@ -63,6 +68,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Update([FromBody] UpdateDiagnosticTestDto diagnosticTest)
         {
           
@@ -75,6 +81,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
 

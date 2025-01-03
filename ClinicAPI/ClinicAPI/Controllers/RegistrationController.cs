@@ -29,6 +29,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> RegisterPatient([FromBody] CreateRegisterPatientDto request)
         {
             // Sprawdzanie, czy PESEL już istnieje w systemie
@@ -64,7 +65,7 @@ namespace ClinicAPI.Controllers
                 Pesel = request.Pesel,
                 Name = request.Name,
                 Surname = request.Surname,
-                PatientNumber = request.PatientNumber
+                PatientNumber = "domyslnyNumer"
             };
 
             dbContext.Patient.Add(patient);
@@ -74,6 +75,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> RegisterDoctor(CreateRegisterDoctorDto request)
         {
             // Tworzenie użytkownika

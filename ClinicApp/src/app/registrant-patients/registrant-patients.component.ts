@@ -28,6 +28,7 @@ export class RegistrantPatientsComponent {
   isFormVisible: boolean = false;
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
+  isCreateAccountMode: boolean = false;
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
@@ -39,7 +40,9 @@ export class RegistrantPatientsComponent {
       id: Number,
       name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
       surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
-      pesel: new FormControl('', { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required] })
+      pesel: new FormControl('', { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required] }),
+      email: new FormControl('', { validators: [Validators.required] }),
+      password: new FormControl('', { validators: [Validators.required] })
     });
   }
 
@@ -47,6 +50,8 @@ export class RegistrantPatientsComponent {
   get formName(): FormControl { return this.patientForm?.get("name") as FormControl };
   get formSurname(): FormControl { return this.patientForm?.get("surname") as FormControl };
   get formPesel(): FormControl { return this.patientForm?.get("pesel") as FormControl };
+  get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl };
+  get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl };
 
   getAllPatients(){
     //this.http.get<Patient[]>(this.APIUrl+"/Get").subscribe(data =>{
@@ -109,8 +114,18 @@ export class RegistrantPatientsComponent {
     this.isFormVisible = true;
     this.isAddingMode = true;
     this.isEditableMode = false;
+    this.isCreateAccountMode = false;
     //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isAddingMode in AddPatient:', this.isAddingMode);
+  }
+
+  addNewAccount() {
+    this.isFormVisible = true;
+    this.isAddingMode = false;
+    this.isEditableMode = false;
+    this.isCreateAccountMode = true;
+    //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
+    console.log('isCreateAccountMode: ', this.isCreateAccountMode);
   }
 
   cancelAdding() {
@@ -124,6 +139,7 @@ export class RegistrantPatientsComponent {
     this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.isCreateAccountMode = false; 
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -140,6 +156,25 @@ export class RegistrantPatientsComponent {
           this.patient = result; // Zwrócony obiekt przypisany do zmiennej
           this.getAllPatients();
           this.isAddingMode = false;
+        },
+        error: (err) => {
+          console.error("Error occurred:", err); // Obsługa błędów
+        }
+      });
+  }
+
+  createPatientAccount() {
+    //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
+      return;
+    }
+    this.clinicService.createPatientAccount(this.patientForm.getRawValue()) // Bez obiektu opakowującego
+      .subscribe({
+        next: (result: Patient) => {
+          this.patient = result; // Zwrócony obiekt przypisany do zmiennej
+          this.getAllPatients();
+          this.isCreateAccountMode = false;
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów

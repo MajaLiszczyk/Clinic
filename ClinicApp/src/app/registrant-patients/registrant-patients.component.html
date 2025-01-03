@@ -7,20 +7,20 @@
 </div> -->
 
 <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
-
 <div class="col mb-4 d-flex justify-content-between my-4">
     <h1>Patients</h1>
-    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewPatient()" class="btn btn-outline-primary fs-5">
+    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewPatient()" class="btn btn-outline-primary fs-5">
         + Add new patient
     </button>
+    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewAccount()" class="btn btn-outline-primary fs-5">
+        + Create an account
+    </button>
 </div>
-
 <div>
     <h3 class="my-4" *ngIf="isAddingMode">Add new patient</h3>
-
     <h3 class="my-4" *ngIf="isEditableMode">Edit patient</h3>
-
-    <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode" class="w-25 mx-auto">
+    <h3 class="my-4" *ngIf="isCreateAccountMode">Create an account</h3>
+    <form [formGroup]="patientForm" *ngIf="isAddingMode || isEditableMode || isCreateAccountMode" class="w-25 mx-auto">
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
             <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
@@ -55,18 +55,38 @@
             </div>
         </div>
 
+        <div *ngIf="isCreateAccountMode" class="formGroup mb-3">
+            <label class="form-label">E-mail address</label>
+            <input formControlName="email" type="string" class="form-control" aria-label="email"
+                [class.is-invalid]="formEmail.invalid">
+            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formEmail?.errors?.['required']">Required</span>
+            </div>
+        </div>
+        <div *ngIf="isCreateAccountMode" class="formGroup mb-3">
+            <label class="form-label">Password</label>
+            <input formControlName="password" type="string" class="form-control" aria-label="password"
+                [class.is-invalid]="formPassword.invalid">
+            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
+            <div class="invalid-feedback">
+                <span *ngIf="formPassword?.errors?.['required']">Required</span>
+            </div>
+        </div>
+        
+
         <div>
             <div class="d-flex justify-content-center mb-5 mt-5">
                 <button *ngIf="isAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
                     (click)="addPatient()">Save</button>
+                <button *ngIf="isCreateAccountMode" type="button" class="btn  btn-primary float-right mx-2 "
+                    (click)="createPatientAccount()">Save</button>
                 <button *ngIf="isEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
                     (click)="update()">Save</button>
                 <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
             </div>
         </div>
     </form>
-
-
 
     <div class="mt-4">
         <!--<div *ngIf="isVisible">

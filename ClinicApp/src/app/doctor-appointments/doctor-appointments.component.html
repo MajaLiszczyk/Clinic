@@ -1,5 +1,4 @@
-<p>doctor-appointments works!</p>
-
+<div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div>
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead class="thead-dark">

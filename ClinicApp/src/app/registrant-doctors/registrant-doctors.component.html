@@ -39,6 +39,26 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="isAddingMode && !isEditableMode" class="formGroup mb-3">
+            <label class="form-label">E-mail address</label>
+            <div class="input-group">
+                <input formControlName="email" type="string" class="form-control" aria-label="email"
+                    [class.is-invalid]="formEmail.invalid">
+                <div class="invalid-feedback">
+                    <span *ngIf="formEmail?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isAddingMode && !isEditableMode" class="formGroup mb-3">
+            <label class="form-label">Password</label>
+            <div class="input-group">
+                <input formControlName="password" type="string" class="form-control" aria-label="password"
+                    [class.is-invalid]="formPassword.invalid">
+                <div class="invalid-feedback">
+                    <span *ngIf="formPassword?.errors?.['required']">Required</span>
+                </div>
+            </div>
+        </div>
 
 
         <div>

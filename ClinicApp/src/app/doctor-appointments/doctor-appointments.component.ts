@@ -17,6 +17,7 @@ import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appoin
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ClinicService } from '../services/clinic.service';
+import { AuthorizationService } from '../services/authorization.service';
 
 
 
@@ -32,8 +33,11 @@ export class DoctorAppointmentsComponent {
   allMedicalAppointments: AllMedicalAppointments;
   //readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
   isRegistrantMode: boolean = false;
+  //_authorizationService: AuthorizationService;
 
-  constructor(private http:HttpClient, private route: ActivatedRoute, private clinicService: ClinicService){
+  constructor(private http:HttpClient, private route: ActivatedRoute, private clinicService: ClinicService
+            , public authorizationService: AuthorizationService){
+              //this._authorizationService = authorizationService,
     this.allMedicalAppointments = {pastMedicalAppointments: [], futureMedicalAppointments: []}
 
   }
@@ -57,6 +61,10 @@ export class DoctorAppointmentsComponent {
       this.allMedicalAppointments=data;
       //this.allMedicalAppointments.pastMedicalAppointments[0].dateTime = new Date(2024, 12, 24);
     })
+  }
+
+  logout(){
+    this.authorizationService.logout();
   }
 
 }

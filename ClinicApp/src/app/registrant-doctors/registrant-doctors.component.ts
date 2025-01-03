@@ -54,6 +54,9 @@ export class RegistrantDoctorsComponent {
       name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
       surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
       doctorNumber: new FormControl(''/*, {validators: [Validators.required]}*/),
+      email: new FormControl('', { validators: [Validators.required] }),
+      password: new FormControl('', { validators: [Validators.required] }),
+
     });
   }
 
@@ -62,6 +65,8 @@ export class RegistrantDoctorsComponent {
   get formSurname(): FormControl { return this.doctorForm?.get("surname") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formDoctorNumber(): FormControl { return this.doctorForm?.get("doctorNumber") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formSpecialisations(): FormControl { return this.doctorForm?.get("MedicalSpecialisationsIds") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formEmail(): FormControl { return this.doctorForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formPassword(): FormControl { return this.doctorForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
 
 
   getAllAvailableSpecialisations() {

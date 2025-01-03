@@ -31,6 +31,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var result = await _medicalAppointmentService.GetMedicalAppointment(id);
@@ -41,6 +42,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var result = await _medicalAppointmentService.GetAllMedicalAppointments();
@@ -51,6 +53,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetBySpecialisation([FromRoute] int id)
         {
             var result = await _medicalAppointmentService.GetMedicalAppointmentsBySpecialisation(id);
@@ -60,6 +63,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Doctor + "," + UserRole.Registrant)]
         public async Task<IActionResult> GetByDoctorId([FromRoute] int id)
         {
             var result = await _medicalAppointmentService.GetMedicalAppointmentsByDoctorId(id);
@@ -70,31 +74,52 @@ namespace ClinicAPI.Controllers
 
 
         //[HttpGet, Authorize(Roles = "Admin")]
-        [HttpGet]
-        [Authorize(Roles = UserRole.Patient)]
-        public async Task<IActionResult> GetByPatientId()
+
+        //[Authorize(Roles = UserRole.Patient)]
+        [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Patient + "," + UserRole.Registrant)]
+        public async Task<IActionResult> GetByPatientId([FromRoute] int id)
         //public async Task<IActionResult> GetByPatientId([FromRoute] string id)
         {
             //var currentUser = _userContext.GetCurrentUser();
             var currentUserId = _userContext.GetCurrentUserId();
+            var currentUserRole = _userContext.GetCurrentUserRole();
             //if (currentUser == null || currentUser.Id != id) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
             if (currentUserId == null) //OGARNAC CZY ID POWINNO BYC INT CZY STRING
             {
                 return Forbid(); // Zwraca 403, jeśli użytkownik próbuje uzyskać dane innego użytkownika
             }
 
+            if(currentUserRole == UserRole.Registrant)
+            {
+                var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(id);
+                if (result != null)
+                    return Ok(result);
+                return NotFound();
+            }
+
+            if(currentUserRole == UserRole.Patient)
+            {
+                var patient = await _patientService.GetPatientByUserId(currentUserId);
+
+                var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(patient.Id);
+                if (result != null)
+                    return Ok(result);
+                return NotFound();
+            }
+            else //ZOSTAWIC TAK?
+            {
+                return Forbid();
+            }
+
             //var patient = _patientService.GetPatientByUserId(id);
             //var patient = _patientService.GetPatientByUserId(currentUser.Id);
-            var patient = await _patientService.GetPatientByUserId(currentUserId);
 
-            var result = await _medicalAppointmentService.GetMedicalAppointmentsByPatientId(patient.Id);
-            if (result != null)
-                return Ok(result);
-            return NotFound();
         }
 
         //[HttpPost, Authorize]
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create([FromBody] CreateMedicalAppointmentDto request)
         {
             var result = await _medicalAppointmentService.CreateMedicalAppointment(request);
@@ -116,6 +141,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> FinishMedicalAppointment([FromBody] FinishMedicalAppointmentDto request)
         {
                 try
@@ -162,6 +188,7 @@ namespace ClinicAPI.Controllers
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _medicalAppointmentService.DeleteMedicalAppointment(id);

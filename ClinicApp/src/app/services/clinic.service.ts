@@ -27,6 +27,8 @@ export class ClinicService {
   readonly PatientUrl = "https://localhost:5001/api/patient";
   readonly DiagnosticTesttUrl = "https://localhost:5001/api/DiagnosticTest";
   readonly LogInUrl = "https://localhost:5001/api/authorization/login";
+  readonly RegistrationUrl = "https://localhost:5001/api/Registration";
+  
 
 
 
@@ -55,6 +57,10 @@ export class ClinicService {
     return this.http.post<Patient>(this.PatientUrl + "/create", patient)
   }
 
+  createPatientAccount(patient: any): Observable<Patient> { //inny typ
+    return this.http.post<Patient>(this.RegistrationUrl + "/RegisterPatient", patient)
+  }
+
   updatePatient(patient: any): Observable<Patient> { // inny typ
     return this.http.put<Patient>(this.PatientUrl + "/update", patient)
   }
@@ -81,8 +87,12 @@ export class ClinicService {
     return this.http.get<DoctorWithSpcecialisations[]>(this.DoctorUrl + "/GetWithSpecialisations")
   }
 
-  addDoctor(doctor: any): Observable<Doctor> { //inny typ
+  /*addDoctor(doctor: any): Observable<Doctor> { //inny typ
     return this.http.post<Doctor>(this.DoctorUrl + "/create", doctor);
+  }*/
+
+  addDoctor(doctor: any): Observable<Doctor> { //inny typ
+    return this.http.post<Doctor>(this.RegistrationUrl + "/RegisterDoctor", doctor);
   }
 
   updateDoctor(doctor: any): Observable<Doctor> { //inny typ
@@ -144,13 +154,14 @@ export class ClinicService {
     return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByDoctorId/" + doctorId)
   };
 
-  getMedicalAppointmentsByPatientId(): Observable<AllMedicalAppointments> {
+  /*getMedicalAppointmentsByPatientId(): Observable<AllMedicalAppointments> {
     return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId");
-  }
-
-  /*getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments> {
-    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId/" + patientId);
   }*/
+
+  getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments> {
+    console.log(patientId);
+    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId/" + patientId);
+  }
 
   getMedicalAppointmentsBySpecialisationId(specialisationId: number): Observable<ReturnMedicalAppointment[]> {
     return this.http.get<ReturnMedicalAppointment[]>(this.MedicalAppointmentUrl + "/GetBySpecialisation/" + specialisationId);
