@@ -30,10 +30,13 @@ import { RegistrantAppointmentsComponent } from './registrant-appointments/regis
 import { DoctorAppointmentsComponent } from './doctor-appointments/doctor-appointments.component';
 import { DoctorComponent } from './doctor/doctor.component';
 import { AppointmentDetailsComponent } from './appointment-details/appointment-details.component';
+import { LoginComponent } from './log-in/log-in.component';
+import { AuthorizationGuard } from './authorization/authorization-guard';
 
 
 export const routes: Routes = [
     //{ path: '', component: AppComponent }, // Strona główna
+    { path: 'log-in', component: LoginComponent },
     { path: 'your-data', component: YourDataComponent }, // Strona "your-data"
     { path: 'add-patient', component: AddPatientComponent }, // Strona "Add Patient"
     { path: 'add-doctor', component: AddDoctorComponent }, // Strona "Add Patient"
@@ -48,7 +51,8 @@ export const routes: Routes = [
     { path: 'get-registrants', component: GetRegistrantsComponent},
     { path: 'add-registrant', component: AddRegistrantComponent},
     { path: 'get-medical-appointments-for-patient', component: GetMedicalAppointmentsForPatientComponent},
-    { path: 'patient/:patientId', component: PatientComponent},
+    //{ path: 'patient/:patientId', component: PatientComponent},
+    { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
     { path: 'patient-parent', component: PatientParentComponent},
     { path: 'registrant', component: RegistrantComponent},
     { path: 'registrant-patients', component: RegistrantPatientsComponent},

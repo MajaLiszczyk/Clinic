@@ -11,6 +11,7 @@ import { Specialisation } from '../model/specialisation';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ClinicService } from '../services/clinic.service';
+import { AuthorizationService } from '../services/authorization.service';
 
 @Component({
   selector: 'app-patient',
@@ -51,7 +52,7 @@ export class PatientComponent {
   }*/
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, 
-              private route: ActivatedRoute, private clinicService: ClinicService) {
+              private route: ActivatedRoute, private clinicService: ClinicService, private authorizationService: AuthorizationService,) {
     this.choosePatientForm = this.formBuilder.group({});
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
@@ -85,7 +86,9 @@ export class PatientComponent {
     });
     console.log('pacjent id: ', this.patientId);
 
-    this.getAllMedicalAppointments(this.patientId)
+    const userId = this.authorizationService.getUserId();
+
+    this.getAllMedicalAppointments()
     this.choosePatientForm = this.formBuilder.group({
       patientId: new FormControl(null, { validators: [Validators.required] })
     });
@@ -108,9 +111,10 @@ export class PatientComponent {
     })
   }
 
-  getAllMedicalAppointments(patientId: number) {
-    //this.http.get<AllMedicalAppointments>(this.APIUrl + "/GetByPatientId/" + patientId).subscribe(data => {
-    this.clinicService.getMedicalAppointmentsByPatientId(patientId).subscribe(data => {
+  //getAllMedicalAppointments(patientId: number) {
+  getAllMedicalAppointments() {
+    //this.clinicService.getMedicalAppointmentsByPatientId(patientId).subscribe(data => {
+    this.clinicService.getMedicalAppointmentsByPatientId().subscribe(data => {
       this.allMedicalAppointments = data;
       console.log(this.allMedicalAppointments.pastMedicalAppointments);
       console.log(this.allMedicalAppointments.pastMedicalAppointments.length);
@@ -133,7 +137,7 @@ export class PatientComponent {
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
-          this.getAllMedicalAppointments(this.patientId);
+          this.getAllMedicalAppointments();
         },
         error: (error) => {
           console.error("Error performing action:", error);
@@ -171,7 +175,7 @@ export class PatientComponent {
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
-          this.getAllMedicalAppointments(this.patientId)
+          this.getAllMedicalAppointments()
         },
         error: (error) => {
           console.error("Error performing action:", error);

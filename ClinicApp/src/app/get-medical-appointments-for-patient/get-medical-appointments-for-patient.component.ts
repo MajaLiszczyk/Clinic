@@ -57,8 +57,7 @@ export class GetMedicalAppointmentsForPatientComponent {
   }
 
   getAllMedicalAppointments(patientId:number){
-    //this.http.get<AllMedicalAppointments>(this.APIUrl+"/GetByPatientId/" + patientId).subscribe(data =>{
-    this.clinicService.getMedicalAppointmentsByPatientId(patientId).subscribe(data =>{
+    this.clinicService.getMedicalAppointmentsByPatientId().subscribe(data =>{
       this.allMedicalAppointments=data;
       console.log(this.allMedicalAppointments.pastMedicalAppointments);
       console.log(this.allMedicalAppointments.pastMedicalAppointments.length);

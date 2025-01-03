@@ -10,6 +10,7 @@ import { Patient } from '../model/patient';
 import { DiagnosticTest } from '../model/diagnostic-test';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
+import { UserLoginRequest } from '../model/user-login-request';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -25,12 +26,17 @@ export class ClinicService {
   readonly SpecialisationUrl = "https://localhost:5001/api/medicalSpecialisation";
   readonly PatientUrl = "https://localhost:5001/api/patient";
   readonly DiagnosticTesttUrl = "https://localhost:5001/api/DiagnosticTest";
+  readonly LogInUrl = "https://localhost:5001/api/authorization/login";
 
 
 
 
 
   constructor(private http: HttpClient) { }
+
+
+
+
 
   //PATIENT
   getPatientById(patientId: number){
@@ -138,9 +144,13 @@ export class ClinicService {
     return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByDoctorId/" + doctorId)
   };
 
-  getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments> {
-    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId/" + patientId);
+  getMedicalAppointmentsByPatientId(): Observable<AllMedicalAppointments> {
+    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId");
   }
+
+  /*getMedicalAppointmentsByPatientId(patientId: number): Observable<AllMedicalAppointments> {
+    return this.http.get<AllMedicalAppointments>(this.MedicalAppointmentUrl + "/GetByPatientId/" + patientId);
+  }*/
 
   getMedicalAppointmentsBySpecialisationId(specialisationId: number): Observable<ReturnMedicalAppointment[]> {
     return this.http.get<ReturnMedicalAppointment[]>(this.MedicalAppointmentUrl + "/GetBySpecialisation/" + specialisationId);

@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens; // SymmetricSecurityKey, SigningCredentials, SecurityAlgorithms
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization; // JwtSecurityToken, JwtSecurityTokenHandler
+using ClinicAPI.DB; 
 
 namespace ClinicAPI.Controllers
 {
@@ -15,6 +16,8 @@ namespace ClinicAPI.Controllers
     {
         public string Email { get; set; } = default!;
         public string Password { get; set; } = default!;
+        
+
     }
 
     [ApiController]
@@ -23,11 +26,13 @@ namespace ClinicAPI.Controllers
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
+        private readonly ApplicationDBContext _dbContext;
 
-        public AuthorizationController(SignInManager<User> signInManager, UserManager<User> userManager)
+        public AuthorizationController(SignInManager<User> signInManager, UserManager<User> userManager, ApplicationDBContext dbContext)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            _dbContext = dbContext;
         }
 
         [HttpPost]
@@ -48,13 +53,23 @@ namespace ClinicAPI.Controllers
             }
 
             var roles = await userManager.GetRolesAsync(user);
+            string role = roles.FirstOrDefault() ?? "Unknown";
+            int id = role switch
+            {
+                "Patient" => _dbContext.Patient.FirstOrDefault(p => p.UserId == user.Id)?.Id ?? 0,
+                "Doctor" => _dbContext.Doctor.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
+                _ => 0
+            };
+
             var token = GenerateJwtToken(user, roles);
 
             return Ok(new
             {
                 Token = token,
-                Roles = roles,
-                Id = user.Id,
+                //Roles = roles,
+                Role = role,
+                UserId = user.Id,
+                Id = id
                 //Message = "Login successful"
             });
         }

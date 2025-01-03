@@ -56,24 +56,32 @@
     <a [routerLink]="['/patient']" routerLinkActive="active" class="btn btn-success w-50">Patient menu</a>
   </div> -->
 
-  <h4>PATIENT-PARENT</h4>
-<!--  <div class="d-flex flex-column align-items-center mb-5"> -->
+  <!-- <h4>PATIENT-PARENT</h4>
   <div class="mb-4 w-100">
     <a [routerLink]="['/patient-parent']" routerLinkActive="active" class="btn btn-success w-100">Patient parent</a>
     <router-outlet></router-outlet>
   </div>
 
   <h4>REGISTRANT-MENU</h4>
-  <!-- <div class="w-50 d-flex flex-column align-items-center mb-5"> -->
     <div class="mb-4 w-100">
     <a [routerLink]="['/registrant']" routerLinkActive="active" class="btn btn-success w-100">Registrant menu</a>
     <router-outlet></router-outlet>
   </div>
 
   <h4>DOCTOR</h4>
-  <!-- <div class="w-50 d-flex flex-column align-items-center mb-5"> -->
   <div class="mb-4 w-100">
     <a [routerLink]="['/doctor']" routerLinkActive="active" class="btn btn-success w-100">Doctor </a>
+    <router-outlet></router-outlet>
+  </div> -->
+
+  <!-- <h4>LOG IN</h4>
+  <div class="mb-4 w-100">
+    <a [routerLink]="['/log-in']" routerLinkActive="active" class="btn btn-success w-100">Log in </a>
+    <router-outlet></router-outlet>
+  </div>  -->
+
+  <div>
+    <app-log-in></app-log-in>
     <router-outlet></router-outlet>
   </div>
 
