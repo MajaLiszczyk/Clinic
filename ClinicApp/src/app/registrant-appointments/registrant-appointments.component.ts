@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 //import { GetMedicalAppointmentsComponent } from '../get-medical-appointments/get-medical-appointments.component';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, ValidationErrors } from '@angular/forms';
 //import { NgbDateNativeAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateNativeAdapter, NgbDateStruct, NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateMedicalAppointment } from '../model/create-medical-appointment';
@@ -51,11 +51,19 @@ export class RegistrantAppointmentsComponent {
     this.getAllDoctors();
     //this.getAllMedicalAppointments();
     this.medicalAppointmentForm = this.formBuilder.group({
-      date: new FormControl(null, { validators: [Validators.required] }),
-      time: new FormControl(null, { validators: [Validators.required] }),
-      doctorId: new FormControl(null, { validators: [Validators.required] }),
+      date: new FormControl(null, [Validators.required]),
+      time: new FormControl(null, [Validators.required]),
+      doctorId: new FormControl(null, [Validators.required])
+    },{
+      validators: this.dateTimeValidator // Walidator grupowy
     });
   }
+
+  dateTimeValidator(formGroup: FormGroup): ValidationErrors | null {
+    const date = formGroup.get('date')?.value;
+    const time = formGroup.get('time')?.value;
+    return date && time ? null : { dateTimeRequired: true };
+}
 
   get formDoctorId(): FormControl { return this.medicalAppointmentForm?.get("doctorId") as FormControl };
   get formMedicalAppointmentDate(): FormControl { return this.medicalAppointmentForm.get("date") as FormControl };
@@ -116,6 +124,7 @@ export class RegistrantAppointmentsComponent {
 
   cancelAdding(){
     this.isAddingMode = false;
+    this.medicalAppointmentForm.reset();
   }
 
   showAllAppointments(){

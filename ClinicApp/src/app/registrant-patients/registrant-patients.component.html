@@ -9,10 +9,12 @@
 <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 <div class="col mb-4 d-flex justify-content-between my-4">
     <h1>Patients</h1>
-    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewPatient()" class="btn btn-outline-primary fs-5">
+    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewPatient()"
+        class="btn btn-outline-primary fs-5">
         + Add new patient
     </button>
-    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewAccount()" class="btn btn-outline-primary fs-5">
+    <button [disabled]="isEditableMode || isAddingMode || isCreateAccountMode" (click)="addNewAccount()"
+        class="btn btn-outline-primary fs-5">
         + Create an account
     </button>
 </div>
@@ -24,56 +26,58 @@
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
             <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
-                [class.is-invalid]="formName.invalid">
+                [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
             <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
             <div class="invalid-feedback">
-                <span *ngIf="formName?.errors?.['min']">Min length: 1</span>
-                <span *ngIf="formName?.errors?.['max']">Max length: 60</span>
                 <span *ngIf="formName?.errors?.['required']">Required</span>
             </div>
         </div>
         <div class="formGroup mb-3">
             <label class="form-label">Surname</label>
             <input formControlName="surname" type="string" class="form-control" aria-label="surname"
-                [class.is-invalid]="formSurname.invalid">
+                [class.is-invalid]="formSurname.invalid && (formSurname.touched || formSurname.dirty)">
             <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
             <div class="invalid-feedback">
-                <span *ngIf="formSurname?.errors?.['min']">Min length: 1</span>
-                <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
                 <span *ngIf="formSurname?.errors?.['required']">Required</span>
             </div>
         </div>
         <div class="formGroup mb-3">
             <label class="form-label">PESEL</label>
             <input formControlName="pesel" type="string" class="form-control" aria-label="pesel"
-                [class.is-invalid]="formPesel.invalid">
+                [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)">
             <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
             <div class="invalid-feedback">
-                <span *ngIf="formPesel?.errors?.['min']">Min length: 11</span>
-                <span *ngIf="formPesel?.errors?.['max']">Max length: 11</span>
-                <span *ngIf="formPesel?.errors?.['required']">Required</span>
+                <span *ngIf="formPesel?.errors?.['minlength']">Pesel length: 11</span>
+                <span *ngIf="formPesel?.errors?.['maxlength']">Pesel length: 11</span>
+                <span *ngIf="formPesel?.errors?.['required']">Required </span>
+                <span *ngIf="formPesel?.errors?.['pattern']"> Only digits</span>
+            </div>
+        </div>
+
+
+
+        <div class="formGroup mb-3" *ngIf="isCreateAccountMode">
+            <label class="form-label">E-mail address</label>
+            <input formControlName="email" type="string" class="form-control" aria-label="email"
+                [class.is-invalid]="formEmail.invalid && (formEmail.touched || formEmail.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formEmail?.errors?.['required']">Required</span>
+                <span *ngIf="formEmail?.errors?.['maxlength']">Max length: 256</span>
+                <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
             </div>
         </div>
 
         <div *ngIf="isCreateAccountMode" class="formGroup mb-3">
-            <label class="form-label">E-mail address</label>
-            <input formControlName="email" type="string" class="form-control" aria-label="email"
-                [class.is-invalid]="formEmail.invalid">
-            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
-            <div class="invalid-feedback">
-                <span *ngIf="formEmail?.errors?.['required']">Required</span>
-            </div>
-        </div>
-        <div *ngIf="isCreateAccountMode" class="formGroup mb-3">
             <label class="form-label">Password</label>
             <input formControlName="password" type="string" class="form-control" aria-label="password"
-                [class.is-invalid]="formPassword.invalid">
-            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
+                [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
+                <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
+                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span>
             </div>
         </div>
-        
+
 
         <div>
             <div class="d-flex justify-content-center mb-5 mt-5">

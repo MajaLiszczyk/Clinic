@@ -38,11 +38,13 @@ export class RegistrantPatientsComponent {
     this.getAllPatients();
     this.patientForm = this.formBuilder.group({
       id: Number,
-      name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
-      surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
-      pesel: new FormControl('', { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required] }),
-      email: new FormControl('', { validators: [Validators.required] }),
-      password: new FormControl('', { validators: [Validators.required] })
+      name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
+      surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
+      pesel: new FormControl(null, { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required, Validators.pattern(/^\d{11}$/)]}),
+      email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
+        Validators.maxLength(256)] }),
+      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
+        Validators.maxLength(100)] }),
     });
   }
 
@@ -50,8 +52,9 @@ export class RegistrantPatientsComponent {
   get formName(): FormControl { return this.patientForm?.get("name") as FormControl };
   get formSurname(): FormControl { return this.patientForm?.get("surname") as FormControl };
   get formPesel(): FormControl { return this.patientForm?.get("pesel") as FormControl };
-  get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl };
-  get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl };
+  get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+
 
   getAllPatients(){
     //this.http.get<Patient[]>(this.APIUrl+"/Get").subscribe(data =>{
@@ -88,6 +91,7 @@ export class RegistrantPatientsComponent {
         console.log("Action performed successfully:", response);
         this.getAllPatients();
         this.isEditableMode = false;
+        this.patientForm.reset();
       },
       error: (error) => {
         console.error("Error performing action:", error);
@@ -115,6 +119,7 @@ export class RegistrantPatientsComponent {
     this.isAddingMode = true;
     this.isEditableMode = false;
     this.isCreateAccountMode = false;
+    this.setConditionalValidation();
     //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isAddingMode in AddPatient:', this.isAddingMode);
   }
@@ -124,22 +129,45 @@ export class RegistrantPatientsComponent {
     this.isAddingMode = false;
     this.isEditableMode = false;
     this.isCreateAccountMode = true;
+    this.setConditionalValidation();
     //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isCreateAccountMode: ', this.isCreateAccountMode);
+  }
+
+  setConditionalValidation() {
+    const emailC = this.patientForm.get('email');
+    const passwordC = this.patientForm.get('password');
+
+    if (this.isCreateAccountMode) {
+      // Dodaj walidator `required`
+      emailC?.setValidators([Validators.required]);
+      passwordC?.setValidators([Validators.required]);
+
+    } else {
+      // Usuń walidator `required`
+      emailC?.clearValidators();
+      passwordC?.clearValidators();
+    }
+    // Uruchom ponowną walidację
+    emailC?.updateValueAndValidity();
+    passwordC?.updateValueAndValidity();
   }
 
   cancelAdding() {
     this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.isCreateAccountMode = false;
+    this.patientForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
-  cancelEditing() {
+  cancelEditing() { //do wyrzucenia, kalka powyzszej
     this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
     this.isCreateAccountMode = false; 
+    this.patientForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -156,6 +184,7 @@ export class RegistrantPatientsComponent {
           this.patient = result; // Zwrócony obiekt przypisany do zmiennej
           this.getAllPatients();
           this.isAddingMode = false;
+          this.patientForm.reset();
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów
@@ -175,6 +204,7 @@ export class RegistrantPatientsComponent {
           this.patient = result; // Zwrócony obiekt przypisany do zmiennej
           this.getAllPatients();
           this.isCreateAccountMode = false;
+          this.patientForm.reset();
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów

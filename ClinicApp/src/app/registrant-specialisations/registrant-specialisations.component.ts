@@ -36,7 +36,7 @@ export class RegistrantSpecialisationsComponent {
     this.specialisationF = this.formBuilder.group({
       id: Number,
       //id: new  FormControl(0, {validators: [Validators.required]}),
-      name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(50), Validators.required] })
+      name: new FormControl(null, { validators: [Validators.required] })
     });
   }
 
@@ -86,6 +86,7 @@ export class RegistrantSpecialisationsComponent {
         console.log("Action performed successfully:", response);
         this.getAllSpecialisations();
         this.isEditableMode = false;
+        this.specialisationF.reset();
       },
       error: (error) => {
         console.error("Error performing action:", error);
@@ -121,6 +122,7 @@ export class RegistrantSpecialisationsComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.specialisationF.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -128,6 +130,7 @@ export class RegistrantSpecialisationsComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.specialisationF.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -146,6 +149,7 @@ export class RegistrantSpecialisationsComponent {
           this.specialisation = result; // Zwrócony obiekt przypisany do zmiennej
           this.getAllSpecialisations();
           this.isAddingMode = false;
+          this.specialisationF.reset();
         },
         error: (err) => {
           console.error("Error occurred:", err); // Obsługa błędów

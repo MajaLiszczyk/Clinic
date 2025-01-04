@@ -51,11 +51,13 @@ export class RegistrantDoctorsComponent {
     this.doctorForm = this.formBuilder.group({
       medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }),
       id: Number,
-      name: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
-      surname: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
+      name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
+      surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
       doctorNumber: new FormControl(''/*, {validators: [Validators.required]}*/),
-      email: new FormControl('', { validators: [Validators.required] }),
-      password: new FormControl('', { validators: [Validators.required] }),
+      email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
+        Validators.maxLength(256)] }),
+      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
+        Validators.maxLength(100)] }),
 
     });
   }
@@ -113,6 +115,7 @@ export class RegistrantDoctorsComponent {
           this.doctorForm.reset();
           this.formDoctorNumber.setValue('');
           this.formId.setValue('');
+          this.doctorForm.reset();
 
           //CZYSZCZENIE COMBOBOXA:
           const specialisationsArrayTemp = this.doctorForm.get('medicalSpecialisationsIds') as FormArray;
@@ -242,6 +245,7 @@ export class RegistrantDoctorsComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.doctorForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -249,6 +253,7 @@ export class RegistrantDoctorsComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.doctorForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -277,6 +282,7 @@ export class RegistrantDoctorsComponent {
           this.isEditableMode = false;
           this.doctorSpecialisationsList = []; //czyszczenie listy?
           this.doctorSpecialisationsList = [];
+          this.doctorForm.reset();
         },
         error: (error) => {
           console.error("Error performing action:", error);

@@ -15,16 +15,12 @@
     <form class="w-25 mx-auto" [formGroup]="diagnosticTestTypesForm" *ngIf="isAddingMode || isEditableMode">
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
-            <div class="input-group">
                 <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
-                    [class.is-invalid]="formName.invalid">
+                    [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
                 <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
                 <div class="invalid-feedback">
-                    <span *ngIf="formName?.errors?.['min']">Min length: 2</span>
-                    <span *ngIf="formName?.errors?.['max']">Max length: 50</span>
                     <span *ngIf="formName?.errors?.['required']">Required</span>
                 </div>
-            </div>
         </div>
 
 

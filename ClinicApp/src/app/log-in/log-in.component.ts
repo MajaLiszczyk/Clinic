@@ -23,8 +23,8 @@ export class LoginComponent {
     private router: Router
   ) {
     this.logInForm = this.fb.group({
-      email: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
-      password: new FormControl('', { validators: [Validators.minLength(1), Validators.maxLength(60), Validators.required] }),
+      email: new FormControl('', { validators: [Validators.required, Validators.email, Validators.maxLength(256)] }),
+      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6), Validators.maxLength(100)] }),
     });
   }
 

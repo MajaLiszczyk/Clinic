@@ -2,23 +2,23 @@
   <div class="formGroup mb-3">
     <label class="form-label">Email</label>
     <input formControlName="email" type="string" step="0.01" class="form-control" aria-label="email"
-        [class.is-invalid]="formEmail.invalid">
+        [class.is-invalid]="formEmail.invalid && (formEmail.touched || formEmail.dirty)">
     <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
     <div class="invalid-feedback">
-        <span *ngIf="formEmail?.errors?.['min']">Min length: 1</span>
-        <span *ngIf="formEmail?.errors?.['max']">Max length: 60</span>
         <span *ngIf="formEmail?.errors?.['required']">Required</span>
+        <span *ngIf="formEmail?.errors?.['maxlength']">Max length: 256</span>
+        <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
     </div>
 </div>
 <div class="formGroup mb-3">
     <label class="form-label">Password</label>
-    <input formControlName="password" type="string" class="form-control" aria-label="password"
-        [class.is-invalid]="formPassword.invalid">
+    <input formControlName="password" type="password" class="form-control" aria-label="password"
+        [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
     <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
     <div class="invalid-feedback">
-        <span *ngIf="formPassword?.errors?.['min']">Min length: 1</span>
-        <span *ngIf="formPassword?.errors?.['max']">Max length: 60</span>
         <span *ngIf="formPassword?.errors?.['required']">Required</span>
+        <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
+        <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span>
     </div>
 </div>
 <div>

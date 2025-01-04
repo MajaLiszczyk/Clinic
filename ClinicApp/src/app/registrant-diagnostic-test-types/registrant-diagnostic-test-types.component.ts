@@ -36,7 +36,7 @@ export class RegistrantDiagnosticTestTypesComponent {
     this.diagnosticTestTypesForm = this.formBuilder.group({
       id: Number,
       //id: new  FormControl(0, {validators: [Validators.required]}),
-      name: new FormControl('', { validators: [Validators.minLength(2), Validators.maxLength(50), Validators.required] })
+      name: new FormControl(null, { validators: [Validators.required] })
     });
   }
 
@@ -82,6 +82,7 @@ export class RegistrantDiagnosticTestTypesComponent {
         console.log("Action performed successfully:", response);
         this.getAllDiagnosticTestTypes();
         this.isEditableMode = false;
+        this.diagnosticTestTypesForm.reset();
       },
       error: (error) => {
         console.error("Error performing action:", error);
@@ -135,6 +136,7 @@ export class RegistrantDiagnosticTestTypesComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.diagnosticTestTypesForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -142,6 +144,7 @@ export class RegistrantDiagnosticTestTypesComponent {
     //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
+    this.diagnosticTestTypesForm.reset();
     //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
@@ -160,6 +163,7 @@ export class RegistrantDiagnosticTestTypesComponent {
         this.diagnosticTestType = result; // Zwrócony obiekt przypisany do zmiennej
         this.getAllDiagnosticTestTypes()
         this.isAddingMode = false;
+        this.diagnosticTestTypesForm.reset();
       },
       error: (err) => {
         console.error("Error occurred:", err); // Obsługa błędów

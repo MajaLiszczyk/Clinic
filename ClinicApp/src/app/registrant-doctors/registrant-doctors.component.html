@@ -10,53 +10,47 @@
 
 <div>
     <h3 class="my-4" *ngIf="isAddingMode">Add new doctor</h3>
-
     <h3 class="my-4" *ngIf="isEditableMode">Edit doctor</h3>
-
     <form class="w-25 mx-auto" [formGroup]="doctorForm" *ngIf="isAddingMode || isEditableMode">
-
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
-            <div class="input-group">
-                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
-                    [class.is-invalid]="formName.invalid">
-                <div class="invalid-feedback">
-                    <span *ngIf="formName?.errors?.['min']">Min length: 1</span>
-                    <span *ngIf="formName?.errors?.['max']">Max length: 60</span>
-                    <span *ngIf="formName?.errors?.['required']">Required</span>
-                </div>
+            <!-- <div class="input-group"> -->
+            <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formName?.errors?.['required']">Required</span>
             </div>
+            <!-- </div> -->
         </div>
+
         <div class="formGroup mb-3">
             <label class="form-label">Surname</label>
-            <div class="input-group">
-                <input formControlName="surname" type="string" class="form-control" aria-label="surname"
-                    [class.is-invalid]="formSurname.invalid">
-                <div class="invalid-feedback">
-                    <span *ngIf="formSurname?.errors?.['min']">Min length: 1</span>
-                    <span *ngIf="formSurname?.errors?.['max']">Max length: 60</span>
-                    <span *ngIf="formSurname?.errors?.['required']">Required</span>
-                </div>
+            <input formControlName="surname" type="string" class="form-control" aria-label="surname"
+                [class.is-invalid]="formSurname.invalid && (formSurname.touched || formSurname.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formSurname?.errors?.['required']">Required</span>
             </div>
         </div>
-        <div *ngIf="isAddingMode && !isEditableMode" class="formGroup mb-3">
+
+        <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">E-mail address</label>
-            <div class="input-group">
-                <input formControlName="email" type="string" class="form-control" aria-label="email"
-                    [class.is-invalid]="formEmail.invalid">
-                <div class="invalid-feedback">
-                    <span *ngIf="formEmail?.errors?.['required']">Required</span>
-                </div>
+            <input formControlName="email" type="string" class="form-control" aria-label="email"
+                [class.is-invalid]="formEmail.invalid && (formEmail.touched || formEmail.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formEmail?.errors?.['required']">Required</span>
+                <span *ngIf="formEmail?.errors?.['maxlength']">Max length: 256</span>
+                <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
             </div>
         </div>
-        <div *ngIf="isAddingMode && !isEditableMode" class="formGroup mb-3">
+
+        <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">Password</label>
-            <div class="input-group">
-                <input formControlName="password" type="string" class="form-control" aria-label="password"
-                    [class.is-invalid]="formPassword.invalid">
-                <div class="invalid-feedback">
-                    <span *ngIf="formPassword?.errors?.['required']">Required</span>
-                </div>
+            <input formControlName="password" type="string" class="form-control" aria-label="password"
+                [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formPassword?.errors?.['required']">Required</span>
+                <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
+                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span>
             </div>
         </div>
 
@@ -165,7 +159,7 @@
                     Archived
                 </th>
             </tr>
-    
+
         </thead>
         <!-- <tr *ngFor="let doctor of doctors"> -->
         <tbody>
@@ -189,12 +183,14 @@
                     {{!doctorWtihSpecialisations.isAvailable}}
                 </td>
                 <td class="text-end">
-                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable" type="button"
-                        class="btn btn-outline-primary ms-4 me-2" (click)="edit(doctorWtihSpecialisations)">Edit</button>
-    
-                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable" type="button" class="btn btn-outline-danger mx-2"
+                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable"
+                        type="button" class="btn btn-outline-primary ms-4 me-2"
+                        (click)="edit(doctorWtihSpecialisations)">Edit</button>
+
+                    <button [disabled]="isAddingMode || isEditableMode || !doctorWtihSpecialisations.isAvailable"
+                        type="button" class="btn btn-outline-danger mx-2"
                         (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
-    
+
                     <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
                     <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id]"
                         [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
