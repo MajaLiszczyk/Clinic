@@ -8,7 +8,8 @@ import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 
 import { Component } from '@angular/core';
 import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
-import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
+import { AuthorizationService } from '../services/authorization.service';
+//import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
 
 
 @Component({
@@ -19,10 +20,14 @@ import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appoin
   styleUrl: './registrant.component.css'
 })
 export class RegistrantComponent {
-  constructor(private http:HttpClient, private formBuilder: FormBuilder){
+  constructor(private http:HttpClient, private formBuilder: FormBuilder, public authorizationService: AuthorizationService ){
   }
 
   ngOnInit(){
+  }
+
+  logout(){
+    this.authorizationService.logout();
   }
 
 }

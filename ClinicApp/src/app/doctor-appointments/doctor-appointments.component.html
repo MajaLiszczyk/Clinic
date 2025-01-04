@@ -1,66 +1,91 @@
-<div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div>
-<div class="d-flex justify-content-center mx-5 px-5 mb-5">
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>
-                    Future appointments:
-                </th>
-                <th>
-                   
-                </th>
-            </tr>
+<div class="container">
+    <div *ngIf="!isRegistrantMode">
+        <button [disabled]="!authorizationService.isLoggedIn()" type="button"
+            class="btn  btn-success float-right mx-2 mt-5 " (click)="logout()">Logout</button>
+    </div>
 
-        </thead>
-        <tr *ngFor="let futureAppointment of allMedicalAppointments.futureMedicalAppointments">
-            <td>
-                Time: {{futureAppointment.dateTime}}
-                Patient Id: {{futureAppointment.patientId}}
-            </td>
-            <td>
-                <!-- <button type="button" class="btn  btn-success float-right" (click)="cancel(futureAppointment)">Cancel</button> -->
-                <!--<a [routerLink]="['/appointment-details', futureAppointment.id, true]" class="btn btn-success w-50" >Details</a>   -->
-                <a [routerLink]="['/appointment-details', futureAppointment.id]" [queryParams]="{ isEditable: true, isAppointmentCancelled: futureAppointment.isCancelled}" *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+    <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->
+    Future appointments
+    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Doctor Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let futureAppointment of allMedicalAppointments.futureMedicalAppointments">
+                    <td>
+                        {{futureAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{futureAppointment.patientId}}
+                    </td>
+                    <td class="text-end">
+                        <a [routerLink]="['/appointment-details', futureAppointment.id]"
+                            [queryParams]="{ isEditable: true, isAppointmentCancelled: futureAppointment.isCancelled}"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
 
 
-                
-            </td>
-        </tr>
-        <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
-            <td colspan="8">No future medical appointments</td>
-        </tr>
-    </table>
+
+                    </td>
+                </tr>
+                <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
+                    <td colspan="8">No future medical appointments</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    Past appointments:
+    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Doctor Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let pastAppointment of allMedicalAppointments.pastMedicalAppointments">
+                    <td>
+                        {{pastAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{pastAppointment.patientId}}
+                    </td>
+
+                    <td class="text-end">
+                        <a [routerLink]="['/appointment-details', pastAppointment.id]"
+                            [queryParams]="{ isEditable: false, isAppointmentCancelled: pastAppointment.isCancelled}"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                        <!-- <a [routerLink]="['/appointment-details', pastAppointment.id, false]" class="btn btn-success w-50" >Details</a>   -->
+                    </td>
+                </tr>
+                <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
+                    <td colspan="8">No past medical appointments</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-doctors']" class="btn btn-secondary">Return</a>
+
 </div>
-
-<div class="d-flex justify-content-center mx-5 px-5 mb-5">
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th>
-                    Past appointments:
-                </th>
-                <th>
-                </th>
-            </tr>
-
-        </thead>
-        <tr *ngFor="let pastAppointment of allMedicalAppointments.pastMedicalAppointments">
-            <td>
-                Time: {{pastAppointment.dateTime}}
-                Patient Id: {{pastAppointment.patientId}}
-            </td>
-            <td>
-                <a [routerLink]="['/appointment-details', pastAppointment.id]" [queryParams]="{ isEditable: false, isAppointmentCancelled: pastAppointment.isCancelled}" *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
-
-
-
-                <!-- <a [routerLink]="['/appointment-details', pastAppointment.id, false]" class="btn btn-success w-50" >Details</a>   -->
-            </td>
-        </tr>
-        <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
-            <td colspan="8">No past medical appointments</td>
-        </tr>
-    </table>
-</div>
-
-<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-doctors']" class="btn btn-secondary">Return</a>

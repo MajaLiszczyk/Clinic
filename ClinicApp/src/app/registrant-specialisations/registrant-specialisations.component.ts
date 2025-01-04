@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
-import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
+//import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
+//import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Specialisation } from '../model/specialisation';
@@ -11,7 +11,7 @@ import { ClinicService } from '../services/clinic.service';
 @Component({
   selector: 'app-registrant-specialisations',
   standalone: true,
-  imports: [HttpClientModule, AddSpecialisationComponent, GetSpecialisationsComponent, CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [HttpClientModule, CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './registrant-specialisations.component.html',
   styleUrl: './registrant-specialisations.component.css'
 })

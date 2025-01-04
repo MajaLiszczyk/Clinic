@@ -1,5 +1,8 @@
 <!-- <div class="container d-flex flex-column justify-content-center align-items-center vh-100">-->
 <div class="container">
+    <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+        (click)="logout()">Logout</button>
+    <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->
     <h1 class="my-4">Registrant menu</h1>
     <div class="row mt-4">
         <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4">

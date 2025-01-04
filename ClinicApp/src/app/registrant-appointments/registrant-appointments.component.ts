@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AddMedicalAppointmentComponent } from '../add-medical-appointment/add-medical-appointment.component';
-import { GetMedicalAppointmentsComponent } from '../get-medical-appointments/get-medical-appointments.component';
+//import { AddMedicalAppointmentComponent } from '../add-medical-appointment/add-medical-appointment.component';
+//import { GetMedicalAppointmentsComponent } from '../get-medical-appointments/get-medical-appointments.component';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';

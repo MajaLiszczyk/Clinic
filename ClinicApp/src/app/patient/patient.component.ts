@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GetMedicalAppointmentsForPatientComponent } from '../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component';
+//import { GetMedicalAppointmentsForPatientComponent } from '../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component';
 import { MakeAnAppointmentComponent } from '../make-an-appointment/make-an-appointment.component';
 import { Patient } from '../model/patient';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ import { AuthorizationService } from '../services/authorization.service';
 @Component({
   selector: 'app-patient',
   standalone: true,
-  imports: [MakeAnAppointmentComponent, GetMedicalAppointmentsForPatientComponent,
+  imports: [MakeAnAppointmentComponent,
     HttpClientModule, ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './patient.component.html',
   styleUrl: './patient.component.css'
@@ -52,7 +52,7 @@ export class PatientComponent {
   }*/
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, 
-              private route: ActivatedRoute, private clinicService: ClinicService, private authorizationService: AuthorizationService,) {
+              private route: ActivatedRoute, private clinicService: ClinicService, public authorizationService: AuthorizationService,) {
     this.choosePatientForm = this.formBuilder.group({});
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
@@ -181,6 +181,10 @@ export class PatientComponent {
           console.error("Error performing action:", error);
         }
       });
+  }
+
+  logout(){
+    this.authorizationService.logout();
   }
 
   /*onPatientChange(event: Event): void {

@@ -13,7 +13,7 @@ import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 
 import { Input } from '@angular/core';
 import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
-import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
+//import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ClinicService } from '../services/clinic.service';

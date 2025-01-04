@@ -1,136 +1,141 @@
-<h4>MEDICAL APPOINTMENT</h4>
-<p></p>
-<h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">
-  <div *ngIf="medicalAppointment.isCancelled; else finishBlock">
-    status: CANCELLED
+<div class="container">
+  <h4>MEDICAL APPOINTMENT</h4>
+  <p></p>
+  <h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">
+    <div *ngIf="medicalAppointment.isCancelled; else finishBlock">
+      status: CANCELLED
+    </div>
+    <ng-template #finishBlock>
+      <div *ngIf="medicalAppointment.isFinished; else awaitBlock">
+        status: FINISHED
+      </div>
+    </ng-template>
+    <ng-template #awaitBlock>
+      status: AWAITING
+    </ng-template> <br />
+
+    Time: {{medicalAppointment.dateTime}} <br />
+    Patient id: {{medicalAppointment.patientId}}
+
+  </h5>
+
+  <div *ngIf="isAppointmentCancelled || isCancelClicked">
+    <form [formGroup]="cancelAppointmentForm">
+      <label for="textbox">Reason to cancel the medical appointment:</label>
+      <input id="cancelComment" formControlName="cancelComment" type="text" class="form-control">
+    </form>
+
+    <div *ngIf="isEditable">
+      <button (click)="saveCancelComment()" class="btn btn-success w-50">Save comment</button>
+      <button (click)="cancelCancelComment()" class="btn btn-success w-50">Cancel comment</button>
+    </div>
   </div>
-  <ng-template #finishBlock>
-    <div *ngIf="medicalAppointment.isFinished; else awaitBlock">
-      status: FINISHED
-    </div> 
-  </ng-template>
-  <ng-template #awaitBlock>
-    status: AWAITING
-  </ng-template> <br/>
-
-  Time: {{medicalAppointment.dateTime}} <br/>
-  Patient id: {{medicalAppointment.patientId}} 
-
-</h5>
-
-<div *ngIf="isAppointmentCancelled || isCancelClicked">
-  <form [formGroup]="cancelAppointmentForm">
-    <label for="textbox">Reason to cancel the medical appointment:</label>
-    <input id="cancelComment" formControlName="cancelComment" type="text" class="form-control">
-  </form>
-
-  <div *ngIf="isEditable">
-    <button (click)="saveCancelComment()" class="btn btn-success w-50">Save comment</button>
-    <button (click)="cancelCancelComment()" class="btn btn-success w-50">Cancel comment</button>
-  </div>
-</div>
 
 
-<!-- JESLI WIZYTA NIEANULOWANA - OCZEKUJĄCA LUB ZAKOŃCZONA -->
-<div *ngIf="!isAppointmentCancelled && !isCancelClicked">
-  <form [formGroup]="medicalAppointmentForm">
-    <label for="textbox">Interview:</label>
-    <input id="interview" formControlName="interviewText" type="text" class="form-control">
+  <!-- JESLI WIZYTA NIEANULOWANA - OCZEKUJĄCA LUB ZAKOŃCZONA -->
+  <div *ngIf="!isAppointmentCancelled && !isCancelClicked">
+    <form [formGroup]="medicalAppointmentForm">
+      <label for="textbox">Interview:</label>
+      <input id="interview" formControlName="interviewText" type="text" class="form-control">
       <div class="invalid-feedback">
         <span *ngIf="formInterview?.errors?.['min']">Min length: 1</span>
         <span *ngIf="formInterview?.errors?.['required']">Required</span>
-    </div>
-    <p></p>
+      </div>
+      <p></p>
 
-    <label for="textbox">Diagnosis:</label>
-    <input id="textbox" type="text" formControlName="diagnosisText" class="form-control" />
+      <label for="textbox">Diagnosis:</label>
+      <input id="textbox" type="text" formControlName="diagnosisText" class="form-control" />
       <div class="invalid-feedback">
         <span *ngIf="formDiagnosis?.errors?.['min']">Min length: 1</span>
         <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
-    </div>
-
-  </form>
-
-  <form [formGroup]="chooseDiagnosticTestTypeForm" *ngIf="isEditable">
-    <div class="form-group">
-      <label for="diagnosticTypeTestType">Diagnostic Test Type:</label>
-      <select id="diagnosticTypeTestType" class="form-control" formControlName="diagnosticTypeTestType">
-        <option *ngFor="let diagnosticTestType of diagnosticTestTypes" [ngValue]="diagnosticTestType">
-          {{ diagnosticTestType.name }}
-        </option>
-      </select>
-    </div>
-    <div>
-      <div class="d-flex justify-content-center mb-4">
-        <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
-          (click)="selectDiagnosticTestType()">Select</button>
       </div>
-    </div>
-  </form>
 
-  <form [formGroup]="diagnosticTestForm" *ngIf="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode">
-    <label for="textbox">Type:</label>
-    <input id="diagnosticTestTypeName" formControlName="diagnosticTestTypeName" type="text" class="form-control">
-    <p></p>
+    </form>
 
-    <label for="textbox">Description:</label>
-    <input id="description" type="text" formControlName="description" />
+    <form [formGroup]="chooseDiagnosticTestTypeForm" *ngIf="isEditable">
+      <div class="form-group">
+        <label for="diagnosticTypeTestType">Diagnostic Test Type:</label>
+        <select id="diagnosticTypeTestType" class="form-control" formControlName="diagnosticTypeTestType">
+          <option *ngFor="let diagnosticTestType of diagnosticTestTypes" [ngValue]="diagnosticTestType">
+            {{ diagnosticTestType.name }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <div class="d-flex justify-content-center mb-4">
+          <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+            (click)="selectDiagnosticTestType()">Select</button>
+        </div>
+      </div>
+    </form>
 
-    <div class="d-flex justify-content-center mb-4 mt-5">
-      <button *ngIf="isDiagnosticTestAddingMode" type="button" class="btn  btn-success float-right mx-2 "
-        (click)="saveDiagnosticTest()">Save Diagnostic Test</button>
-      <button (click)="cancelAddingDiagnosticTest()" class="btn btn-secondary">Cancel</button>
-      <button *ngIf="isDiagnosticTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
-        (click)="updateDiagnosticTest()">Save
-        etitioned diagnosticTest</button>
+    <form [formGroup]="diagnosticTestForm" *ngIf="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode">
+      <label for="textbox">Type:</label>
+      <input id="diagnosticTestTypeName" formControlName="diagnosticTestTypeName" type="text" class="form-control">
+      <p></p>
+
+      <label for="textbox">Description:</label>
+      <input id="description" type="text" formControlName="description" />
+
+      <div class="d-flex justify-content-center mb-4 mt-5">
+        <button *ngIf="isDiagnosticTestAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+          (click)="saveDiagnosticTest()">Save Diagnostic Test</button>
+        <button (click)="cancelAddingDiagnosticTest()" class="btn btn-secondary">Cancel</button>
+        <button *ngIf="isDiagnosticTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+          (click)="updateDiagnosticTest()">Save
+          etitioned diagnosticTest</button>
 
 
 
-    </div>
-  </form>
+      </div>
+    </form>
 
-  <div>
-    <table class="table table-striped">
-      <thead class="thead-dark">
-        <tr>
-          <th>
-            Diagnostic Test
-          </th>
-          <th>
+    <div>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>
+              Diagnostic Test
+            </th>
+            <th>
 
-          </th>
+            </th>
+          </tr>
+
+        </thead>
+        <tr *ngFor="let pastDiagnosticTest of pastDiagnosticTests">
+          <td>
+            Diagnostic test type: {{pastDiagnosticTest.diagnosticTestTypeName}}
+            <br />
+            Description: {{pastDiagnosticTest.description}}
+          </td>
+          <td *ngIf="isEditable">
+            <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
+              class="btn  btn-success float-right" (click)="edit(pastDiagnosticTest)">Edit</button>
+            <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
+              class="btn  btn-success float-right" (click)="delete(pastDiagnosticTest.id)">Delete</button>
+          </td>
         </tr>
+        <tr *ngIf="pastDiagnosticTests.length === 0">
+          <td colspan="8">No diagnosticTest</td>
+        </tr>
+      </table>
+    </div>
 
-      </thead>
-      <tr *ngFor="let pastDiagnosticTest of pastDiagnosticTests">
-        <td>
-          Diagnostic test type: {{pastDiagnosticTest.diagnosticTestTypeName}}
-          <br />
-          Description: {{pastDiagnosticTest.description}}
-        </td>
-        <td *ngIf="isEditable">
-          <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
-            class="btn  btn-success float-right" (click)="edit(pastDiagnosticTest)">Edit</button>
-          <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
-            class="btn  btn-success float-right" (click)="delete(pastDiagnosticTest.id)">Delete</button>
-        </td>
-      </tr>
-      <tr *ngIf="pastDiagnosticTests.length === 0">
-        <td colspan="8">No diagnosticTest</td>
-      </tr>
-    </table>
+    <div *ngIf="isEditable">
+      <button [disabled]="medicalAppointment.patientId==0" (click)="saveAnAppointment()"
+        class="btn btn-success w-50">Finish the appointment</button>
+      <button [disabled]="medicalAppointment.patientId==0" (click)="cancelAnAppointment()"
+        class="btn btn-success w-50">Cancel the appointment</button>
+
+      <!-- <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a> -->
+    </div>
+
   </div>
+  <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId]" class="btn btn-secondary">Return</a>
 
-  <div *ngIf="isEditable">
-    <button [disabled]="medicalAppointment.patientId==0" (click)="saveAnAppointment()" class="btn btn-success w-50">Finish the appointment</button>
-    <button [disabled]="medicalAppointment.patientId==0" (click)="cancelAnAppointment()" class="btn btn-success w-50">Cancel the appointment</button>
-
-    <!-- <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a> -->
-  </div>
 
 </div>
-<a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId]" class="btn btn-secondary">Return</a>
-
 
 
 

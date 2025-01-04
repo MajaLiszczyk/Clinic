@@ -3,15 +3,15 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
-import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
+//import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
+//import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
 import { DiagnosticTestType } from '../model/diagnostic-test-type';
 import { ClinicService } from '../services/clinic.service';
 
 @Component({
   selector: 'app-registrant-diagnostic-test-types',
   standalone: true,
-  imports: [HttpClientModule, AddSpecialisationComponent, GetSpecialisationsComponent, CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [HttpClientModule, CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './registrant-diagnostic-test-types.component.html',
   styleUrl: './registrant-diagnostic-test-types.component.css'
 })
