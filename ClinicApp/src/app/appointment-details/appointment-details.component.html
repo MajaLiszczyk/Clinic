@@ -21,39 +21,50 @@
 
   <div *ngIf="isAppointmentCancelled || isCancelClicked">
     <form [formGroup]="cancelAppointmentForm">
-      <label for="textbox">Reason to cancel the medical appointment:</label>
-      <input id="cancelComment" formControlName="cancelComment" type="text" class="form-control">
+      <div class="formGroup mb-3">
+        <label for="textbox">Reason to cancel the medical appointment:</label>
+        <input formControlName="cancelComment" id="cancelComment" type="text" class="form-control"
+          aria-label="cancelComment"
+          [class.is-invalid]="formCancelComment.invalid && (formCancelComment.touched || formCancelComment.dirty)">
+        <div class="invalid-feedback">
+          <span *ngIf="formCancelComment?.errors?.['required']">Required</span>
+        </div>
+      </div>
+      <div *ngIf="isEditable">
+        <button (click)="saveCancelComment()" class="btn btn-success w-50">Save comment</button>
+        <button (click)="cancelCancelComment()" class="btn btn-success w-50">Cancel comment</button>
+      </div>
     </form>
 
-    <div *ngIf="isEditable">
-      <button (click)="saveCancelComment()" class="btn btn-success w-50">Save comment</button>
-      <button (click)="cancelCancelComment()" class="btn btn-success w-50">Cancel comment</button>
-    </div>
+
   </div>
 
 
   <!-- JESLI WIZYTA NIEANULOWANA - OCZEKUJĄCA LUB ZAKOŃCZONA -->
   <div *ngIf="!isAppointmentCancelled && !isCancelClicked">
     <form [formGroup]="medicalAppointmentForm">
-      <label for="textbox">Interview:</label>
-      <input id="interview" formControlName="interviewText" type="text" class="form-control">
-      <div class="invalid-feedback">
-        <span *ngIf="formInterview?.errors?.['min']">Min length: 1</span>
-        <span *ngIf="formInterview?.errors?.['required']">Required</span>
+      <div class="formGroup mb-3">
+        <label for="textbox">Interview:</label>
+        <input id="interview" formControlName="interviewText" type="text" class="form-control" aria-label="interview"
+          [class.is-invalid]="formInterview.invalid && (formInterview.touched || formInterview.dirty)">
+        <div class="invalid-feedback">
+          <span *ngIf="formInterview?.errors?.['required']">Required</span>
+        </div>
       </div>
       <p></p>
-
-      <label for="textbox">Diagnosis:</label>
-      <input id="textbox" type="text" formControlName="diagnosisText" class="form-control" />
-      <div class="invalid-feedback">
-        <span *ngIf="formDiagnosis?.errors?.['min']">Min length: 1</span>
-        <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
+      
+      <div class="formGroup mb-3">
+        <label for="textbox">Diagnosis:</label>
+        <input id="textbox" type="text" formControlName="diagnosisText" class="form-control"
+          [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)"/>
+        <div class="invalid-feedback">
+          <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
+        </div>
       </div>
-
     </form>
 
     <form [formGroup]="chooseDiagnosticTestTypeForm" *ngIf="isEditable">
-      <div class="form-group">
+      <div class="formGroup mb-3">
         <label for="diagnosticTypeTestType">Diagnostic Test Type:</label>
         <select id="diagnosticTypeTestType" class="form-control" formControlName="diagnosticTypeTestType">
           <option *ngFor="let diagnosticTestType of diagnosticTestTypes" [ngValue]="diagnosticTestType">

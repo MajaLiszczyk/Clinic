@@ -49,7 +49,7 @@ export class RegistrantDoctorsComponent {
     this.getAllDoctors();
     this.getAllAvailableSpecialisations();
     this.doctorForm = this.formBuilder.group({
-      medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }),
+      medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }), //pusta tablica chyba ok
       id: Number,
       name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
       surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),

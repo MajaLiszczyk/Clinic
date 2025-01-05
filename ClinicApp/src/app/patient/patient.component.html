@@ -1,11 +1,13 @@
 <div class="container">
-    <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success "
-        (click)="logout()">Logout</button>
+    <div *ngIf="!isRegistrantMode">
+        <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success "
+            (click)="logout()">Logout</button>
+    </div>
     <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->
     <!-- MAKE APPOINTMENT-->
     <div class=" col-12 mb-4 text-center">
         <button [disabled]="isMakeAnAppointmentMode || patient.isAvailable==false " (click)="openAppointmentForm()"
-            class="btn btn-success w-50 mb-5">Make an appointment</button>
+            class="btn btn-primary ms-2 me-4">Make an appointment</button> 
     </div>
     <div>
         <h3 class="my-4" *ngIf="isMakeAnAppointmentMode">Make an appointment</h3>
@@ -25,7 +27,7 @@
                     {{formSpecialisationId.value}}</button>
                 <button (click)="cancelAppointmentForm()" class="btn btn-outline-secondary">Cancel</button>
             </div>
-            //do zrobienia!!!!!
+            //do zrobienia ESTETYCZNIE!!!!!
 
             <div *ngFor="let medicalAppointment of medicalAppointments">
                 <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:

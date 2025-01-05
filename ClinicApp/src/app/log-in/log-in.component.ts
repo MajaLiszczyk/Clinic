@@ -16,6 +16,9 @@ export class LoginComponent {
   logInForm: FormGroup;
   errorMessage: string | null = null;
   res:  string = "";
+  passwordVisible = false;
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -23,15 +26,17 @@ export class LoginComponent {
     private router: Router
   ) {
     this.logInForm = this.fb.group({
-      email: new FormControl('', { validators: [Validators.required, Validators.email, Validators.maxLength(256)] }),
-      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6), Validators.maxLength(100)] }),
+      email: new FormControl(null, { validators: [Validators.required, Validators.email, Validators.maxLength(256)] }),
+      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6), Validators.maxLength(100)] }),
     });
   }
 
   get formEmail(): FormControl { return this.logInForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formPassword(): FormControl { return this.logInForm?.get("password") as FormControl };
 
-
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
 
   logIn() {
       //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego

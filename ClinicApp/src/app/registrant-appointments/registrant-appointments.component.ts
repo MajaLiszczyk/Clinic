@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 //import { GetMedicalAppointmentsComponent } from '../get-medical-appointments/get-medical-appointments.component';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, ValidationErrors, AbstractControl } from '@angular/forms';
 //import { NgbDateNativeAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateNativeAdapter, NgbDateStruct, NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateMedicalAppointment } from '../model/create-medical-appointment';
@@ -51,7 +51,7 @@ export class RegistrantAppointmentsComponent {
     this.getAllDoctors();
     //this.getAllMedicalAppointments();
     this.medicalAppointmentForm = this.formBuilder.group({
-      date: new FormControl(null, [Validators.required]),
+      date: new FormControl(null, [Validators.required, this.futureOrTodayDateValidator]),
       time: new FormControl(null, [Validators.required]),
       doctorId: new FormControl(null, [Validators.required])
     },{
@@ -63,7 +63,17 @@ export class RegistrantAppointmentsComponent {
     const date = formGroup.get('date')?.value;
     const time = formGroup.get('time')?.value;
     return date && time ? null : { dateTimeRequired: true };
-}
+  }
+
+  futureOrTodayDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return null; // Nie sprawdzaj, jeśli pole jest puste
+    }
+    const selectedDate = new Date(control.value.year, control.value.month - 1, control.value.day); // Dostosowanie dla ngbDatepicker
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Ustawienie godziny na początek dnia
+    return selectedDate >= today ? null : { notFutureOrToday: true };
+  }
 
   get formDoctorId(): FormControl { return this.medicalAppointmentForm?.get("doctorId") as FormControl };
   get formMedicalAppointmentDate(): FormControl { return this.medicalAppointmentForm.get("date") as FormControl };
@@ -91,6 +101,14 @@ export class RegistrantAppointmentsComponent {
     this.isAddingMode = true;
   }
 
+  resetForm() {
+    this.medicalAppointmentForm.reset({
+      date: null,
+      time: null,
+      doctorId: null
+    });
+  }
+
   addMedicalAppointment(): void {
     if(this.medicalAppointmentForm.invalid){ 
       this.medicalAppointmentForm.markAllAsTouched();
@@ -104,6 +122,7 @@ export class RegistrantAppointmentsComponent {
           this.getAllMedicalAppointments();
         }
         console.log('Wizyta została utworzona:', result);
+        this.resetForm();
       },
       error: (err) => {
         console.error('Wystąpił błąd podczas tworzenia wizyty:', err);
@@ -125,6 +144,7 @@ export class RegistrantAppointmentsComponent {
   cancelAdding(){
     this.isAddingMode = false;
     this.medicalAppointmentForm.reset();
+    this.resetForm();
   }
 
   showAllAppointments(){

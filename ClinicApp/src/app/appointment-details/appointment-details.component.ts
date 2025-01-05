@@ -50,12 +50,12 @@ export class AppointmentDetailsComponent {
     this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0, diagnosticTestTypeName: '', description: '' };
     this.medicalAppointmentForm = this.fb.group({
       //interviewText: new FormControl('', { validators: [Validators.required] }), // Domyślna wartość
-      interviewText: new FormControl('', { validators: [Validators.minLength(1), Validators.required] }), // Domyślna wartość
+      interviewText: new FormControl(null, { validators: [Validators.required] }), // Domyślna wartość
       //diagnosisText: [''],
-      diagnosisText: new FormControl('', { validators: [Validators.minLength(1), Validators.required] })
+      diagnosisText: new FormControl(null, { validators: [Validators.required] })
     });
     this.cancelAppointmentForm = this.fb.group({
-      cancelComment: new FormControl('', { validators: [Validators.minLength(1), Validators.required] }),
+      cancelComment: new FormControl(null, { validators: [Validators.required] }),
     });    
     this.chooseDiagnosticTestTypeForm = this.fb.group({});
     this.diagnosticTestForm = this.fb.group({});
@@ -85,8 +85,8 @@ export class AppointmentDetailsComponent {
     });
     //DIAGNOSTIC TEST FORM
     this.diagnosticTestForm = this.fb.group({
-      diagnosticTestTypeName: new FormControl(''),
-      description: new FormControl('', { validators: [Validators.required] }),
+      diagnosticTestTypeName: new FormControl(''), //ZMIENIC NA NULL?
+      description: new FormControl(null, { validators: [Validators.required] }),
     });
 
     if (this.isEditable) {
@@ -110,7 +110,6 @@ export class AppointmentDetailsComponent {
   get formTypeDiagnosticTestType(): FormControl { return this.chooseDiagnosticTestTypeForm?.get("diagnosticTypeTestType") as FormControl };
   get formDiagnosticTestType(): FormControl { return this.diagnosticTestForm.get('diagnosticTestTypeName') as FormControl; }
   get formDescription(): FormControl { return this.diagnosticTestForm.get('description') as FormControl; }
-
   get formCancelComment(): FormControl { return this.cancelAppointmentForm.get('cancelComment') as FormControl; }
 
 

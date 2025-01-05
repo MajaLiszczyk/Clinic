@@ -30,6 +30,7 @@
             <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
             <div class="invalid-feedback">
                 <span *ngIf="formName?.errors?.['required']">Required</span>
+                <span *ngIf="formName?.errors?.['pattern']">Only letters</span>
             </div>
         </div>
         <div class="formGroup mb-3">
@@ -39,6 +40,7 @@
             <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
             <div class="invalid-feedback">
                 <span *ngIf="formSurname?.errors?.['required']">Required</span>
+                <span *ngIf="formSurname?.errors?.['pattern']">Only letters</span>
             </div>
         </div>
         <div class="formGroup mb-3">

@@ -1,6 +1,6 @@
 <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 
-<div class=" col-12 mb-4 text-center">  
+<div class=" col-12 mb-4 text-center">
     <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary">Add new medical
         appointment</button>
 </div>
@@ -16,6 +16,10 @@
                     {{doctor.surname}}
                 </option>
             </select>
+            <div *ngIf="medicalAppointmentForm.get('doctorId')?.invalid && medicalAppointmentForm.get('doctorId')?.touched"
+                class="invalid-feedback">
+                <span *ngIf="medicalAppointmentForm.get('doctorId')?.errors?.['required']">Doctor is required</span>
+            </div>
         </div>
         <div class="formGroup mb-3">
             <label class="d-block form-label">Date</label>
@@ -25,7 +29,7 @@
                         class="form-control" aria-label="date"
                         [class.is-invalid]="medicalAppointmentForm.get('date')?.invalid && (medicalAppointmentForm.get('date')?.touched || medicalAppointmentForm.get('date')?.dirty)"
                         [readOnly]="true" placeholder="YYYY-MM-DD">
-                        <!-- [class.is-invalid]="formMedicalAppointmentDate.invalid" -->
+                    <!-- [class.is-invalid]="formMedicalAppointmentDate.invalid" -->
                     <a class="btn btn-outline-secondary pi pi-calendar"
                         (click)="formMedicalAppointmentDatePicker.toggle()" type="button">Select date</a>
                 </div>
@@ -34,22 +38,26 @@
                     [class.is-invalid]="medicalAppointmentForm.get('time')?.invalid && (medicalAppointmentForm.get('time')?.touched || medicalAppointmentForm.get('time')?.dirty)">
                 </ngb-timepicker>
             </div>
-            <div *ngIf="medicalAppointmentForm.errors?.['dateTimeRequired'] && (medicalAppointmentForm.touched || medicalAppointmentForm.dirty)" class="invalid-feedback">
-                Both date and time are required.
+            <!-- Komunikaty o błędach dla pola date -->
+            <div *ngIf="medicalAppointmentForm.get('date')?.errors?.['required'] && medicalAppointmentForm.get('date')?.touched"
+                class="invalid-feedback">
+                <span>Date is required</span>
             </div>
-            <!-- <div class="invalid-feedback"> -->
-            <!-- <div *ngIf="medicalAppointmentForm.invalid || medicalAppointmentForm.touched || medicalAppointmentForm.dirty" class="invalid-feedback"> 
-                <span *ngIf="medicalAppointmentForm.get('date')?.errors?.['required']">Date is required</span>
-                <span *ngIf="medicalAppointmentForm.get('time')?.errors?.['required']">Time is required</span>
-            </div> -->
-            <div *ngIf="medicalAppointmentForm.get('date')?.invalid && medicalAppointmentForm.get('date')?.touched" class="invalid-feedback">
-                <span *ngIf="medicalAppointmentForm.get('date')?.errors?.['required']">Date is required</span>
+            <div *ngIf="medicalAppointmentForm.get('date')?.errors?.['notFutureOrToday'] && medicalAppointmentForm.get('date')?.touched"
+                class="invalid-feedback">
+                <span>Selected date must be today or in the future</span>
             </div>
-            <div *ngIf="medicalAppointmentForm.get('time')?.invalid && medicalAppointmentForm.get('time')?.touched" class="invalid-feedback">
-                <span *ngIf="medicalAppointmentForm.get('time')?.errors?.['required']">Time is required</span>
+
+            <!-- Komunikaty o błędach dla pola time -->
+            <div *ngIf="medicalAppointmentForm.get('time')?.errors?.['required'] && medicalAppointmentForm.get('time')?.touched"
+                class="invalid-feedback">
+                <span>Time is required</span>
             </div>
-            <div *ngIf="medicalAppointmentForm.errors?.['dateTimeRequired'] && (medicalAppointmentForm.touched || medicalAppointmentForm.dirty)" class="invalid-feedback">
-                Both date and time are required.
+
+            <!-- Komunikat o błędzie grupowym (date i time są wymagane) -->
+            <div *ngIf="medicalAppointmentForm.errors?.['dateTimeRequired'] && (medicalAppointmentForm.touched || medicalAppointmentForm.dirty)"
+                class="invalid-feedback">
+                <span>Both date and time are required.</span>
             </div>
         </div>
 
@@ -58,7 +66,8 @@
         </div> -->
         <div>
             <div class="d-flex justify-content-center mb-5 mt-5">
-                <button type="button" class="btn btn-primary float-right mx-2" (click)="addMedicalAppointment()">Save</button>
+                <button type="button" class="btn btn-primary float-right mx-2"
+                    (click)="addMedicalAppointment()">Save</button>
                 <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
             </div>
         </div>

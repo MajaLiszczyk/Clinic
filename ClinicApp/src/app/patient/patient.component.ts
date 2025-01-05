@@ -128,6 +128,7 @@ export class PatientComponent {
   cancelAppointmentForm(){
     this.isMakeAnAppointmentMode = false;
     this.medicalAppointments.length = 0;
+    this.chooseSpecialisationForm.reset();
   }
 
   cancel(medicalAppointment: MedicalAppointment) {
@@ -176,6 +177,7 @@ export class PatientComponent {
         next: (response) => {
           console.log("Action performed successfully:", response);
           this.getAllMedicalAppointments()
+          this.chooseSpecialisationForm.reset();
         },
         error: (error) => {
           console.error("Error performing action:", error);

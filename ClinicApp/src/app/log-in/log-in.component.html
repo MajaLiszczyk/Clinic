@@ -12,8 +12,10 @@
 </div>
 <div class="formGroup mb-3">
     <label class="form-label">Password</label>
-    <input formControlName="password" type="password" class="form-control" aria-label="password"
-        [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+    <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" class="form-control" [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+        <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
+    <!-- <input formControlName="password" type="password" class="form-control" aria-label="password"
+        [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)"> -->
     <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
     <div class="invalid-feedback">
         <span *ngIf="formPassword?.errors?.['required']">Required</span>
