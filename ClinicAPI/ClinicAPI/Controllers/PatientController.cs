@@ -12,6 +12,8 @@ namespace ClinicAPI.Controllers
     //Obsługa kodów błędów(np. 404, 500) i komunikacja z serwisem.
     //Nie powinna zawierać logiki biznesowej ani mapowania danych.
 
+    //[ApiController] Automatycznie włącza walidację modelu na podstawie adnotacji zdefiniowanych w DTO.
+    //Jeśli dane wejściowe są nieprawidłowe, ASP.NET Core nie wykona kontrolera i automatycznie zwróci odpowiedź HTTP 400 (Bad Request) z błędami walidacji.
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class PatientController : ControllerBase

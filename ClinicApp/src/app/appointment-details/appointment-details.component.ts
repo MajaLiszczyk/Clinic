@@ -9,9 +9,6 @@ import { DiagnosticTestType } from '../model/diagnostic-test-type';
 import { DiagnosticTest } from '../model/diagnostic-test';
 import { ClinicService } from '../services/clinic.service';
 
-
-
-
 @Component({
   selector: 'app-appointment-details',
   standalone: true,
@@ -19,6 +16,7 @@ import { ClinicService } from '../services/clinic.service';
   templateUrl: './appointment-details.component.html',
   styleUrl: './appointment-details.component.css'
 })
+
 export class AppointmentDetailsComponent {
   //OTRZYMANE Z PARAMETRÓW
   appointmentId: number = 0;
@@ -49,9 +47,7 @@ export class AppointmentDetailsComponent {
     this.selectedDiagnosticTestType = { id: 0, name: '' , isAvailable: true};
     this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0, diagnosticTestTypeName: '', description: '' };
     this.medicalAppointmentForm = this.fb.group({
-      //interviewText: new FormControl('', { validators: [Validators.required] }), // Domyślna wartość
       interviewText: new FormControl(null, { validators: [Validators.required] }), // Domyślna wartość
-      //diagnosisText: [''],
       diagnosisText: new FormControl(null, { validators: [Validators.required] })
     });
     this.cancelAppointmentForm = this.fb.group({
@@ -67,7 +63,7 @@ export class AppointmentDetailsComponent {
       console.log('Received appointmentId:', this.appointmentId);
     });
     this.route.queryParams.subscribe(queryParams => {
-      this.isEditable = queryParams['isEditable'] === 'true';
+      this.isEditable = queryParams['isEditable'] === 'true'; //czy wizyta z przeszlosci czy nie
       console.log('Is appointment editable:', this.isEditable);
     });
     this.route.queryParams.subscribe(queryParams => {
@@ -85,7 +81,7 @@ export class AppointmentDetailsComponent {
     });
     //DIAGNOSTIC TEST FORM
     this.diagnosticTestForm = this.fb.group({
-      diagnosticTestTypeName: new FormControl(''), //ZMIENIC NA NULL?
+      diagnosticTestTypeName: new FormControl(null, { validators: [Validators.required] }), //ZMIENIC NA NULL? //chyba też required?
       description: new FormControl(null, { validators: [Validators.required] }),
     });
 
@@ -93,12 +89,15 @@ export class AppointmentDetailsComponent {
       this.medicalAppointmentForm.get('interviewText')?.enable(); // Włączanie kontrolki
       this.medicalAppointmentForm.get('diagnosisText')?.enable();
       this.cancelAppointmentForm.get('cancelComment')?.enable();
+      this.diagnosticTestForm.get('diagnosticTestTypeName')?.disable();
 
-    } else {
+      
+    } 
+    else {
       this.medicalAppointmentForm.get('interviewText')?.disable(); // Wyłączanie kontrolki
       this.medicalAppointmentForm.get('diagnosisText')?.disable(); // Wyłączanie kontrolki
       this.cancelAppointmentForm.get('cancelComment')?.disable();
-
+      this.diagnosticTestForm.get('diagnosticTestTypeName')?.disable();
     }
     this.getMedicalAppointmentsDetails(this.appointmentId);
     console.log('Wywiad 2: ', this.medicalAppointment.interview);
@@ -122,14 +121,12 @@ export class AppointmentDetailsComponent {
   }
 
   getAllDiagnosticTestTypes() {
-    //this.http.get<DiagnosticTestType[]>("https://localhost:5001/api/DiagnosticTestType/Get").subscribe(data => {
     this.clinicService.getAllDiagnosticTestTypes().subscribe(data => {
       this.diagnosticTestTypes = data;
     })
   }
 
   getDiagnosticTestsByAppointmentId() {
-    //this.http.get<DiagnosticTest[]>("https://localhost:5001/api/DiagnosticTest/GetByMedicalAppointmentId/" + this.appointmentId).subscribe(data => {
     this.clinicService.getDiagnosticTestsByAppointmentId(this.appointmentId).subscribe(data => {
       this.pastDiagnosticTests = data;
     })
@@ -181,7 +178,6 @@ export class AppointmentDetailsComponent {
   }
 
 
-
 //------------------------------------------MEDICAL APPOINTMENT------------------------------------------------
   getMedicalAppointmentsDetails(appointmentId: number) {
     //this.http.get<MedicalAppointment>(this.APIUrl + "/Get/" + appointmentId).subscribe(data => {
@@ -196,7 +192,6 @@ export class AppointmentDetailsComponent {
     this.formInterview.setValue(this.medicalAppointment.interview);
     this.formDiagnosis.setValue(this.medicalAppointment.diagnosis);
     this.formCancelComment.setValue(this.medicalAppointment.cancellingComment);
-
   }
 
   cancelAnAppointment(){
@@ -212,8 +207,6 @@ export class AppointmentDetailsComponent {
     this.medicalAppointment.cancellingComment = this.cancelAppointmentForm.get('cancelComment')?.value || '';
     this.medicalAppointment.isCancelled = true;
 
-    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    //this.http.put<MedicalAppointment>(this.APIUrl + "/update", this.medicalAppointment, { headers })
     this.clinicService.editMedicalAppointmentCancel(this.medicalAppointment)
       .subscribe({
         next: (response) => {
@@ -224,18 +217,7 @@ export class AppointmentDetailsComponent {
           console.error("Error occurred:", error);
         }
       });
-
     //DOROBIĆ WYSKAKUJĄCE OKIENKO
-
-    /*this.http.put<MedicalAppointment>(this.APIUrl + "/update", JSON.stringify(this.medicalAppointment), { headers })
-      .subscribe({
-        next: (response) => {
-          console.log("Action performed successfully:", response);
-        },
-        error: (error) => {
-          console.error("Error performing action:", error);
-        }
-      }); */
   }
 
   cancelCancelComment(){
@@ -255,7 +237,6 @@ export class AppointmentDetailsComponent {
         doctorId: this.medicalAppointment.doctorId,
         interview: this.formInterview.value, //
         diagnosis: this.formDiagnosis.value, //
-        //diseaseUnit: this.medicalAppointment.diseaseUnit,
         isFinished: true, //
         isCancelled: false,
         cancellingComment: this.medicalAppointment.cancellingComment
@@ -268,8 +249,6 @@ export class AppointmentDetailsComponent {
     };
   
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    //this.http.post(this.APIUrl + "/FinishMedicalAppointment", finishAppointmentDto, { headers })
-    //this.clinicService.finishMedicalAppointment(finishAppointmentDto, { headers })
     this.clinicService.finishMedicalAppointment(finishAppointmentDto)
       .subscribe({
         next: (response) => {
@@ -281,39 +260,4 @@ export class AppointmentDetailsComponent {
         }
       });
   }
-
-
-
-  /*saveAnAppointmentOld() {
-    this.medicalAppointment.diagnosis = this.formDiagnosis.value;
-    this.medicalAppointment.interview = this.formInterview.value;
-    this.medicalAppointment.isFinished = true;
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.put<MedicalAppointment>(this.APIUrl + "/update", JSON.stringify(this.medicalAppointment), { headers })
-      .subscribe({
-        next: (response) => {
-          console.log("Action performed successfully:", response);
-        },
-        error: (error) => {
-          console.error("Error performing action:", error);
-        }
-      });
-
-    for (let t of this.pastDiagnosticTests){
-      const requestBody = {
-        medicalAppointmentId: t.medicalAppointmentId,
-        diagnosticTestTypeId: t.diagnosticTestTypeId,
-        description: t.description,
-      };
-      this.http.post<DiagnosticTest>("https://localhost:5001/api/DiagnosticTest/create", requestBody)
-        .subscribe({
-          next: (response) => {
-            console.log("Action performed successfully:", response);
-          },
-          error: (error) => {
-            console.error("Error performing action:", error);
-          }
-        })
-    }
-  } */
 }

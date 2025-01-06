@@ -15,8 +15,8 @@
 //import { GetRegistrantsComponent } from './get-registrants/get-registrants.component';
 //import { AddRegistrantComponent } from './add-registrant/add-registrant.component';
 //import { GetMedicalAppointmentsForPatientComponent } from './get-medical-appointments-for-patient/get-medical-appointments-for-patient.component';
-import { MakeAnAppointmentComponent } from './make-an-appointment/make-an-appointment.component'; //???????
-import { DoctorComponent } from './doctor/doctor.component';//?????
+//import { MakeAnAppointmentComponent } from './make-an-appointment/make-an-appointment.component'; //???????
+//import { DoctorComponent } from './doctor/doctor.component';//?????
 
 import { Routes } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -51,7 +51,7 @@ export const routes: Routes = [
 
     { path: '', component: LoginComponent  }, // Strona główna
     { path: 'log-in', component: LoginComponent },  
-    { path: 'make-an-appointment', component: MakeAnAppointmentComponent, canActivate: [AuthorizationGuard] },
+    //{ path: 'make-an-appointment', component: MakeAnAppointmentComponent, canActivate: [AuthorizationGuard] },
     //{ path: 'patient/:patientId', component: PatientComponent},
     { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant', component: RegistrantComponent, canActivate: [AuthorizationGuard] },
@@ -61,7 +61,7 @@ export const routes: Routes = [
     { path: 'registrant-diagnostic-test-types', component: RegistrantDiagnosticTestTypesComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-doctors', component: RegistrantDoctorsComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-appointments', component: RegistrantAppointmentsComponent, canActivate: [AuthorizationGuard] },
-    { path: 'doctor', component: DoctorComponent},
+    //{ path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent, },
 

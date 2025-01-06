@@ -1,18 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-//import { AddMedicalAppointmentComponent } from '../add-medical-appointment/add-medical-appointment.component';
-//import { GetMedicalAppointmentsComponent } from '../get-medical-appointments/get-medical-appointments.component';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
-
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, ValidationErrors, AbstractControl } from '@angular/forms';
-//import { NgbDateNativeAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateNativeAdapter, NgbDateStruct, NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateMedicalAppointment } from '../model/create-medical-appointment';
 import { Doctor } from '../model/doctor';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { ClinicService } from '../services/clinic.service';
-
 
 @Component({
   selector: 'app-registrant-appointments',
@@ -25,9 +20,6 @@ import { ClinicService } from '../services/clinic.service';
 export class RegistrantAppointmentsComponent {
   isAddNewAppointmentVisible: boolean = false;
   isGetAllAppointmentsVisible: boolean = false;
-
-  //readonly APIUrl = "https://localhost:5001/api/MedicalAppointment";
-  //doctors: MedicalAppointment[] = [];
   doctors: Doctor[] = [];
   medicalAppointment: MedicalAppointment;
   createdAppointment: CreateMedicalAppointment;
@@ -49,7 +41,6 @@ export class RegistrantAppointmentsComponent {
 
   ngOnInit() {
     this.getAllDoctors();
-    //this.getAllMedicalAppointments();
     this.medicalAppointmentForm = this.formBuilder.group({
       date: new FormControl(null, [Validators.required, this.futureOrTodayDateValidator]),
       time: new FormControl(null, [Validators.required]),
@@ -83,19 +74,11 @@ export class RegistrantAppointmentsComponent {
     this.clinicService.getAllMedicalAppointments().subscribe(data =>{
       this.medicalAppointments=data;
     })
-    //WERSJA BEZ SERWISU:
-    /*this.http.get<MedicalAppointment[]>(this.APIUrl+"/Get").subscribe(data =>{
-      this.medicalAppointments=data;
-    })*/
   }
 
   addNewAppointment() {
     this.isAddNewAppointmentVisible = true;
   }
-  
-  /*getAllAppointments() {
-    this.isGetAllAppointmentsVisible = true;
-  } */
 
   openAppointmentForm(){
     this.isAddingMode = true;
@@ -128,17 +111,6 @@ export class RegistrantAppointmentsComponent {
         console.error('Wystąpił błąd podczas tworzenia wizyty:', err);
       },
     });
-
-    /*console.log("ger raw value:" + this.createdAppointment);
-    this.http.post<MedicalAppointment>(this.APIUrl + "/create", this.medicalAppointmentForm.getRawValue())
-      .subscribe({
-        next: (result: MedicalAppointment) => {
-          this.medicalAppointment = result;
-        },
-        error: (err) => {
-          console.error("Error occurred:", err);
-        }
-      });*/
   }
 
   cancelAdding(){
@@ -157,13 +129,9 @@ export class RegistrantAppointmentsComponent {
   }
 
   getAllDoctors(){
-    //this.clinicService.getAllDoctors().subscribe(data =>{
     this.clinicService.getAllAvailableDoctors().subscribe(data =>{
       this.doctors=data;
     })
-    /*this.http.get<Doctor[]>("https://localhost:5001/api/doctor/Get").subscribe(data =>{
-      this.doctors=data;
-    })*/
   }
 
   edit(medicalAppointment: MedicalAppointment){
@@ -176,16 +144,6 @@ export class RegistrantAppointmentsComponent {
         console.error("Error performing action:", error);
       }
     })
-    /*this.http.put<MedicalAppointment>(this.APIUrl+"/update", medicalAppointment)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    }) */
-
   }
 
   delete(medicalAppointmentId: number){
@@ -199,16 +157,5 @@ export class RegistrantAppointmentsComponent {
         console.error("Error performing action:", error);
       }
     });
-    /*this.http.delete<string>(this.APIUrl+"/Delete/"+ medicalAppointmentId)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllMedicalAppointments();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    }); */
   }
-
 }

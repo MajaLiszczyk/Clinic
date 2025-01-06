@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+/*import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Doctor } from '../model/doctor';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -47,4 +47,4 @@ export class DoctorComponent {
   }
 
 
-}
+} */

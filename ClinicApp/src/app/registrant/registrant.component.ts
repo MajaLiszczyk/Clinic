@@ -7,7 +7,7 @@ import { Patient } from '../model/patient';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 
 import { Component } from '@angular/core';
-import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
+//import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
 import { AuthorizationService } from '../services/authorization.service';
 //import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
 

@@ -225,6 +225,27 @@ builder.Services.AddScoped<IMedicalAppointmentDiagnosticTestService, MedicalAppo
 builder.Services.AddScoped<IUserContext, UserContext>(); //dodalam
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IClinicSeeder, ClinicSeeder>();
+
+
+
+
+
+
+
+//Sprawdza has³o pod k¹tem regu³ zdefiniowanych w options.Password.
+//Jeœli has³o nie spe³nia wymagañ, metoda zwróci IdentityResult z b³êdami.
+/*Gdy u¿ywasz metody userManager.CreateAsync(user, password), ASP.NET Core:
+Sprawdza has³o pod k¹tem regu³ zdefiniowanych w options.Password.
+Jeœli has³o nie spe³nia wymagañ, metoda zwróci IdentityResult z b³êdami.*/
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true; // Wymagana cyfra
+    options.Password.RequiredLength = 6; // Minimalna d³ugoœæ
+    options.Password.RequireLowercase = true; // Wymagana ma³a litera
+    options.Password.RequireNonAlphanumeric = true; // Wymagany znak specjalny
+    options.Password.RequiredUniqueChars = 3; // Liczba unikalnych znaków
+    options.Password.RequireUppercase = true; // Wymagana wielka litera
+});
 //1h 15
 
 

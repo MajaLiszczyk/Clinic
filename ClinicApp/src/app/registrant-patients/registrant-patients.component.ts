@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, 
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ClinicService } from '../services/clinic.service';
-
+import { passwordValidator } from '../validators';
 
 @Component({
   selector: 'app-registrant-patients',
@@ -15,8 +15,6 @@ import { ClinicService } from '../services/clinic.service';
   styleUrl: './registrant-patients.component.css'
 })
 export class RegistrantPatientsComponent {
-
-  //readonly APIUrl = "https://localhost:5001/api/patient";
   patients: Patient[] = [];
   patientForm: FormGroup;
   patientId: number = 0;
@@ -40,11 +38,12 @@ export class RegistrantPatientsComponent {
       id: Number,
       name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
       surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
-      pesel: new FormControl(null, { validators: [Validators.minLength(11), Validators.maxLength(11), Validators.required, Validators.pattern(/^\d{11}$/)]}),
+      pesel: new FormControl(null, { validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(/^\d{11}$/)]}),
       email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
-        Validators.maxLength(256)] }),
-      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
-        Validators.maxLength(100)] }),
+        Validators.maxLength(256)] }),     
+      /*password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
+        Validators.maxLength(100)] }),*/
+      password: new FormControl(null, { validators: [Validators.required, passwordValidator] }),
     });
   }
 
@@ -57,17 +56,10 @@ export class RegistrantPatientsComponent {
 
 
   getAllPatients(){
-    //this.http.get<Patient[]>(this.APIUrl+"/Get").subscribe(data =>{
     this.clinicService.getAllPatients().subscribe(data =>{
       this.patients=data;
     })
   }
-
-  /*getPatients() {
-    this.http.get<Patient[]>(this.APIUrl + "/GetAll").subscribe(data => {
-      this.patients = data;
-    })
-  } */
 
   edit(patient: Patient){
     this.isEditableMode = true;  
@@ -76,6 +68,7 @@ export class RegistrantPatientsComponent {
     this.formName.setValue(patient.name);
     this.formSurname.setValue(patient.surname);
     this.formPesel.setValue(patient.pesel);
+    this.setConditionalValidation();
   }
 
   update(){
@@ -84,7 +77,6 @@ export class RegistrantPatientsComponent {
       return;
     }
     const patientData = this.patientForm.getRawValue();
-    //this.http.put<Patient>(this.APIUrl+"/update", this.patientForm.getRawValue())
     this.clinicService.updatePatient(patientData)
     .subscribe({
       next: (response) => {
@@ -97,9 +89,7 @@ export class RegistrantPatientsComponent {
         console.error("Error performing action:", error);
       }
     })
-
   }
-
 
   delete(patientId: number){
     this.clinicService.deletePatient(patientId)
@@ -120,7 +110,6 @@ export class RegistrantPatientsComponent {
     this.isEditableMode = false;
     this.isCreateAccountMode = false;
     this.setConditionalValidation();
-    //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isAddingMode in AddPatient:', this.isAddingMode);
   }
 
@@ -130,7 +119,6 @@ export class RegistrantPatientsComponent {
     this.isEditableMode = false;
     this.isCreateAccountMode = true;
     this.setConditionalValidation();
-    //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isCreateAccountMode: ', this.isCreateAccountMode);
   }
 
@@ -139,7 +127,6 @@ export class RegistrantPatientsComponent {
     const passwordC = this.patientForm.get('password');
 
     if (this.isCreateAccountMode) {
-      // Dodaj walidator `required`
       emailC?.setValidators([Validators.required]);
       passwordC?.setValidators([Validators.required]);
 
@@ -159,7 +146,6 @@ export class RegistrantPatientsComponent {
     this.isEditableMode = false; //niepotrzebne?
     this.isCreateAccountMode = false;
     this.patientForm.reset();
-    //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
   cancelEditing() { //do wyrzucenia, kalka powyzszej
@@ -168,12 +154,9 @@ export class RegistrantPatientsComponent {
     this.isEditableMode = false; //niepotrzebne?
     this.isCreateAccountMode = false; 
     this.patientForm.reset();
-    //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
-
   addPatient() {
-    //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
     if (this.patientForm.invalid) {
       this.patientForm.markAllAsTouched();
       return;
@@ -193,7 +176,6 @@ export class RegistrantPatientsComponent {
   }
 
   createPatientAccount() {
-    //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
     if (this.patientForm.invalid) {
       this.patientForm.markAllAsTouched();
       return;
@@ -211,6 +193,4 @@ export class RegistrantPatientsComponent {
         }
       });
   }
-
-
 }

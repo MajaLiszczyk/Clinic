@@ -1,13 +1,16 @@
 ﻿using ClinicAPI.DB;
 using ClinicAPI.Dtos;
 using ClinicAPI.Models;
+using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClinicAPI.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize(Roles = (UserRole.Registrant + "," + UserRole.Admin))]
@@ -17,61 +20,32 @@ namespace ClinicAPI.Controllers
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly ApplicationDBContext dbContext;
         private readonly IMedicalSpecialisationService _medicalSpecialisationService;
+        private readonly IPatientService _patientService;
 
 
         public RegistrationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager
-                                      , ApplicationDBContext dbContext, IMedicalSpecialisationService medicalSpecialisationService)
+                                      , ApplicationDBContext dbContext, IMedicalSpecialisationService medicalSpecialisationService
+                                      , IPatientService patientService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dbContext = dbContext;
             this._medicalSpecialisationService = medicalSpecialisationService;
+            _patientService = patientService;
         }
 
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> RegisterPatient([FromBody] CreateRegisterPatientDto request)
         {
-            // Sprawdzanie, czy PESEL już istnieje w systemie
-            if (dbContext.Patient.Any(p => p.Pesel == request.Pesel))
+            var result = await _patientService.RegisterPatient(request);
+            if (!result.Confirmed)
             {
-                return BadRequest(new { Message = "Patient with this PESEL already exists" });
+                return BadRequest(new { Message = result.Response });
             }
 
-            // Tworzenie użytkownika
-            var user = new User
-            {
-                UserName = request.Email,
-                Email = request.Email
-            };
-
-            var createUserResult = await userManager.CreateAsync(user, request.Password);
-            if (!createUserResult.Succeeded)
-            {
-                return BadRequest(createUserResult.Errors);
-            }
-
-            // Przypisanie roli Patient do użytkownika
-            var addToRoleResult = await userManager.AddToRoleAsync(user, UserRole.Patient);
-            if (!addToRoleResult.Succeeded)
-            {
-                return BadRequest(addToRoleResult.Errors);
-            }
-
-            // Tworzenie encji Patient i powiązanie z User
-            var patient = new Patient
-            {
-                UserId = user.Id,
-                Pesel = request.Pesel,
-                Name = request.Name,
-                Surname = request.Surname,
-                PatientNumber = "domyslnyNumer"
-            };
-
-            dbContext.Patient.Add(patient);
-            await dbContext.SaveChangesAsync();
-
-            return Ok(new { Message = "Patient registered successfully", PatientId = patient.Id });
+            //return Ok(new { Message = "Patient created successfully." });
+            return Ok(new { message = result.Response });
         }
 
         [HttpPost]

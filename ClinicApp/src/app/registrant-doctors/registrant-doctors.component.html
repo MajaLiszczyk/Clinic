@@ -51,8 +51,23 @@
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
-                <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
-                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span>
+                <div *ngIf="formPassword?.errors?.['hasNumber']">
+                    {{ formPassword?.errors?.['hasNumber'] }}
+                  </div>
+                  <div *ngIf="formPassword?.errors?.['hasUppercase']">
+                    {{ formPassword?.errors?.['hasUppercase'] }}
+                  </div>
+                  <div *ngIf="formPassword?.errors?.['hasLowercase']">
+                    {{ formPassword?.errors?.['hasLowercase'] }}
+                  </div>
+                  <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
+                    {{ formPassword.errors?.['hasSpecialCharacter'] }}
+                  </div>
+                  <div *ngIf="formPassword?.errors?.['isValidLength']">
+                    {{ formPassword.errors?.['isValidLength'] }}
+                  </div>
+                <!-- <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
+                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span> -->
             </div>
         </div>
 

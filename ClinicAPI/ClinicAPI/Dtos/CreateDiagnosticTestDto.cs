@@ -1,15 +1,16 @@
 ﻿using ClinicAPI.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicAPI.Dtos
 {
     public class CreateDiagnosticTestDto
     {
+        [Required]
         public int MedicalAppointmentId { get; set; }
-        //public int DoctorId { get; set; }
-        //public DateTime date { get; set; } //nie wiem czy ma sens, bo to zawsze jest data wizyty
-        //public DiagnosticTestType Type { get; set; }
+        [Required]
         public int DiagnosticTestTypeId { get; set; }
+        [Required]
         public string Description { get; set; }
     }
 }

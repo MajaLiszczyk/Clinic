@@ -12,7 +12,7 @@ import { Patient } from '../model/patient';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 
 import { Input } from '@angular/core';
-import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
+//import { MakeAnAppointmentComponent } from "../make-an-appointment/make-an-appointment.component";
 //import { GetMedicalAppointmentsForPatientComponent } from "../get-medical-appointments-for-patient/get-medical-appointments-for-patient.component";
 import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
@@ -31,18 +31,13 @@ import { AuthorizationService } from '../services/authorization.service';
 export class DoctorAppointmentsComponent {
   doctorId: number = 0;
   allMedicalAppointments: AllMedicalAppointments;
-  //readonly APIUrl="https://localhost:5001/api/MedicalAppointment";
   isRegistrantMode: boolean = false;
-  //_authorizationService: AuthorizationService;
 
   constructor(private http:HttpClient, private route: ActivatedRoute, private clinicService: ClinicService
             , public authorizationService: AuthorizationService){
-              //this._authorizationService = authorizationService,
     this.allMedicalAppointments = {pastMedicalAppointments: [], futureMedicalAppointments: []}
-
   }
   
-
   ngOnInit(){
     this.route.params.subscribe(params => {
       this.doctorId = +params['doctorId']; // Przypisanie id z URL
@@ -56,15 +51,12 @@ export class DoctorAppointmentsComponent {
   }
 
   getMedicalAppointmentsForDoctor(){
-    //this.http.get<AllMedicalAppointments>(this.APIUrl+"/GetByDoctorId/" + this.doctorId).subscribe(data =>{
     this.clinicService.getMedicalAppointmentsForDoctor(this.doctorId).subscribe(data =>{
       this.allMedicalAppointments=data;
-      //this.allMedicalAppointments.pastMedicalAppointments[0].dateTime = new Date(2024, 12, 24);
     })
   }
 
   logout(){
     this.authorizationService.logout();
   }
-
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthorizationService } from '../services/authorization.service';
+import { passwordValidator } from '../validators';
 
 @Component({
   selector: 'app-log-in',
@@ -18,28 +19,29 @@ export class LoginComponent {
   res:  string = "";
   passwordVisible = false;
 
-
-
   constructor(
     private fb: FormBuilder,
     private authorizationService: AuthorizationService,
     private router: Router
   ) {
     this.logInForm = this.fb.group({
-      email: new FormControl(null, { validators: [Validators.required, Validators.email, Validators.maxLength(256)] }),
-      password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6), Validators.maxLength(100)] }),
+      email: new FormControl(null, { validators: [Validators.required, Validators.email] }),
+      //password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6), Validators.maxLength(100)] }),
+      password: new FormControl(null, { validators: [Validators.required] }),
     });
   }
 
+
   get formEmail(): FormControl { return this.logInForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formPassword(): FormControl { return this.logInForm?.get("password") as FormControl };
+  
+
 
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
   logIn() {
-      //this.http.post<Patient>(this.APIUrl + "/create", this.patientForm.getRawValue()) // Bez obiektu opakowującego
       if (this.logInForm.invalid) {
         this.logInForm.markAllAsTouched();
         return;

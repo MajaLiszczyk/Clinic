@@ -17,9 +17,7 @@ import { ClinicService } from '../services/clinic.service';
 })
 export class RegistrantSpecialisationsComponent {
   isAddNewSpecialisationVisible: boolean = false;
-  //readonly APIUrl = "https://localhost:5001/api/MedicalSpecialisation";
   specialisations: Specialisation[] = [];
-  //specialisationForm: FormGroup;
   specialisationF: FormGroup;
   specialisation: Specialisation = { id: 0, name: '', checked: false, isAvailable: true };
   isDisable = false;
@@ -35,23 +33,14 @@ export class RegistrantSpecialisationsComponent {
     this.getAllSpecialisations();
     this.specialisationF = this.formBuilder.group({
       id: Number,
-      //id: new  FormControl(0, {validators: [Validators.required]}),
       name: new FormControl(null, { validators: [Validators.required] })
     });
   }
 
-
   get formId(): FormControl { return this.specialisationF?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formName(): FormControl { return this.specialisationF?.get("name") as FormControl };
 
-  /*getSpecialisations() {
-    this.http.get<Specialisation[]>(this.APIUrl + "/GetAll").subscribe(data => {
-      this.specialisations = data;
-    })
-  } */
-
   getAllSpecialisations(){
-    //this.http.get<Specialisation[]>(this.APIUrl+"/Get").subscribe(data =>{
     this.clinicService.getAllSpecialisations().subscribe(data =>{
       this.specialisations=data;
     })
@@ -60,26 +49,16 @@ export class RegistrantSpecialisationsComponent {
   edit(specialisation: Specialisation){
     this.isVisible = true;  
     this.isAddingMode = false; //niepotrzebne?
-
-    /*this.specialisationForm.reset();
-    this.editableMeasure = measure;
-    this.isFormVisible = true;
-    this.editableMode = true;
-    this.operationResult = null;*/
     this.formId.setValue(specialisation.id);
     this.formName.setValue(specialisation.name);
     this.isEditableMode = true;
-
-    //this.fillForm(measure);
   }
-
 
   update(){
     if(this.specialisationF.invalid){
       this.specialisationF.markAllAsTouched(); 
       return;
     }
-    //this.http.put<Specialisation>(this.APIUrl+"/update", this.specialisationF.getRawValue())
     this.clinicService.updateSpecialisation(this.specialisationF.getRawValue())
     .subscribe({
       next: (response) => {
@@ -92,11 +71,9 @@ export class RegistrantSpecialisationsComponent {
         console.error("Error performing action:", error);
       }
     })
-
   }
 
   delete(dspecialisationId: number){
-    //this.http.delete<string>(this.APIUrl+"/Delete/"+ dspecialisationId)
     this.clinicService.deleteSpecialisation(dspecialisationId)
     .subscribe({
       next: (response) => {
@@ -110,39 +87,28 @@ export class RegistrantSpecialisationsComponent {
   }
 
   addNewSpecialisation() {
-    //this.isFormVisible = true;
     this.isAddingMode = true;
     this.isEditableMode = false;
-    //this.isAddingModeChange.emit(this.isAddingMode); // Informuje rodzica o zmianie
     console.log('isAddingMode in AddPatient:', this.isAddingMode);
   }
 
-
   cancelAdding() {
-    //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
     this.specialisationF.reset();
-    //this.isAddingModeChange.emit(this.isAddingMode);
   }
 
   cancelEditing() {
-    //this.isFormVisible = false;
     this.isAddingMode = false;
     this.isEditableMode = false; //niepotrzebne?
     this.specialisationF.reset();
-    //this.isAddingModeChange.emit(this.isAddingMode);
   }
-
-
-
 
   addSpecialisation() {
     if(this.specialisationF.invalid){
       this.specialisationF.markAllAsTouched(); 
       return;
     }
-    //this.http.post<Specialisation>(this.APIUrl + "/create", this.specialisationF.getRawValue()) // Bez obiektu opakowującego
     this.clinicService.addSpecialisation(this.specialisationF.getRawValue()) // Bez obiektu opakowującego
       .subscribe({
         next: (result: Specialisation) => {
@@ -156,8 +122,4 @@ export class RegistrantSpecialisationsComponent {
         }
       });
   }
-
-
-
-
 }

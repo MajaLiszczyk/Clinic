@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClinicAPI.Dtos
 {
-    public class UpdateDiagnosticTestDto
+    public class UpdateDiagnosticTestDto //chyba nie używam
     {
         public int Id { get; set; }
         public int MedicalAppointmentId { get; set; }

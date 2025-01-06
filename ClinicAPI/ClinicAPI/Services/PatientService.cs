@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using ClinicAPI.DB;
 using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
 namespace ClinicAPI.Services
@@ -14,12 +18,15 @@ namespace ClinicAPI.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IMapper _mapper;
+        private readonly ApplicationDBContext _dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public PatientService(IPatientRepository patientRepository, IMapper mapper)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, ApplicationDBContext dbContext, UserManager<User> userManager)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
-
+            _dbContext = dbContext;
+            _userManager = userManager;
         }
 
 
@@ -74,9 +81,67 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((false, "Patient was not created.", k));
 
             }
-
-
         }
+
+        public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> RegisterPatient(CreateRegisterPatientDto request)
+        {
+            if (_dbContext.Patient.Any(p => p.Pesel == request.Pesel))
+            {
+                ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Patient with this PESEL already exists.", k);
+                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
+            }
+
+            // Tworzenie użytkownika
+            var user = new User
+            {
+                UserName = request.Email,
+                Email = request.Email
+            };
+
+            var createUserResult = await _userManager.CreateAsync(user, request.Password);
+            if (!createUserResult.Succeeded)
+            {
+
+                var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
+                return (false, string.Join("; ", errorMessages), null);
+            }
+
+            // Przypisanie roli Patient do użytkownika
+            var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Patient);
+            if (!addToRoleResult.Succeeded)
+            {
+                ReturnPatientDto? k = null;
+                return (false, "Failed to assign role to the user.", k);  //WYSTARCZY PEWNIE ZAMIAST K DAC BEZPOSREDNIO NULL?
+            }
+
+            // Tworzenie encji Patient i powiązanie z User
+            var patient = new Patient
+            {
+                UserId = user.Id,
+                Pesel = request.Pesel,
+                Name = request.Name,
+                Surname = request.Surname,
+                PatientNumber = "domyslnyNumer"
+            };
+
+            Patient? p = await _patientRepository.CreatePatient(patient);
+            if (p != null)
+            {
+                ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
+                return await Task.FromResult((true, "Patient successfully registered.", r));
+            }
+
+            else //DA SIĘ INACZEJ OBEJŚĆ?
+            {
+                ReturnPatientDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                return await Task.FromResult((false, "Patient was not created.", k));
+
+            }
+        }
+
+
+
         public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
             //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   

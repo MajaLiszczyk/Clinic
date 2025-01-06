@@ -6,7 +6,6 @@
     <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
     <div class="invalid-feedback">
         <span *ngIf="formEmail?.errors?.['required']">Required</span>
-        <span *ngIf="formEmail?.errors?.['maxlength']">Max length: 256</span>
         <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
     </div>
 </div>
@@ -19,9 +18,8 @@
     <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
     <div class="invalid-feedback">
         <span *ngIf="formPassword?.errors?.['required']">Required</span>
-        <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
-        <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span>
     </div>
+    
 </div>
 <div>
   <div class="d-flex justify-content-center mb-5 mt-5">

@@ -12,15 +12,16 @@ namespace ClinicAPI.Models
         [ForeignKey("User")]
         public string? UserId { get; set; } // Nullable klucz obcy do User
         public User? User { get; set; } // Opcjonalna właściwość nawigacyjna do User
+        [Required]
+        [MaxLength(11)]
         public string Pesel { get; set; }
+        [Required]
+        [MaxLength(100)] //zostawić?
         public string Name { get; set; }
+        [Required]
+        [MaxLength(100)]
         public string Surname { get; set; }
         public string PatientNumber { get; set; }
         public bool IsAvailable { get; set; } = true;
-
-        //static int patientsAmount {get; set;}
-        //public List<MedicalAppointment> MedicalAppointments { get; set; } //wszystkie - przyszłe, przeszłe, nieodbyte
-        //public List<DiagnosticTest> DiagnosticTests { get; set; } 
-        //public List<LaboratoryTest> LaboratoryTests { get; set; } //wszystkie - przyszłe, przeszłe, nieodbyte
     }
 }

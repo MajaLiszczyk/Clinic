@@ -8,12 +8,14 @@ namespace ClinicAPI.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public DateTime DateTime { get; set; } //TYMCZASOWO Z PYTAJNIKIEM!!!!!
         //public DateTime? dateTime { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("Patient")]
         public int? PatientId { get; set; }
 
+        [Required]
         [ForeignKey("Doctor")]
         public int DoctorId { get; set; }
         public string? Interview { get; set; }

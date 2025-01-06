@@ -8,16 +8,17 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens; // SymmetricSecurityKey, SigningCredentials, SecurityAlgorithms
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization; // JwtSecurityToken, JwtSecurityTokenHandler
-using ClinicAPI.DB; 
+using ClinicAPI.DB;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClinicAPI.Controllers
 {
     public class UserLoginRequest
     {
+        [Required]
         public string Email { get; set; } = default!;
+        [Required]
         public string Password { get; set; } = default!;
-        
-
     }
 
     [ApiController]

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+/*import { Component, Input } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MedicalAppointment} from '../model/medical-appointment'
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -93,4 +93,4 @@ export class MakeAnAppointmentComponent {
     });
   }
 
-}
+}*/

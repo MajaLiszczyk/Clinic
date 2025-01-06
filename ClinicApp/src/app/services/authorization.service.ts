@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 export class AuthorizationService {
   readonly LogInUrl = "https://localhost:5001/api/authorization";
 
-
   constructor(private http: HttpClient, private router: Router) { }
 
   logIn(loginRequest: UserLoginRequest): Observable<any> {
@@ -22,12 +21,9 @@ export class AuthorizationService {
   logout(): void {
     // Usuń dane autoryzacyjne
     localStorage.removeItem('authToken'); // Usuń token JWT
-    //localStorage.removeItem('user'); // Usuń inne dane użytkownika, jeśli są przechowywane
     // Przekieruj na stronę logowania
     this.router.navigate(['/log-in']);
   }
-
-
 
   setToken(token: string) {
     localStorage.setItem('authToken', token);
@@ -57,5 +53,4 @@ export class AuthorizationService {
       return null;
     }
   }
-
 }
