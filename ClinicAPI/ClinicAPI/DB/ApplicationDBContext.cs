@@ -97,5 +97,7 @@ namespace ClinicAPI.DB
         public DbSet<MedicalSpecialisation> MedicalSpecialisation {  get; set; }
         public DbSet<DiagnosticTestType> DiagnosticTestType {  get; set; }
         public DbSet<LaboratoryTestType> LaboratoryTestType {  get; set; }
+        public DbSet<LaboratoryAppointment> LaboratoryAppointment {  get; set; }
+        public DbSet<LaboratoryTestsGroup> LaboratoryTestsGroup {  get; set; }
     }
 }

@@ -12,8 +12,45 @@ namespace ClinicAPI.Models
         public bool IsAvailable { get; set; } = true;
     }
 
+    public enum LaboratoryTestState
+    {
+        ToBeCompleted = 0,
+        WaitingForSupervisor = 1,
+        Accepted = 2,
+        Rejected = 3
+    }
 
     public class LaboratoryTest
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [ForeignKey("LaboratoryTestsGroup")]
+        public int LaboratoryTestsGroupId { get; set; }
+
+        [Required]
+        public LaboratoryTestState State { get; set; }       
+
+        public int LaboratoryTestTypeId { get; set; }
+        public string? wynik {  get; set; }
+        public string? DoctorNote { get; set; }
+        public string? RejectComment { get; set; }
+    }
+
+
+
+
+    /*public static class LaboratoryTestState
+    {
+
+        public const string ToBeCompleted = "ToBeCompleted";
+        public const string WaitingForSupervisor = "WaitingForSupervisor";
+        public const string Accepted = "Accepted";
+        public const string Rejected = "Rejected";
+    }*/
+
+    /*public class LaboratoryTest
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,11 +63,10 @@ namespace ClinicAPI.Models
 
         [ForeignKey("LaboratoryWorker")]
         public int LaboratoryWorkerId { get; set; }
-
         [ForeignKey("LaboratorySupervisor")]
-        public int SupervisorId { get; set; }
+        public int SupervisorId { get; set; } 
 
-        public string DoctorNote { get; set; }
 
-    }
+
+    }*/
 }

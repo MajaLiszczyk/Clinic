@@ -33,11 +33,11 @@ namespace ClinicAPI.Services
         {
             LaboratoryTest _laboratoryTest = new LaboratoryTest
             {
-                MedicalAppointmentId = laboratoryTest.MedicalAppointmentId,
-                date = laboratoryTest.date,
+                //MedicalAppointmentId = laboratoryTest.MedicalAppointmentId,
+                //date = laboratoryTest.date,
                 LaboratoryTestTypeId = laboratoryTest.LaboratoryTestTypeId,
-                LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId,
-                SupervisorId = laboratoryTest.SupervisorId,
+                //LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId,
+                //SupervisorId = laboratoryTest.SupervisorId,
                 DoctorNote = laboratoryTest.DoctorNote,
             };
             LaboratoryTest? p = await _laboratoryTestRepository.CreateLaboratoryTest(_laboratoryTest);

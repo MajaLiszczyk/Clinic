@@ -64,11 +64,11 @@ namespace ClinicAPI.Repositories
             }
             try
             {
-                _laboratoryTest.date = laboratoryTest.date;
+                //_laboratoryTest.date = laboratoryTest.date;
                 _laboratoryTest.LaboratoryTestTypeId = laboratoryTest.LaboratoryTestTypeId;
-                _laboratoryTest.SupervisorId = laboratoryTest.SupervisorId;
-                _laboratoryTest.LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId;
-                _laboratoryTest.MedicalAppointmentId = laboratoryTest.MedicalAppointmentId;
+                //_laboratoryTest.SupervisorId = laboratoryTest.SupervisorId;
+                //_laboratoryTest.LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId;
+                //_laboratoryTest.MedicalAppointmentId = laboratoryTest.MedicalAppointmentId;
                 _laboratoryTest.DoctorNote = laboratoryTest.DoctorNote;
 
                 _context.SaveChanges();
