@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -37,14 +38,12 @@ namespace ClinicAPI.Services
         }
         public async Task<ReturnDoctorDto?> GetDoctor(int id)
         {
-
             Doctor doctor = await _doctorRepository.GetDoctorById(id);
             return _mapper.Map<ReturnDoctorDto>(doctor);
-
         }
+
         public async Task<List<ReturnDoctorDto>> GetAllDoctors()
         {
-
             var doctors = await _doctorRepository.GetAllDoctors();
             return _mapper.Map<List<ReturnDoctorDto>>(doctors);
         }
@@ -57,7 +56,6 @@ namespace ClinicAPI.Services
 
         public async Task<List<DoctorWithSpecialisations>> GetDoctorsWithSpecialisations()
         {
-
             var doctors = await _doctorRepository.GetDoctorsWithSpecialisations();
             return doctors;
         }
@@ -65,97 +63,125 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
-            Doctor _doctor = new Doctor
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                Name = request.Name,
-                Surname = request.Surname,
-                DoctorNumber = request.DoctorNumber,
-                MedicalSpecialisations = medicalSpecialisations
-            };
-            Doctor? p = await _doctorRepository.CreateDoctor(_doctor);
-            if (p != null)
-            {
+                Doctor _doctor = new Doctor
+                {
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    DoctorNumber = request.DoctorNumber,
+                    MedicalSpecialisations = medicalSpecialisations
+                };
+                Doctor? p = await _doctorRepository.CreateDoctor(_doctor);
+                if (p == null)
+                {
+                    ReturnDoctorDto? k = null;
+                    return await Task.FromResult((false, "doctor was not created.", k)); 
+                }
                 ReturnDoctorDto r = _mapper.Map<ReturnDoctorDto>(p);
+                scope.Complete();
                 return await Task.FromResult((true, "doctor successfully created.", r));
+
             }
-            else
+            catch (Exception ex)
             {
-                ReturnDoctorDto? k = null;
-                return await Task.FromResult((false, "doctor was not created.", k));
+                return (false, $"Error creating doctor: {ex.Message}", null);
             }
+
+
         }
 
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctorWithSpecialisations(CreateDoctorDto request)
         {
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach (int id in medicalSpecialisationsIds)
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
+                ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+                ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+                MedicalSpecialisation specialisation;
+                foreach (int id in medicalSpecialisationsIds)
+                {
+                    specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                    medicalSpecialisations.Add(specialisation);
+                }
+                return await CreateDoctor(request, medicalSpecialisations);
             }
-            return await CreateDoctor(request, medicalSpecialisations);
+            catch (Exception ex)
+            {
+                return (false, $"Error creating doctor: {ex.Message}", null);
+            }
         }
 
 
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> RegisterDoctor(CreateRegisterDoctorDto request)
         {
-           
-            if (await _doctorRepository.GetDoctorWithTheSameNumber(request.DoctorNumber))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "Doctor with this PWZ number already exists.", null);
-            }
-            // Tworzenie użytkownika
-            var user = new User
-            {
-                UserName = request.Email,
-                Email = request.Email
-            };
+                if (await _doctorRepository.GetDoctorWithTheSameNumber(request.DoctorNumber))
+                {
+                    return (false, "Doctor with this PWZ number already exists.", null);
+                }
+                // Tworzenie użytkownika
+                var user = new User
+                {
+                    UserName = request.Email,
+                    Email = request.Email
+                };
 
-            var createUserResult = await _userManager.CreateAsync(user, request.Password);
-            if (!createUserResult.Succeeded)
-            {
-                var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
-                return (false, string.Join("; ", errorMessages), null);
-            }
+                var createUserResult = await _userManager.CreateAsync(user, request.Password);
+                if (!createUserResult.Succeeded)
+                {
+                    var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
+                    return (false, string.Join("; ", errorMessages), null);
+                }
 
-            // Przypisanie roli Doctor do użytkownika
-            var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Doctor);
-            if (!addToRoleResult.Succeeded)
-            {
-                return (false, "Failed to assign role to the user.", null); 
-            }
+                // Przypisanie roli Doctor do użytkownika
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Doctor);
+                if (!addToRoleResult.Succeeded)
+                {
+                    return (false, "Failed to assign role to the user.", null);
+                }
 
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach (int id in medicalSpecialisationsIds)
-            {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
-            }
-            var doctor = new Doctor
-            {
-                UserId = user.Id,
-                Name = request.Name,
-                Surname = request.Surname,
-                DoctorNumber = request.DoctorNumber,
-                MedicalSpecialisations = medicalSpecialisations
-            };
+                ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+                ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+                MedicalSpecialisation specialisation;
+                foreach (int id in medicalSpecialisationsIds)
+                {
+                    specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                    medicalSpecialisations.Add(specialisation);
+                }
+                var doctor = new Doctor
+                {
+                    UserId = user.Id,
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    DoctorNumber = request.DoctorNumber,
+                    MedicalSpecialisations = medicalSpecialisations
+                };
 
-            Doctor? d = await _doctorRepository.CreateDoctor(doctor);
-            if (d != null)
-            {
+                Doctor? d = await _doctorRepository.CreateDoctor(doctor);
+                if (d == null)
+                {
+                    ReturnDoctorDto? k = null;
+                    return await Task.FromResult((false, "Doctor was not created.", k));
+
+                }
                 ReturnDoctorDto r = _mapper.Map<ReturnDoctorDto>(d);
+                scope.Complete();
                 return await Task.FromResult((true, "Doctor successfully registered.", r));
+
             }
-
-            else
+            catch (Exception ex)
             {
-                ReturnDoctorDto? k = null;
-                return await Task.FromResult((false, "Doctor was not created.", k));
-
+                return (false, $"Error registering doctor: {ex.Message}", null);
             }
         }
 
@@ -163,104 +189,116 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
-            if (await _doctorRepository.GetDoctorWithTheSameNumber(doctor.DoctorNumber))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "Doctor with this PWZ number already exists.");
-            }
-            var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
-
-            if (_doctor == null)
-            {
-                return await Task.FromResult((false, "doctor with given id does not exist."));
-            }
-            else
-            {
-                try
+                if (await _doctorRepository.GetDoctorWithTheSameNumber(doctor.DoctorNumber))
                 {
-
-                    _doctor.Name = doctor.Name;
-                    _doctor.Surname = doctor.Surname;
-                    _doctor.DoctorNumber = doctor.DoctorNumber;
-                    _doctor.MedicalSpecialisations = medicalSpecialisations;
-
-                    //Doctor r = _mapper.Map<Doctor>(doctor);
-                    var p = await _doctorRepository.UpdateDoctor(_doctor);
-                    return await Task.FromResult((true, "doctor succesfully uptated"));
-
+                    return (false, "Doctor with this PWZ number already exists.");
                 }
-                catch (Exception ex)
+                var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
+
+                if (_doctor == null)
                 {
-                    Console.WriteLine(ex.ToString());
-                    return await Task.FromResult((false, "doctor ERROR uptated"));
-
+                    return await Task.FromResult((false, "doctor with given id does not exist."));
                 }
+                _doctor.Name = doctor.Name;
+                _doctor.Surname = doctor.Surname;
+                _doctor.DoctorNumber = doctor.DoctorNumber;
+                _doctor.MedicalSpecialisations = medicalSpecialisations;
 
+                //Doctor r = _mapper.Map<Doctor>(doctor);
+                var p = await _doctorRepository.UpdateDoctor(_doctor);
+                scope.Complete();
+                return await Task.FromResult((true, "doctor succesfully uptated"));
 
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error registering doctor: {ex.Message}");
+            }
+
         }
 
         public async Task<(bool Confirmed, string Response)> UpdateDoctorWithSpecialisations(UpdateDoctorDto request)
         {
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach (int id in medicalSpecialisationsIds)
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
+                ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+                ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+                MedicalSpecialisation specialisation;
+                foreach (int id in medicalSpecialisationsIds)
+                {
+                    specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                    medicalSpecialisations.Add(specialisation);
+                }
+                return await UpdateDoctor(request, medicalSpecialisations);
             }
-            return await UpdateDoctor(request, medicalSpecialisations);
+            catch (Exception ex)
+            {
+                return (false, $"Error registering doctor: {ex.Message}");
+            }
         }
 
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
-            var _doctor = await _doctorRepository.GetDoctorById(id);
-            if (_doctor == null)
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return await Task.FromResult((false, "doctor with given id does not exist."));
-            }
-            else
-            {
+                var _doctor = await _doctorRepository.GetDoctorById(id);
+                if (_doctor == null)
+                {
+                    return await Task.FromResult((false, "doctor with given id does not exist."));
+                }
                 if (!await _doctorRepository.CanArchiveDoctor(id))
                 {
                     return await Task.FromResult((false, "Can nor archive doctor with appointments.")); // Nie można zarchiwizować lekarza
                 }
-                try
-                {
-                    _doctor.IsAvailable = false;
-                   
+                _doctor.IsAvailable = false;
 
-                    //Doctor r = _mapper.Map<Doctor>(doctor);
-                    var p = await _doctorRepository.UpdateDoctor(_doctor);
-                    return await Task.FromResult((true, "doctor succesfully uptated"));
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                    return await Task.FromResult((false, "doctor ERROR uptated"));
-
-                }
-
-
+                //Doctor r = _mapper.Map<Doctor>(doctor);
+                var p = await _doctorRepository.UpdateDoctor(_doctor);
+                scope.Complete();
+                return await Task.FromResult((true, "doctor succesfully uptated"));
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error transfering to archive doctor: {ex.Message}");
             }
         }
 
 
         public async Task<(bool Confirmed, string Response)> DeleteDoctor(int id)
         {
-
-            var doctor = await _doctorRepository.GetDoctorById(id);
-            if (doctor == null) return await Task.FromResult((false, "doctor with given id does not exist."));
-            else
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
+                var doctor = await _doctorRepository.GetDoctorById(id);
+                if (doctor == null)
+                {
+                    return await Task.FromResult((false, "doctor with given id does not exist."));
+                }
                 if (await _medicalAppointmentRepository.HasDoctorMedicalAppointments(id))
                 {
                     return await Task.FromResult((false, "can not delete doctor with appointments."));
                 }
                 await _doctorRepository.DeleteDoctor(id);
+                scope.Complete();
                 return await Task.FromResult((true, "doctor successfully deleted."));
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error deleting doctor: {ex.Message}");
             }
 
         }

@@ -18,20 +18,11 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient?> GetPatientById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                        TransactionScopeAsyncFlowOption.Enabled);
+
             Patient? patient = null;
-            try
-            {
                 patient = await _context.Patient.Where(r => r.Id == id)
                             .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
 
-                scope.Complete();
-            }
-            catch (Exception) {
-                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
-            }
             //return await Task.Run(() => patient);
             return patient;
         }
@@ -104,15 +95,11 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient> CreatePatient(Patient patient)
         {
-            try
-            {
+
                 await _context.AddAsync(patient);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            
+
 
             return patient;
         }
@@ -120,20 +107,9 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient?> UpdatePatient(Patient patient)
         {
-
-            try
-            {
                 _context.Patient.Update(patient);
                 await _context.SaveChangesAsync();
 
-               
-            }
-            catch (Exception ex)
-            {
-                //OBSŁUŻYC
-                throw new Exception("An error occurred while updating the patient.", ex);
-
-            }
             return patient;
         }
 

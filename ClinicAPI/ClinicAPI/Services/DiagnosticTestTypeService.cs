@@ -5,6 +5,7 @@ using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
 using MediatR;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -44,79 +45,125 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(DiagnosticTestType testType)
         {
-            if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "Diagnostic Test type with this name already exists.", null);
-            }
+                if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
+                {
+                    return (false, "Diagnostic Test type with this name already exists.", null);
+                }
 
-            DiagnosticTestType _testType = new DiagnosticTestType
-            {
-                Name = testType.Name,
-            };
-            DiagnosticTestType? p = await _diagnosticTestTypeRepository.CreateDiagnosticTestType(_testType);
-            if (p != null)
-            {
+                DiagnosticTestType _testType = new DiagnosticTestType
+                {
+                    Name = testType.Name,
+                };
+                DiagnosticTestType? p = await _diagnosticTestTypeRepository.CreateDiagnosticTestType(_testType);
+                if (p == null)
+                {
+                    DiagnosticTestType? k = null;
+                    return await Task.FromResult((false, "Diagnostic test type was not created.", k));
+                    //return await Task.FromResult((true, "Diagnostic test type successfully created.", p));
+                }
+                scope.Complete();
                 return await Task.FromResult((true, "Diagnostic test type successfully created.", p));
-            }
-            else
-            {
-                DiagnosticTestType? k = null; 
-                return await Task.FromResult((false, "Diagnostic test type was not created.", k));
+                /*else
+                {
+                    DiagnosticTestType? k = null;
+                    return await Task.FromResult((false, "Diagnostic test type was not created.", k));
 
+                }*/
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error creating DiagnosticTestType: {ex.Message}", null);
+            }
+
+
         }
         
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(DiagnosticTestType testType)
         {
-            if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
-            {
-                return (false, "Diagnostic Test type with this name already exists.");
-            }
-            var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
 
-            if (_testType == null)
+            try
             {
-                return await Task.FromResult((false, "Patient with given id does not exist."));
-            }
-            else
-            { 
+                if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
+                {
+                    return (false, "Diagnostic Test type with this name already exists.");
+                }
+                var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
+
+                if (_testType == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
+
                 _testType.Name = testType.Name;
                 var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTestType: {ex.Message}");
+            }
+
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
-            var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
-
-            if (_testType == null)
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return await Task.FromResult((false, "Patient with given id does not exist."));
-            }
-            else
-            {
+                var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
+                if (_testType == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
                 _testType.IsAvailable = false;
                 var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
-                return await Task.FromResult((true, "Patient transfered to archive"));
+                scope.Complete();
+                return await Task.FromResult((true, "Patient transfered to archive"));          
             }
-
+            catch (Exception ex)
+            {
+                return (false, $"Error transfering to archive DiagnosticTestType: {ex.Message}");
+            }
         }
 
 
         public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTestType(int id)
         {
-            var testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
-            if (testType == null) return await Task.FromResult((false, "DiagnosticTestType with given id does not exist."));
-            else
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                if(await _diagnosticTestTypeRepository.IsUsedInTests(id))
+                var testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
+                if (testType == null)
+                {
+                    return await Task.FromResult((false, "DiagnosticTestType with given id does not exist."));
+                }
+                if (await _diagnosticTestTypeRepository.IsUsedInTests(id))
                 {
                     return await Task.FromResult((false, "Can not delete DiagnosticTestType in use."));
                 }
                 await _diagnosticTestTypeRepository.DeleteDiagnosticTestType(id);
+                scope.Complete();
                 return await Task.FromResult((true, "DiagnosticTestType successfully deleted."));
+               
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error deleting DiagnosticTestType: {ex.Message}");
+            }
+
         }
     }
 }

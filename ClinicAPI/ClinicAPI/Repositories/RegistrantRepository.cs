@@ -18,17 +18,9 @@ namespace ClinicAPI.Repositories
 
         public async Task<Registrant?> GetRegistrantById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                        TransactionScopeAsyncFlowOption.Enabled);
             Registrant? registrant = null;
-            try
-            {
                 registrant = await _context.Registrant.Where(r => r.Id == id)
                             .FirstOrDefaultAsync();
-                scope.Complete();
-            }
-            catch (Exception){}
             return registrant;
         }
 
@@ -64,15 +56,10 @@ namespace ClinicAPI.Repositories
             {
                 return null;
             }
-            try
-            {
                 _registrant.Name = registrant.Name;
                 _registrant.Surname = registrant.Surname;
 
                 _context.SaveChanges();
-
-            }
-            catch (Exception ex){}
             return _registrant;
         }
 

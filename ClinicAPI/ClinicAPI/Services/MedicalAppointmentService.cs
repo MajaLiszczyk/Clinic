@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -52,7 +53,6 @@ namespace ClinicAPI.Services
                 {
                     allAppointments.futureMedicalAppointments.Add(medicalAppointment);
                 }
-
             }
             return allAppointments;
         }
@@ -77,10 +77,7 @@ namespace ClinicAPI.Services
                 {
                     allAppointments.futureMedicalAppointments.Add(medicalAppointment);
                 }
-
             }
-
-
             return allAppointments;
 
 
@@ -92,48 +89,61 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAp)
         {
-            var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
-            var todayDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            if (appointmentDate < todayDate) 
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "The appointment date cannot be in the past.", null);
-            }
-            //var medicalAppointment = _mapper.Map<MedicalAppointment>(medicalAp);
-            MedicalAppointment _medicalAppointment = new MedicalAppointment
-            {
-                DateTime = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0),
-                PatientId = 0,
-                DoctorId = medicalAp.DoctorId,
-                Interview = "domyslny interview",
-                Diagnosis = "domyslne diagnosis",
-                IsCancelled = false,
-                IsFinished = false,
-                CancellingComment = ""
-               
-            };
-            MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
-            if (p != null)
-            {
+                var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
+                var todayDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                if (appointmentDate < todayDate)
+                {
+                    return (false, "The appointment date cannot be in the past.", null);
+                }
+                //var medicalAppointment = _mapper.Map<MedicalAppointment>(medicalAp);
+                MedicalAppointment _medicalAppointment = new MedicalAppointment
+                {
+                    DateTime = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0),
+                    PatientId = 0,
+                    DoctorId = medicalAp.DoctorId,
+                    Interview = "domyslny interview",
+                    Diagnosis = "domyslne diagnosis",
+                    IsCancelled = false,
+                    IsFinished = false,
+                    CancellingComment = ""
+
+                };
+                MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
+                if (p == null)
+                {
+                    ReturnMedicalAppointmentDto? k = null;
+                    return await Task.FromResult((false, "medicalAppointment was not created.", k));
+
+                }
                 ReturnMedicalAppointmentDto r = _mapper.Map<ReturnMedicalAppointmentDto>(p);
+                scope.Complete();
                 return await Task.FromResult((true, "medicalAppointment successfully created.", r));
             }
-            else
+            catch (Exception ex)
             {
-                ReturnMedicalAppointmentDto? k = null;
-                return await Task.FromResult((false, "medicalAppointment was not created.", k));
+                return (false, $"Error cerating appointmnent: {ex.Message}", null);
             }
+
         }
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalAppointment(UpdateMedicalAppointmentDto medicalAppointment)
         {
-            var _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
 
-            if (_medicalAppointment == null)
-            {
-                return await Task.FromResult((false, "medicalAppointment with given id does not exist."));
-            }
-            else
-            {
+                if (_medicalAppointment == null)
+                {
+                    return await Task.FromResult((false, "medicalAppointment with given id does not exist."));
+                }
                 _medicalAppointment.DateTime = medicalAppointment.DateTime;
                 _medicalAppointment.PatientId = medicalAppointment.PatientId;
                 _medicalAppointment.Interview = medicalAppointment.Interview;
@@ -143,19 +153,37 @@ namespace ClinicAPI.Services
                 _medicalAppointment.IsCancelled = medicalAppointment.IsCancelled;
                 _medicalAppointment.CancellingComment = medicalAppointment.CancellingComment;
                 var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(_medicalAppointment);
+                scope.Complete();
                 return await Task.FromResult((true, "medicalAppointment succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating appointmnent: {ex.Message}");
+            }
+
         }
         
         public async Task<(bool Confirmed, string Response)> DeleteMedicalAppointment(int id)
         {
-            var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(id);
-            if (medicalAppointment == null) return await Task.FromResult((false, "medicalAppointment with given id does not exist."));
-            else
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
+                var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(id);
+                if (medicalAppointment == null)
+                {
+                    return await Task.FromResult((false, "medicalAppointment with given id does not exist."));
+                }
                 await _medicalAppointmentRepository.DeleteMedicalAppointment(id);
+                scope.Complete();
                 return await Task.FromResult((true, "medicalAppointment successfully deleted."));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error deleting appointmnent: {ex.Message}");
+            }
+
         }
     }
 }

@@ -26,14 +26,19 @@ namespace ClinicAPI.Services
 
         public async Task<string> FinishAppointment(FinishMedicalAppointmentDto dto)
         {
-            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
 
             try
             {
                 // Aktualizacja wizyty
                 var appointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(dto.MedicalAppointmentDto.Id);
                 if (appointment == null)
+                {
                     throw new Exception("Appointment not found");
+                }
+                    
 
                 appointment.DateTime = dto.MedicalAppointmentDto.DateTime;
                 appointment.PatientId = dto.MedicalAppointmentDto.PatientId;
@@ -66,12 +71,12 @@ namespace ClinicAPI.Services
                     }
                 }
 
-                transaction.Complete();
+                scope.Complete();
                 return "Operation completed successfully.";
             }
             catch (Exception ex)
             {
-                transaction.Dispose();
+                //transaction.Dispose();
                 throw new Exception($"An error occurred: {ex.Message}");
             }
         }

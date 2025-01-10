@@ -16,16 +16,14 @@ namespace ClinicAPI.Repositories
         }
         public async Task<DiagnosticTest?> GetDiagnosticTestById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                       new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                       TransactionScopeAsyncFlowOption.Enabled);
+
             DiagnosticTest? diagnosticTest = null;
             try
             {
                 diagnosticTest = await _context.DiagnosticTest.Where(r => r.Id == id)
                             .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
 
-                scope.Complete();
+                
             }
             catch (Exception)
             {
@@ -101,12 +99,8 @@ namespace ClinicAPI.Repositories
         public async Task<DiagnosticTest?> UpdateDiagnosticTest(DiagnosticTest diagnosticTest)
         {
             var _diagnosticTest = _context.DiagnosticTest.
-               FirstOrDefault(p => p.Id == diagnosticTest.Id);
+                   FirstOrDefault(p => p.Id == diagnosticTest.Id);
 
-            if (_diagnosticTest == null)
-            {
-                return null;
-            }
             try
             {
                 _diagnosticTest.Description = diagnosticTest.Description;

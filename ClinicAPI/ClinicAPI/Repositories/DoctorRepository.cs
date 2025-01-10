@@ -20,18 +20,12 @@ namespace ClinicAPI.Repositories
 
         public async Task<Doctor?> GetDoctorById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                       new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                       TransactionScopeAsyncFlowOption.Enabled);
             Doctor? doctor = null;
-            try
-            {
-                doctor = await _context.Doctor.Where(r => r.Id == id)
+            doctor = await _context.Doctor.Where(r => r.Id == id)
                             .FirstOrDefaultAsync(); 
 
-                scope.Complete();
-            }
-            catch (Exception) { }
+
+
             return doctor;
         }
 
@@ -115,18 +109,9 @@ namespace ClinicAPI.Repositories
         }
 
         public async Task<Doctor?> UpdateDoctor(Doctor doctor)
-        {
-           
-            try
-            {
-                _context.Doctor.Update(doctor);
-                await _context.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the patient.", ex);
-            }
+        {   
+            _context.Doctor.Update(doctor);
+            await _context.SaveChangesAsync();
             return doctor;
         }
 

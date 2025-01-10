@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -61,18 +62,29 @@ namespace ClinicAPI.Services
         }
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTest(UpdateDiagnosticTestDto diagnosticTest)
         {
-            var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                           new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                           TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
 
-            if (_diagnosticTest == null)
-            {
-                return await Task.FromResult((false, "DiagnosticTest with given id does not exist."));
-            }
-            else
-            {
+                if (_diagnosticTest == null)
+                {
+                    return await Task.FromResult((false, "DiagnosticTest with given id does not exist."));
+                }
+
                 DiagnosticTest r = _mapper.Map<DiagnosticTest>(diagnosticTest);
                 var p = await _diagnosticTestRepository.UpdateDiagnosticTest(r);
+                // Zatwierdzenie transakcji
+                scope.Complete();
                 return await Task.FromResult((true, "DiagnosticTest succesfully uptated"));
+              
             }
+            catch (Exception ex) {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+
         }
 
     }

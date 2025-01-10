@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -61,80 +62,96 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 
         {
-            if (_dbContext.Patient.Any(p => p.Pesel == patient.Pesel))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                ReturnPatientDto? k = null;
-                return (false, "Patient with this PESEL already exists.", k);
-            }
-            Patient _patient = new Patient
-            {
-                Pesel = patient.Pesel,
-                Name = patient.Name,
-                Surname = patient.Surname,
-                PatientNumber = "domyslnyNumer",
-            };
-            Patient? p = await _patientRepository.CreatePatient(_patient);
-            if (p != null) {
+                if (_dbContext.Patient.Any(p => p.Pesel == patient.Pesel))
+                {
+                    ReturnPatientDto? k = null;
+                    return (false, "Patient with this PESEL already exists.", k);
+                }
+                Patient _patient = new Patient
+                {
+                    Pesel = patient.Pesel,
+                    Name = patient.Name,
+                    Surname = patient.Surname,
+                    PatientNumber = "domyslnyNumer",
+                };
+                Patient? p = await _patientRepository.CreatePatient(_patient);
+                if (p == null)
+                {
+                    ReturnPatientDto? k = null;
+                    return await Task.FromResult((false, "Patient was not created.", k));
+
+                }
                 ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient successfully created.", r));
             }
-            else
+            catch (Exception ex)
             {
-                ReturnPatientDto? k = null; 
-                return await Task.FromResult((false, "Patient was not created.", k));
-
+                return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
             }
+            
         }
 
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> RegisterPatient(CreateRegisterPatientDto request)
         {
-            if (await _patientRepository.GetPatientWithTheSamePesel(request.Pesel))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "Patient with this PESEL already exists.", null);
-            }
+                if (await _patientRepository.GetPatientWithTheSamePesel(request.Pesel))
+                {
+                    return (false, "Patient with this PESEL already exists.", null);
+                }
 
-            var user = new User
-            {
-                UserName = request.Email,
-                Email = request.Email
-            };
+                var user = new User
+                {
+                    UserName = request.Email,
+                    Email = request.Email
+                };
 
-            var createUserResult = await _userManager.CreateAsync(user, request.Password);
-            if (!createUserResult.Succeeded)
-            {
+                var createUserResult = await _userManager.CreateAsync(user, request.Password);
+                if (!createUserResult.Succeeded)
+                {
+                    var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
+                    return (false, string.Join("; ", errorMessages), null);
+                }
 
-                var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
-                return (false, string.Join("; ", errorMessages), null);
-            }
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Patient);
+                if (!addToRoleResult.Succeeded)
+                {
+                    ReturnPatientDto? k = null;
+                    return (false, "Failed to assign role to the user.", k);
+                }
 
-            var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Patient);
-            if (!addToRoleResult.Succeeded)
-            {
-                ReturnPatientDto? k = null;
-                return (false, "Failed to assign role to the user.", k);  
-            }
+                var patient = new Patient
+                {
+                    UserId = user.Id,
+                    Pesel = request.Pesel,
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    PatientNumber = "domyslnyNumer"
+                };
 
-            var patient = new Patient
-            {
-                UserId = user.Id,
-                Pesel = request.Pesel,
-                Name = request.Name,
-                Surname = request.Surname,
-                PatientNumber = "domyslnyNumer"
-            };
-
-            Patient? p = await _patientRepository.CreatePatient(patient);
-            if (p != null)
-            {
+                Patient? p = await _patientRepository.CreatePatient(patient);
+                if (p == null)
+                {
+                    ReturnPatientDto? k = null;
+                    return await Task.FromResult((false, "Patient was not created.", k));
+                   
+                }
                 ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient successfully registered.", r));
             }
-
-            else 
+            catch (Exception ex)
             {
-                ReturnPatientDto? k = null; 
-                return await Task.FromResult((false, "Patient was not created.", k));
-
+                return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
             }
         }
 
@@ -142,60 +159,93 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
-            if (await _patientRepository.GetPatientWithTheSamePesel(patient.Pesel))
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                return (false, "Patient with this PESEL already exists.");
-            }
-            var _patient = await _patientRepository.GetPatientById(patient.Id);   
+                if (await _patientRepository.GetPatientWithTheSamePesel(patient.Pesel))
+                {
+                    return (false, "Patient with this PESEL already exists.");
+                }
+                var _patient = await _patientRepository.GetPatientById(patient.Id);
 
-            if (_patient == null) {
-                return await Task.FromResult((false, "Patient with given id does not exist."));
-            }
-            else{
+                if (_patient == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
                 _patient.Name = patient.Name;
                 _patient.Surname = patient.Surname;
                 _patient.Pesel = patient.Pesel;
 
                 var p = await _patientRepository.UpdatePatient(_patient);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+            
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
-            var _patient = await _patientRepository.GetPatientById(id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _patient = await _patientRepository.GetPatientById(id);
 
-            if (_patient == null)
-            {
-                return await Task.FromResult((false, "Patient with given id does not exist."));
-            }
-            else
-            {
-                if(!await _patientRepository.CanArchivePatient(id)){
+                if (_patient == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
+                if (!await _patientRepository.CanArchivePatient(id))
+                {
                     return await Task.FromResult((false, "Can nor archive Patient with appointments."));
                 }
                 _patient.IsAvailable = false;
                 var p = await _patientRepository.UpdatePatient(_patient);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+           
         }
 
 
 
         public async Task<(bool Confirmed, string Response)> DeletePatient(int id)
         {
-            var patient = await _patientRepository.GetPatientById(id);
-            if (patient == null) return await Task.FromResult((false, "Patient with given id does not exist."));
-            else
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
+                var patient = await _patientRepository.GetPatientById(id);
+                if (patient == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
                 //sprawdzenie czy mozna usunac pacjenta (czy ma jakąkolwiek przypisaną wizytę)
                 if (await _medicalAppointmentRepository.HasPatientMedicalAppointments(id))
                 {
                     return await Task.FromResult((false, "Can not delete patient with appointments."));
                 }
                 await _patientRepository.DeletePatient(id);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient successfully deleted."));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+           
         }
     }
 }

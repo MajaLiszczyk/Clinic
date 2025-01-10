@@ -27,7 +27,6 @@
                     {{formSpecialisationId.value}}</button>
                 <button (click)="cancelAppointmentForm()" class="btn btn-outline-secondary">Cancel</button>
             </div>
-            //do zrobienia ESTETYCZNIE!!!!!
 
             <div *ngFor="let medicalAppointment of medicalAppointments">
                 <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:

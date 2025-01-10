@@ -16,10 +16,7 @@ namespace ClinicAPI.Repositories
 
         public async Task<MedicalAppointment?> GetMedicalAppointmentById(int id)
         {
-
-            return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();
-
-            
+            return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();           
         }
 
         public async Task<List<MedicalAppointment>> GetAllMedicalAppointments()
@@ -132,24 +129,16 @@ namespace ClinicAPI.Repositories
 
         public async Task<MedicalAppointment> CreateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
-            try
-            {
                 await _context.AddAsync(medicalAppointment);
                 medicalAppointment.DateTime = medicalAppointment.DateTime.ToUniversalTime();
                 await _context.SaveChangesAsync();         
-            }
 
-            catch (DbUpdateException ex)
-{
-                Console.WriteLine(ex.InnerException?.Message);
-            }
             return medicalAppointment;
 
         }
 
         public async Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
-
             _context.MedicalAppointment.Update(medicalAppointment);
             await _context.SaveChangesAsync();
             return medicalAppointment;

@@ -16,23 +16,17 @@ namespace ClinicAPI.Repositories
 
         public async Task<DiagnosticTestType?> GetDiagnosticTestTypeById(int id)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                        TransactionScopeAsyncFlowOption.Enabled);
             DiagnosticTestType? testType = null;
             try
             {
                 testType = await _context.DiagnosticTestType.Where(r => r.Id == id)
                             .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
-
-                scope.Complete();
             }
             catch (Exception)
             {
                 //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
             }
             return testType;
-
         }
 
         public async Task<bool> IsDiagnosticTestTypeWithTheSameName(string name)
@@ -93,7 +87,6 @@ namespace ClinicAPI.Repositories
             {
                 _context.DiagnosticTestType.Update(testType);
                 await _context.SaveChangesAsync();
-
             }
             catch (Exception ex)
             {

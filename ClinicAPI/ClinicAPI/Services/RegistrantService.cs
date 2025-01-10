@@ -5,6 +5,7 @@ using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
 using System.Numerics;
+using System.Transactions;
 
 namespace ClinicAPI.Services
 {
@@ -34,69 +35,108 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnRegistrantDto? registrant)> CreateRegistrant(CreateRegistrantDto registrant)
         {
-            Registrant _registrant = new Registrant
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
-                Name = registrant.Name,
-                Surname = registrant.Surname,
-            };
-            Registrant? p = await _registantRepository.CreateRegistrant(_registrant);
-            if (p != null)
-            {
+                Registrant _registrant = new Registrant
+                {
+                    Name = registrant.Name,
+                    Surname = registrant.Surname,
+                };
+                Registrant? p = await _registantRepository.CreateRegistrant(_registrant);
+                if (p == null)
+                {
+                    ReturnRegistrantDto? k = null;
+                    return await Task.FromResult((false, "Registrant was not created.", k));
+                }
                 ReturnRegistrantDto r = _mapper.Map<ReturnRegistrantDto>(p);
+                scope.Complete();
                 return await Task.FromResult((true, "Registrant successfully created.", r));
-            }
-            else
-            {
-                ReturnRegistrantDto? k = null;
-                return await Task.FromResult((false, "Registrant was not created.", k));
 
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
+            }
+            
 
 
         }
         public async Task<(bool Confirmed, string Response)> UpdateRegistrant(UpdateRegistrantDto registrant)
         {
-            Registrant? _registrant = await _registantRepository.GetRegistrantById(registrant.Id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                Registrant? _registrant = await _registantRepository.GetRegistrantById(registrant.Id);
 
-            if (_registrant == null)
-            {
-                return await Task.FromResult((false, "Registrant with given id does not exist."));
-            }
-            else
-            {
+                if (_registrant == null)
+                {
+                    return await Task.FromResult((false, "Registrant with given id does not exist."));
+                }
                 Registrant r = _mapper.Map<Registrant>(registrant);
                 var p = await _registantRepository.UpdateRegistrant(_registrant);
+                scope.Complete();
                 return await Task.FromResult((true, "Registrant succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+            
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
-            Registrant? _registrant = await _registantRepository.GetRegistrantById(id);
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                Registrant? _registrant = await _registantRepository.GetRegistrantById(id);
 
-            if (_registrant == null)
-            {
-                return await Task.FromResult((false, "Registrant with given id does not exist."));
-            }
-            else
-            {
+                if (_registrant == null)
+                {
+                    return await Task.FromResult((false, "Registrant with given id does not exist."));
+                }
                 _registrant.IsAvailable = false;
                 var p = await _registantRepository.UpdateRegistrant(_registrant);
+                scope.Complete();
                 return await Task.FromResult((true, "Registrant succesfully uptated"));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+           
         }
 
         
 
         public async Task<(bool Confirmed, string Response)> DeleteRegistrant(int id)
         {
-            var registrant = await _registantRepository.GetRegistrantById(id);
-            if (registrant == null) return await Task.FromResult((false, "Patient with given id does not exist."));
-            else
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
+            try
             {
+                var registrant = await _registantRepository.GetRegistrantById(id);
+                if (registrant == null)
+                {
+                    return await Task.FromResult((false, "Patient with given id does not exist."));
+                }
                 await _registantRepository.DeleteRegistrant(id);
+                scope.Complete();
                 return await Task.FromResult((true, "Patient successfully deleted."));
             }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating DiagnosticTest: {ex.Message}");
+            }
+            
         }
     }
 }

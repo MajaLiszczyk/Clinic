@@ -16,19 +16,11 @@ namespace ClinicAPI.Repositories
         }
         public async Task<MedicalSpecialisation?> GetMedicalSpecialisationById(int id)
         {
-
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                       new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                       TransactionScopeAsyncFlowOption.Enabled);
             MedicalSpecialisation? medicalSpecialisation = null;
-            try
-            {
-                medicalSpecialisation = await _context.MedicalSpecialisation.Where(r => r.Id == id)
+            medicalSpecialisation = await _context.MedicalSpecialisation.Where(r => r.Id == id)
                             .FirstOrDefaultAsync();
+            
 
-                scope.Complete();
-            }
-            catch (Exception) { }
             return medicalSpecialisation;
         }
 
@@ -86,15 +78,9 @@ namespace ClinicAPI.Repositories
         
         public async Task<MedicalSpecialisation?> UpdateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation)
         {
-            try
-            {
                 _context.MedicalSpecialisation.Update(medicalSpecialisation);
                 await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            { // Obsłuż wyjątek
-                throw new Exception("An error occurred while updating the medical specialisation.", ex);
-            }
+
             return medicalSpecialisation;
         }
         
