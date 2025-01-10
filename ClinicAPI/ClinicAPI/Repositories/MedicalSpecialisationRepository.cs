@@ -117,5 +117,23 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsLinkedToDoctor(int specialisationId)
+        {
+
+            return await _context.Doctor.AnyAsync(d => d.MedicalSpecialisations.Any(s => s.Id == specialisationId));
+
+        }
+
+        public async Task<bool> CanArchiveSpecialisation(int specialisationId)
+        {
+            // Sprawdzenie, czy istnieje wpis w tabeli wspólnej z lekarzem, który jest dostępny
+            return !await _context.Doctor
+                .Where(d => d.IsAvailable == true)
+                .AnyAsync(d => d.MedicalSpecialisations.Any(ms => ms.Id == specialisationId));
+        }
+
+
+
     }
 }

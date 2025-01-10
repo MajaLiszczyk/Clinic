@@ -114,6 +114,10 @@ namespace ClinicAPI.Services
             if (testType == null) return await Task.FromResult((false, "DiagnosticTestType with given id does not exist."));
             else
             {
+                if(await _diagnosticTestTypeRepository.IsUsedInTests(id))
+                {
+                    return await Task.FromResult((false, "Can not delete DiagnosticTestType in use."));
+                }
                 await _diagnosticTestTypeRepository.DeleteDiagnosticTestType(id);
                 return await Task.FromResult((true, "DiagnosticTestType successfully deleted."));
             }

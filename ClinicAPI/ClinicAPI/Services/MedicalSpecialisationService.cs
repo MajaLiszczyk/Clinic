@@ -106,6 +106,10 @@ namespace ClinicAPI.Services
             }
             else
             {
+                if (!await _medicalSpecialisationRepository.CanArchiveSpecialisation(id))
+                {
+                    return await Task.FromResult((false, "MedicalSpecialisation is linked with available doctor.")); // Nie można zarchiwizować specjalizacji
+                }
                 _medicalSpecialisation.IsAvailable = false;
                 //MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
                 //var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
@@ -121,6 +125,11 @@ namespace ClinicAPI.Services
             if (medicalSpecialisation == null) return await Task.FromResult((false, "MedicalSpecialisation with given id does not exist."));
             else
             {
+                if(await _medicalSpecialisationRepository.IsLinkedToDoctor(id))
+                {
+                    return await Task.FromResult((false, "Can not delete MedicalSpecialisation in use."));
+
+                }
                 await _medicalSpecialisationRepository.DeleteMedicalSpecialisation(id);
                 return await Task.FromResult((true, "MedicalSpecialisation successfully deleted."));
             }

@@ -17,20 +17,23 @@ namespace ClinicAPI.Services
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IMedicalAppointmentRepository _medicalAppointmentRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDBContext _dbContext;
         private readonly UserManager<User> _userManager;
 
-        public PatientService(IPatientRepository patientRepository, IMapper mapper, ApplicationDBContext dbContext, UserManager<User> userManager)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper, ApplicationDBContext dbContext
+                              , UserManager<User> userManager, IMedicalAppointmentRepository medicalAppointmentRepository)
         {
             _patientRepository = patientRepository;
             _mapper = mapper;
             _dbContext = dbContext;
             _userManager = userManager;
+            _medicalAppointmentRepository = medicalAppointmentRepository;
         }
 
 
-       // public Task<ReturnPatientDto?> GetPatientAsync(int id)
+        // public Task<ReturnPatientDto?> GetPatientAsync(int id)
         public async Task<ReturnPatientDto?> GetPatient(int id)
         {
             var patient = await _patientRepository.GetPatientById(id);
@@ -185,6 +188,9 @@ namespace ClinicAPI.Services
             }
             else
             {
+                if(!await _patientRepository.CanArchivePatient(id)){
+                    return await Task.FromResult((false, "Can nor archive Patient with appointments."));
+                }
                 _patient.IsAvailable = false;
                 //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _patientRepository.UpdatePatient(_patient);
@@ -200,6 +206,11 @@ namespace ClinicAPI.Services
             if (patient == null) return await Task.FromResult((false, "Patient with given id does not exist."));
             else
             {
+                //sprawdzenie czy mozna usunac pacjenta (czy ma jakąkolwiek przypisaną wizytę)
+                if (await _medicalAppointmentRepository.HasPatientMedicalAppointments(id))
+                {
+                    return await Task.FromResult((false, "Can not delete patient with appointments."));
+                }
                 await _patientRepository.DeletePatient(id);
                 return await Task.FromResult((true, "Patient successfully deleted."));
             }

@@ -134,7 +134,7 @@ namespace ClinicAPI.Repositories
             return _diagnosticTest;
         }
 
-        public async Task<bool> DeleteDiagnosticTest(int id)
+        /*public async Task<bool> DeleteDiagnosticTest(int id)
         {
             var _diagnosticTest = await _context.DiagnosticTest.FindAsync(id);
             if (_diagnosticTest == null) return false;
@@ -143,5 +143,11 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsLinkedToAppointment(int id)
+        {
+            return await _context.MedicalAppointment.AnyAsync(a => a.Id == testId); // Sprawdź powiązania
+        } */
+
     }
 }

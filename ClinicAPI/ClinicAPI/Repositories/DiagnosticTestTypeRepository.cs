@@ -122,5 +122,11 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> IsUsedInTests(int testTypeId)
+        {
+            return await _context.DiagnosticTest.AnyAsync(t => t.DiagnosticTestTypeId == testTypeId);
+        }
+
     }
 }

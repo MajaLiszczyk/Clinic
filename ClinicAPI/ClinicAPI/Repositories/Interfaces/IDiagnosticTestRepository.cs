@@ -10,6 +10,7 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<List<ReturnDiagnosticTestDto>> GetByMedicalAppointmentId(int id);
         public Task<DiagnosticTest> CreateDiagnosticTest(DiagnosticTest patient);
         public Task<DiagnosticTest?> UpdateDiagnosticTest(DiagnosticTest patient);
-        public Task<bool> DeleteDiagnosticTest(int id);
+        //public Task<bool> DeleteDiagnosticTest(int id);
+        //public Task<bool> IsLinkedToAppointment(int id);
     }
 }

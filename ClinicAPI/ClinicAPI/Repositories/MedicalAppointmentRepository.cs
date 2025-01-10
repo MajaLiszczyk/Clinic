@@ -21,19 +21,19 @@ namespace ClinicAPI.Repositories
             return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();
 
             //TRANSAKCJE W SERWISIE
-           /* using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                      new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                      TransactionScopeAsyncFlowOption.Enabled);
-            MedicalAppointment? medicalAppointment = null;
-            try
-            {
-                medicalAppointment = await _context.MedicalAppointment.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync();
+            /* using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                       new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                       TransactionScopeAsyncFlowOption.Enabled);
+             MedicalAppointment? medicalAppointment = null;
+             try
+             {
+                 medicalAppointment = await _context.MedicalAppointment.Where(r => r.Id == id)
+                             .FirstOrDefaultAsync();
 
-                scope.Complete();
-            }
-            catch (Exception) { }
-            return medicalAppointment; */
+                 scope.Complete();
+             }
+             catch (Exception) { }
+             return medicalAppointment; */
         }
 
         public async Task<List<MedicalAppointment>> GetAllMedicalAppointments()
@@ -108,7 +108,7 @@ namespace ClinicAPI.Repositories
                 return new List<MedicalAppointment>();
             }
         }
-        
+
 
         public async Task<List<MedicalAppointment>> GetMedicalAppointmentsByPatientId(int patientId)
         {
@@ -117,15 +117,12 @@ namespace ClinicAPI.Repositories
                                                    TransactionScopeAsyncFlowOption.Enabled);
             try
             {
-
                 // Filtruj wizyty na podstawie patientId
                 var appointments = await _context.MedicalAppointment
                     .Where(ma => ma.PatientId == patientId)
                     .ToListAsync();
-
                 scope.Complete();
                 return appointments;
-
                 /* Jesli bede chciala wiecej danych o pacjencie:
                    var query = from ma in _context.MedicalAppointments
                     join p in _context.Patients on ma.PatientId equals p.Id
@@ -142,7 +139,18 @@ namespace ClinicAPI.Repositories
                 return new List<MedicalAppointment>();
             }
         }
-        
+
+        public async Task<bool> HasPatientMedicalAppointments(int patientId)
+        {
+            return await _context.MedicalAppointment.AnyAsync(ma => ma.PatientId == patientId);
+        }
+
+        public async Task<bool> HasDoctorMedicalAppointments(int doctorId)
+        {
+           return  await _context.MedicalAppointment.AnyAsync(a => a.DoctorId == doctorId);
+        }
+
+
 
 
 

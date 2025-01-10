@@ -92,7 +92,7 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "DiagnosticTest succesfully uptated"));
             }
         }
-        public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTest(int id)
+        /*public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTest(int id)
         {
             var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(id);
             if (_diagnosticTest == null) return await Task.FromResult((false, "DiagnosticTest with given id does not exist."));
@@ -101,7 +101,7 @@ namespace ClinicAPI.Services
                 await _diagnosticTestRepository.DeleteDiagnosticTest(id);
                 return await Task.FromResult((true, "Diagnostic test successfully deleted."));
             }
-        }
+        }*/
 
 
 

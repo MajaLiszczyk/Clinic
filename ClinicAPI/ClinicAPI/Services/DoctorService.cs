@@ -16,6 +16,7 @@ namespace ClinicAPI.Services
     public class DoctorService : IDoctorService
     {
         private readonly IDoctorRepository _doctorRepository;
+        private readonly IMedicalAppointmentRepository _medicalAppointmentRepository;
         private readonly IMapper _mapper;
         private readonly ApplicationDBContext _dbContext;
         private readonly UserManager<User> _userManager;
@@ -24,13 +25,15 @@ namespace ClinicAPI.Services
 
 
         public DoctorService(IDoctorRepository doctorRepository, IMapper mapper, ApplicationDBContext applicationDBContext
-                            , UserManager<User> userManager, IMedicalSpecialisationService medicalSpecialisationService)
+                            , UserManager<User> userManager, IMedicalSpecialisationService medicalSpecialisationService
+                            , IMedicalAppointmentRepository medicalAppointmentRepository)
         {
             _doctorRepository = doctorRepository;
             _mapper = mapper;
             _dbContext = applicationDBContext;
             _userManager = userManager;
             _medicalSpecialisationService = medicalSpecialisationService;
+            _medicalAppointmentRepository = medicalAppointmentRepository;
         }
         public async Task<ReturnDoctorDto?> GetDoctor(int id)
         {
@@ -227,7 +230,11 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((false, "doctor with given id does not exist."));
             }
             else
-            {               
+            {
+                if (!await _doctorRepository.CanArchiveDoctor(id))
+                {
+                    return await Task.FromResult((false, "Can nor archive doctor with appointments.")); // Nie można zarchiwizować lekarza
+                }
                 try
                 {
                     _doctor.IsAvailable = false;
@@ -252,10 +259,15 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> DeleteDoctor(int id)
         {
+
             var doctor = await _doctorRepository.GetDoctorById(id);
             if (doctor == null) return await Task.FromResult((false, "doctor with given id does not exist."));
             else
             {
+                if (await _medicalAppointmentRepository.HasDoctorMedicalAppointments(id))
+                {
+                    return await Task.FromResult((false, "can not delete doctor with appointments."));
+                }
                 await _doctorRepository.DeleteDoctor(id);
                 return await Task.FromResult((true, "doctor successfully deleted."));
             }

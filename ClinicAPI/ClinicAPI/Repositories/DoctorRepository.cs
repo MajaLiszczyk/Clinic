@@ -157,10 +157,19 @@ namespace ClinicAPI.Repositories
         {
             var _doctor = await _context.Doctor.FindAsync(id);
             if (_doctor == null) return false;
-
-            _context.Doctor.Remove(_doctor);
+            _doctor.MedicalSpecialisations.Clear(); //usuwa z powiazanej tablicy
+            _context.Doctor.Remove(_doctor); 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> CanArchiveDoctor(int doctorId)
+        {
+            // Sprawdzenie, czy lekarz ma jakąkolwiek "otwartą" wizytę
+            return !await _context.MedicalAppointment.AnyAsync(ma =>
+                ma.DoctorId == doctorId &&
+                ma.IsFinished == false &&
+                ma.IsCancelled == false);
         }
     }
 }

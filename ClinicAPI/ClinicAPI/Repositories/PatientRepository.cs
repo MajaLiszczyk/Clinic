@@ -163,5 +163,14 @@ namespace ClinicAPI.Repositories
             return true;
         }
 
+        public async Task<bool> CanArchivePatient(int patientId)
+        {
+            // Sprawdzenie, czy pacjent ma jakąkolwiek "otwartą" wizytę
+            return !await _context.MedicalAppointment.AnyAsync(ma =>
+                ma.PatientId == patientId &&
+                ma.IsFinished == false &&
+                ma.IsCancelled == false);
+        }
+
     }
 }

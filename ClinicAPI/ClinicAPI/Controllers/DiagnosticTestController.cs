@@ -80,7 +80,7 @@ namespace ClinicAPI.Controllers
         }
 
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
@@ -90,7 +90,7 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = diagnosticTest.Response });
             //return Ok(diagnosticTest.Response);
             else return BadRequest(diagnosticTest.Response);
-        }
+        } */
 
     }
 }

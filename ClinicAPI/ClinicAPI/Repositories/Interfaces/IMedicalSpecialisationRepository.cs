@@ -13,5 +13,9 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<MedicalSpecialisation> CreateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation);
         public Task<MedicalSpecialisation?> UpdateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation);
         public Task<bool> DeleteMedicalSpecialisation(int id);
+        public Task<bool> IsLinkedToDoctor(int specialisationId);
+        public Task<bool> CanArchiveSpecialisation(int specialisationId);
+
+
     }
 }
