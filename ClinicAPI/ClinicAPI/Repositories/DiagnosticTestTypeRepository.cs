@@ -35,7 +35,17 @@ namespace ClinicAPI.Repositories
             return testType;
 
         }
-        
+
+        public async Task<bool> IsDiagnosticTestTypeWithTheSameName(string name)
+        {
+            if (_context.DiagnosticTestType.Any(p => p.Name == name))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         public async Task<List<DiagnosticTestType>> GetAllDiagnosticTestTypes()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,

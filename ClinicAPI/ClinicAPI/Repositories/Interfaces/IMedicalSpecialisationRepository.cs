@@ -7,6 +7,7 @@ namespace ClinicAPI.Repositories.Interfaces
     {
 
         public Task<MedicalSpecialisation?> GetMedicalSpecialisationById(int id);
+        public Task<bool> IsSpecilityWithTheSameName(string name);
         public Task<List<MedicalSpecialisation>> GetAllMedicalSpecialisations();
         public Task<List<MedicalSpecialisation>> GetAllAvailableMedicalSpecialisations();
         public Task<MedicalSpecialisation> CreateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation);

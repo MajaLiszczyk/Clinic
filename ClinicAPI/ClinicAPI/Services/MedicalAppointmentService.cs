@@ -106,8 +106,11 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAp)
         {
+            //var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
             var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
-            if (appointmentDate < DateTime.Now)
+            var todayDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            //if (appointmentDate < DateTime.Now) 
+            if (appointmentDate < todayDate) 
             {
                 return (false, "The appointment date cannot be in the past.", null);
             }

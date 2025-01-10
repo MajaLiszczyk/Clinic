@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using MediatR;
 
 namespace ClinicAPI.Services
 {
@@ -43,6 +44,11 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(DiagnosticTestType testType)
         {
+            if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
+            {
+                return (false, "Diagnostic Test type with this name already exists.", null);
+            }
+
             DiagnosticTestType _testType = new DiagnosticTestType
             {
                 Name = testType.Name,
@@ -64,6 +70,10 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(DiagnosticTestType testType)
         {
+            if (await _diagnosticTestTypeRepository.IsDiagnosticTestTypeWithTheSameName(testType.Name))
+            {
+                return (false, "Diagnostic Test type with this name already exists.");
+            }
             //DiagnosticTestType? _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
             var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
 

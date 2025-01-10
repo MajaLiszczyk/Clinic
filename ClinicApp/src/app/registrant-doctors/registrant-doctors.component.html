@@ -34,6 +34,16 @@
             </div>
         </div>
 
+        <div class="formGroup mb-3">
+            <label class="form-label">PWZ number</label>
+            <input formControlName="doctorNumber" type="string" class="form-control" aria-label="doctorNumber"
+                [class.is-invalid]="formDoctorNumber.invalid && (formDoctorNumber.touched || formDoctorNumber.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formDoctorNumber?.errors?.['required']">Required</span>
+                <span *ngIf="formDoctorNumber?.errors?.['pattern']">Doctor number must consist of 7 digits and cannot start with 0</span>
+            </div>
+        </div>
+
         <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">E-mail address</label>
             <input formControlName="email" type="string" class="form-control" aria-label="email"

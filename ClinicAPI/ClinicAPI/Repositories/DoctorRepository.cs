@@ -1,6 +1,8 @@
 ﻿using ClinicAPI.DB;
+using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 using System.Transactions;
@@ -32,6 +34,16 @@ namespace ClinicAPI.Repositories
             catch (Exception) { }
             return doctor;
         }
+
+        public async Task<bool> GetDoctorWithTheSameNumber(string number)
+        {
+            if (_context.Doctor.Any(p => p.DoctorNumber == number))
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         public async Task<List<Doctor>> GetAllDoctors()
         {

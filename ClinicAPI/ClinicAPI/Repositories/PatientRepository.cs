@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ClinicAPI.Repositories
 {
@@ -56,7 +57,16 @@ namespace ClinicAPI.Repositories
             return patient;
         }
 
-        
+        public async Task<bool> GetPatientWithTheSamePesel(string pesel)
+        {
+            if (_context.Patient.Any(p => p.Pesel == pesel))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
 
         public async Task<List<Patient>> GetAllPatients()
         {

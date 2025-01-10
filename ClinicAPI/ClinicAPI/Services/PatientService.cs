@@ -63,6 +63,12 @@ namespace ClinicAPI.Services
         //TO DO : PRZY TWRZENIEU PESEL NIE MOZE SIE POWTORZYC W BAZIE
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 
         {
+            if (_dbContext.Patient.Any(p => p.Pesel == patient.Pesel))
+            {
+                ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Patient with this PESEL already exists.", k);
+                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
+            }
             Patient _patient = new Patient
             {
                 Pesel = patient.Pesel,
@@ -85,10 +91,11 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> RegisterPatient(CreateRegisterPatientDto request)
         {
-            if (_dbContext.Patient.Any(p => p.Pesel == request.Pesel))
+            //if (_dbContext.Patient.Any(p => p.Pesel == request.Pesel))
+            if (await _patientRepository.GetPatientWithTheSamePesel(request.Pesel))
             {
-                ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
-                return (false, "Patient with this PESEL already exists.", k);
+                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Patient with this PESEL already exists.", null);
                 //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
 
@@ -144,6 +151,12 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
+            if (await _patientRepository.GetPatientWithTheSamePesel(patient.Pesel))
+            {
+                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Patient with this PESEL already exists.");
+                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
+            }
             //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
             var _patient = await _patientRepository.GetPatientById(patient.Id);   
 

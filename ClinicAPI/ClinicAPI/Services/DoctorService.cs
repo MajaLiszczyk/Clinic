@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
+using ClinicAPI.DB;
 using ClinicAPI.Dtos;
 using ClinicAPI.Models;
+using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
 namespace ClinicAPI.Services
@@ -12,12 +17,20 @@ namespace ClinicAPI.Services
     {
         private readonly IDoctorRepository _doctorRepository;
         private readonly IMapper _mapper;
+        private readonly ApplicationDBContext _dbContext;
+        private readonly UserManager<User> _userManager;
+        private readonly IMedicalSpecialisationService _medicalSpecialisationService;
 
-        public DoctorService(IDoctorRepository doctorRepository, IMapper mapper)
+
+
+        public DoctorService(IDoctorRepository doctorRepository, IMapper mapper, ApplicationDBContext applicationDBContext
+                            , UserManager<User> userManager, IMedicalSpecialisationService medicalSpecialisationService)
         {
             _doctorRepository = doctorRepository;
             _mapper = mapper;
-
+            _dbContext = applicationDBContext;
+            _userManager = userManager;
+            _medicalSpecialisationService = medicalSpecialisationService;
         }
         public async Task<ReturnDoctorDto?> GetDoctor(int id)
         {
@@ -70,8 +83,95 @@ namespace ClinicAPI.Services
             }
         }
 
+        public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctorWithSpecialisations(CreateDoctorDto request)
+        {
+            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+            MedicalSpecialisation specialisation;
+            foreach (int id in medicalSpecialisationsIds)
+            {
+                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                medicalSpecialisations.Add(specialisation);
+            }
+            return await CreateDoctor(request, medicalSpecialisations);
+        }
+
+
+        public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> RegisterDoctor(CreateRegisterDoctorDto request)
+        {
+           
+            //if (_dbContext.Doctor.Any(p => p.DoctorNumber == request.DoctorNumber))
+            if (await _doctorRepository.GetDoctorWithTheSameNumber(request.DoctorNumber))
+            {
+                //ReturnDoctorDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Doctor with this PWZ number already exists.", null);
+            }
+            // Tworzenie użytkownika
+            var user = new User
+            {
+                UserName = request.Email,
+                Email = request.Email
+            };
+
+            var createUserResult = await _userManager.CreateAsync(user, request.Password);
+            if (!createUserResult.Succeeded)
+            {
+                var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
+                return (false, string.Join("; ", errorMessages), null);
+            }
+
+            // Przypisanie roli Doctor do użytkownika
+            var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Doctor);
+            if (!addToRoleResult.Succeeded)
+            {
+                return (false, "Failed to assign role to the user.", null);  //WYSTARCZY PEWNIE ZAMIAST K DAC BEZPOSREDNIO NULL?
+            }
+
+            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+            MedicalSpecialisation specialisation;
+            foreach (int id in medicalSpecialisationsIds)
+            {
+                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                medicalSpecialisations.Add(specialisation);
+            }
+            var doctor = new Doctor
+            {
+                UserId = user.Id,
+                Name = request.Name,
+                Surname = request.Surname,
+                DoctorNumber = request.DoctorNumber,
+                MedicalSpecialisations = medicalSpecialisations
+            };
+
+            Doctor? d = await _doctorRepository.CreateDoctor(doctor);
+            if (d != null)
+            {
+                ReturnDoctorDto r = _mapper.Map<ReturnDoctorDto>(d);
+                return await Task.FromResult((true, "Doctor successfully registered.", r));
+            }
+
+            else //DA SIĘ INACZEJ OBEJŚĆ?
+            {
+                ReturnDoctorDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                return await Task.FromResult((false, "Doctor was not created.", k));
+
+            }
+
+
+            //dbContext.Doctor.Add(doctor);
+            //await dbContext.SaveChangesAsync();
+        }
+
+
+
         public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
+            if (await _doctorRepository.GetDoctorWithTheSameNumber(doctor.DoctorNumber))
+            {
+                //ReturnDoctorDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Doctor with this PWZ number already exists.");
+            }
             //Doctor? _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
             var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
 
@@ -104,7 +204,21 @@ namespace ClinicAPI.Services
 
             }
         }
-        
+
+        public async Task<(bool Confirmed, string Response)> UpdateDoctorWithSpecialisations(UpdateDoctorDto request)
+        {
+            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
+            MedicalSpecialisation specialisation;
+            foreach (int id in medicalSpecialisationsIds)
+            {
+                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
+                medicalSpecialisations.Add(specialisation);
+            }
+            return await UpdateDoctor(request, medicalSpecialisations);
+        }
+
+
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
             var _doctor = await _doctorRepository.GetDoctorById(id);

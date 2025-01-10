@@ -36,8 +36,8 @@ export class RegistrantPatientsComponent {
     this.getAllPatients();
     this.patientForm = this.formBuilder.group({
       id: Number,
-      name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
-      surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
+      name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
+      surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
       pesel: new FormControl(null, { validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(/^\d{11}$/)]}),
       email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
         Validators.maxLength(256)] }),     

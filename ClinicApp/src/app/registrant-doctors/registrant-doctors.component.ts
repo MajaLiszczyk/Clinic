@@ -41,9 +41,9 @@ export class RegistrantDoctorsComponent {
     this.doctorForm = this.formBuilder.group({
       medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }), //pusta tablica chyba ok
       id: Number,
-      name: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
-      surname: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
-      doctorNumber: new FormControl(''/*, {validators: [Validators.required]}*/),
+      name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
+      surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
+      doctorNumber: new FormControl(null, {validators: [Validators.required, Validators.pattern(/^[1-9][0-9]{6}$/)]}),
       email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
         Validators.maxLength(256)] }),
       /*password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
@@ -127,6 +127,7 @@ export class RegistrantDoctorsComponent {
     this.formId.setValue(doctor.id);
     this.formName.setValue(doctor.name);
     this.formSurname.setValue(doctor.surname);
+    this.formDoctorNumber.setValue(doctor.doctorNumber);
     this.formDoctorNumber.setValue(doctor.doctorNumber);
     this.specialisationsArray = this.doctorForm.get('medicalSpecialisationsIds') as FormArray;
     for (let specialisation of this.specialisations) {

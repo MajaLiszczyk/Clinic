@@ -21,17 +21,19 @@ namespace ClinicAPI.Controllers
         private readonly ApplicationDBContext dbContext;
         private readonly IMedicalSpecialisationService _medicalSpecialisationService;
         private readonly IPatientService _patientService;
+        private readonly IDoctorService _doctorService;
 
 
         public RegistrationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager
                                       , ApplicationDBContext dbContext, IMedicalSpecialisationService medicalSpecialisationService
-                                      , IPatientService patientService)
+                                      , IPatientService patientService, IDoctorService doctorService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.dbContext = dbContext;
             this._medicalSpecialisationService = medicalSpecialisationService;
             _patientService = patientService;
+            _doctorService = doctorService;
         }
 
         [HttpPost]
@@ -52,51 +54,14 @@ namespace ClinicAPI.Controllers
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> RegisterDoctor(CreateRegisterDoctorDto request)
         {
-            // Tworzenie użytkownika
-            var user = new User
+            var result = await _doctorService.RegisterDoctor(request);
+            if (!result.Confirmed)
             {
-                UserName = request.Email,
-                Email = request.Email
-            };
-
-            var createUserResult = await userManager.CreateAsync(user, request.Password);
-            if (!createUserResult.Succeeded)
-            {
-                return BadRequest(createUserResult.Errors);
+                return BadRequest(new { Message = result.Response });
             }
 
-            // Przypisanie roli Doctor do użytkownika
-            var addToRoleResult = await userManager.AddToRoleAsync(user, UserRole.Doctor);
-            if (!addToRoleResult.Succeeded)
-            {
-                return BadRequest(addToRoleResult.Errors);
-            }
-
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach (int id in medicalSpecialisationsIds)
-            {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
-            }
-
-
-            var doctor = new Doctor
-            {
-                UserId = user.Id,
-                Name = request.Name,
-                Surname = request.Surname,
-                DoctorNumber = request.DoctorNumber,
-                MedicalSpecialisations = medicalSpecialisations
-            };
-
-            dbContext.Doctor.Add(doctor);
-            await dbContext.SaveChangesAsync();
-
-            return Ok(new { Message = "Doctor registered successfully", DoctorId = doctor.Id });
-
-
+            //return Ok(new { Message = "Patient created successfully." });
+            return Ok(new { message = result.Response });
         }
     }
 }

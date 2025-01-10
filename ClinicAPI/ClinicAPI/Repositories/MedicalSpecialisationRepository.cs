@@ -32,7 +32,17 @@ namespace ClinicAPI.Repositories
             return medicalSpecialisation;
         }
 
-        
+        public async Task<bool> IsSpecilityWithTheSameName(string name)
+        {
+            if (_context.MedicalSpecialisation.Any(p => p.Name == name))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+
         public async Task<List<MedicalSpecialisation>> GetAllMedicalSpecialisations()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,

@@ -61,7 +61,13 @@ namespace ClinicAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateDoctorDto request)
         {
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+
+            var _doctor = await _doctorService.CreateDoctorWithSpecialisations(request);
+            if (_doctor.Confirmed)
+                return Ok(new { message = _doctor.Response });
+            else return BadRequest(_doctor.Response);
+
+            /*ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
             ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
             MedicalSpecialisation specialisation;
             foreach(int id in medicalSpecialisationsIds)
@@ -72,16 +78,19 @@ namespace ClinicAPI.Controllers
             var result = await _doctorService.CreateDoctor(request, medicalSpecialisations);
             if (result.Confirmed)
                 return Ok(new { message = result.Response, doctor = result.doctor });
-                //return Ok(result.Response); //return Ok(new { message = result.Response }); //jeśli chcę zamienić stringa na json
-            else return BadRequest(result.Response);
+            else return BadRequest(result.Response); */
         }
 
         //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateDoctorDto request)
         {
+            var _doctor = await _doctorService.UpdateDoctorWithSpecialisations(request);
+            if (_doctor.Confirmed)
+                return Ok(new { message = _doctor.Response });
+            else return BadRequest(_doctor.Response);
 
-            ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
+            /*ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
             ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
             MedicalSpecialisation specialisation;
             foreach (int id in medicalSpecialisationsIds)
@@ -94,7 +103,7 @@ namespace ClinicAPI.Controllers
             if (result.Confirmed)
                 //return Ok(result.Response);
                 return Ok(new { message = result.Response });
-            else return BadRequest(result.Response);
+            else return BadRequest(result.Response);*/
         }
 
         [HttpPut("{id}")]

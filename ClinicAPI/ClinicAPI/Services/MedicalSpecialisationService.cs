@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using MediatR;
 
 namespace ClinicAPI.Services
 {
@@ -46,6 +47,13 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalSpecialisationDto? medSpecialisation)> CreateMedicalSpecialisation(CreateMedicalSpecialisationDto medicalSpecialisation)
         {
+            if (await _medicalSpecialisationRepository.IsSpecilityWithTheSameName(medicalSpecialisation.Name))
+            {
+                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Medical Specility with this name already exists.", null);
+                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
+            }
+
             MedicalSpecialisation _medicalSpecialisation = new MedicalSpecialisation
             {
                 Name = medicalSpecialisation.Name,
@@ -65,6 +73,12 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalSpecialisation(UpdateMedicalSpecialisationDto medicalSpecialisation)
         {
+            if (await _medicalSpecialisationRepository.IsSpecilityWithTheSameName(medicalSpecialisation.Name))
+            {
+                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                return (false, "Medical Specility with this name already exists.");
+                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
+            }
             //MedicalSpecialisation? _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
             var _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
 
