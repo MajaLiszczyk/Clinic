@@ -49,9 +49,7 @@ namespace ClinicAPI.Services
         {
             if (await _medicalSpecialisationRepository.IsSpecilityWithTheSameName(medicalSpecialisation.Name))
             {
-                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Medical Specility with this name already exists.", null);
-                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
 
             MedicalSpecialisation _medicalSpecialisation = new MedicalSpecialisation
@@ -75,11 +73,8 @@ namespace ClinicAPI.Services
         {
             if (await _medicalSpecialisationRepository.IsSpecilityWithTheSameName(medicalSpecialisation.Name))
             {
-                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Medical Specility with this name already exists.");
-                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
-            //MedicalSpecialisation? _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
             var _medicalSpecialisation = await _medicalSpecialisationRepository.GetMedicalSpecialisationById(medicalSpecialisation.Id);
 
             if (_medicalSpecialisation == null)
@@ -89,8 +84,7 @@ namespace ClinicAPI.Services
             else
             {
                 _medicalSpecialisation.Name = medicalSpecialisation.Name;
-                //MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
-                //var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
+
                 var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(_medicalSpecialisation);
                 return await Task.FromResult((true, "MedicalSpecialisation succesfully uptated"));
             }
@@ -112,7 +106,7 @@ namespace ClinicAPI.Services
                 }
                 _medicalSpecialisation.IsAvailable = false;
                 //MedicalSpecialisation r = _mapper.Map<MedicalSpecialisation>(medicalSpecialisation);
-                //var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(r);
+
                 var p = await _medicalSpecialisationRepository.UpdateMedicalSpecialisation(_medicalSpecialisation);
                 return await Task.FromResult((true, "MedicalSpecialisation succesfully uptated"));
             }

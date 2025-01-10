@@ -60,7 +60,6 @@ namespace ClinicAPI.Services
 
             var doctors = await _doctorRepository.GetDoctorsWithSpecialisations();
             return doctors;
-            //return _mapper.Map<List<ReturnDoctorDto>>(doctors);
         }
 
 
@@ -103,10 +102,8 @@ namespace ClinicAPI.Services
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> RegisterDoctor(CreateRegisterDoctorDto request)
         {
            
-            //if (_dbContext.Doctor.Any(p => p.DoctorNumber == request.DoctorNumber))
             if (await _doctorRepository.GetDoctorWithTheSameNumber(request.DoctorNumber))
             {
-                //ReturnDoctorDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Doctor with this PWZ number already exists.", null);
             }
             // Tworzenie użytkownika
@@ -127,7 +124,7 @@ namespace ClinicAPI.Services
             var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Doctor);
             if (!addToRoleResult.Succeeded)
             {
-                return (false, "Failed to assign role to the user.", null);  //WYSTARCZY PEWNIE ZAMIAST K DAC BEZPOSREDNIO NULL?
+                return (false, "Failed to assign role to the user.", null); 
             }
 
             ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
@@ -154,16 +151,12 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "Doctor successfully registered.", r));
             }
 
-            else //DA SIĘ INACZEJ OBEJŚĆ?
+            else
             {
-                ReturnDoctorDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                ReturnDoctorDto? k = null;
                 return await Task.FromResult((false, "Doctor was not created.", k));
 
             }
-
-
-            //dbContext.Doctor.Add(doctor);
-            //await dbContext.SaveChangesAsync();
         }
 
 
@@ -172,10 +165,8 @@ namespace ClinicAPI.Services
         {
             if (await _doctorRepository.GetDoctorWithTheSameNumber(doctor.DoctorNumber))
             {
-                //ReturnDoctorDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Doctor with this PWZ number already exists.");
             }
-            //Doctor? _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
             var _doctor = await _doctorRepository.GetDoctorById(doctor.Id);
 
             if (_doctor == null)

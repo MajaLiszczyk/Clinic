@@ -40,7 +40,6 @@ namespace ClinicAPI.Services
                 appointment.DoctorId = dto.MedicalAppointmentDto.DoctorId;
                 appointment.Interview = dto.MedicalAppointmentDto.Interview;
                 appointment.Diagnosis = dto.MedicalAppointmentDto.Diagnosis;
-                //appointment.DiseaseUnit = dto.MedicalAppointmentDto.DiseaseUnit;
                 appointment.IsFinished = dto.MedicalAppointmentDto.IsFinished;
                 appointment.IsCancelled = dto.MedicalAppointmentDto.IsCancelled;
 
@@ -59,12 +58,10 @@ namespace ClinicAPI.Services
                     if (r != null)
                     {
                         ReturnDiagnosticTestDto q = _mapper.Map<ReturnDiagnosticTestDto>(r);
-                        //return await Task.FromResult((true, "DiagnosticTest successfully created.", r));
                     }
                     else
                     {
-                        ReturnDiagnosticTestDto? k = null; //bez sensu tak obchodzić, da się inaczej?
-                        //return await Task.FromResult((false, "DiagnosticTest was not created.", k));
+                        ReturnDiagnosticTestDto? k = null; 
 
                     }
                 }

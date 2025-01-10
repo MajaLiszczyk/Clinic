@@ -17,7 +17,6 @@ namespace ClinicAPI.Controllers
             _registrantService = service;
         }
 
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -27,7 +26,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -37,20 +35,15 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateRegistrantDto request)
-        //public async Task<IActionResult> Create(CreateRegistrantDto request)
         {
-            //return Ok();
-
             var result = await _registrantService.CreateRegistrant(request);
             if (result.Confirmed)
                 return Ok(result.Response);
             else return BadRequest(result.Response);
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateRegistrantDto request)
         {
@@ -69,8 +62,6 @@ namespace ClinicAPI.Controllers
             else return BadRequest(result.Response);
         }
         
-
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

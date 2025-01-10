@@ -20,8 +20,6 @@ namespace ClinicAPI.Services
 
         }
 
-
-        // public Task<ReturnPatientDto?> GetPatientAsync(int id)
         public async Task<ReturnRegistrantDto?> GetRegistrant(int id)
         {
             var registrant = await _registantRepository.GetRegistrantById(id);
@@ -31,8 +29,6 @@ namespace ClinicAPI.Services
         {
             var registrants = await _registantRepository.GetAllRegistrants();
             return _mapper.Map<List<ReturnRegistrantDto>>(registrants);
-
-            //return _mapper.Map<List<ReturnMessageDto>>(messages);
 
         }
 

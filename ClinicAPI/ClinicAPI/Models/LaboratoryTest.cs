@@ -10,17 +10,10 @@ namespace ClinicAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public bool IsAvailable { get; set; } = true;
-
     }
 
-    /*public enum LaboratoryTestType
-    {
-        Ferrum,
-        Glucose,
-        Urine
-    }*/
 
-    public class LaboratoryTest //konkretne jedno badanie o danej godzinie??
+    public class LaboratoryTest
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -30,7 +23,6 @@ namespace ClinicAPI.Models
         public int MedicalAppointmentId { get; set; }
         public DateTime date { get; set; } 
         public int LaboratoryTestTypeId { get; set; }
-        //public LaboratoryTestType laboratoryTestType { get; set; }
 
         [ForeignKey("LaboratoryWorker")]
         public int LaboratoryWorkerId { get; set; }
@@ -39,8 +31,6 @@ namespace ClinicAPI.Models
         public int SupervisorId { get; set; }
 
         public string DoctorNote { get; set; }
-        //public LaboratorySupervisor Supervisor { get; set; }
-        //public LaboratoryWorker Worker { get; set; }
 
     }
 }

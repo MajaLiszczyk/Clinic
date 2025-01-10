@@ -45,8 +45,6 @@ namespace ClinicAPI.Controllers
             {
                 return BadRequest(new { Message = result.Response });
             }
-
-            //return Ok(new { Message = "Patient created successfully." });
             return Ok(new { message = result.Response });
         }
 
@@ -59,8 +57,6 @@ namespace ClinicAPI.Controllers
             {
                 return BadRequest(new { Message = result.Response });
             }
-
-            //return Ok(new { Message = "Patient created successfully." });
             return Ok(new { message = result.Response });
         }
     }

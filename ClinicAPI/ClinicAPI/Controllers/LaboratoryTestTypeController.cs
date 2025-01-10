@@ -20,18 +20,15 @@ namespace ClinicAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-
             LaboratoryTestType? testType = await _testService.GetLaboratoryTestType(id);
             if (testType != null)
                 return Ok(testType);
             return NotFound();
-
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-
             List<LaboratoryTestType> testTypes = await _testService.GetAllLaboratoryTestTypes();
             if (testTypes != null)
                 return Ok(testTypes);
@@ -52,7 +49,6 @@ namespace ClinicAPI.Controllers
         {
             var _testType = await _testService.UpdateLaboratoryTestType(testType);
             if (_testType.Confirmed)
-                //return Ok(_patient.Response);
                 return Ok(new { message = _testType.Response });
             else return BadRequest(_testType.Response);
         }
@@ -74,7 +70,5 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
-
     }
-
 }

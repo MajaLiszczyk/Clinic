@@ -34,23 +34,6 @@ namespace ClinicAPI.Services
             
             var tests = await _diagnosticTestRepository.GetByMedicalAppointmentId(id);
             return tests;
-            /*List<ReturnDiagnosticTestDto> dtoList = new List<ReturnDiagnosticTestDto>();
-            var diagnosticTests = await _diagnosticTestRepository.GetByMedicalAppointmentId(id);
-            //List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
-            foreach(DiagnosticTest test in diagnosticTests)
-            {
-                ReturnDiagnosticTestDto dto = new ReturnDiagnosticTestDto()
-                {
-                    Id = test.Id,
-                    MedicalAppoitmentId = test.MedicalAppoitmentId,
-                    DiagnosticTestTypeId = test.DiagnosticTestTypeId,
-                    DiagnosticTestTypeName =
-                    Description = test.Description,
-                };
-                dtoList.Add(dto);
-            }
-
-            return dtoList; */
         }
 
 
@@ -70,7 +53,7 @@ namespace ClinicAPI.Services
             }
             else
             {
-                ReturnDiagnosticTestDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                ReturnDiagnosticTestDto? k = null;
                 return await Task.FromResult((false, "DiagnosticTest was not created.", k));
 
             }
@@ -78,7 +61,6 @@ namespace ClinicAPI.Services
         }
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTest(UpdateDiagnosticTestDto diagnosticTest)
         {
-            //DiagnosticTest? _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
             var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(diagnosticTest.Id);
 
             if (_diagnosticTest == null)
@@ -92,39 +74,6 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "DiagnosticTest succesfully uptated"));
             }
         }
-        /*public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTest(int id)
-        {
-            var _diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(id);
-            if (_diagnosticTest == null) return await Task.FromResult((false, "DiagnosticTest with given id does not exist."));
-            else
-            {
-                await _diagnosticTestRepository.DeleteDiagnosticTest(id);
-                return await Task.FromResult((true, "Diagnostic test successfully deleted."));
-            }
-        }*/
-
-
-
-        /*public Task<ReturnDiagnosticTestDto?> GetDiagnosticTestAsync(int id)
-        {
-
-        }
-        public Task<List<ReturnDiagnosticTestDto>> GetAllDiagnosticTestsAsync()
-        {
-
-        }
-        public Task<(bool Confirmed, string Response)> CreateDiagnosticTestAsync(CreateDiagnosticTestDto request)
-        {
-
-        }
-        public Task<(bool Confirmed, string Response)> UpdateDiagnosticTestAsync(UpdateDiagnosticTestDto request, int id)
-        {
-
-        }
-        public Task<(bool Confirmed, string Response)> DeleteDiagnosticTestAsync(int id)
-        {
-
-        }*/
 
     }
 }

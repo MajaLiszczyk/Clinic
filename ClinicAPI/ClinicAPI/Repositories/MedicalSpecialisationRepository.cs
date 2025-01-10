@@ -86,20 +86,10 @@ namespace ClinicAPI.Repositories
         
         public async Task<MedicalSpecialisation?> UpdateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation)
         {
-            /*var _medicalSpecialisation = _context.MedicalSpecialisation.
-                FirstOrDefault(p => p.Id == medicalSpecialisation.Id);
-
-            if (_medicalSpecialisation == null)
-            {
-                return null;
-            }*/
             try
             {
                 _context.MedicalSpecialisation.Update(medicalSpecialisation);
                 await _context.SaveChangesAsync();
-
-                /*_medicalSpecialisation.Name = medicalSpecialisation.Name;
-                _context.SaveChanges(); */
             }
             catch (Exception ex)
             { // Obsłuż wyjątek

@@ -18,20 +18,16 @@ namespace ClinicAPI.Controllers
             _diagnosticTestService = service;
         }
 
-
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-
             ReturnDiagnosticTestDto? diagnosticTest = await _diagnosticTestService.GetDiagnosticTest(id);
             if (diagnosticTest != null)
                 return Ok(diagnosticTest);
             return NotFound();
         }
 
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Get()
@@ -52,8 +48,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
         
-
-        //[HttpPost, Authorize]
         [HttpPost]
         [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Create(CreateDiagnosticTestDto diagnosticTest)
@@ -61,12 +55,9 @@ namespace ClinicAPI.Controllers
             var _diagnosticTest = await _diagnosticTestService.CreateDiagnosticTest(diagnosticTest);
             if (_diagnosticTest.Confirmed)
                 return Ok(new { message = _diagnosticTest.Response, diagnosticTest = _diagnosticTest.diagnosticTest });
-
-                //return Ok(_diagnosticTest.Response);
             else return BadRequest(_diagnosticTest.Response);
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         [Authorize(Roles = UserRole.Doctor)]
         public async Task<IActionResult> Update([FromBody] UpdateDiagnosticTestDto diagnosticTest)
@@ -75,7 +66,6 @@ namespace ClinicAPI.Controllers
            var _diagnosticTest = await _diagnosticTestService.UpdateDiagnosticTest(diagnosticTest);
            if (_diagnosticTest.Confirmed)
                return Ok(new { message = _diagnosticTest.Response });
-                //return Ok(_diagnosticTest.Response);
             else return BadRequest(_diagnosticTest.Response);
         }
 

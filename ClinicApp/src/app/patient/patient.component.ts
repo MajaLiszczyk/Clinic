@@ -83,7 +83,8 @@ export class PatientComponent {
 
 
   getAllSpecialisations() {
-    this.clinicService.getAllSpecialisations().subscribe(data => {
+    //this.clinicService.getAllSpecialisations().subscribe(data => {
+    this.clinicService.getAllAvailableSpecialisations().subscribe(data => {     
       this.specialisations = data;
     })
   }

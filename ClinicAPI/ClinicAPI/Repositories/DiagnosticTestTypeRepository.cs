@@ -31,7 +31,6 @@ namespace ClinicAPI.Repositories
             {
                 //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
             }
-            //return await Task.Run(() => patient);
             return testType;
 
         }
@@ -50,12 +49,12 @@ namespace ClinicAPI.Repositories
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+                                                    TransactionScopeAsyncFlowOption.Enabled);  
             List<DiagnosticTestType> testTypes = new List<DiagnosticTestType>();
             try
             {
                 testTypes = await _context.DiagnosticTestType.
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync(); 
                 scope.Complete();
             }
             catch (Exception) { }
@@ -66,12 +65,12 @@ namespace ClinicAPI.Repositories
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+                                                    TransactionScopeAsyncFlowOption.Enabled); 
             List<DiagnosticTestType> testTypes = new List<DiagnosticTestType>();
             try
             {
                 testTypes = await _context.DiagnosticTestType.Where(r => r.IsAvailable == true).
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync(); 
                 scope.Complete();
             }
             catch (Exception) { }
@@ -90,25 +89,15 @@ namespace ClinicAPI.Repositories
         
         public async Task<DiagnosticTestType?> UpdateDiagnosticTestType(DiagnosticTestType testType)
         {
-            /*var _testType = _context.DiagnosticTestType.
-               FirstOrDefault(p => p.Id == testType.Id);
-
-            if (_testType == null)
-            {
-                return null;
-            } */
             try
             {
                 _context.DiagnosticTestType.Update(testType);
                 await _context.SaveChangesAsync();
 
-                /*_testType.Name = testType.Name;
-                _context.SaveChanges(); */
             }
             catch (Exception ex)
             {
                 throw new Exception("An error occurred while updating the medical specialisation.", ex);
-                //OVSŁUŻYC
             }
             return testType;
         }

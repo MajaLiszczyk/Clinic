@@ -27,7 +27,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 doctor = await _context.Doctor.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                            .FirstOrDefaultAsync(); 
 
                 scope.Complete();
             }
@@ -98,33 +98,10 @@ namespace ClinicAPI.Repositories
                     })
                     .ToListAsync();
                 scope.Complete();
-                //return doctors.Cast<object>().ToList();
                 return doctors;
-
-
-
-                /*var doctors = await _context.Doctor
-                    .Where(ma => ma.DoctorId == doctorId)
-                    .ToListAsync();
-
-                scope.Complete();
-                return doctors; */
-
-                /* Jesli bede chciala wiecej danych o pacjencie:
-                   var query = from ma in _context.MedicalAppointments
-                    join p in _context.Patients on ma.PatientId equals p.Id
-                    where ma.PatientId == patientId
-                    select new { Appointment = ma, Patient = p };
-                    var result = await query.ToListAsync();
-                    scope.Complete();
-                 */
-
             }
             catch (Exception ex)
             {
-                // Obsłuż wyjątek (logowanie, etc.)
-                //return new List<object>();
-                //return doctors.Cast<object>().ToList();
                 return new List<Models.DoctorWithSpecialisations>();
             }
         }

@@ -18,7 +18,6 @@ namespace ClinicAPI.Controllers
             _medicalSpecialisationService = service;
         }
 
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> Get([FromRoute] int id)
@@ -29,7 +28,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
@@ -50,7 +48,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpPost, Authorize]
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create(CreateMedicalSpecialisationDto request)
@@ -58,18 +55,15 @@ namespace ClinicAPI.Controllers
             var result = await _medicalSpecialisationService.CreateMedicalSpecialisation(request);
             if (result.Confirmed)
                 return Ok(new { message = result.Response, doctor = result.medSpecialisation });
-            //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Update([FromBody] UpdateMedicalSpecialisationDto request)
         {
             var result = await _medicalSpecialisationService.UpdateMedicalSpecialisation(request);
             if (result.Confirmed)
-                //return Ok(result.Response);
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
@@ -81,19 +75,16 @@ namespace ClinicAPI.Controllers
         {
             var result = await _medicalSpecialisationService.TransferToArchive(id);
             if (result.Confirmed)
-                //return Ok(result.Response);
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
 
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _medicalSpecialisationService.DeleteMedicalSpecialisation(id);
             if (result.Confirmed)
-                //return Ok(result.Response);
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }

@@ -53,34 +53,21 @@ namespace ClinicAPI.Services
                     allAppointments.futureMedicalAppointments.Add(medicalAppointment);
                 }
 
-                /*if (medicalAppointment.dateTime < DateTime.Now)
-                {
-                    allAppointments.pastMedicalAppointments.Add(medicalAppointment);
-                }
-
-                else
-                {
-                    allAppointments.futureMedicalAppointments.Add(medicalAppointment);
-                }*/
-
             }
             return allAppointments;
         }
 
         
 
-        //public async Task<List<ReturnMedicalAppointmentDto>> GetMedicalAppointmentsByPatientId(int id)
         public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByPatientId(int id)
         {
             MedicalAppointmentsOfPatient allAppointments = new MedicalAppointmentsOfPatient();
-            //List<ReturnMedicalAppointmentDto> pastAppointment = new List<ReturnMedicalAppointmentDto>();
-            //List<ReturnMedicalAppointmentDto> futureAppointments = new List<ReturnMedicalAppointmentDto>();
+
 
             var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsByPatientId(id);
             List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
             foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
             {
-                //if (medicalAppointment.IsFinished || medicalAppointment.IsCancelled)
                 if (medicalAppointment.IsFinished)
                 {
                     allAppointments.pastMedicalAppointments.Add(medicalAppointment);
@@ -92,8 +79,7 @@ namespace ClinicAPI.Services
                 }
 
             }
-           // allAppointments.pastMedicalAppointments = pastAppointment;
-            //allAppointments.futureMedicalAppointments = futureAppointments;
+
 
             return allAppointments;
 
@@ -106,10 +92,8 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAp)
         {
-            //var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
             var appointmentDate = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0);
             var todayDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            //if (appointmentDate < DateTime.Now) 
             if (appointmentDate < todayDate) 
             {
                 return (false, "The appointment date cannot be in the past.", null);
@@ -118,13 +102,10 @@ namespace ClinicAPI.Services
             MedicalAppointment _medicalAppointment = new MedicalAppointment
             {
                 DateTime = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0),
-                //dateTime = medicalAppointment.dateTime,
                 PatientId = 0,
-                //DoctorId = medicalAppointment.DoctorId,
                 DoctorId = medicalAp.DoctorId,
                 Interview = "domyslny interview",
                 Diagnosis = "domyslne diagnosis",
-                //DiseaseUnit = 0,
                 IsCancelled = false,
                 IsFinished = false,
                 CancellingComment = ""
@@ -145,7 +126,6 @@ namespace ClinicAPI.Services
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalAppointment(UpdateMedicalAppointmentDto medicalAppointment)
         {
-            //MedicalAppointment? _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
             var _medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(medicalAppointment.Id);
 
             if (_medicalAppointment == null)
@@ -158,13 +138,10 @@ namespace ClinicAPI.Services
                 _medicalAppointment.PatientId = medicalAppointment.PatientId;
                 _medicalAppointment.Interview = medicalAppointment.Interview;
                 _medicalAppointment.Diagnosis = medicalAppointment.Diagnosis;
-                //_medicalAppointment.DiseaseUnit = medicalAppointment.DiseaseUnit;
                 _medicalAppointment.DoctorId = medicalAppointment.DoctorId;
                 _medicalAppointment.IsFinished = medicalAppointment.IsFinished;
                 _medicalAppointment.IsCancelled = medicalAppointment.IsCancelled;
                 _medicalAppointment.CancellingComment = medicalAppointment.CancellingComment;
-                //MedicalAppointment r = _mapper.Map<MedicalAppointment>(medicalAppointment);
-                //var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(r);
                 var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(_medicalAppointment);
                 return await Task.FromResult((true, "medicalAppointment succesfully uptated"));
             }

@@ -9,8 +9,6 @@ namespace ClinicAPI.Repositories
 {
     public class DiagnosticTestRepository : IDiagnosticTestRepository
     {
-        //diagnosticTest
-        //REPOZYTORIUM nic nie interesuje. Zwraca dane lub null jeśli ich nie ma. Problemy z bazą, walidacja, to już robota serwisu
         private readonly ApplicationDBContext _context;
         public DiagnosticTestRepository(ApplicationDBContext context)
         {
@@ -42,7 +40,7 @@ namespace ClinicAPI.Repositories
             //W przeciwnym razie zostaną wycofane.
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+                                                    TransactionScopeAsyncFlowOption.Enabled);  
             List<DiagnosticTest> diagnosticTests = new List<DiagnosticTest>();
             try
             {
@@ -61,17 +59,16 @@ namespace ClinicAPI.Repositories
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
-            //List<DiagnosticTest> diagnosticTests = new List<DiagnosticTest>();
+                                                    TransactionScopeAsyncFlowOption.Enabled);  
             try
             {
                 var diagnosticTests = await _context.DiagnosticTest
                     .Where(dt => dt.MedicalAppointmentId == medicalAppointmentId)
                     .Join(
-                        _context.DiagnosticTestType, // Druga tabela do połączenia
-                        dt => dt.DiagnosticTestTypeId, // Klucz z DiagnosticTest
-                        dtt => dtt.Id, // Klucz z DiagnosticTestType
-                        (dt, dtt) => new ReturnDiagnosticTestDto // Projekcja wyniku
+                        _context.DiagnosticTestType, 
+                        dt => dt.DiagnosticTestTypeId, 
+                        dtt => dtt.Id,
+                        (dt, dtt) => new ReturnDiagnosticTestDto 
                         {
                             Id = dt.Id,
                             MedicalAppointmentId = dt.MedicalAppointmentId,
@@ -84,12 +81,6 @@ namespace ClinicAPI.Repositories
 
                     scope.Complete();
                     return diagnosticTests;
-
-                /*var diagnosticTests = await _context.DiagnosticTest
-                    .Where(ma => ma.MedicalAppoitmentId == medicalAppointmentId)
-                    .ToListAsync();
-                scope.Complete();
-                return diagnosticTests; */
 
             }
             catch (Exception) {
@@ -115,13 +106,10 @@ namespace ClinicAPI.Repositories
             if (_diagnosticTest == null)
             {
                 return null;
-                //brak testu
             }
             try
             {
-                //_diagnosticTest.date = diagnosticTest.date;
                 _diagnosticTest.Description = diagnosticTest.Description;
-                //_diagnosticTest.DoctorId = diagnosticTest.DoctorId;
                 _diagnosticTest.MedicalAppointmentId = diagnosticTest.MedicalAppointmentId;
 
                 _context.SaveChanges();
@@ -133,21 +121,6 @@ namespace ClinicAPI.Repositories
             }
             return _diagnosticTest;
         }
-
-        /*public async Task<bool> DeleteDiagnosticTest(int id)
-        {
-            var _diagnosticTest = await _context.DiagnosticTest.FindAsync(id);
-            if (_diagnosticTest == null) return false;
-
-            _context.DiagnosticTest.Remove(_diagnosticTest);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> IsLinkedToAppointment(int id)
-        {
-            return await _context.MedicalAppointment.AnyAsync(a => a.Id == testId); // Sprawdź powiązania
-        } */
-
+     
     }
 }

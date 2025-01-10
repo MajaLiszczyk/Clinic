@@ -19,7 +19,6 @@ namespace ClinicAPI.Controllers
             _medicalSpecialisationService = medicalSpecialisationService;
         }
 
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -29,7 +28,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -57,7 +55,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateDoctorDto request)
         {
@@ -65,45 +62,16 @@ namespace ClinicAPI.Controllers
             var _doctor = await _doctorService.CreateDoctorWithSpecialisations(request);
             if (_doctor.Confirmed)
                 return Ok(new { message = _doctor.Response });
-            else return BadRequest(_doctor.Response);
-
-            /*ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach(int id in medicalSpecialisationsIds)
-            {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
-            }
-            var result = await _doctorService.CreateDoctor(request, medicalSpecialisations);
-            if (result.Confirmed)
-                return Ok(new { message = result.Response, doctor = result.doctor });
-            else return BadRequest(result.Response); */
+            else return BadRequest(_doctor.Response);        
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateDoctorDto request)
         {
             var _doctor = await _doctorService.UpdateDoctorWithSpecialisations(request);
             if (_doctor.Confirmed)
                 return Ok(new { message = _doctor.Response });
-            else return BadRequest(_doctor.Response);
-
-            /*ICollection<int> medicalSpecialisationsIds = request.MedicalSpecialisationsIds;
-            ICollection<MedicalSpecialisation> medicalSpecialisations = new List<MedicalSpecialisation>();
-            MedicalSpecialisation specialisation;
-            foreach (int id in medicalSpecialisationsIds)
-            {
-                specialisation = await _medicalSpecialisationService.GetRawSpecialisation(id);
-                medicalSpecialisations.Add(specialisation);
-            }
-
-            var result = await _doctorService.UpdateDoctor(request, medicalSpecialisations);
-            if (result.Confirmed)
-                //return Ok(result.Response);
-                return Ok(new { message = result.Response });
-            else return BadRequest(result.Response);*/
+            else return BadRequest(_doctor.Response);        
         }
 
         [HttpPut("{id}")]
@@ -111,22 +79,17 @@ namespace ClinicAPI.Controllers
         {
             var result = await _doctorService.TransferToArchive(id);
             if (result.Confirmed)
-                //return Ok(result.Response); // z tego nie zrobi sie json  -a tego oczekuje angular
-                return Ok(new { message = result.Response }); //tu tworzy sie json
+                return Ok(new { message = result.Response }); 
             else return BadRequest(result.Response);
         }
 
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _doctorService.DeleteDoctor(id);
             if (result.Confirmed)
-                //return Ok(result.Response); // z tego nie zrobi sie json  -a tego oczekuje angular
-                return Ok(new { message = result.Response }); //tu tworzy sie json
+                return Ok(new { message = result.Response }); 
             else return BadRequest(result.Response);
         }
-
-
     }
 }

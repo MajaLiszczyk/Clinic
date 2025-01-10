@@ -35,7 +35,6 @@ namespace ClinicAPI.Services
             {
                 MedicalAppointmentId = laboratoryTest.MedicalAppointmentId,
                 date = laboratoryTest.date,
-                //laboratoryTestType = laboratoryTest.laboratoryTestType,
                 LaboratoryTestTypeId = laboratoryTest.LaboratoryTestTypeId,
                 LaboratoryWorkerId = laboratoryTest.LaboratoryWorkerId,
                 SupervisorId = laboratoryTest.SupervisorId,
@@ -49,7 +48,7 @@ namespace ClinicAPI.Services
             }
             else
             {
-                ReturnLaboratoryTestDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                ReturnLaboratoryTestDto? k = null;
                 return await Task.FromResult((false, "laboratoryTest was not created.", k));
 
             }

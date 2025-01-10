@@ -56,13 +56,11 @@ namespace ClinicAPI.Services
             DiagnosticTestType? p = await _diagnosticTestTypeRepository.CreateDiagnosticTestType(_testType);
             if (p != null)
             {
-                //ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
-                //return await Task.FromResult((true, "Patient successfully created.", r));
                 return await Task.FromResult((true, "Diagnostic test type successfully created.", p));
             }
             else
             {
-                DiagnosticTestType? k = null; //bez sensu tak obchodzić, da się inaczej?
+                DiagnosticTestType? k = null; 
                 return await Task.FromResult((false, "Diagnostic test type was not created.", k));
 
             }
@@ -74,7 +72,6 @@ namespace ClinicAPI.Services
             {
                 return (false, "Diagnostic Test type with this name already exists.");
             }
-            //DiagnosticTestType? _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
             var _testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(testType.Id);
 
             if (_testType == null)
@@ -84,7 +81,6 @@ namespace ClinicAPI.Services
             else
             { 
                 _testType.Name = testType.Name;
-                //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }

@@ -10,7 +10,6 @@ namespace ClinicAPI.Repositories
 {
     public class PatientRepository : IPatientRepository
     {
-        //REPOZYTORIUM nic nie interesuje. Zwraca dane lub null jeśli ich nie ma. Problemy z bazą, walidacja, to już robota serwisu
         private readonly ApplicationDBContext _context;
         public PatientRepository(ApplicationDBContext context)
         {
@@ -70,30 +69,26 @@ namespace ClinicAPI.Repositories
 
         public async Task<List<Patient>> GetAllPatients()
         {
-            //TransactionScope tworzy obszar transakcji. Gdy wywołasz scope.Complete(), wszystkie operacje w transakcji zostaną zatwierdzone.
-            //W przeciwnym razie zostaną wycofane.
-            using var scope = new TransactionScope(TransactionScopeOption.Required, 
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+                                                    TransactionScopeAsyncFlowOption.Enabled);
             List<Patient> patientList = new List<Patient>();
             try
             {
                 patientList = await _context.Patient.
-                    //Include(m => m.  .ReceivingUser). // Include powodują załadowanie danych powiązanych z innymi tabelami (tzw. eager loading).
-                    //Include(m => m.SendingUser).      //Bez tego domyślnie EF Core nie załaduje tych danych.
+
                     ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
                 scope.Complete();
             }
             catch (Exception) { }
             return patientList;
-            //return await Task.Run(() => arr);
         }
 
         public async Task<List<Patient>> GetAllAvailablePatients()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                    TransactionScopeAsyncFlowOption.Enabled);  //KOD Z ESERVICE
+                                                    TransactionScopeAsyncFlowOption.Enabled);  
             List<Patient> patientList = new List<Patient>();
             try
             {
@@ -103,7 +98,6 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception) { }
             return patientList;
-            //return await Task.Run(() => arr);
         }
 
         
@@ -126,22 +120,12 @@ namespace ClinicAPI.Repositories
 
         public async Task<Patient?> UpdatePatient(Patient patient)
         {
-            /*var _patient = _context.Patient.
-                FirstOrDefault(p => p.Id == patient.Id);
 
-            if (_patient == null)
-            {
-                return null;
-                //brak pacjenta
-            } */
             try
             {
                 _context.Patient.Update(patient);
                 await _context.SaveChangesAsync();
-                /*_patient.Surname = patient.Surname;
-                _patient.Name = patient.Name;
-                _patient.Pesel = patient.Pesel;            
-                _context.SaveChanges(); */
+
                
             }
             catch (Exception ex)

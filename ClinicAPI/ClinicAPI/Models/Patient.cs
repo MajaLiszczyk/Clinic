@@ -1,5 +1,4 @@
-﻿//using ClinicAPI.Models.ApplicationUsers;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace ClinicAPI.Models
@@ -8,15 +7,15 @@ namespace ClinicAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } //To samo Id co w ApplicationUserPatient, bo relacja 1:1
+        public int Id { get; set; }
         [ForeignKey("User")]
-        public string? UserId { get; set; } // Nullable klucz obcy do User
-        public User? User { get; set; } // Opcjonalna właściwość nawigacyjna do User
+        public string? UserId { get; set; } 
+        public User? User { get; set; }
         [Required]
         [MaxLength(11)]
         public string Pesel { get; set; }
         [Required]
-        [MaxLength(100)] //zostawić?
+        [MaxLength(100)] 
         public string Name { get; set; }
         [Required]
         [MaxLength(100)]

@@ -12,8 +12,6 @@ using System.Numerics;
 
 namespace ClinicAPI.Services
 {
-    //SERWIS powinien przygotować dane w postaci odpowiedniej dla kontrolera (dto) - mapuje encje odebrane z repo na dto. 
-    //Obsługuje sytuacje, w których wynik zapytania jest null, ale nie powinien jeszcze zwracać kodów HTTP (to rola kontrolera).
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository _patientRepository;
@@ -33,7 +31,6 @@ namespace ClinicAPI.Services
         }
 
 
-        // public Task<ReturnPatientDto?> GetPatientAsync(int id)
         public async Task<ReturnPatientDto?> GetPatient(int id)
         {
             var patient = await _patientRepository.GetPatientById(id);
@@ -62,15 +59,12 @@ namespace ClinicAPI.Services
         }
 
         
-        //public Task<(bool Confirmed, string Response, Patient? patient)> CreatePatientAsync(CreatePatientDto patient)
-        //TO DO : PRZY TWRZENIEU PESEL NIE MOZE SIE POWTORZYC W BAZIE
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 
         {
             if (_dbContext.Patient.Any(p => p.Pesel == patient.Pesel))
             {
-                ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
+                ReturnPatientDto? k = null;
                 return (false, "Patient with this PESEL already exists.", k);
-                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
             Patient _patient = new Patient
             {
@@ -86,7 +80,7 @@ namespace ClinicAPI.Services
             }
             else
             {
-                ReturnPatientDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                ReturnPatientDto? k = null; 
                 return await Task.FromResult((false, "Patient was not created.", k));
 
             }
@@ -94,15 +88,11 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> RegisterPatient(CreateRegisterPatientDto request)
         {
-            //if (_dbContext.Patient.Any(p => p.Pesel == request.Pesel))
             if (await _patientRepository.GetPatientWithTheSamePesel(request.Pesel))
             {
-                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Patient with this PESEL already exists.", null);
-                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
 
-            // Tworzenie użytkownika
             var user = new User
             {
                 UserName = request.Email,
@@ -117,15 +107,13 @@ namespace ClinicAPI.Services
                 return (false, string.Join("; ", errorMessages), null);
             }
 
-            // Przypisanie roli Patient do użytkownika
             var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Patient);
             if (!addToRoleResult.Succeeded)
             {
                 ReturnPatientDto? k = null;
-                return (false, "Failed to assign role to the user.", k);  //WYSTARCZY PEWNIE ZAMIAST K DAC BEZPOSREDNIO NULL?
+                return (false, "Failed to assign role to the user.", k);  
             }
 
-            // Tworzenie encji Patient i powiązanie z User
             var patient = new Patient
             {
                 UserId = user.Id,
@@ -142,9 +130,9 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((true, "Patient successfully registered.", r));
             }
 
-            else //DA SIĘ INACZEJ OBEJŚĆ?
+            else 
             {
-                ReturnPatientDto? k = null; //bez sensu tak obchodzić, da się inaczej?
+                ReturnPatientDto? k = null; 
                 return await Task.FromResult((false, "Patient was not created.", k));
 
             }
@@ -156,11 +144,8 @@ namespace ClinicAPI.Services
         {
             if (await _patientRepository.GetPatientWithTheSamePesel(patient.Pesel))
             {
-                //ReturnPatientDto? k = null; //BARDZO ZŁA PRAKTYKA??
                 return (false, "Patient with this PESEL already exists.");
-                //return BadRequest(new { Message = "Patient with this PESEL already exists" });
             }
-            //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
             var _patient = await _patientRepository.GetPatientById(patient.Id);   
 
             if (_patient == null) {
@@ -171,7 +156,6 @@ namespace ClinicAPI.Services
                 _patient.Surname = patient.Surname;
                 _patient.Pesel = patient.Pesel;
 
-                //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _patientRepository.UpdatePatient(_patient);
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }
@@ -179,7 +163,6 @@ namespace ClinicAPI.Services
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
-            //Patient? _patient = await _patientRepository.GetPatientById(patient.Id);   
             var _patient = await _patientRepository.GetPatientById(id);
 
             if (_patient == null)
@@ -192,7 +175,6 @@ namespace ClinicAPI.Services
                     return await Task.FromResult((false, "Can nor archive Patient with appointments."));
                 }
                 _patient.IsAvailable = false;
-                //Patient r = _mapper.Map<Patient>(patient);
                 var p = await _patientRepository.UpdatePatient(_patient);
                 return await Task.FromResult((true, "Patient succesfully uptated"));
             }

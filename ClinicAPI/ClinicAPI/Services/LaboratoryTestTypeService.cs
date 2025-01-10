@@ -44,7 +44,7 @@ namespace ClinicAPI.Services
             }
             else
             {
-                LaboratoryTestType? k = null; //bez sensu tak obchodzić, da się inaczej?
+                LaboratoryTestType? k = null;
                 return await Task.FromResult((false, "Laboratory test type was not created.", k));
 
             }

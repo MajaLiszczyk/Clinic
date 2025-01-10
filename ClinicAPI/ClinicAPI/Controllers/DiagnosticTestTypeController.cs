@@ -21,19 +21,16 @@ namespace ClinicAPI.Controllers
         [Authorize] 
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-
             DiagnosticTestType? testType = await _testService.GetDiagnosticTestType(id);
             if (testType != null)
                 return Ok(testType);
             return NotFound();
-
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Get()
         {
-
             List<DiagnosticTestType> testTypes = await _testService.GetAllDiagnosticTestTypes();
             if (testTypes != null)
                 return Ok(testTypes);
@@ -43,7 +40,6 @@ namespace ClinicAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAvailable()
         {
-
             List<DiagnosticTestType> testTypes = await _testService.GetAllAvailableDiagnosticTestTypes();
             if (testTypes != null)
                 return Ok(testTypes);
