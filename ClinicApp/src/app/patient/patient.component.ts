@@ -162,7 +162,7 @@ export class PatientComponent {
       });
   }
 
-  logout(){
+  /*logout(){
     this.authorizationService.logout();
-  }
+  } */
 }

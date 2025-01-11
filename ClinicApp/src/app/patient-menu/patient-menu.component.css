@@ -1,0 +1,19 @@
+.tile {
+    height: 12rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    border-radius: 8px;
+    transition: transform .3s ease-out;
+}
+
+.tile:hover {
+    transform: scale(1.05); /* translate(0, -10px) */
+}
+
+.line-break {
+    width: 100%;
+}

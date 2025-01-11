@@ -57,7 +57,7 @@ export class LoginComponent {
             this.authorizationService.setToken(result.token);
             //this.res = result; // Zwrócony obiekt przypisany do zmiennej
             if (result.role === 'Patient') {
-              this.router.navigate(['/patient', id], { queryParams: { isRegistrantMode: false } });
+              this.router.navigate(['/patient-menu', id], { queryParams: { isRegistrantMode: false } });
             } else if (result.role === 'Doctor') {
               this.router.navigate(['/doctor-appointments', id]);
             } else if (result.role === 'Registrant') {

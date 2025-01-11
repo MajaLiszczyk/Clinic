@@ -1,0 +1,18 @@
+<div class="container">
+    <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn btn-secondary my-4"
+        (click)="logout()">Logout</button>
+    <h1 class="my-4">Patient menu</h1>
+    <div class="row mt-4">
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6 my-4">
+            <div [routerLink]="['/patient', patient.id]" [queryParams]="{isRegistrantMode: false }" class="tile btn btn-primary" type="button">
+                <h3>Medical appointments</h3>    
+            </div>   
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6 my-4">   
+            <div [routerLink]="['/patient' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="tile btn btn-primary" type="button">   
+                <h3>Laboratory appointments</h3>   
+            </div>    
+        </div>  
+    </div>
+</div>

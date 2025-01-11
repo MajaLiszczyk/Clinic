@@ -33,6 +33,7 @@ import { RegistrantLaboratoryWorkersComponent } from './registrant-laboratory-wo
 import { RegistrantLaboratorySupervisorsComponent } from './registrant-laboratory-supervisors/registrant-laboratory-supervisors.component';
 import { RegistrantLaboratoryTestTypesComponent } from './registrant-laboratory-test-types/registrant-laboratory-test-types.component';
 import { RegistrantLaboratoryAppointmentsComponent } from './registrant-laboratory-appointments/registrant-laboratory-appointments.component';
+import { PatientMenuComponent } from './patient-menu/patient-menu.component';
 
 import { LoginComponent } from './log-in/log-in.component';
 import { AuthorizationGuard } from './authorization/authorization-guard';
@@ -59,6 +60,8 @@ export const routes: Routes = [
     //{ path: 'make-an-appointment', component: MakeAnAppointmentComponent, canActivate: [AuthorizationGuard] },
     //{ path: 'patient/:patientId', component: PatientComponent},
     { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
+    { path: 'patient-menu/:patientId', component: PatientMenuComponent, canActivate: [AuthorizationGuard] },
+
     { path: 'registrant', component: RegistrantComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-patients', component: RegistrantPatientsComponent, canActivate: [AuthorizationGuard] },
     //{ path: 'registrant-specialisations-old', component: RegistrantSpecialisationsOldComponent},
