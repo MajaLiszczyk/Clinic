@@ -43,7 +43,7 @@ namespace ClinicAPI.Services
             return testTypes;
         }
 
-        public async Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(DiagnosticTestType testType)
+        public async Task<(bool Confirmed, string Response, DiagnosticTestType? patient)> CreateDiagnosticTestType(CreateDiagnosticTestTypeDto testType)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -58,6 +58,7 @@ namespace ClinicAPI.Services
                 DiagnosticTestType _testType = new DiagnosticTestType
                 {
                     Name = testType.Name,
+                    IsAvailable = true
                 };
                 DiagnosticTestType? p = await _diagnosticTestTypeRepository.CreateDiagnosticTestType(_testType);
                 if (p == null)
@@ -83,7 +84,7 @@ namespace ClinicAPI.Services
 
         }
         
-        public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(DiagnosticTestType testType)
+        public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(UpdateDiagnosticTestTypeDto testType)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },

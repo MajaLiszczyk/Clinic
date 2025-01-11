@@ -5,13 +5,14 @@ namespace ClinicAPI.Models
 {
     public enum LaboratoryAppointmentState
     {
-        Commissioned = 0, //lub NotAssigned , Reserved
-        ToBeCompleted = 1,
-        WaitingForSupervisor = 2,
-        ToBeFixed = 3,
-        AllAccepted = 4, //ready for patient
-        Finished = 5, //wyslane dopacjenta
-        Cancelled = 6
+        Empty = 0,
+        Reserved = 1, //lub NotAssigned , Reserved
+        ToBeCompleted = 2,
+        WaitingForSupervisor = 3,
+        ToBeFixed = 4,
+        AllAccepted = 5, //ready for patient
+        Finished = 6, //wyslane dopacjenta
+        Cancelled = 7
     }
 
     public class LaboratoryAppointment

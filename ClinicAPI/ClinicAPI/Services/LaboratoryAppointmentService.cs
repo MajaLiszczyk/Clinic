@@ -42,7 +42,7 @@ namespace ClinicAPI.Services
                 {
                     LaboratoryWorkerId = request.LaboratoryWorkerId,
                     SupervisorId = request.SupervisorId,
-                    State = LaboratoryAppointmentState.Commissioned,
+                    State = LaboratoryAppointmentState.Empty,
                     DateTime = new DateTime(request.Date.Year, request.Date.Month, request.Date.Day, request.Time.Hour, request.Time.Minute, 0),
                     CancelComment = ""
                 };

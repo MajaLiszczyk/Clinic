@@ -49,7 +49,7 @@ namespace ClinicAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]
-        public async Task<IActionResult> Create(DiagnosticTestType testType)
+        public async Task<IActionResult> Create(CreateDiagnosticTestTypeDto testType)
         {
             var _testType = await _testService.CreateDiagnosticTestType(testType);
             if (_testType.Confirmed)
@@ -59,7 +59,7 @@ namespace ClinicAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = UserRole.Registrant)]
-        public async Task<IActionResult> Update([FromBody] DiagnosticTestType testType)
+        public async Task<IActionResult> Update([FromBody] UpdateDiagnosticTestTypeDto testType)
         {
             var _testType = await _testService.UpdateDiagnosticTestType(testType);
             if (_testType.Confirmed)

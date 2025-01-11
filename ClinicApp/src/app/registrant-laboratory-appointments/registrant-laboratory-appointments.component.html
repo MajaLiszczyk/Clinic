@@ -1,0 +1,158 @@
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+
+<div class=" col-12 mb-4 text-center">
+    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary">Add new laboratory
+        appointment</button>
+</div>
+
+<div>
+    <h3 class="my-4" *ngIf="isAddingMode">Add new laboratory appointment</h3>
+    <form [formGroup]="laboratoryAppointmentForm" *ngIf="isAddingMode" class="w-50 mx-auto">
+        <div class="formGroup mb-3">
+            <label class="form-label" for="doctor">Laboratory Worker</label>
+            <select id="laboratoryWorker" class="form-control" formControlName="laboratoryWorkerId">
+                <option *ngFor="let laboratoryWorker of laboratoryWorkers" [value]="laboratoryWorker.id">
+                    {{ laboratoryWorker.name }}
+                    {{laboratoryWorker.surname}}
+                </option>
+            </select>
+            <div *ngIf="laboratoryAppointmentForm.get('laboratoryWorkerId')?.invalid && laboratoryAppointmentForm.get('laboratoryWorkerId')?.touched"
+                class="invalid-feedback">
+                <span *ngIf="laboratoryAppointmentForm.get('laboratoryWorkerId')?.errors?.['required']">laboratory Worker is required</span>
+            </div>
+        </div>
+
+        <div class="formGroup mb-3">
+            <label class="form-label" for="doctor">Supervisor</label>
+            <select id="supervisor" class="form-control" formControlName="supervisorId">
+                <option *ngFor="let supervisor of laboratorySupervisors" [value]="supervisor.id">
+                    {{ supervisor.name }}
+                    {{supervisor.surname}}
+                </option>
+            </select>
+            <div *ngIf="laboratoryAppointmentForm.get('supervisorId')?.invalid && laboratoryAppointmentForm.get('supervisorId')?.touched"
+                class="invalid-feedback">
+                <span *ngIf="laboratoryAppointmentForm.get('supervisorId')?.errors?.['supervisorId']">Supervisor is required</span>
+            </div>
+        </div>
+
+        <div class="formGroup mb-3">
+            <label class="d-block form-label">Date</label>
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="input-group me-2">
+                    <input formControlName="date" ngbDatepicker #formMedicalAppointmentDatePicker="ngbDatepicker"
+                        class="form-control" aria-label="date"
+                        [class.is-invalid]="laboratoryAppointmentForm.get('date')?.invalid && (laboratoryAppointmentForm.get('date')?.touched || laboratoryAppointmentForm.get('date')?.dirty)"
+                        [readOnly]="true" placeholder="YYYY-MM-DD">
+                    <!-- [class.is-invalid]="formMedicalAppointmentDate.invalid" -->
+                    <a class="btn btn-outline-secondary pi pi-calendar"
+                        (click)="formMedicalAppointmentDatePicker.toggle()" type="button">Select date</a>
+                </div>
+                <ngb-timepicker formControlName="time" [spinners]="true" [seconds]="false" [hourStep]="1"
+                    [minuteStep]="1"
+                    [class.is-invalid]="laboratoryAppointmentForm.get('time')?.invalid && (laboratoryAppointmentForm.get('time')?.touched || laboratoryAppointmentForm.get('time')?.dirty)">
+                </ngb-timepicker>
+            </div>
+            <!-- Komunikaty o błędach dla pola date -->
+            <div *ngIf="laboratoryAppointmentForm.get('date')?.errors?.['required'] && laboratoryAppointmentForm.get('date')?.touched"
+                class="invalid-feedback">
+                <span>Date is required</span>
+            </div>
+            <div *ngIf="laboratoryAppointmentForm.get('date')?.errors?.['notFutureOrToday'] && laboratoryAppointmentForm.get('date')?.touched"
+                class="invalid-feedback">
+                <span>Selected date must be today or in the future</span>
+            </div>
+
+            <!-- Komunikaty o błędach dla pola time -->
+            <div *ngIf="laboratoryAppointmentForm.get('time')?.errors?.['required'] && laboratoryAppointmentForm.get('time')?.touched"
+                class="invalid-feedback">
+                <span>Time is required</span>
+            </div>
+
+            <!-- Komunikat o błędzie grupowym (date i time są wymagane) -->
+            <div *ngIf="laboratoryAppointmentForm.errors?.['dateTimeRequired'] && (laboratoryAppointmentForm.touched || laboratoryAppointmentForm.dirty)"
+                class="invalid-feedback">
+                <span>Both date and time are required.</span>
+            </div>
+        </div>
+
+        <!-- <div class="invalid-feedback">
+            <span *ngIf="formMedicalAppointmentDate.get('dateTime')?.errors?.['required']">Required</span>
+        </div> -->
+        <div>
+            <div class="d-flex justify-content-center mb-5 mt-5">
+                <button type="button" class="btn btn-primary float-right mx-2"
+                    (click)="addLaboratoryAppointment()">Save</button>
+                <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<!-- GET ALL -->
+
+
+
+
+
+
+<div class=" col-12 mt-5 mb-5 text-center">
+    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-primary">Show all
+        appointments</button>
+
+</div>
+<h3 class="my-4" *ngIf="isShowingAllAppointmentsMode">All appointments</h3>
+
+<div *ngIf="isShowingAllAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Laboratory appointment Id
+                </th>
+                <th>
+                    Laboratory worker Id
+                </th>
+                <th>
+                    Supervisor Id
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr *ngFor="let laboratoryAppointment of laboratoryAppointments">
+                <td>
+                    {{laboratoryAppointment.id}}
+                </td>
+                <td>
+                    {{laboratoryAppointment.laboratoryWorkerId}}
+                </td>
+                <td>
+                    {{laboratoryAppointment.supervisorId}}
+                </td>
+                <td>
+                    {{laboratoryAppointment.dateTime}}
+                </td>
+                <td class="text-end">
+                    <!-- <button type="button" class="btn  btn-success float-right" (click)="edit(medicalAppointment)">Edit</button> -->
+                    <button type="button" [disabled]="laboratoryAppointment.state !== laboratoryAppointmentState.Empty"
+                        class="btn btn-outline-danger mx-2" (click)="delete(laboratoryAppointment.id)">Delete</button>
+                </td>
+            </tr>
+            <tr *ngIf="laboratoryAppointments.length === 0">
+                <td colspan="8">No laboratory appointments</td>
+            </tr>
+        </tbody>
+    </table>
+    <button (click)="closeAllAppointments()" class="btn btn-secondary">Close</button>
+</div>

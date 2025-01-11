@@ -29,6 +29,11 @@ import { RegistrantDoctorsComponent } from './registrant-doctors/registrant-doct
 import { RegistrantAppointmentsComponent } from './registrant-appointments/registrant-appointments.component';
 import { DoctorAppointmentsComponent } from './doctor-appointments/doctor-appointments.component';
 import { AppointmentDetailsComponent } from './appointment-details/appointment-details.component';
+import { RegistrantLaboratoryWorkersComponent } from './registrant-laboratory-workers/registrant-laboratory-workers.component';
+import { RegistrantLaboratorySupervisorsComponent } from './registrant-laboratory-supervisors/registrant-laboratory-supervisors.component';
+import { RegistrantLaboratoryTestTypesComponent } from './registrant-laboratory-test-types/registrant-laboratory-test-types.component';
+import { RegistrantLaboratoryAppointmentsComponent } from './registrant-laboratory-appointments/registrant-laboratory-appointments.component';
+
 import { LoginComponent } from './log-in/log-in.component';
 import { AuthorizationGuard } from './authorization/authorization-guard';
 
@@ -60,7 +65,14 @@ export const routes: Routes = [
     { path: 'registrant-specialisations', component: RegistrantSpecialisationsComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-diagnostic-test-types', component: RegistrantDiagnosticTestTypesComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-doctors', component: RegistrantDoctorsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-laboratory-workers', component: RegistrantLaboratoryWorkersComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-laboratory-supervisors', component: RegistrantLaboratorySupervisorsComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-appointments', component: RegistrantAppointmentsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-laboratory-test-types', component: RegistrantLaboratoryTestTypesComponent, canActivate: [AuthorizationGuard] },
+    { path: 'registrant-laboratory-appointments', component: RegistrantLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
+
+    
+    
     //{ path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent, },

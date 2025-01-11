@@ -1,0 +1,65 @@
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+<h1 class="my-4">Laboratory Test Types</h1>
+
+
+
+<div>
+    <h3 class="my-4" *ngIf="isAddingMode">Add new diagnostic test type</h3>
+
+    <h3 class="my-4" *ngIf="isEditableMode">Edit diagnostic test type</h3>
+
+    <form class="w-25 mx-auto" [formGroup]="laboratoryTestTypesForm" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup mb-3">
+            <label class="form-label">Name</label>
+                <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                    [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
+                <div class="invalid-feedback">
+                    <span *ngIf="formName?.errors?.['required']">Required</span>
+                </div>
+        </div>
+
+        <div class="d-flex justify-content-center mb-5 mt-5">
+            <button *ngIf="isAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="addLaboratoryTestType()">Insert</button>
+            <button *ngIf="isEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="update()">Save</button>
+            <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="row mt-4">
+    <div class="col text-center" *ngIf="laboratoryTestTypes.length === 0">
+        <h3>No diagnostic test types!</h3>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4">
+        <button [disabled]="isEditableMode || isAddingMode" class="tile action-tile btn btn-primary"
+            (click)="addNewLaboratoryTestType()">
+            <div class="row">
+                <span class="col-12 plus-icon">+</span>
+                <p class="col-12">Add new laboratory test type</p>
+            </div>
+        </button>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-4" *ngFor="let laboratoryTestType of laboratoryTestTypes">
+        <div class="tile" *ngIf="laboratoryTestType.isAvailable == true">
+            <h3 class="my-4">{{laboratoryTestType.name}}</h3>
+            <div class="line-break"></div>
+            <div class="mb-4">
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-primary mx-2"
+                    (click)="edit(laboratoryTestType)">Edit</button>
+                <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn btn-danger mx-2"
+                    (click)="delete(laboratoryTestType.id)">Delete</button>
+            </div>
+        </div>
+        <div class="tile" style="color: grey;" *ngIf="laboratoryTestType.isAvailable == false">
+            <h3 class="my-4">{{laboratoryTestType.name}}</h3>
+            <div class="line-break"></div>
+            <div class="mb-4">
+                Archived
+            </div>
+        </div>
+    </div>
+</div>

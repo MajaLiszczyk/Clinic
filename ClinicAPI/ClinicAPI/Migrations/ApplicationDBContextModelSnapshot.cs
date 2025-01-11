@@ -146,6 +146,9 @@ namespace ClinicAPI.Migrations
                     b.Property<string>("CancelComment")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("LaboratoryWorkerId")
                         .HasColumnType("integer");
 
@@ -154,9 +157,6 @@ namespace ClinicAPI.Migrations
 
                     b.Property<int>("SupervisorId")
                         .HasColumnType("integer");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -170,6 +170,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LaboratorySupervisorNumber")
                         .IsRequired()
@@ -271,6 +274,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LaboratoryWorkerNumber")
                         .IsRequired()

@@ -32,6 +32,19 @@ namespace ClinicAPI.Repositories
             return laboratorySupervisor;
         }
 
+
+        public async Task<bool> GetLaboratorySupervisorWithTheSameNumber(string number)
+        {
+            if (_context.LaboratorySupervisor.Any(p => p.LaboratorySupervisorNumber == number))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+
+
         public async Task<List<LaboratorySupervisor>> GetAllLaboratorySupervisors()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -48,6 +61,24 @@ namespace ClinicAPI.Repositories
             return laboratorySupervisors;
         }
 
+        public async Task<List<LaboratorySupervisor>> GetAllAvailableLAboratorySupervisors()
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            List<LaboratorySupervisor> laboratorySupervisors = new List<LaboratorySupervisor>();
+            try
+            {
+                laboratorySupervisors = await _context.LaboratorySupervisor.Where(r => r.IsAvailable == true)
+                    .ToListAsync();
+                scope.Complete();
+            }
+            catch (Exception) { }
+            return laboratorySupervisors;
+        }
+        
+
+
         public async Task<LaboratorySupervisor> CreateLaboratorySupervisor(LaboratorySupervisor laboratorySupervisor)
         {
             await _context.AddAsync(laboratorySupervisor);
@@ -57,23 +88,9 @@ namespace ClinicAPI.Repositories
 
         public async Task<LaboratorySupervisor?> UpdateLaboratorySupervisor(LaboratorySupervisor laboratorySupervisor)
         {
-            var _laboratorySupervisor = _context.LaboratorySupervisor.
-                FirstOrDefault(p => p.Id == laboratorySupervisor.Id);
-
-            if (_laboratorySupervisor == null)
-            {
-                return null;
-            }
-            try
-            {
-                _laboratorySupervisor.Surname = laboratorySupervisor.Surname;
-                _laboratorySupervisor.Name = laboratorySupervisor.Name;
-
-                _context.SaveChanges();
-
-            }
-            catch (Exception ex) { }
-            return _laboratorySupervisor;
+            _context.LaboratorySupervisor.Update(laboratorySupervisor);
+            await _context.SaveChangesAsync();
+            return laboratorySupervisor;          
         }
 
         public async Task<bool> DeleteLaboratorySupervisor(int id)
@@ -84,6 +101,15 @@ namespace ClinicAPI.Repositories
             _context.LaboratorySupervisor.Remove(_laboratorySupervisor);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<bool> CanArchiveLaboratorySupervisor(int laboratorySupervisorId)
+        {
+            // Sprawdzenie, czy laboratorySupervisor ma jakąkolwiek wizytę, która nie jest Cancelled ani Finished
+            return !await _context.LaboratoryAppointment.AnyAsync(ma =>
+                ma.SupervisorId == laboratorySupervisorId &&
+                (ma.State != LaboratoryAppointmentState.Cancelled &&
+                ma.State != LaboratoryAppointmentState.Finished));
         }
 
     }

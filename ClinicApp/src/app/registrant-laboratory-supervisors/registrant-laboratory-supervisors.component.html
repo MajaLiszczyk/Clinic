@@ -1,0 +1,160 @@
+<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+
+<!-- <div *ngIf="isFormVisible" class="w-100"> -->
+
+<div class="col mb-4 d-flex justify-content-between my-4">
+    <h1>Laboratory supervisors</h1> 
+    <button [disabled]="isEditableMode || isAddingMode" (click)="addNewLaboratoryWorker()"
+        class="btn btn-outline-primary fs-5">
+        + Add new laboratory supervisor</button>
+</div>
+
+<div>
+    <h3 class="my-4" *ngIf="isAddingMode">Add new laboratory supervisor</h3>
+    <h3 class="my-4" *ngIf="isEditableMode">Edit  laboratory supervisor</h3>
+    <form class="w-25 mx-auto" [formGroup]="laboratoryWorkerForm" *ngIf="isAddingMode || isEditableMode">
+        <div class="formGroup mb-3">
+            <label class="form-label">Name</label>
+            <!-- <div class="input-group"> -->
+            <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
+                [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formName?.errors?.['required']">Required</span>
+                <span *ngIf="formName?.errors?.['pattern']">Only letters</span>
+            </div>
+            <!-- </div> -->
+        </div>
+
+        <div class="formGroup mb-3">
+            <label class="form-label">Surname</label>
+            <input formControlName="surname" type="string" class="form-control" aria-label="surname"
+                [class.is-invalid]="formSurname.invalid && (formSurname.touched || formSurname.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formSurname?.errors?.['required']">Required</span>
+                <span *ngIf="formSurname?.errors?.['pattern']">Only letters</span>
+            </div>
+        </div>
+
+        <div class="formGroup mb-3">
+            <label class="form-label">Laboratory supervisor number</label>
+            <input formControlName="supervisorNumber" type="string" class="form-control"
+                aria-label="supervisorNumber"
+                [class.is-invalid]="formSupervisorNumber.invalid && (formSupervisorNumber.touched || formSupervisorNumber.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formSupervisorNumber?.errors?.['required']">Required</span>
+                <span *ngIf="formSupervisorNumber?.errors?.['pattern']"> Laboratory supervisor number must consist of 5
+                    digits</span>
+            </div>
+        </div>
+
+        <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
+            <label class="form-label">E-mail address</label>
+            <input formControlName="email" type="string" class="form-control" aria-label="email"
+                [class.is-invalid]="formEmail.invalid && (formEmail.touched || formEmail.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formEmail?.errors?.['required']">Required</span>
+                <span *ngIf="formEmail?.errors?.['maxlength']">Max length: 256</span>
+                <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
+            </div>
+        </div>
+
+        <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
+            <label class="form-label">Password</label>
+            <input formControlName="password" type="string" class="form-control" aria-label="password"
+                [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+            <div class="invalid-feedback">
+                <span *ngIf="formPassword?.errors?.['required']">Required</span>
+                <div *ngIf="formPassword?.errors?.['hasNumber']">
+                    {{ formPassword?.errors?.['hasNumber'] }}
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasUppercase']">
+                    {{ formPassword?.errors?.['hasUppercase'] }}
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasLowercase']">
+                    {{ formPassword?.errors?.['hasLowercase'] }}
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
+                    {{ formPassword.errors?.['hasSpecialCharacter'] }}
+                </div>
+                <div *ngIf="formPassword?.errors?.['isValidLength']">
+                    {{ formPassword.errors?.['isValidLength'] }}
+                </div>
+                <!-- <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
+                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span> -->
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-center mb-5 mt-5">
+            <button *ngIf="isAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="createLaboratoryWorkerAccount()">Save</button>
+            <button *ngIf="isEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
+                (click)="update()">Save</button>
+            <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Surname
+                </th>
+                <th>
+                    Supervisor number
+                </th>
+                <th>
+                    Archived
+                </th>
+            </tr>
+
+        </thead>
+        <!-- <tr *ngFor="let doctor of doctors"> -->
+        <tbody>
+            <tr *ngFor="let laboratoryWorker of laboratoryWorkers">
+                <td>
+                    {{laboratoryWorker.id}}
+                </td>
+                <td>
+                    {{laboratoryWorker.name}}
+                </td>
+                <td>
+                    {{laboratoryWorker.surname}}
+                </td>
+                <td>
+                    {{laboratoryWorker.supervisorNumber}}
+                </td>
+                <td>
+                    {{!laboratoryWorker.isAvailable}}
+                </td>
+                <td class="text-end">
+                    <button [disabled]="isAddingMode || isEditableMode || !laboratoryWorker.isAvailable" type="button"
+                        class="btn btn-outline-primary ms-4 me-2" (click)="edit(laboratoryWorker)">Edit</button>
+
+                    <button [disabled]="isAddingMode || isEditableMode || !laboratoryWorker.isAvailable" type="button"
+                        class="btn btn-outline-danger mx-2" (click)="archive(laboratoryWorker.id)">Archive</button>
+
+                    <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
+                    <a [routerLink]="['/doctor-appointments', laboratoryWorker.id]"
+                        [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
+                        class="btn btn-primary ms-2 me-4">Supervisor's Appointments</a>
+                </td>
+            </tr>
+            <tr *ngIf="laboratoryWorkers.length === 0">
+                <td colspan="8">No supervisor</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!--
+</div>-->

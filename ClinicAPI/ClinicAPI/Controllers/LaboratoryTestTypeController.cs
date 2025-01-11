@@ -3,6 +3,8 @@ using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
+using ClinicAPI.Dtos;
+
 namespace ClinicAPI.Controllers
 {
     [ApiController]
@@ -36,7 +38,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(LaboratoryTestType testType)
+        public async Task<IActionResult> Create(CreateLaboratoryTestTypeDto testType)
         {
             var _testType = await _testService.CreateLaboratoryTestType(testType);
             if (_testType.Confirmed)
@@ -45,7 +47,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] LaboratoryTestType testType)
+        public async Task<IActionResult> Update([FromBody] UpdateLaboratoryTestTypeDto testType)
         {
             var _testType = await _testService.UpdateLaboratoryTestType(testType);
             if (_testType.Confirmed)

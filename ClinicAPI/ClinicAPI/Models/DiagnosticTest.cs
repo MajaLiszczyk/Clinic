@@ -11,7 +11,20 @@ namespace ClinicAPI.Models
         [Required]
         public string Name { get; set; }
         public bool IsAvailable { get; set; } = true;
+    }
 
+    public class CreateDiagnosticTestTypeDto
+    {
+        [Required]
+        public string Name { get; set; }
+    }
+
+    public class UpdateDiagnosticTestTypeDto
+    {
+        [Required]
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public bool? IsAvailable { get; set; }
     }
 
     public class DiagnosticTest 

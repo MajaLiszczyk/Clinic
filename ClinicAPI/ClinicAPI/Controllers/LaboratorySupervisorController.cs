@@ -36,6 +36,15 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAvailable()
+        {
+            var result = await _laboratorySupervisorService.GetAllAvailableLaboratorySupervisors();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratorySupervisorDto request)
@@ -52,7 +61,16 @@ namespace ClinicAPI.Controllers
         {
             var result = await _laboratorySupervisorService.UpdateLaboratorySupervisor(request);
             if (result.Confirmed)
-                return Ok(result.Response);
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> TransferToArchive([FromRoute] int id)
+        {
+            var result = await _laboratorySupervisorService.TransferToArchive(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
 

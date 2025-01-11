@@ -1,11 +1,12 @@
 ﻿using ClinicAPI.DB;
 using ClinicAPI.Models;
+using ClinicAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 
 namespace ClinicAPI.Repositories
 {
-    public class LaboratoryTestTypeRepository
+    public class LaboratoryTestTypeRepository : ILaboratoryTestTypeRepository
     {
         private readonly ApplicationDBContext _context;
         public LaboratoryTestTypeRepository(ApplicationDBContext context)
@@ -50,7 +51,16 @@ namespace ClinicAPI.Repositories
             return testTypes;
 
         }
-        
+
+        public async Task<bool> IsLaboratoryTestTypeWithTheSameName(string name)
+        {
+            if (_context.LaboratoryTestType.Any(p => p.Name == name))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<LaboratoryTestType> CreateLaboratoryTestType(LaboratoryTestType type)
         {
             await _context.AddAsync(type);
@@ -60,24 +70,9 @@ namespace ClinicAPI.Repositories
         
         public async Task<LaboratoryTestType?> UpdateLaboratoryTestType(LaboratoryTestType testType)
         {
-            var _testType = _context.LaboratoryTestType.
-              FirstOrDefault(p => p.Id == testType.Id);
-
-            if (_testType == null)
-            {
-                return null;
-            }
-            try
-            {
-                _testType.Name = testType.Name;
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                //wyjatek
-            }
-            return _testType;
-
+            _context.LaboratoryTestType.Update(testType);
+            await _context.SaveChangesAsync();
+            return testType;
         }
         
         public async Task<bool> DeleteLaboratoryTestType(int id)

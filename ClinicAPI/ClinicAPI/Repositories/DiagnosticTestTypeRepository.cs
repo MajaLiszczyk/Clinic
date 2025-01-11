@@ -83,15 +83,8 @@ namespace ClinicAPI.Repositories
         
         public async Task<DiagnosticTestType?> UpdateDiagnosticTestType(DiagnosticTestType testType)
         {
-            try
-            {
-                _context.DiagnosticTestType.Update(testType);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An error occurred while updating the medical specialisation.", ex);
-            }
+            _context.DiagnosticTestType.Update(testType);
+            await _context.SaveChangesAsync();           
             return testType;
         }
         

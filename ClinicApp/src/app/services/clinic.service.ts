@@ -11,6 +11,10 @@ import { DiagnosticTest } from '../model/diagnostic-test';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
 import { UserLoginRequest } from '../model/user-login-request';
+import { LaboratoryWorker } from '../model/laboratory-worker';
+import { LaboratorySupervisor } from '../model/laboratory-supervisor';
+import { LaboratoryTestType } from '../model/laboratory-test-type';
+import { LaboratoryAppointment } from '../model/laboratory-appointment';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -28,6 +32,17 @@ export class ClinicService {
   readonly DiagnosticTesttUrl = "https://localhost:5001/api/DiagnosticTest";
   readonly LogInUrl = "https://localhost:5001/api/authorization/login";
   readonly RegistrationUrl = "https://localhost:5001/api/Registration";
+  readonly LaboratoryWorkerUrl = "https://localhost:5001/api/LaboratoryWorker";
+  readonly LaboratorySupervisorUrl = "https://localhost:5001/api/LaboratorySupervisor";
+  readonly LaboratoryTestTypeUrl = "https://localhost:5001/api/LaboratoryTestType";
+  readonly LaboratoryAppointmentUrl = "https://localhost:5001/api/LaboratoryAppointment";
+
+  
+
+  
+
+
+  
   
 
 
@@ -65,12 +80,95 @@ export class ClinicService {
     return this.http.put<Patient>(this.PatientUrl + "/update", patient)
   }
 
-  /*deletePatient(patientId: number): Observable<string> {
-    return this.http.delete<string>(this.PatientUrl + "/Delete/" + patientId)
-  } */
-
   deletePatient(patientId: number): Observable<string> {
     const url = `${this.PatientUrl}/TransferToArchive/${patientId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
+  }
+
+  //LABORATORY TEST TYPE
+
+  getAllLaboratoryTestTypes(): Observable<LaboratoryTestType[]> {
+    return this.http.get<LaboratoryTestType[]>(this.LaboratoryTestTypeUrl + "/Get");
+  }
+
+  getAllAvailableLaboratoryTestTypes(): Observable<LaboratoryTestType[]> {
+    return this.http.get<LaboratoryTestType[]>(this.LaboratoryTestTypeUrl + "/GetAvailable");
+  }
+
+  updateLAboratoryTestType(laboratoryTestType: any): Observable<LaboratoryTestType> { 
+    return this.http.put<LaboratoryTestType>(this.LaboratoryTestTypeUrl + "/update", laboratoryTestType);
+  }
+
+  transferToArchiveLaboratoryTestType(testTypeId: number): Observable<string> {
+    const url = `${this.LaboratoryTestTypeUrl}/TransferToArchive/${testTypeId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
+  }
+
+  addLaboratoryTestType(laboratoryTestType: any): Observable<LaboratoryTestType> { //może w sumie byc DiagnosticTestType
+    return this.http.post<LaboratoryTestType>(this.LaboratoryTestTypeUrl + "/create", laboratoryTestType) // Bez obiektu opakowującego
+  }
+
+    //LABORATORY APPOINTMENT
+
+    getAllLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
+      return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
+    }
+    
+    addLaboratoryAppointment(appointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
+      return this.http.post<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/create", appointment);
+    }
+  
+    editLaboratoryAppointment(laboratoryAppointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
+      return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/update", laboratoryAppointment);
+    }
+
+    deleteLaboratoryAppointment(laboratoryAppointmentId: number): Observable<string> {
+      return this.http.delete<string>(this.LaboratoryAppointmentUrl + "/Delete/" + laboratoryAppointmentId);
+    }
+    
+
+
+  //LABORATORY WORKER
+  getAllLaboratoryWorkers(): Observable<LaboratoryWorker[]> {
+    return this.http.get<LaboratoryWorker[]>(this.LaboratoryWorkerUrl + "/Get");
+  }
+
+  getAllAvailableLaboratoryWorkers(): Observable<LaboratoryWorker[]> {
+    return this.http.get<LaboratoryWorker[]>(this.LaboratoryWorkerUrl + "/GetAvailable");
+  }
+  
+  createLaboratoryWorkerAccount(laboratoryWorker: any): Observable<LaboratoryWorker>{
+    return this.http.post<LaboratoryWorker>(this.RegistrationUrl + "/RegisterLaboratoryWorker", laboratoryWorker)
+  }
+
+  updateLaboratoryWorker(laboratoryWorker: any): Observable<LaboratoryWorker>{
+    return this.http.put<LaboratoryWorker>(this.LaboratoryWorkerUrl + "/update", laboratoryWorker)
+  }
+
+  archiveLaboratoryWorker(laboratoryWorkerId: number): Observable<string>{
+    const url = `${this.LaboratoryWorkerUrl}/TransferToArchive/${laboratoryWorkerId}`;
+    return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
+  }
+
+  //LABORATORY SUPERVISOR
+  getAllLaboratorySupervisors(): Observable<LaboratorySupervisor[]> {
+    return this.http.get<LaboratorySupervisor[]>(this.LaboratorySupervisorUrl + "/Get");
+  }
+
+  getAllAvailableLaboratorySupervisors(): Observable<LaboratorySupervisor[]> {
+    return this.http.get<LaboratorySupervisor[]>(this.LaboratorySupervisorUrl + "/GetAvailable");
+  }
+
+  createLaboratorySupervisorAccount(laboratorySupervisor: any): Observable<LaboratorySupervisor>{
+    return this.http.post<LaboratorySupervisor>(this.RegistrationUrl + "/RegisterLaboratorySupervisor", laboratorySupervisor)
+  }
+
+  updateLaboratorySupervisor(laboratorySupervisor: any): Observable<LaboratorySupervisor>{
+    return this.http.put<LaboratorySupervisor>(this.LaboratorySupervisorUrl + "/update", laboratorySupervisor)
+  }
+
+  archiveLaboratorySupervisor(laboratorySupervisorId: number): Observable<string>{
+    const url = `${this.LaboratoryWorkerUrl}/TransferToArchive/${laboratorySupervisorId}`;
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
   }
 
@@ -138,6 +236,8 @@ export class ClinicService {
     // Wywołanie PUT z `null` jako body i `responseType: 'text'` w opcjach
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' });
   }
+
+
   
 
   //MEDICAL APPOINTMENT

@@ -21,12 +21,16 @@ namespace ClinicAPI.Controllers
         private readonly ApplicationDBContext dbContext;
         private readonly IMedicalSpecialisationService _medicalSpecialisationService;
         private readonly IPatientService _patientService;
+        private readonly ILaboratoryWorkerService _laboratoryWorkerService;
+        private readonly ILaboratorySupervisorService _laboratorySupervisorService;
         private readonly IDoctorService _doctorService;
 
 
         public RegistrationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager
                                       , ApplicationDBContext dbContext, IMedicalSpecialisationService medicalSpecialisationService
-                                      , IPatientService patientService, IDoctorService doctorService)
+                                      , IPatientService patientService, IDoctorService doctorService
+                                      , ILaboratoryWorkerService laboratoryWorkerService
+                                      , ILaboratorySupervisorService laboratorySupervisorService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -34,6 +38,8 @@ namespace ClinicAPI.Controllers
             this._medicalSpecialisationService = medicalSpecialisationService;
             _patientService = patientService;
             _doctorService = doctorService;
+            _laboratoryWorkerService = laboratoryWorkerService;
+            _laboratorySupervisorService = laboratorySupervisorService;
         }
 
         [HttpPost]
@@ -53,6 +59,30 @@ namespace ClinicAPI.Controllers
         public async Task<IActionResult> RegisterDoctor(CreateRegisterDoctorDto request)
         {
             var result = await _doctorService.RegisterDoctor(request);
+            if (!result.Confirmed)
+            {
+                return BadRequest(new { Message = result.Response });
+            }
+            return Ok(new { message = result.Response });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
+        public async Task<IActionResult> RegisterLaboratoryWorker([FromBody] CreateRegisterLaboratoryWorkerDto request)
+        {
+            var result = await _laboratoryWorkerService.RegisterLaboratoryWorker(request);
+            if (!result.Confirmed)
+            {
+                return BadRequest(new { Message = result.Response });
+            }
+            return Ok(new { message = result.Response });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
+        public async Task<IActionResult> RegisterLaboratorySupervisor([FromBody] CreateRegisterLaboratorySupervisorDto request)
+        {
+            var result = await _laboratorySupervisorService.RegisterLaboratorySupervisor(request);
             if (!result.Confirmed)
             {
                 return BadRequest(new { Message = result.Response });

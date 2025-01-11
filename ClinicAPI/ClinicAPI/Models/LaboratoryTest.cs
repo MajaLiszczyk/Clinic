@@ -12,6 +12,20 @@ namespace ClinicAPI.Models
         public bool IsAvailable { get; set; } = true;
     }
 
+    public class CreateLaboratoryTestTypeDto
+    {
+        [Required]
+        public string Name { get; set; }
+    }
+
+    public class UpdateLaboratoryTestTypeDto
+    {
+        [Required]
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public bool? IsAvailable { get; set; }
+    }
+
     public enum LaboratoryTestState
     {
         ToBeCompleted = 0,

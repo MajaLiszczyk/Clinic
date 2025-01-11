@@ -15,7 +15,7 @@ import { ClinicService } from '../services/clinic.service';
 })
 
 export class RegistrantDiagnosticTestTypesComponent {
-  isAddNewSpecialisationVisible: boolean = false;
+  //isAddNewSpecialisationVisible: boolean = false;
   diagnosticTestTypes: DiagnosticTestType[] = [];
   diagnosticTestTypesForm: FormGroup;
   diagnosticTestType: DiagnosticTestType = { id: 0, name: '' , isAvailable: true};

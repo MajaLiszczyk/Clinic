@@ -202,6 +202,14 @@ builder.Services.AddScoped<ILaboratorySupervisorRepository, LaboratorySupervisor
 builder.Services.AddScoped<ILaboratoryTestService, LaboratoryTestService>(); //dodalam
 builder.Services.AddScoped<ILaboratoryTestRepository, LaboratoryTestRepository>(); //dodalam
 
+builder.Services.AddScoped<ILaboratoryAppointmentService, LaboratoryAppointmentService>(); //dodalam
+builder.Services.AddScoped<ILaboratoryAppointmentRepository, LaboratoryAppointmentRepository>(); //dodalam
+
+builder.Services.AddScoped<ILaboratoryTestTypeService, LaboratoryTestTypeService>(); //dodalam
+builder.Services.AddScoped<ILaboratoryTestTypeRepository, LaboratoryTestTypeRepository>(); //dodalam
+
+builder.Services.AddScoped<ILaboratoryTestsGroupRepository, LaboratoryTestsGroupRepository>(); //dodalam
+
 builder.Services.AddScoped<ILaboratoryWorkerService, LaboratoryWorkerService>(); //dodalam
 builder.Services.AddScoped<ILaboratoryWorkerRepository, LaboratoryWorkerRepository>(); //dodalam
 
