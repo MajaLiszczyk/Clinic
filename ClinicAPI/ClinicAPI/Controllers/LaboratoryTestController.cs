@@ -1,6 +1,7 @@
 ﻿using ClinicAPI.Dtos;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -25,6 +26,27 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetLaboratoryTestsByPatientId(int id)
+        {
+            var result = await _laboratoryTestService.GetLaboratoryTestsByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetLaboratoryTestsByMedicalAppointmentId(int id)
+        {
+            var result = await _laboratoryTestService.GetLaboratoryTestsByMedicalAppointmentId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
 
         //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]

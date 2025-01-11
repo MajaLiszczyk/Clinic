@@ -51,6 +51,10 @@ namespace ClinicAPI
             CreateMap<CreateMedicalSpecialisationDto, MedicalSpecialisation>();
             CreateMap<UpdateMedicalSpecialisationDto, MedicalSpecialisation>();
 
+            CreateMap<LaboratoryAppointment, ReturnLaboratoryAppointmentDto>();
+            CreateMap<CreateLaboratoryAppointmentDto, LaboratoryAppointment>();
+            CreateMap<UpdateLaboratoryAppointmentDto, LaboratoryAppointment>();
+
             CreateMap<DateDto, DateTime>().ConstructUsing((src, _) => new DateTime(src.Year, src.Month, src.Day));
                 /*.ForMember(d => d.Year, d => d.MapFrom(t => t.Year))
                 .ForMember(d => d.Month, d => d.MapFrom(t => t.Month))

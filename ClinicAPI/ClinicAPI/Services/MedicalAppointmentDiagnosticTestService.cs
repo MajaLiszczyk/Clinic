@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClinicAPI.Dtos;
 using ClinicAPI.Models;
+using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
 using System.Transactions;
@@ -11,16 +12,22 @@ namespace ClinicAPI.Services
     {
         private readonly IMedicalAppointmentRepository _medicalAppointmentRepository;
         private readonly IDiagnosticTestRepository _diagnosticTestRepository;
+        private readonly ILaboratoryTestRepository _laboratoryTestRepository;
+        private readonly ILaboratoryTestsGroupRepository _laboratoryTestsGroupRepository;
         private readonly IMapper _mapper;
 
 
         public MedicalAppointmentDiagnosticTestService(
             IMedicalAppointmentRepository medicalAppointmentRepository,
             IDiagnosticTestRepository diagnosticTestRepository,
+            ILaboratoryTestRepository laboratoryTestRepository,
+            ILaboratoryTestsGroupRepository laboratoryTestsGroupRepository,
             IMapper mapper)
         {
             _medicalAppointmentRepository = medicalAppointmentRepository;
             _diagnosticTestRepository = diagnosticTestRepository;
+            _laboratoryTestRepository = laboratoryTestRepository;
+            _laboratoryTestsGroupRepository = laboratoryTestsGroupRepository;
             _mapper = mapper;
         }
 
@@ -67,6 +74,32 @@ namespace ClinicAPI.Services
                     else
                     {
                         ReturnDiagnosticTestDto? k = null; 
+
+                    }
+                }
+                //utworzyc grupe
+                var laboratoryTestsGroup = new LaboratoryTestsGroup
+                {
+                    MedicalAppointmentId = appointment.Id
+                };
+                int groupId = await _laboratoryTestsGroupRepository.CreateLaboratoryTestsGroup(laboratoryTestsGroup);
+                //utworzyc testy lab
+                foreach (var testDto in dto.CreateLaboratoryTestDtos)
+                {
+                    var laboratoryTest = new LaboratoryTest
+                    {
+                        LaboratoryTestsGroupId = testDto.LaboratoryTestsGroupId,
+                        LaboratoryTestTypeId = testDto.LaboratoryTestTypeId,
+                        DoctorNote = testDto.DoctorNote
+                    };
+                    LaboratoryTest? r = await _laboratoryTestRepository.CreateLaboratoryTest(laboratoryTest);
+                    if (r != null)
+                    {
+                        ReturnLaboratoryTestDto q = _mapper.Map<ReturnLaboratoryTestDto>(r); //??????????
+                    }
+                    else
+                    {
+                        ReturnLaboratoryTestDto? k = null;
 
                     }
                 }

@@ -5,7 +5,7 @@ namespace ClinicAPI.Models
 {
     public enum LaboratoryAppointmentState
     {
-        Commissioned = 0,
+        Commissioned = 0, //lub NotAssigned , Reserved
         ToBeCompleted = 1,
         WaitingForSupervisor = 2,
         ToBeFixed = 3,
@@ -28,7 +28,7 @@ namespace ClinicAPI.Models
 
         public LaboratoryAppointmentState State { get; set; }
 
-        public DateTime date { get; set; }
+        public DateTime DateTime { get; set; }
         public string? CancelComment { get; set; }
     }
 
