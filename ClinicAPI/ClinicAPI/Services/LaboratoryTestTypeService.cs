@@ -32,12 +32,24 @@ namespace ClinicAPI.Services
         
         public async Task<List<LaboratoryTestType>> GetAllLaboratoryTestTypes()
         {
-            if (_laboratoryTestTypeRepository == null)
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var testTypes = await _laboratoryTestTypeRepository.GetAllLaboratoryTestTypes();
+                scope.Complete();
+                return testTypes;
+            }
+            catch (Exception ex)
+            {
+                return (new List<LaboratoryTestType>());
+            }
+            /*if (_laboratoryTestTypeRepository == null)
             {
                 throw new InvalidOperationException("Repository is null");
-            }
-            var testTypes = await _laboratoryTestTypeRepository.GetAllLaboratoryTestTypes();
-            return testTypes;
+            }*/
+
 
         }
         

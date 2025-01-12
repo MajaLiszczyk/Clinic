@@ -52,17 +52,18 @@
         </div>
       </div>
       <p></p>
-      
+
       <div class="formGroup mb-3">
         <label for="textbox">Diagnosis:</label>
         <input id="textbox" type="text" formControlName="diagnosisText" class="form-control"
-          [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)"/>
+          [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)" />
         <div class="invalid-feedback">
           <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
         </div>
       </div>
     </form>
 
+    <!-- DIAGNOSTIC TESTS-->
     <form [formGroup]="chooseDiagnosticTestTypeForm" *ngIf="isEditable">
       <div class="formGroup mb-3">
         <label for="diagnosticTypeTestType">Diagnostic Test Type:</label>
@@ -95,13 +96,10 @@
         <button *ngIf="isDiagnosticTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
           (click)="updateDiagnosticTest()">Save
           etitioned diagnosticTest</button>
-
-
-
       </div>
     </form>
 
-    <div>
+    <div class="mb-5">
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
@@ -112,7 +110,6 @@
 
             </th>
           </tr>
-
         </thead>
         <tr *ngFor="let pastDiagnosticTest of pastDiagnosticTests">
           <td>
@@ -132,6 +129,74 @@
         </tr>
       </table>
     </div>
+    <!-- DIAGNOSTIC TESTS-->
+
+    <!-- LABORATORY TESTS-->
+    <form [formGroup]="chooseLaboratoryTestTypeForm" *ngIf="isEditable">
+      <div class="formGroup mb-3">
+        <label for="laboratoryTypeTestType">Laboratory Test Type:</label>
+        <select id="laboratoryTypeTestType" class="form-control" formControlName="laboratoryTypeTestType">
+          <option *ngFor="let laboratoryTestType of laboratoryTestTypes" [ngValue]="laboratoryTestType">
+            {{ laboratoryTestType.name }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <div class="d-flex justify-content-center mb-4">
+          <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+            (click)="selectLaboratoryTestType()">Select</button>
+        </div>
+      </div>
+    </form>
+
+    <form [formGroup]="laboratoryTestForm" *ngIf="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode">
+      <label for="textbox">Type:</label>
+      <input id="laboratoryTestTypeName" formControlName="laboratoryTestTypeName" type="text" class="form-control">
+      <p></p>
+
+      <label for="textbox">Note:</label>
+      <input id="doctorNote" type="text" formControlName="doctorNote" />
+
+      <div class="d-flex justify-content-center mb-4 mt-5">
+        <button *ngIf="isLaboratoryTestAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+          (click)="saveLaboratoryTest()">Save laboratory Test</button>
+        <button (click)="cancelAddingLaboratoryTest()" class="btn btn-secondary">Cancel</button>
+        <button *ngIf="isLaboratoryTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+          (click)="updateLaboratoryTest()">Save etitioned laboratoryTest</button>
+      </div>
+    </form>
+
+    <div>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>
+              Laboratory Test
+            </th>
+            <th>
+
+            </th>
+          </tr>
+        </thead>
+        <tr *ngFor="let pastLaboratoryTest of pastLaboratoryTests">
+          <td>
+            Laboratory test type: {{pastLaboratoryTest.laboratoryTestTypeName}}
+            <br />
+            Note: {{pastLaboratoryTest.doctorNote}}
+          </td>
+          <td *ngIf="isEditable">
+            <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
+              class="btn  btn-success float-right" (click)="editLaboratoryTest(pastLaboratoryTest)">Edit</button>
+            <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
+              class="btn  btn-success float-right" (click)="deleteLaboratoryTest(pastLaboratoryTest.id)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="pastDiagnosticTests.length === 0">
+          <td colspan="8">No Laboratory Tests</td>
+        </tr>
+      </table>
+    </div>
+    <!-- LABORATORY TESTS-->
 
     <div *ngIf="isEditable">
       <button [disabled]="medicalAppointment.patientId==0" (click)="saveAnAppointment()"

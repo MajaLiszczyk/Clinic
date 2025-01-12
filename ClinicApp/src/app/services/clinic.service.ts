@@ -15,6 +15,7 @@ import { LaboratoryWorker } from '../model/laboratory-worker';
 import { LaboratorySupervisor } from '../model/laboratory-supervisor';
 import { LaboratoryTestType } from '../model/laboratory-test-type';
 import { LaboratoryAppointment } from '../model/laboratory-appointment';
+import { LaboratoryTest } from '../model/laboratory-test';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -35,6 +36,7 @@ export class ClinicService {
   readonly LaboratoryWorkerUrl = "https://localhost:5001/api/LaboratoryWorker";
   readonly LaboratorySupervisorUrl = "https://localhost:5001/api/LaboratorySupervisor";
   readonly LaboratoryTestTypeUrl = "https://localhost:5001/api/LaboratoryTestType";
+  readonly LaboratoryTestUrl = "https://localhost:5001/api/LaboratoryTest"; 
   readonly LaboratoryAppointmentUrl = "https://localhost:5001/api/LaboratoryAppointment";
 
   
@@ -83,6 +85,12 @@ export class ClinicService {
   deletePatient(patientId: number): Observable<string> {
     const url = `${this.PatientUrl}/TransferToArchive/${patientId}`;
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
+  }
+
+    //LABORATORY TEST
+
+  getLaboratoryTestsByAppointmentId(id: number): Observable<LaboratoryTest[]> {
+    return this.http.get<LaboratoryTest[]>(this.LaboratoryTestUrl + "/GetByMedicalAppointmentId/" + id);
   }
 
   //LABORATORY TEST TYPE

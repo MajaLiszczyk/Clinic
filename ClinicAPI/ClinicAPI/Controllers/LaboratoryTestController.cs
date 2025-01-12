@@ -37,9 +37,9 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetLaboratoryTestsByMedicalAppointmentId(int id)
+        public async Task<IActionResult> GetByMedicalAppointmentId([FromRoute]int id)
         {
             var result = await _laboratoryTestService.GetLaboratoryTestsByMedicalAppointmentId(id);
             if (result != null)

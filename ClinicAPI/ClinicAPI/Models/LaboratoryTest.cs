@@ -28,10 +28,11 @@ namespace ClinicAPI.Models
 
     public enum LaboratoryTestState
     {
-        ToBeCompleted = 0,
-        WaitingForSupervisor = 1,
-        Accepted = 2,
-        Rejected = 3
+        Comissioned = 0,
+        ToBeCompleted = 1,
+        WaitingForSupervisor = 2,
+        Accepted = 3,
+        Rejected = 4
     }
 
     public class LaboratoryTest
@@ -47,7 +48,7 @@ namespace ClinicAPI.Models
         public LaboratoryTestState State { get; set; }       
 
         public int LaboratoryTestTypeId { get; set; }
-        public string? wynik {  get; set; }
+        public string? Result {  get; set; }
         public string? DoctorNote { get; set; }
         public string? RejectComment { get; set; }
     }

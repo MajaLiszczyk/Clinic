@@ -88,9 +88,10 @@ namespace ClinicAPI.Services
                 {
                     var laboratoryTest = new LaboratoryTest
                     {
-                        LaboratoryTestsGroupId = testDto.LaboratoryTestsGroupId,
+                        LaboratoryTestsGroupId = groupId,
                         LaboratoryTestTypeId = testDto.LaboratoryTestTypeId,
-                        DoctorNote = testDto.DoctorNote
+                        DoctorNote = testDto.DoctorNote,
+                        State = LaboratoryTestState.Comissioned
                     };
                     LaboratoryTest? r = await _laboratoryTestRepository.CreateLaboratoryTest(laboratoryTest);
                     if (r != null)
