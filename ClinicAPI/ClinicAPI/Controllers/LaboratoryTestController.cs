@@ -27,7 +27,7 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Authorize]
         public async Task<IActionResult> GetLaboratoryTestsByPatientId(int id)
         {
@@ -35,7 +35,19 @@ namespace ClinicAPI.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
+        } */
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetComissionedLaboratoryTestsWithGroupByPatientId([FromRoute] int id)
+        {
+            var result = await _laboratoryTestService.GetComissionedLaboratoryTestsWithGroupByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
         }
+
+        
 
         [HttpGet("{id}")]
         [Authorize]

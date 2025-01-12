@@ -27,7 +27,7 @@ namespace ClinicAPI.Services
         }
 
         //public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByPatientId(int id)
-        public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientId(int id)
+       /* public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -40,16 +40,30 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return new List<IGrouping<int, LaboratoryTest>>();
+            }
+
+
+        }*/
+
+        public async Task<List<ReturnGroupWithLaboratoryTestsDto>> GetComissionedLaboratoryTestsWithGroupByPatientId(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var laboratoryTests = await _laboratoryTestRepository.GetComissionedLaboratoryTestsWithGroupByPatientId(id);
+                return laboratoryTests;
+            }
+            catch (Exception ex)
+            {
+                return new List<ReturnGroupWithLaboratoryTestsDto>();
                 //return (false, $"Error cerating laboratory appointment: {ex.Message}", null);
             }
 
-            /*List<IGrouping<int, ReturnLaboratoryTestDto>> laboratoryTestsDto;
-            foreach(var a in laboratoryTests)
-            {
-
-            }
-            _mapper.Map<List<ReturnLaboratoryTestDto>>(laboratoryTests);*/
         }
+
+        
 
         public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByMedicalAppointmentId(int id)
         {

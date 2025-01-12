@@ -16,6 +16,9 @@ import { LaboratorySupervisor } from '../model/laboratory-supervisor';
 import { LaboratoryTestType } from '../model/laboratory-test-type';
 import { LaboratoryAppointment } from '../model/laboratory-appointment';
 import { LaboratoryTest } from '../model/laboratory-test';
+import { LabAppWithPatientLabTestsMedApp } from '../dtos/labApp-patient-labTests-medApp-dto';
+import { GroupWithLabTests } from '../dtos/group-labTests-dto';
+import { LaboratoryTestsGroup } from '../model/laboratory-tests-group';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -36,16 +39,19 @@ export class ClinicService {
   readonly LaboratoryWorkerUrl = "https://localhost:5001/api/LaboratoryWorker";
   readonly LaboratorySupervisorUrl = "https://localhost:5001/api/LaboratorySupervisor";
   readonly LaboratoryTestTypeUrl = "https://localhost:5001/api/LaboratoryTestType";
-  readonly LaboratoryTestUrl = "https://localhost:5001/api/LaboratoryTest"; 
+  readonly LaboratoryTestUrl = "https://localhost:5001/api/LaboratoryTest";
   readonly LaboratoryAppointmentUrl = "https://localhost:5001/api/LaboratoryAppointment";
+  readonly LaboratoryTestsGroupUrl = "https://localhost:5001/api/LaboratoryTestsGroup";
 
   
 
-  
 
 
-  
-  
+
+
+
+
+
 
 
 
@@ -58,7 +64,7 @@ export class ClinicService {
 
 
   //PATIENT
-  getPatientById(patientId: number){
+  getPatientById(patientId: number) {
     return this.http.get<Patient>(this.PatientUrl + "/Get/" + patientId);
   }
 
@@ -87,10 +93,14 @@ export class ClinicService {
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
   }
 
-    //LABORATORY TEST
+  //LABORATORY TEST
 
   getLaboratoryTestsByAppointmentId(id: number): Observable<LaboratoryTest[]> {
     return this.http.get<LaboratoryTest[]>(this.LaboratoryTestUrl + "/GetByMedicalAppointmentId/" + id);
+  }
+
+  getComissionedLaboratoryTestsByPatientId(id: number): Observable<GroupWithLabTests[]> {
+    return this.http.get<GroupWithLabTests[]>(this.LaboratoryTestUrl + "/GetComissionedLaboratoryTestsWithGroupByPatientId/" + id);
   }
 
   //LABORATORY TEST TYPE
@@ -103,7 +113,7 @@ export class ClinicService {
     return this.http.get<LaboratoryTestType[]>(this.LaboratoryTestTypeUrl + "/GetAvailable");
   }
 
-  updateLAboratoryTestType(laboratoryTestType: any): Observable<LaboratoryTestType> { 
+  updateLAboratoryTestType(laboratoryTestType: any): Observable<LaboratoryTestType> {
     return this.http.put<LaboratoryTestType>(this.LaboratoryTestTypeUrl + "/update", laboratoryTestType);
   }
 
@@ -116,24 +126,44 @@ export class ClinicService {
     return this.http.post<LaboratoryTestType>(this.LaboratoryTestTypeUrl + "/create", laboratoryTestType) // Bez obiektu opakowującego
   }
 
-    //LABORATORY APPOINTMENT
-
-    getAllLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
-      return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
-    }
-    
-    addLaboratoryAppointment(appointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
-      return this.http.post<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/create", appointment);
-    }
+  //LABORATORY TESTS GROUP
+  setLaboratoryAppointmentToTestsGroup(groupId: number, laboratoryAppointmentId: number): Observable<LaboratoryTestsGroup> {
+    const url = `${this.LaboratoryTestsGroupUrl}/UpdateLaboratoryAppointmentToGroup/${groupId}/${laboratoryAppointmentId}`;
+    return this.http.put<LaboratoryTestsGroup>(url, null);
+  }
   
-    editLaboratoryAppointment(laboratoryAppointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
-      return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/update", laboratoryAppointment);
-    }
+  //LABORATORY APPOINTMENT
 
-    deleteLaboratoryAppointment(laboratoryAppointmentId: number): Observable<string> {
-      return this.http.delete<string>(this.LaboratoryAppointmentUrl + "/Delete/" + laboratoryAppointmentId);
-    }
-    
+  getAllLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
+    return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
+  }
+  //ZROBIĆ FAKTYCZNIE AVAILABLE!
+  getAllAvailableLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
+    return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
+  }
+
+  //zrobić
+  getPlannedLaboratoryAppointmentsByPatientId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]> {
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getPlannedLaboratoryAppointmentsByPatientId/" + id);
+  }
+
+  //zrobić
+  getFinishedLaboratoryAppointmentsByPatientId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]> {
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getFinishedLaboratoryAppointmentsByPatientId/" + id);
+  }
+
+  addLaboratoryAppointment(appointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
+    return this.http.post<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/create", appointment);
+  }
+
+  editLaboratoryAppointment(laboratoryAppointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
+    return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/update", laboratoryAppointment);
+  }
+
+  deleteLaboratoryAppointment(laboratoryAppointmentId: number): Observable<string> {
+    return this.http.delete<string>(this.LaboratoryAppointmentUrl + "/Delete/" + laboratoryAppointmentId);
+  }
+
 
 
   //LABORATORY WORKER
@@ -144,16 +174,16 @@ export class ClinicService {
   getAllAvailableLaboratoryWorkers(): Observable<LaboratoryWorker[]> {
     return this.http.get<LaboratoryWorker[]>(this.LaboratoryWorkerUrl + "/GetAvailable");
   }
-  
-  createLaboratoryWorkerAccount(laboratoryWorker: any): Observable<LaboratoryWorker>{
+
+  createLaboratoryWorkerAccount(laboratoryWorker: any): Observable<LaboratoryWorker> {
     return this.http.post<LaboratoryWorker>(this.RegistrationUrl + "/RegisterLaboratoryWorker", laboratoryWorker)
   }
 
-  updateLaboratoryWorker(laboratoryWorker: any): Observable<LaboratoryWorker>{
+  updateLaboratoryWorker(laboratoryWorker: any): Observable<LaboratoryWorker> {
     return this.http.put<LaboratoryWorker>(this.LaboratoryWorkerUrl + "/update", laboratoryWorker)
   }
 
-  archiveLaboratoryWorker(laboratoryWorkerId: number): Observable<string>{
+  archiveLaboratoryWorker(laboratoryWorkerId: number): Observable<string> {
     const url = `${this.LaboratoryWorkerUrl}/TransferToArchive/${laboratoryWorkerId}`;
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
   }
@@ -167,15 +197,15 @@ export class ClinicService {
     return this.http.get<LaboratorySupervisor[]>(this.LaboratorySupervisorUrl + "/GetAvailable");
   }
 
-  createLaboratorySupervisorAccount(laboratorySupervisor: any): Observable<LaboratorySupervisor>{
+  createLaboratorySupervisorAccount(laboratorySupervisor: any): Observable<LaboratorySupervisor> {
     return this.http.post<LaboratorySupervisor>(this.RegistrationUrl + "/RegisterLaboratorySupervisor", laboratorySupervisor)
   }
 
-  updateLaboratorySupervisor(laboratorySupervisor: any): Observable<LaboratorySupervisor>{
+  updateLaboratorySupervisor(laboratorySupervisor: any): Observable<LaboratorySupervisor> {
     return this.http.put<LaboratorySupervisor>(this.LaboratorySupervisorUrl + "/update", laboratorySupervisor)
   }
 
-  archiveLaboratorySupervisor(laboratorySupervisorId: number): Observable<string>{
+  archiveLaboratorySupervisor(laboratorySupervisorId: number): Observable<string> {
     const url = `${this.LaboratoryWorkerUrl}/TransferToArchive/${laboratorySupervisorId}`;
     return this.http.put<string>(url, null, { responseType: 'text' as 'json' })
   }
@@ -246,7 +276,7 @@ export class ClinicService {
   }
 
 
-  
+
 
   //MEDICAL APPOINTMENT
 

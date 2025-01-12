@@ -37,6 +37,7 @@ import { PatientMenuComponent } from './patient-menu/patient-menu.component';
 
 import { LoginComponent } from './log-in/log-in.component';
 import { AuthorizationGuard } from './authorization/authorization-guard';
+import { PatientLaboratoryAppointmentsComponent } from './patient-laboratory-appointments/patient-laboratory-appointments.component';
 
 
 export const routes: Routes = [
@@ -61,6 +62,8 @@ export const routes: Routes = [
     //{ path: 'patient/:patientId', component: PatientComponent},
     { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
     { path: 'patient-menu/:patientId', component: PatientMenuComponent, canActivate: [AuthorizationGuard] },
+    { path: 'patient-laboratory-appointments/:patientId', component: PatientLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
+
 
     { path: 'registrant', component: RegistrantComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-patients', component: RegistrantPatientsComponent, canActivate: [AuthorizationGuard] },

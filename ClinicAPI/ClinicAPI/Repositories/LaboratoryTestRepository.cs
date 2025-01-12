@@ -1,7 +1,10 @@
 ﻿using ClinicAPI.DB;
+using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text.RegularExpressions;
 using System.Transactions;
 
 namespace ClinicAPI.Repositories
@@ -36,76 +39,102 @@ namespace ClinicAPI.Repositories
         public async Task<List<LaboratoryTest>> GetLaboratoryTestsByMedicalAppointmentId(int medicalAppointmentId)
         {
             // Pobierz ID grupy powiązanej z wizytą
-            var groupId = await _context.LaboratoryTestsGroup
+            // Jeśli brak grupy, zwróć pustą listę
+            // Pobierz testy laboratoryjne powiązane z grupą
+            var tests = await (from labTest in _context.LaboratoryTest
+                               join labGroup in _context.LaboratoryTestsGroup
+                               on labTest.LaboratoryTestsGroupId equals labGroup.Id
+                               where labGroup.MedicalAppointmentId == medicalAppointmentId
+                       select labTest).ToListAsync();
+
+            return tests;
+
+
+
+
+            /*var groupId = await _context.LaboratoryTestsGroup
                 .Where(group => group.MedicalAppointmentId == medicalAppointmentId)
                 .Select(group => group.Id)
                 .FirstOrDefaultAsync();
 
-            if (groupId == 0) // Jeśli brak grupy, zwróć pustą listę
+            if (groupId == 0) 
                 return new List<LaboratoryTest>();
 
-            // Pobierz testy laboratoryjne powiązane z grupą
             var tests = await _context.LaboratoryTest
                 .Where(test => test.LaboratoryTestsGroupId == groupId)
-                .ToListAsync();
-
-            return tests;
-
-            //podejście z join
-            /*var tests = await (from LaboratoryTest in _context.LaboratoryTest
-                               join group in _context.LaboratoryTestsGroup
-                                   on test.LaboratoryTestsGroupId equals group.Id
-                               where group.MedicalAppointmentId == medicalAppointmentId
-                       select test).ToListAsync();
-
-            return tests; */
-
-
-            /*var tests = await _context.LaboratoryTest
-                .Where(test => test.LaboratoryTestsGroup.MedicalAppointmentId == medicalAppointmentId)
-                .Include(test => test.State) // Ładowanie stanu testu
                 .ToListAsync();
 
             return tests;*/
         }
 
-        //Zwraca listę testów dla danego pacjenta, pogrupowanych według wizyt (lub grup).
-        //Zwracamy grupy jako kolekcję IGrouping<int, LaboratoryTest>, gdzie kluczem jest MedicalAppointmentId, a wartością lista testów.
-        //public async Task<List<LaboratoryTest>> GetLaboratoryTestsByPatientId(int patientId)
-        public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientId(int patientId)
+        //lsta zleconych badań "w grupach" u pacjenta
+        public async Task<List<ReturnGroupWithLaboratoryTestsDto>> GetComissionedLaboratoryTestsWithGroupByPatientId(int patientId)
         {
-            // Pobierz ID wizyt pacjenta
-            var medicalAppointmentIds = await _context.MedicalAppointment
+            var groupedTests = await (from labTest in _context.LaboratoryTest
+                                      join labGroup in _context.LaboratoryTestsGroup
+                                      on labTest.LaboratoryTestsGroupId equals labGroup.Id
+                                      where labGroup.LaboratoryAppointmentId == null   //czy == 0 ?
+                                      join appointment in _context.MedicalAppointment
+                                      on labGroup.MedicalAppointmentId equals appointment.Id
+                                      where labGroup.LaboratoryAppointmentId == null
+                                            && appointment.PatientId == patientId
+                                      group labTest by labGroup.Id into testGroup
+                                      select new ReturnGroupWithLaboratoryTestsDto
+                                      {
+                                          groupId = testGroup.Key,
+                                          laboratoryTests = testGroup.ToList()
+                                      }).ToListAsync();
+
+            return groupedTests;
+        }
+
+
+        //Wynikiem jest lista grup(IGrouping<int, LaboratoryTest>), gdzie:
+        //Kluczem(Key) grupy jest MedicalAppointmentId.
+        //Wartości grupy to lista LaboratoryTest powiązanych z tą wizytą.
+        //DO WYWALENIA? UŻYWAM ?
+        public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientIdGroupByMedApp(int patientId)
+        {
+            //grupowanie po medicalAppointment:
+
+            var groupedTests = await (from labTest in _context.LaboratoryTest
+                                      join labGroup in _context.LaboratoryTestsGroup
+                                      on labTest.LaboratoryTestsGroupId equals labGroup.Id
+                                      join appointment in _context.MedicalAppointment
+                                      on labGroup.MedicalAppointmentId equals appointment.Id
+                                      where appointment.PatientId == patientId
+                              group labTest by labGroup.MedicalAppointmentId into testGroup
+                              select testGroup).ToListAsync();
+
+            return groupedTests;
+
+            //grupowanie po testGroup:
+            /*var groupedTests = await (from test in _context.LaboratoryTest
+                                      join group in _context.LaboratoryTestsGroup
+                                      on test.LaboratoryTestsGroupId equals group.Id
+                                      join appointment in _context.MedicalAppointment
+                                      on group.MedicalAppointmentId equals appointment.Id
+                                      where appointment.PatientId == patientId
+                              group test by group.Id into testGroup
+                              select testGroup).ToListAsync();
+            return groupedTests;*/
+
+            /*var medicalAppointmentIds = await _context.MedicalAppointment
                 .Where(appointment => appointment.PatientId == patientId)
                 .Select(appointment => appointment.Id)
                 .ToListAsync();
-
-            // Pobierz ID grup testów powiązanych z tymi wizytami
             var groupIds = await _context.LaboratoryTestsGroup
                 .Where(group => medicalAppointmentIds.Contains(group.MedicalAppointmentId))
                 .Select(group => group.Id)
                 .ToListAsync();
-
-            // Pobierz testy laboratoryjne powiązane z grupami
             var tests = await _context.LaboratoryTest
                 .Where(test => groupIds.Contains(test.LaboratoryTestsGroupId))
                 .ToListAsync();
-
-            // Pogrupuj testy według ID wizyt
             var groupedTests = tests.GroupBy(test =>
             {
                 var group = _context.LaboratoryTestsGroup.FirstOrDefault(g => g.Id == test.LaboratoryTestsGroupId);
                 return group?.MedicalAppointmentId ?? 0;
             }).ToList();
-
-            return groupedTests;
-
-            /*var groupedTests = await _context.LaboratoryTest
-                .Where(test => test.LaboratoryTestsGroup.MedicalAppointment.PatientId == patientId)
-                .Include(test => test.State) // Ładowanie stanu testu
-                .GroupBy(test => test.LaboratoryTestsGroup.MedicalAppointmentId)
-                .ToListAsync();
-
             return groupedTests;*/
         }
 

@@ -32,6 +32,29 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getPlannedLaboratoryAppointmentsByPatientId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getPlannedLaboratoryAppointmentsByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getFinishedLaboratoryAppointmentsByPatientId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getFinishedLaboratoryAppointmentsByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        
+
+
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create([FromBody] CreateLaboratoryAppointmentDto request)

@@ -1,7 +1,9 @@
 ﻿using ClinicAPI.DB;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using System.Transactions;
 
 namespace ClinicAPI.Repositories
 {
@@ -19,6 +21,21 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return laboratoryTestsGroup.Id;
         }
+
+        public async Task<int> UpdateLaboratoryTestsGroup(LaboratoryTestsGroup laboratoryTestsGroup)
+        {
+
+            _context.LaboratoryTestsGroup.Update(laboratoryTestsGroup);
+            await _context.SaveChangesAsync();
+            return laboratoryTestsGroup.Id;
+        }
+
+        public async Task<LaboratoryTestsGroup?> GetTestsGroupById(int id)
+        {
+            return await _context.LaboratoryTestsGroup.Where(r => r.Id == id).FirstOrDefaultAsync();
+        }
+        
+
 
     }
 }
