@@ -15,6 +15,12 @@ namespace ClinicAPI.Repositories
             _context = context;
         }
 
+        public async Task<LaboratoryTestsGroup?> getGroupByLabAppId(int id)
+        {
+            return await _context.LaboratoryTestsGroup.Where(r => r.LaboratoryAppointmentId == id).FirstOrDefaultAsync();
+        }
+
+
         public async Task<int> CreateLaboratoryTestsGroup(LaboratoryTestsGroup laboratoryTestsGroup)
         {
             await _context.AddAsync(laboratoryTestsGroup);

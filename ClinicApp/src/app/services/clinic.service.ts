@@ -128,8 +128,10 @@ export class ClinicService {
 
   //LABORATORY TESTS GROUP
   setLaboratoryAppointmentToTestsGroup(groupId: number, laboratoryAppointmentId: number): Observable<LaboratoryTestsGroup> {
+    //const url = `${this.LaboratoryTestsGroupUrl}/UpdateLaboratoryAppointmentToGroup/${groupId}/${laboratoryAppointmentId}`;
     const url = `${this.LaboratoryTestsGroupUrl}/UpdateLaboratoryAppointmentToGroup/${groupId}/${laboratoryAppointmentId}`;
     return this.http.put<LaboratoryTestsGroup>(url, null);
+    //return this.http.put<LaboratoryTestsGroup>("https://localhost:5001/api/LaboratoryTestsGroup/2/2", null);
   }
   
   //LABORATORY APPOINTMENT
@@ -139,7 +141,7 @@ export class ClinicService {
   }
   //ZROBIĆ FAKTYCZNIE AVAILABLE!
   getAllAvailableLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
-    return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
+    return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/GetAvailableLaboratoryAppointments");
   }
 
   //zrobić
@@ -162,6 +164,10 @@ export class ClinicService {
 
   deleteLaboratoryAppointment(laboratoryAppointmentId: number): Observable<string> {
     return this.http.delete<string>(this.LaboratoryAppointmentUrl + "/Delete/" + laboratoryAppointmentId);
+  }
+
+  cancelPlannedAppointment(id: number): Observable<string> {
+    return this.http.put<string>(this.LaboratoryAppointmentUrl + "/cancelPlannedAppointment/" + id, null, { responseType: 'text' as 'json' });
   }
 
 

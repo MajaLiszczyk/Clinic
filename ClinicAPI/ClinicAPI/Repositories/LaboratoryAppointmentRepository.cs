@@ -37,6 +37,18 @@ namespace ClinicAPI.Repositories
             return laboratoryAppointments;
         }
 
+        public async Task<List<LaboratoryAppointment>> GetAvailableLaboratoryAppointments()
+        {
+           
+            List<LaboratoryAppointment> laboratoryAppointments = new List<LaboratoryAppointment>();
+
+                laboratoryAppointments = await _context.LaboratoryAppointment.Where(r => r.State == LaboratoryAppointmentState.Empty).
+                    ToListAsync();            
+            return laboratoryAppointments;
+        }
+
+        
+
         public async Task<List<LaboratoryAppointment>> GetAllAailableLaboratoryAppointments()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,

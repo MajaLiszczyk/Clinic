@@ -18,22 +18,18 @@
         <!--</form> -->  
     
     </div> 
-
-
-
-
-
-
-
-    <div class=" col-12 mb-4 text-center">
-        <button (click)="OpenComissioned()"
-            class="btn btn-primary ms-2 me-4">Zlecone badania</button>
-    </div>
     
     
     <h3 class="my-4">Laboratory appointments and tests</h3>
-    Comissioned laboratory tests
-    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openComissioned()"
+            class="btn btn-primary ms-2 me-4">Comissioned laboratory tests</button>
+    </div>
+
+    
+    <div *ngIf="isCommisionedTestsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Comissioned laboratory tests
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -70,11 +66,15 @@
                 </tr>
             </tbody>
         </table>
+        <button (click)="closeComissionedAppointments()" class="btn btn-secondary">Close</button>
     </div>
 
-
-    Planned laboratory appointments
-    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openPlanned()"
+            class="btn btn-primary ms-2 me-4">Planned laboratory appointments</button>
+    </div>
+    <div *ngIf="isPlannedLabAppMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Planned laboratory appointments
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -117,7 +117,7 @@
 
                     <td class="text-end">
                         <button type="button" class="btn btn-outline-danger mx-2" [disabled]="isMakeAnAppointmentMode"
-                            (click)="cancelPlannedAppointment(plannedLaboratoryAppointment)">Cancel</button>
+                            (click)="cancelPlannedAppointment(plannedLaboratoryAppointment.laboratoryAppointmentId)">Cancel</button>
                     </td>
                 </tr>
                 <tr *ngIf="comissionedLaboratoryTests.length === 0">
@@ -125,15 +125,18 @@
                 </tr>
             </tbody>
         </table>
+        <button (click)="closePlannedAppointments()" class="btn btn-secondary">Close</button>
     </div>
 
 
 
 
-
-    Finished laboratory appointments
-    <!-- GET ALL-->
-    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openFinished()"
+            class="btn btn-primary ms-2 me-4">Finished laboratory appointments</button>
+    </div>
+    <div *ngIf="isFinishedLabappMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Finished laboratory appointments
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -185,5 +188,6 @@
                 </tr>
             </tbody>
         </table>
+        <button (click)="closeFinishedAppointments()" class="btn btn-secondary">Close</button>
     </div>    
     <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>

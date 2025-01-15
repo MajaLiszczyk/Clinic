@@ -32,6 +32,18 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAvailableLaboratoryAppointments()
+        {
+            var result = await _laboratoryAppointmentService.GetAvailableLaboratoryAppointments();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getPlannedLaboratoryAppointmentsByPatientId([FromRoute] int id)
@@ -52,7 +64,18 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> cancelPlannedAppointment([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.CancelPlannedAppointment(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
         
+
+
 
 
         [HttpPost]

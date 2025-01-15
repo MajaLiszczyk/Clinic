@@ -76,8 +76,6 @@ export const routes: Routes = [
     { path: 'registrant-appointments', component: RegistrantAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-laboratory-test-types', component: RegistrantLaboratoryTestTypesComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-laboratory-appointments', component: RegistrantLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
-
-    
     
     //{ path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },

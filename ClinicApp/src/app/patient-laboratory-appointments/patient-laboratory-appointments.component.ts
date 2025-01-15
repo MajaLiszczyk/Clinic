@@ -30,6 +30,9 @@ export class PatientLaboratoryAppointmentsComponent {
     testsGroupToArrange: GroupWithLabTests; //undefined moze byc na poczatku?
     selectedAppointment: LaboratoryAppointment;
     laboratoryAppointmentState = LaboratoryAppointmentState;
+    isCommisionedTestsMode: boolean = false;
+    isPlannedLabAppMode: boolean = false;
+    isFinishedLabappMode: boolean = false;
 
     //chooseLaboratoryAppointmentForm: FormGroup;
 
@@ -66,9 +69,17 @@ export class PatientLaboratoryAppointmentsComponent {
         this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
         console.log('Is registrant mode po params:', this.isRegistrantMode);
       });  
-      this.getComissionedLaboratoryTests();
-      this.getFinishedLaboratoryAppointmentsByPatientId();
-      this.getPlannedLaboratoryAppointments();
+      //this.getComissionedLaboratoryTests();
+      //this.getFinishedLaboratoryAppointmentsByPatientId();
+      //this.getPlannedLaboratoryAppointments();
+      for(var comissionedLaboratoryTest of this.comissionedLaboratoryTests){
+        console.log("Grupa id");
+        console.log(comissionedLaboratoryTest.groupId);
+        for(var laboratoryTest of comissionedLaboratoryTest.laboratoryTests){
+          console.log("Nazwa testu:")
+          console.log(laboratoryTest.laboratoryTestTypeName)
+        }
+      }  
   
       //this.getAllLaboratoryAppointments() //odpalić dopieor po naciśnięciu przycisku
     }
@@ -77,7 +88,10 @@ export class PatientLaboratoryAppointmentsComponent {
       this.clinicService.setLaboratoryAppointmentToTestsGroup(this.testsGroupToArrange.groupId, laboratoryAppointmentId)
       .subscribe(data => {
         //this.availableLaboratoryAppointments = data;
+        this.getComissionedLaboratoryTests();
+        this.getPlannedLaboratoryAppointments();
       })
+
     }
 
     chooseAppointment(medicalAppointmentId: number): void {
@@ -101,10 +115,38 @@ export class PatientLaboratoryAppointmentsComponent {
       this.isMakeAnAppointmentMode = false;
     }
 
-    OpenComissioned(){
+    openComissioned(){
+      this.isCommisionedTestsMode = true;
+      this.getComissionedLaboratoryTests();
     }
-    cancelPlannedAppointment(plannedLaboratoryAppointment: LabAppWithPatientLabTestsMedApp){
 
+    openPlanned(){
+      this.isPlannedLabAppMode = true;
+      this.getPlannedLaboratoryAppointments();
+    }
+
+    openFinished(){
+      this.isFinishedLabappMode = true;
+      this.getFinishedLaboratoryAppointmentsByPatientId();
+    }
+
+    cancelPlannedAppointment(laboratoryAppointmentId: number){
+      this.clinicService.cancelPlannedAppointment(laboratoryAppointmentId).subscribe(data => {
+        this.getComissionedLaboratoryTests();
+        this.getPlannedLaboratoryAppointments();
+      })
+    }
+
+    closeComissionedAppointments(){
+      this.isCommisionedTestsMode = false;
+    }
+
+    closePlannedAppointments(){
+      this.isPlannedLabAppMode = false;     
+    }
+
+    closeFinishedAppointments(){
+      this.isFinishedLabappMode = false;
     }
 
     
@@ -131,8 +173,7 @@ export class PatientLaboratoryAppointmentsComponent {
           console.log("Nazwa testu:")
           console.log(laboratoryTest.laboratoryTestTypeName)
         }
-      }
-      
+      }    
     }
 
     getPlannedLaboratoryAppointments(){

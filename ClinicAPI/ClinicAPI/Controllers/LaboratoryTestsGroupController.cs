@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClinicAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    //[Route("api/[controller]/[action]")]
     public class LaboratoryTestsGroupController : ControllerBase
     {
         private readonly ILaboratoryTestsGroupService _laboratoryTestsGroupService;
@@ -18,7 +18,9 @@ namespace ClinicAPI.Controllers
             _userContext = userContext;
         }
 
-        [HttpPut("/{groupId}/{laboratoryAppointmentId}")]
+        //[HttpPut("{groupId}/{laboratoryAppointmentId}")]
+        [HttpPut]
+        [Route("api/LaboratoryTestsGroup/UpdateLaboratoryAppointmentToGroup/{groupId}/{laboratoryAppointmentId}")]
         public async Task<IActionResult> UpdateLaboratoryAppointmentToGroup(
             [FromRoute] int groupId,
             [FromRoute] int laboratoryAppointmentId)

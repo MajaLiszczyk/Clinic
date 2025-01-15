@@ -208,6 +208,7 @@ builder.Services.AddScoped<ILaboratoryAppointmentRepository, LaboratoryAppointme
 builder.Services.AddScoped<ILaboratoryTestTypeService, LaboratoryTestTypeService>(); //dodalam
 builder.Services.AddScoped<ILaboratoryTestTypeRepository, LaboratoryTestTypeRepository>(); //dodalam
 
+builder.Services.AddScoped<ILaboratoryTestsGroupService, LaboratoryTestsGroupService>(); //dodalam
 builder.Services.AddScoped<ILaboratoryTestsGroupRepository, LaboratoryTestsGroupRepository>(); //dodalam
 
 builder.Services.AddScoped<ILaboratoryWorkerService, LaboratoryWorkerService>(); //dodalam

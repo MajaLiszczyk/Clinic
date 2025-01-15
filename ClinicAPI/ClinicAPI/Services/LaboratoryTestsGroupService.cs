@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClinicAPI.Dtos;
+using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
@@ -16,9 +17,10 @@ namespace ClinicAPI.Services
         public LaboratoryTestsGroupService(ILaboratoryTestsGroupRepository laboratoryTestsGroupRepository
                                            , ILaboratoryAppointmentRepository laboratoryAppointmentRepository, IMapper mapper)
         {
+
+            _mapper = mapper;
             _laboratoryTestsGroupRepository = laboratoryTestsGroupRepository;
             _laboratoryAppointmentRepository = laboratoryAppointmentRepository;
-            _mapper = mapper;
 
         }
 
@@ -37,18 +39,22 @@ namespace ClinicAPI.Services
                     return (false, "Tests Group with this id does not exists.");
                 }
                 //sprawdzic czy do grupy nie ma juz jakiegos lab app przypisanego?
-                if (updatedGroup.LaboratoryAppointmentId != 0)
+                if (updatedGroup.LaboratoryAppointmentId != null)
                 {
                     return (false, "Tests Group already has laboratory appointment assigned.");
                 }
                 //sprawdzic czy istnieje lab app
-                var app = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(laboratoryAppointmentId);
-                if (app == null)
+                var labApp = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(laboratoryAppointmentId);
+                if (labApp == null)
                 {
                     return (false, "Laboratory appointment with this id does not exists.");
                 }
                 updatedGroup.LaboratoryAppointmentId = laboratoryAppointmentId;
                 var p = await _laboratoryTestsGroupRepository.UpdateLaboratoryTestsGroup(updatedGroup);
+                labApp.State = LaboratoryAppointmentState.Reserved;
+                var q = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(labApp);
+
+
                 scope.Complete();
                 return await Task.FromResult((true, "Tests group succesfully uptated"));
             }
