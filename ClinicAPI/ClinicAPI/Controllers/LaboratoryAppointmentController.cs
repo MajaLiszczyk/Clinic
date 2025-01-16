@@ -41,9 +41,6 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
-
-        
-
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getPlannedLaboratoryAppointmentsByPatientId([FromRoute] int id)
@@ -53,6 +50,75 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getFutureLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getFutureLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getWaitingForFillLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getWaitingForFillLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getWaitingForSupervisorLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getWaitingForSupervisorLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getToBeFixedLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getToBeFixedLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getReadyForPatientLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getReadyForPatientLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getSentToPatientLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getSentToPatientLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getCancelledLabAppsByLabWorkerId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getCancelledLabAppsByLabWorkerId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+
+
 
         [HttpGet("{id}")]
         [Authorize]

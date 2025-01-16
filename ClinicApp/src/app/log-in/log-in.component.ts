@@ -62,7 +62,10 @@ export class LoginComponent {
               this.router.navigate(['/doctor-appointments', id]);
             } else if (result.role === 'Registrant') {
               this.router.navigate(['/registrant']);
+            } else if (result.role === 'LaboratoryWorker') {
+              this.router.navigate(['/laboratory-worker', id]);
             }
+
           },
           error: (error) => {
             this.errorMessage = 'Invalid username or password';

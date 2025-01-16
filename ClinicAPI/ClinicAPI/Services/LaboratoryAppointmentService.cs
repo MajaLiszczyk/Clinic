@@ -40,13 +40,49 @@ namespace ClinicAPI.Services
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getPlannedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
-
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getFinishedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
-        
+
+
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getFutureLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForFillLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForSupervisorLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForSupervisorLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getToBeFixedLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getReadyForPatientLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getReadyForPatientLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSentToPatientLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getCancelledLabAppsByLabWorkerId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getCancelledLabAppsByLabWorkerId(id);
+            return laboratoryAppointments;
+        }
+
 
 
 
