@@ -11,6 +11,11 @@ namespace ClinicAPI.Controllers
         public string ResultValue { get; set; }
     }
 
+    public class LaboratoryTestRejectCommentDto
+    {
+        public string RejectCommentValue { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class LaboratoryTestController : ControllerBase
@@ -125,11 +130,31 @@ namespace ClinicAPI.Controllers
                 //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AcceptLaboratoryTest([FromRoute] int id)
+        {
+            var result = await _laboratoryTestService.AcceptLaboratoryTestResult(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> RejectLaboratoryTest([FromRoute] int id, [FromBody] LaboratoryTestRejectCommentDto rejectCommentDto)
+        {
+            if (rejectCommentDto == null || string.IsNullOrWhiteSpace(rejectCommentDto.RejectCommentValue))
+            {
+                return BadRequest("Invalid data.");
+            }
+            var result = await _laboratoryTestService.RejectLaboratoryTestResult(id, rejectCommentDto.RejectCommentValue);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            //return Ok(result.Response);
+            else return BadRequest(result.Response);
+        }
+
         
-
-
-
-
         //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)

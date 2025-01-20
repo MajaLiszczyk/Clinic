@@ -1,1 +1,137 @@
-<p>laboratory-supervisor works!</p>
+<div class="container">
+    <div *ngIf="!isRegistrantMode">
+        <button [disabled]="!authorizationService.isLoggedIn()" type="button"
+            class="btn  btn-success float-right mx-2 mt-5 " (click)="logout()">Logout</button>
+    </div>
+
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openWaitingForReviewLabApp()"
+            class="btn btn-primary ms-2 me-4">Waiting for review</button>
+    </div>
+    <div *ngIf="isWaitingForReviewMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Waiting for review
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Patient Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let waitingForReviewAppointment of waitingForReviewAppointments">
+                    <td>
+                        {{waitingForReviewAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{waitingForReviewAppointment.patientId}}
+                    </td>
+                    <td class="text-end">
+                        <a [routerLink]="['/laboratory-appointment-details', waitingForReviewAppointment.laboratoryAppointmentId]"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                    </td>
+                </tr>
+                <tr *ngIf="waitingForReviewAppointments.length === 0">
+                    <td colspan="8">No tests waiting for review</td>
+                </tr>
+            </tbody>
+        </table>
+        <button (click)="closeWaitingForReviewLabApp()" class="btn btn-secondary">Close</button>
+    </div>
+
+
+    
+
+
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openSentBackLabApp()"
+            class="btn btn-primary ms-2 me-4">Sent back</button>
+    </div>
+    <div *ngIf="isSentBackMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Sent back
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Patient Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sentBackAppointment of sentBackAppointments">
+                    <td>
+                        {{sentBackAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{sentBackAppointment.patientId}}
+                    </td>
+                    <td class="text-end">
+                        <a [routerLink]="['/laboratory-appointment-details', sentBackAppointment.laboratoryAppointmentId]"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                    </td>
+                </tr>
+                <tr *ngIf="sentBackAppointments.length === 0">
+                    <td colspan="8">No sent back tests</td>
+                </tr>
+            </tbody>
+        </table>
+        <button (click)="closeSentBackLabApp()" class="btn btn-secondary">Close</button>
+    </div>
+
+
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openAcceptedLabApp()"
+            class="btn btn-primary ms-2 me-4">Accepted</button>
+    </div>
+    <div *ngIf="isAcceptedMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        Accepted
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Patient Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let acceptedAppointment of acceptedAppointments">
+                    <td>
+                        {{acceptedAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{acceptedAppointment.patientId}}
+                    </td>
+                    <td class="text-end">
+                        <a [routerLink]="['/laboratory-appointment-details', acceptedAppointment.laboratoryAppointmentId]"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                    </td>
+                </tr>
+                <tr *ngIf="acceptedAppointments.length === 0">
+                    <td colspan="8">No accepetd tests</td>
+                </tr>
+            </tbody>
+        </table>
+        <button (click)="closeAcceptedLabApp()" class="btn btn-secondary">Close</button>
+    </div>
+
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers']" class="btn btn-secondary">Return</a>
+
+</div>

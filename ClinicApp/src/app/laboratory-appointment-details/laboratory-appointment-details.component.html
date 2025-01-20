@@ -95,10 +95,6 @@
                   </th>
                   <th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted ||
                       laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed">
-                      Edit test
-                  </th>
-                  <th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted ||
-                      laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed">
                       Save test
                   </th>
               </tr>
@@ -118,8 +114,11 @@
                       {{laboratoryTest.doctorNote}}
                   </td>
                   <td>
-                    <ng-container *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted || 
+                    <ng-container *ngIf="laboratoryTest.state == LaboratoryTestState.ToBeCompleted || 
+                                         laboratoryTest.state == LaboratoryTestState.Completed ||
                                          laboratoryTest.state == LaboratoryTestState.Rejected; else staticResult">
+                    <!-- <ng-container *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted || 
+                                         laboratoryTest.state == LaboratoryTestState.Rejected; else staticResult"> -->
                                          <!--laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed; else staticResult"> -->
                       <form [formGroup]="getLaboratoryTestFormGroup(i)">
                         <input type="text" formControlName="result" />
@@ -148,14 +147,11 @@
                        || laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
                       {{laboratoryTest.rejectComment}}
                   </td>
+                  <td *ngIf="laboratoryTest.state == LaboratoryTestState.ToBeCompleted || 
+                    laboratoryTest.state == LaboratoryTestState.Completed ||
+                    laboratoryTest.state == LaboratoryTestState.Rejected;">
                   <!-- <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted ||
-                      laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed">
-                    <button type="button"
-                    class="btn  btn-success float-right" (click)="editLaboratoryTest(i)">Edit</button>
-                      Edit
-                  </td> -->
-                  <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted ||
-                      laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed">
+                      laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed"> -->
                     <button  type="button"
                     class="btn  btn-success float-right" (click)="saveLaboratoryTest(i)">Save</button>
                   </td>
@@ -172,8 +168,8 @@
         <button *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.Reserved" type="button" class="btn  btn-primary float-right mx-2 "
             (click)="cancelAppointment()">Cancel</button>
 
-        <button [disabled]="!isAllResultsCompleted" *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed
-                || laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted" type="button" class="btn  btn-primary float-right mx-2 "
+        <button [disabled]="!isAllResultsCompleted" *ngIf="isAllResultsCompleted && (laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed
+                || laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeCompleted)" type="button" class="btn  btn-primary float-right mx-2 "
             (click)="sendToSupervisor()">Send to supervisor</button>
 
         <button *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.AllAccepted" type="button" class="btn  btn-primary float-right mx-2 "

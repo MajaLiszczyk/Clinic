@@ -14,6 +14,8 @@ namespace ClinicAPI.Services.Interfaces
         public Task<(bool Confirmed, string Response, ReturnLaboratoryTestDto? laboratoryTest)> CreateLaboratoryTest(CreateLaboratoryTestDto request);
         public Task<(bool Confirmed, string Response)> UpdateLaboratoryTest(UpdateLaboratoryTestDto request);
         public Task<(bool Confirmed, string Response)> SaveLaboratoryTestResult(int id, string resultValue);
+        public Task<(bool Confirmed, string Response)> AcceptLaboratoryTestResult(int id);
+        public Task<(bool Confirmed, string Response)> RejectLaboratoryTestResult(int id, string rejectComment);
         public Task<(bool Confirmed, string Response)> DeleteLaboratoryTest(int id);
     }
 }

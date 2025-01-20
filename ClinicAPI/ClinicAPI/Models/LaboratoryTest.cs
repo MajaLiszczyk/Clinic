@@ -29,10 +29,11 @@ namespace ClinicAPI.Models
     public enum LaboratoryTestState
     {
         Comissioned = 0,
-        ToBeCompleted = 1,
-        WaitingForSupervisor = 2,
-        Accepted = 3,
-        Rejected = 4
+        ToBeCompleted = 1,  //moze lab worker zmienic
+        Completed = 2, //moze lab worker zmienic
+        WaitingForSupervisor = 3, 
+        Accepted = 4,
+        Rejected = 5 //moze lab worker zmienic
     }
 
     public class LaboratoryTest

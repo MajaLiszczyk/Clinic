@@ -104,6 +104,18 @@ export class ClinicService {
     return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/SaveLaboratoryTestResult/" + id, body, { headers: { 'Content-Type': 'application/json' } });
     { responseType: 'text' as 'json' }
   }
+  //supervisor
+  acceptLaboratoryTest(id: number): Observable<LaboratoryTest>{
+    return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/acceptLaboratoryTest/"+ id, null);
+  }
+  rejectLaboratoryTest(id: number, rejectCommentValue: string): Observable<LaboratoryTest>{
+    return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/rejectLaboratoryTest/"+ id, rejectCommentValue);
+  }
+  sendLaboratoryTestsToLaboratoryWorker(laboratoryAppointmentId: number): Observable<LaboratoryTest>{
+    return this.http.put<LaboratoryTest>(this.LaboratoryAppointmentUrl + "/sendLaboratoryTestsToLaboratoryWorker/"+ laboratoryAppointmentId, null);
+  }
+
+  
 
 
   //LABORATORY TEST TYPE
@@ -189,6 +201,16 @@ export class ClinicService {
   }
   getCancelledLabAppsByLabWorkerId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]>{
     return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getCancelledLabAppsByLabWorkerId/" + id);
+  }
+  //lab app ze strony supervisor
+  getWaitingForReviewLabAppsBySupervisorId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]>{
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getWaitingForReviewLabAppsBySupervisorId/" + id);
+  }
+  getAcceptedLabAppsBySupervisorId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]>{
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getAcceptedLabAppsBySupervisorId/" + id);
+  }
+  getSentBackLabAppsBySupervisorId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]>{
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getSentBackLabAppsBySupervisorId/" + id);
   }
 
   //Obsługa wizyt przez lab workera

@@ -12,7 +12,8 @@ export interface LaboratoryTest{
 export enum LaboratoryTestState {
     Comissioned = 0,
     ToBeCompleted = 1,
-    WaitingForSupervisor = 2,
-    Accepted = 3,
-    Rejected = 4
+    Completed = 2,
+    WaitingForSupervisor = 3,
+    Accepted = 4,
+    Rejected = 5
 }

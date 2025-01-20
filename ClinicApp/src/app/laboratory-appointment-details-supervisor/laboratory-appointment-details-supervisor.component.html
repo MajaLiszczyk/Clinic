@@ -1,0 +1,120 @@
+<div class="container">
+    <a [routerLink]="['/laboratory-supervisor' , laboratoryAppointment?.supervisorId]"
+        class="btn btn-secondary my-4">Return</a>
+
+    <h4>LABORATORY APPOINTMENT</h4>
+    <p></p>
+    <h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">
+        <div *ngIf="laboratoryAppointment?.state === LaboratoryAppointmentState.WaitingForSupervisor ; else toBeFixed">
+            status: WAITING FOR REVIEW
+        </div>
+        <ng-template #toBeFixed>
+            <div *ngIf="laboratoryAppointment?.state === LaboratoryAppointmentState.ToBeFixed; else allAccepted">
+                status: SENT BACK
+            </div>
+        </ng-template>
+        <ng-template #allAccepted>
+            <div>
+                status: ALL ACCPETED
+            </div>
+        </ng-template>
+    </h5>
+    Time: {{laboratoryAppointment?.dateTime}} <br />
+    Patient id: {{laboratoryAppointment?.patientId}} <br />
+    Patient name: {{laboratoryAppointment?.patientName}} <br />
+    Patient surname: {{laboratoryAppointment?.patientSurname}} <br />
+    Issue date: {{laboratoryAppointment?.medicalAppointmentDateTime}} <br />
+    Doctor name: {{laboratoryAppointment?.doctorName}} <br />
+    Doctor surname: {{laboratoryAppointment?.doctorSurname}}
+
+
+    <div class="mt-4" *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.Cancelled">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Test type
+                    </th>
+                    <th>
+                        Doctor note
+                    </th>
+                    <th>
+                        Result
+                    </th>
+                    <th>
+                        State
+                    </th>
+                    <!--<th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor 
+                         || laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed 
+                         || laboratoryAppointment?.state == LaboratoryAppointmentState.AllAccepted"> -->
+                    <th>
+                        Reject comment
+                    </th>
+                    <th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                        Accept test
+                    </th>
+                    <th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                        Rejest test
+                    </th>
+                </tr>
+
+            </thead>
+            <!-- <tr *ngFor="let doctor of doctors"> -->
+            <tbody>
+                <!--<tr *ngFor="let laboratoryTest of laboratoryAppointment?.laboratoryTests">-->
+                <tr *ngFor="let laboratoryTest of laboratoryAppointment?.laboratoryTests; let i = index">
+                    <td>
+                        {{laboratoryTest.id}}
+                    </td>
+                    <td>
+                        {{laboratoryTest.laboratoryTestTypeName}}
+                    </td>
+                    <td>
+                        {{laboratoryTest.doctorNote}}
+                    </td>
+                    <td>
+                        {{laboratoryTest.result}}
+                    </td>
+                    <td>
+                        {{laboratoryTest.state}}
+                    </td>
+                    <td>
+                        <ng-container
+                            *ngIf="laboratoryTest.state == LaboratoryTestState.WaitingForSupervisor; else staticRejectComment">
+                            <form [formGroup]="getLaboratoryTestFormGroup(i)">
+                                <input type="text" formControlName="rejectComment" />
+                            </form>
+                        </ng-container>
+                        <ng-template #staticRejectComment>
+                            {{ laboratoryTest.rejectComment }}
+                        </ng-template>
+                    </td>
+
+                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                        <button type="button" class="btn  btn-success float-right"
+                            (click)="acceptLaboratoryTest(i)">Accept</button>
+                    </td>
+                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                        <button type="button" class="btn  btn-success float-right"
+                            (click)="rejectLaboratoryTest(i)">Reject</button>
+                    </td>
+                </tr>
+                <tr *ngIf="laboratoryAppointment?.laboratoryTests?.length === 0">
+                    <td colspan="8">No laboratory tests</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-center mb-5 mt-5">
+            <button [disabled]="!isAllResultsChecked" *ngIf="isAllResultsChecked && laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor" type="button"
+                class="btn  btn-primary float-right mx-2 " (click)="sendToLaboratoryWorker()">Send to laboratory worker</button>
+        </div>
+
+
+
+
+    </div>
+</div>

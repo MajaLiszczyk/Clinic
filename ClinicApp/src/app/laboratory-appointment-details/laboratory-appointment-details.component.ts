@@ -173,7 +173,9 @@ export class LaboratoryAppointmentDetailsComponent {
 
   isAllTestResultsCompleted(){
     for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.result == null){
+      if(labTest.state == LaboratoryTestState.Completed || labTest.state == LaboratoryTestState.Rejected
+        || labTest.state == LaboratoryTestState.Accepted){ 
+      //if(labTest.result == null){ //można po stanie sprawdzić 
         this.isAllResultsCompleted = false;
         return;
       }
@@ -184,7 +186,7 @@ export class LaboratoryAppointmentDetailsComponent {
   sendToSupervisor() { 
     for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
       if(labTest.result == null){
-        this.cancelAppointmentForm.markAllAsTouched();
+        this.laboratoryTestsFormArray.markAllAsTouched();
         return;
       }
     }

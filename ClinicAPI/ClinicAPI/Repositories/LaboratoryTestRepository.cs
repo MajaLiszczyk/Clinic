@@ -253,6 +253,9 @@ public string DoctorNote { get; set; } */
 
 
 
+
+
+
         public async Task<LaboratoryTest> CreateLaboratoryTest(LaboratoryTest laboratoryTest)
         {
             await _context.AddAsync(laboratoryTest);
@@ -267,6 +270,35 @@ public string DoctorNote { get; set; } */
             return laboratoryTest;
 
         }
+
+        public async Task<List<LaboratoryTest>> ChangeLaboratoryTestsStateByLabAppId(int laboratoryAppointmentId, LaboratoryTestState testState)
+        {
+                // Znalezienie wszystkich testów laboratoryjnych dla podanego laboratoryAppointmentId
+                var laboratoryTests = await (from labApp in _context.LaboratoryAppointment
+                                             where labApp.Id == laboratoryAppointmentId
+                                             join labGroup in _context.LaboratoryTestsGroup
+                                                 on labApp.Id equals labGroup.LaboratoryAppointmentId
+                                             join labTest in _context.LaboratoryTest
+                                                 on labGroup.Id equals labTest.LaboratoryTestsGroupId
+                                             select labTest)
+                                            .ToListAsync();
+
+                // Zmień stan na ToBeCompleted
+                foreach (var test in laboratoryTests)
+                {
+                    test.State = testState;
+                }
+
+                // Zapisanie zmian w bazie danych
+                await _context.SaveChangesAsync();
+
+                return laboratoryTests; // Zwróć zaktualizowane testy
+
+
+        }
+
+        
+
         public async Task<bool> DeleteLaboratoryTest(int id)
         {
             var _laboratoryTest = await _context.LaboratoryTest.FindAsync(id);

@@ -130,6 +130,36 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        //LAB SUPERVISOR
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetWaitingForReviewLabAppsBySupervisorId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.GetWaitingForReviewLabAppsBySupervisorId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetAcceptedLabAppsBySupervisorId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.GetAcceptedLabAppsBySupervisorId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetSentBackLabAppsBySupervisorId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.GetSentBackLabAppsBySupervisorId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }                        
+        //LAB SUPERVISOR
+
 
 
 
@@ -207,6 +237,15 @@ namespace ClinicAPI.Controllers
         public async Task<IActionResult> SendLaboratoryTestsResultsToPatient([FromRoute] int id)
         {
             var result = await _laboratoryAppointmentService.SendLaboratoryTestsResultsToPatient(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{laboratoryAppointmentId}")]
+        public async Task<IActionResult> SendLaboratoryTestsToLaboratoryWorker([FromRoute] int laboratoryAppointmentId)
+        {
+            var result = await _laboratoryAppointmentService.SendLaboratoryTestsToLaboratoryWorker(laboratoryAppointmentId);
             if (result.Confirmed)
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);

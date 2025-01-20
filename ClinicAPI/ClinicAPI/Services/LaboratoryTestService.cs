@@ -168,6 +168,7 @@ namespace ClinicAPI.Services
                     return await Task.FromResult((false, "LaboratoryTest with state WaitingForSupervisor or Accepted can not be changed"));
                 }
                 _laboratoryTest.Result = resultValue;
+                _laboratoryTest.State = LaboratoryTestState.Completed;
                 var p = await _laboratoryTestRepository.UpdateLaboratoryTest(_laboratoryTest);
                 Console.WriteLine("Result: " + p.Result);
                 scope.Complete();
@@ -177,8 +178,57 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating laboratory test: {ex.Message}");
             }
-
         }
+
+        public async Task<(bool Confirmed, string Response)> AcceptLaboratoryTestResult(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                LaboratoryTest? _laboratoryTest = await _laboratoryTestRepository.GetLaboratoryTestById(id);
+
+                if (_laboratoryTest == null)
+                {
+                    return await Task.FromResult((false, "LaboratoryTest with given id does not exist."));
+                }
+                _laboratoryTest.State = LaboratoryTestState.Accepted;
+                var p = await _laboratoryTestRepository.UpdateLaboratoryTest(_laboratoryTest);
+                scope.Complete();
+                return await Task.FromResult((true, "LaboratoryTest succesfully saved"));
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory test: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Confirmed, string Response)> RejectLaboratoryTestResult(int id, string rejectComment)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                LaboratoryTest? _laboratoryTest = await _laboratoryTestRepository.GetLaboratoryTestById(id);
+
+                if (_laboratoryTest == null)
+                {
+                    return await Task.FromResult((false, "LaboratoryTest with given id does not exist."));
+                }
+                _laboratoryTest.RejectComment = rejectComment;
+                _laboratoryTest.State = LaboratoryTestState.Rejected;
+                var p = await _laboratoryTestRepository.UpdateLaboratoryTest(_laboratoryTest);
+                scope.Complete();
+                return await Task.FromResult((true, "LaboratoryTest succesfully saved"));
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory test: {ex.Message}");
+            }
+        }
+
 
 
         public async Task<(bool Confirmed, string Response)> DeleteLaboratoryTest(int id)

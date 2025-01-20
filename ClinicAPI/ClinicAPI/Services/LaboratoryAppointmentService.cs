@@ -12,14 +12,17 @@ namespace ClinicAPI.Services
     {
         private readonly ILaboratoryAppointmentRepository _laboratoryAppointmentRepository;
         private readonly ILaboratoryTestsGroupRepository _laboratoryTestsGroupRepository;
+        private readonly ILaboratoryTestRepository _laboratoryTestsRepository;
         private readonly IMapper _mapper;
 
         public LaboratoryAppointmentService(ILaboratoryAppointmentRepository laboratoryAppointmentRepository
                                             , ILaboratoryTestsGroupRepository laboratoryTestsGroupRepository
+                                            , ILaboratoryTestRepository laboratoryTestRepository
                                             , IMapper mapper)
         {
             _laboratoryAppointmentRepository = laboratoryAppointmentRepository;
             _laboratoryTestsGroupRepository = laboratoryTestsGroupRepository;
+            _laboratoryTestsRepository = laboratoryTestRepository;
             _mapper = mapper;
         }
 
@@ -100,6 +103,26 @@ namespace ClinicAPI.Services
         }
         //LAB WORKER
 
+        //LAB SUPERVISOR
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetWaitingForReviewLabAppsBySupervisorId(int id)
+        {
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.WaitingForSupervisor);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetAcceptedLabAppsBySupervisorId(int id)
+        {
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.AllAccepted);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetSentBackLabAppsBySupervisorId(int id)
+        {
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.ToBeFixed);
+            return laboratoryAppointments;
+        }
+        //LAB SUPERVISOR
 
 
 
@@ -213,6 +236,7 @@ namespace ClinicAPI.Services
                 }
                 _laboratoryAppointment.State = LaboratoryAppointmentState.ToBeCompleted;
                 var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                var r = await _laboratoryTestsRepository.ChangeLaboratoryTestsStateByLabAppId(id, LaboratoryTestState.ToBeCompleted);
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
 
@@ -237,9 +261,10 @@ namespace ClinicAPI.Services
                 {
                     return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
                 }
-                //sprawdzic czy wszystkie wyniki są niepuste
+                //TO DO : sprawdzic czy wszystkie wyniki są niepuste. Mozna sprawdzić stanami testów
                 _laboratoryAppointment.State = LaboratoryAppointmentState.WaitingForSupervisor;
                 var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                var r = await _laboratoryTestsRepository.ChangeLaboratoryTestsStateByLabAppId(id, LaboratoryTestState.WaitingForSupervisor);
                 //zmienic status testow
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
@@ -250,6 +275,59 @@ namespace ClinicAPI.Services
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
         }
+
+        public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsToLaboratoryWorker(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _laboratoryAppointment = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(id);
+
+                if (_laboratoryAppointment == null)
+                {
+                    return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
+                }
+                var labTests = await _laboratoryTestsRepository.GetLaboratoryTestsByLabAppId(id);
+                //TO DO : sprawdzic czy wszystkie wyniki są niepuste. Mozna sprawdzić stanami testów
+                //sprawdzic czy wszystkie wyniki sa accpted, czy cos jest rejected
+                int acceptedTestsCounter = 0;
+                foreach (var test in labTests)
+                {
+                    if (test.State != LaboratoryTestState.Accepted)
+                    {
+                        acceptedTestsCounter++;
+                    }
+                    else if (test.State != LaboratoryTestState.Rejected)
+                    {
+                    }
+                    else 
+                    {
+                        return;
+                    }
+                }
+                if(acceptedTestsCounter == labTests.Count())
+                {
+                    _laboratoryAppointment.State = LaboratoryAppointmentState.AllAccepted;
+                }
+                else
+                {
+                    _laboratoryAppointment.State = LaboratoryAppointmentState.ToBeFixed;
+                }
+
+                var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                scope.Complete();
+                return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory appointment: {ex.Message}");
+            }
+        }
+
+        
 
         public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsResultsToPatient(int id)
         {
