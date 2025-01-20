@@ -5,6 +5,8 @@ namespace ClinicAPI.Services.Interfaces
     public interface ILaboratoryAppointmentService
     {
         public Task<List<ReturnLaboratoryAppointmentDto>> GetAllLaboratoryAppointments();
+        public Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id);
+        //public Task<bool> IsAllLaboratoryTestsResultsCompleted(int id);
         public Task<List<ReturnLaboratoryAppointmentDto>> GetAvailableLaboratoryAppointments();
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int id);
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id);
@@ -19,6 +21,10 @@ namespace ClinicAPI.Services.Interfaces
 
         public Task<(bool Confirmed, string Response, ReturnLaboratoryAppointmentDto? medAppointment)> CreateLaboratoryAppointment(CreateLaboratoryAppointmentDto request);
         public Task<(bool Confirmed, string Response)> UpdateLaboratoryAppointment(UpdateLaboratoryAppointmentDto request);
+        public Task<(bool Confirmed, string Response)> MakeCancelledLaboratoryAppointment(int id, string cancelComment);
+        public Task<(bool Confirmed, string Response)> FinishLaboratoryAppointment(int id);
+        public Task<(bool Confirmed, string Response)> SendLaboratoryTestsToSupervisor(int id);
+        public Task<(bool Confirmed, string Response)> SendLaboratoryTestsResultsToPatient(int id);
         public Task<(bool Confirmed, string Response)> CancelPlannedAppointment(int id);
         
     }

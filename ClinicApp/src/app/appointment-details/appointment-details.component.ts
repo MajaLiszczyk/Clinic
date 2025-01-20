@@ -277,7 +277,6 @@ export class AppointmentDetailsComponent {
     }
   }
 
-
   saveDiagnosticTest() {
     const desc: string = this.diagnosticTestForm.get('description')?.value
     const dTest: DiagnosticTest = { id: this.listCounter, medicalAppointmentId: this.appointmentId
@@ -378,7 +377,7 @@ export class AppointmentDetailsComponent {
       }))
     };
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.clinicService.finishMedicalAppointment(finishAppointmentDto)
       .subscribe({
         next: (response) => {

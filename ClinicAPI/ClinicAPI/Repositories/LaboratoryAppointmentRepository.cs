@@ -198,7 +198,72 @@ namespace ClinicAPI.Repositories
         //DLA PACJENTA
 
         //DLA LABORATORY WORKER
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSomeLabAppsByLabWorkerId(int id, LaboratoryAppointmentState labAppState)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var result = await (from labApp in _context.LaboratoryAppointment
+                                    where labApp.State == labAppState
+                                    where labApp.LaboratoryWorkerId == id
+                                    join labGroup in _context.LaboratoryTestsGroup
+                                        on labApp.Id equals labGroup.LaboratoryAppointmentId
+                                    join medApp in _context.MedicalAppointment
+                                        on labGroup.MedicalAppointmentId equals medApp.Id
+                                    join patient in _context.Patient
+                                        on medApp.PatientId equals patient.Id
+                                    join doctor in _context.Doctor
+                                        on medApp.DoctorId equals doctor.Id
+                                    select new
+                                    {
+                                        LaboratoryAppointment = labApp,
+                                        Patient = patient,
+                                        MedicalAppointment = medApp,
+                                        Doctor = doctor,
+                                        Tests = (from labTest in _context.LaboratoryTest
+                                                 where labTest.LaboratoryTestsGroupId == labGroup.Id
+                                                 select labTest).ToList()
+                                    })
+                                   .ToListAsync();
+
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                {
+                    // Medical appointment
+                    MedicalAppointmentId = x.MedicalAppointment.Id,
+                    MedicalAppointmentDateTime = x.MedicalAppointment.DateTime,
+                    // Doctor
+                    DoctorId = x.Doctor.Id,
+                    DoctorName = x.Doctor.Name,
+                    DoctorSurname = x.Doctor.Surname,
+                    // Laboratory appointment
+                    LaboratoryAppointmentId = x.LaboratoryAppointment.Id,
+                    LaboratoryWorkerId = x.LaboratoryAppointment.LaboratoryWorkerId,
+                    SupervisorId = x.LaboratoryAppointment.SupervisorId,
+                    State = x.LaboratoryAppointment.State,
+                    DateTime = x.LaboratoryAppointment.DateTime,
+                    CancelComment = x.LaboratoryAppointment.CancelComment,
+                    // Patient
+                    PatientId = x.Patient.Id,
+                    PatientName = x.Patient.Name,
+                    PatientSurname = x.Patient.Surname,
+                    PatientPesel = x.Patient.Pesel,
+                    // Laboratory tests
+                    laboratoryTests = x.Tests
+                }).ToList();
+
+                scope.Complete();
+                return mappedResult;
+            }
+            catch (Exception)
+            {
+                scope.Dispose();
+                throw;
+            }
+        }
+
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -261,8 +326,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id)
+        } */
+
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -325,8 +391,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForSupervisorLabAppsByLabWorkerId(int id)
+        }*/
+
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForSupervisorLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -389,9 +456,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
+        }*/
 
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getReadyForPatientLabAppsByLabWorkerId(int id)
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getReadyForPatientLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -399,7 +466,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 var result = await (from labApp in _context.LaboratoryAppointment
-                                    where labApp.State == LaboratoryAppointmentState.ToBeCompleted
+                                    where labApp.State == LaboratoryAppointmentState.AllAccepted
                                     where labApp.LaboratoryWorkerId == id
                                     join labGroup in _context.LaboratoryTestsGroup
                                         on labApp.Id equals labGroup.LaboratoryAppointmentId
@@ -454,10 +521,10 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
+        }*/
 
 
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -520,8 +587,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSentToPatientLabAppsByLabWorkerId(int id)
+        }*/
+
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSentToPatientLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -584,8 +652,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getCancelledLabAppsByLabWorkerId(int id)
+        }*/
+
+        /*public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getCancelledLabAppsByLabWorkerId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                        new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -648,7 +717,9 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
+        }*/
+
+
         //pobranie wszytskim zarezerwowanych lab appointment dla danego lab worker
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getAllReservededLabApposByLabWorkerId(int laboratoryWorkerId)
         {
@@ -715,9 +786,9 @@ namespace ClinicAPI.Repositories
             }
         }
 
-        //dla lab workera jak kliknie details przy zarezerwowanej wizycie
+        //dla lab workera jak kliknie details przy wizycie
         //SingleOrDefaultAsync() zamiast ToListAsync(), aby zapytanie zwracało jeden wynik lub null.
-        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto?> getReservedLabAppDetailsByLabAppId(int laboratoryAppointmentId)
+        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto?> GetLabAppDetailsByLabAppId(int laboratoryAppointmentId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -725,7 +796,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 var result = await (from labApp in _context.LaboratoryAppointment
-                                    where labApp.State == LaboratoryAppointmentState.Reserved
+                                    //where labApp.State == LaboratoryAppointmentState.Reserved
                                     where labApp.Id == laboratoryAppointmentId
                                     join labGroup in _context.LaboratoryTestsGroup
                                         on labApp.Id equals labGroup.LaboratoryAppointmentId
@@ -786,8 +857,8 @@ namespace ClinicAPI.Repositories
                 throw;
             }
         }
-        //DLA LABORATORY WORKER
 
+        
 
 
 

@@ -4,8 +4,8 @@ export interface LaboratoryTest{
     state: LaboratoryTestState;
     laboratoryTestTypeId: number;
     laboratoryTestTypeName: string;
-    result: string;
-    doctorNote: string;
+    result?: string;
+    doctorNote?: string;
     rejectComment: string;
 }
 

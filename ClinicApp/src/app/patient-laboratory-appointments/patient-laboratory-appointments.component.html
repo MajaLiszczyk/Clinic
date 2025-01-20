@@ -5,8 +5,8 @@
         <button [disabled]="isMakeAnAppointmentMode || patient.isAvailable==false " (click)="openAppointmentForm()"
             class="btn btn-primary ms-2 me-4">Make an appointment</button>
     </div> -->
-    <div>
-        <h3 class="my-4" *ngIf="isMakeAnAppointmentMode">Make a laboratory appointment</h3>
+    <div *ngIf="isMakeAnAppointmentMode">
+        <h3 class="my-4">Make a laboratory appointment</h3>
         <!-- <form [formGroup]="chooseLaboratoryAppointmentForm" *ngIf="isMakeAnAppointmentMode">   -->            
             <div *ngFor="let availableLaboratoryAppointment of availableLaboratoryAppointments">
                 <span>Id - {{ availableLaboratoryAppointment.id }} - Time:

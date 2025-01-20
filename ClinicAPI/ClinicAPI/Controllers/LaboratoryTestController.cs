@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
 {
+    public class LaboratoryTestResultDto
+    {
+        public string ResultValue { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class LaboratoryTestController : ControllerBase
@@ -70,6 +75,21 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetLaboratoryTestsByLabAppId([FromRoute] int id)
+        {
+            try
+            {
+                var incompleteTests = await _laboratoryTestService.GetLaboratoryTestsByLabAppId(id);
+                return Ok(incompleteTests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratoryTestDto request)
@@ -91,6 +111,21 @@ namespace ClinicAPI.Controllers
                 return Ok(result.Response);
             else return BadRequest(result.Response);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> SaveLaboratoryTestResult([FromRoute] int id, [FromBody] LaboratoryTestResultDto resultDto)
+        {
+            if (resultDto == null || string.IsNullOrWhiteSpace(resultDto.ResultValue))
+            {
+                return BadRequest("Invalid data.");
+            }
+            var result = await _laboratoryTestService.SaveLaboratoryTestResult(id, resultDto.ResultValue);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+                //return Ok(result.Response);
+            else return BadRequest(result.Response);
+        }
+        
 
 
 

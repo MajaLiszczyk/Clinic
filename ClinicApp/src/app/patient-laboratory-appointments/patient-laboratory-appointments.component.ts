@@ -89,7 +89,12 @@ export class PatientLaboratoryAppointmentsComponent {
       .subscribe(data => {
         //this.availableLaboratoryAppointments = data;
         this.getComissionedLaboratoryTests();
-        this.getPlannedLaboratoryAppointments();
+        if(this.isPlannedLabAppMode == true){
+          this.getPlannedLaboratoryAppointments();
+        }
+        if(this.isMakeAnAppointmentMode == true){
+          this.getAllAvailableLaboratoryAppointments();
+        }
       })
 
     }
@@ -111,6 +116,7 @@ export class PatientLaboratoryAppointmentsComponent {
       this.isMakeAnAppointmentMode = true;
       this.getAllAvailableLaboratoryAppointments();
     }
+
     cancelAppointmentForm(){
       this.isMakeAnAppointmentMode = false;
     }

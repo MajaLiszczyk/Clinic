@@ -35,7 +35,7 @@
                         {{futureAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', futureAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', futureAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -76,7 +76,7 @@
                         {{waitingForFillAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', waitingForFillAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', waitingForFillAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -118,7 +118,7 @@
                         {{waitingForSupervisorAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', waitingForSupervisorAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', waitingForSupervisorAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -160,7 +160,7 @@
                         {{readyForPatientAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', readyForPatientAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', readyForPatientAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -172,50 +172,6 @@
         <button (click)="closeReadyForPatientLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
-
-
-
-    <div class=" col-12 mb-4 text-center">
-        <button (click)="openReadyForPatientLabApp()"
-            class="btn btn-primary ms-2 me-4">Ready to send</button>
-    </div>
-    <div *ngIf="isReadyForPatientMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Ready to send
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        Time
-                    </th>
-                    <th>
-                        Patient Id
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let readyForPatientAppointment of readyForPatientAppointments">
-                    <td>
-                        {{readyForPatientAppointment.dateTime}}
-                    </td>
-                    <td>
-                        {{readyForPatientAppointment.patientId}}
-                    </td>
-                    <td class="text-end">
-                        <a [routerLink]="['/appointment-details', readyForPatientAppointment.laboratoryAppointmentId]"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
-                    </td>
-                </tr>
-                <tr *ngIf="readyForPatientAppointments.length === 0">
-                    <td colspan="8">No tests ready to send</td>
-                </tr>
-            </tbody>
-        </table>
-        <button (click)="closeReadyForPatientLabApp()" class="btn btn-secondary">Close</button>
-    </div>
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openSentToPatientLabApp()"
@@ -246,7 +202,7 @@
                         {{sentToPatientAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', sentToPatientAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', sentToPatientAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -288,7 +244,7 @@
                         {{cancelledAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/appointment-details', cancelledAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details', cancelledAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>

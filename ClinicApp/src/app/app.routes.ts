@@ -39,6 +39,7 @@ import { LoginComponent } from './log-in/log-in.component';
 import { AuthorizationGuard } from './authorization/authorization-guard';
 import { PatientLaboratoryAppointmentsComponent } from './patient-laboratory-appointments/patient-laboratory-appointments.component';
 import { LaboratoryWorkerComponent } from './laboratory-worker/laboratory-worker.component';
+import { LaboratoryAppointmentDetailsComponent } from './laboratory-appointment-details/laboratory-appointment-details.component';
 
 
 export const routes: Routes = [
@@ -83,6 +84,8 @@ export const routes: Routes = [
     //{ path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent, },
+    { path: 'laboratory-appointment-details/:id', component: LaboratoryAppointmentDetailsComponent, },
+
 
     { path: '**', redirectTo: '' }, // Przekierowanie na stronę główną dla nieznanych tras
     { path: '', redirectTo: '/your-data', pathMatch: 'full' }, // Przekierowanie do konkretnej trasy

@@ -32,6 +32,16 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetLabAppDetailsByLabAppId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.GetLabAppDetailsByLabAppId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAvailableLaboratoryAppointments()
@@ -41,6 +51,9 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+        
+
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getPlannedLaboratoryAppointmentsByPatientId([FromRoute] int id)
@@ -162,5 +175,47 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> MakeCancelledLaboratoryAppointment([FromRoute] int id, [FromBody] string cancelComment)
+        {
+            var result = await _laboratoryAppointmentService.MakeCancelledLaboratoryAppointment(id, cancelComment);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> FinishLaboratoryAppointment([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.FinishLaboratoryAppointment(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> SendLaboratoryTestsToSupervisor([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.SendLaboratoryTestsToSupervisor(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> SendLaboratoryTestsResultsToPatient([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.SendLaboratoryTestsResultsToPatient(id);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response });
+            else return BadRequest(result.Response);
+        }
+
+        
+            
+
+
+
     }
 }

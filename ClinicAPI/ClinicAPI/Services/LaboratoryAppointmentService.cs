@@ -29,6 +29,15 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
         }
 
+        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetLabAppDetailsByLabAppId(id);
+            return laboratoryAppointments;
+            //return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
+        }
+
+
+
         public async Task<List<ReturnLaboratoryAppointmentDto>> GetAvailableLaboratoryAppointments()
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetAvailableLaboratoryAppointments();
@@ -46,42 +55,50 @@ namespace ClinicAPI.Services
             return laboratoryAppointments;
         }
 
-
+        //LAB WORKER
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getFutureLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getFutureLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Reserved);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForFillLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForFillLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.ToBeCompleted);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForSupervisorLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForSupervisorLabAppsByLabWorkerId(id);
-            return laboratoryAppointments;
-        }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
-        {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getToBeFixedLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForSupervisorLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.WaitingForSupervisor);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getReadyForPatientLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getReadyForPatientLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getReadyForPatientLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.AllAccepted);
+            return laboratoryAppointments;
+        }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
+        {
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getToBeFixedLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.ToBeFixed);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSentToPatientLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Finished);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getCancelledLabAppsByLabWorkerId(int id)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.getCancelledLabAppsByLabWorkerId(id);
+            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getCancelledLabAppsByLabWorkerId(id);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Cancelled);
             return laboratoryAppointments;
         }
+        //LAB WORKER
 
 
 
@@ -153,6 +170,115 @@ namespace ClinicAPI.Services
             }
 
         }
+
+        public async Task<(bool Confirmed, string Response)> MakeCancelledLaboratoryAppointment(int id, string cancelComment)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _laboratoryAppointment = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(id);
+
+                if (_laboratoryAppointment == null)
+                {
+                    return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
+                }
+                _laboratoryAppointment.State = LaboratoryAppointmentState.Cancelled;
+                _laboratoryAppointment.CancelComment = cancelComment;
+                var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                scope.Complete();
+                return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory appointment: {ex.Message}");
+            }
+
+        }
+
+        public async Task<(bool Confirmed, string Response)> FinishLaboratoryAppointment(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _laboratoryAppointment = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(id);
+
+                if (_laboratoryAppointment == null)
+                {
+                    return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
+                }
+                _laboratoryAppointment.State = LaboratoryAppointmentState.ToBeCompleted;
+                var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                scope.Complete();
+                return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory appointment: {ex.Message}");
+            }
+
+        }
+
+        public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsToSupervisor(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _laboratoryAppointment = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(id);
+
+                if (_laboratoryAppointment == null)
+                {
+                    return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
+                }
+                //sprawdzic czy wszystkie wyniki są niepuste
+                _laboratoryAppointment.State = LaboratoryAppointmentState.WaitingForSupervisor;
+                var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                //zmienic status testow
+                scope.Complete();
+                return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory appointment: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsResultsToPatient(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var _laboratoryAppointment = await _laboratoryAppointmentRepository.GetLaboratoryAppointmentById(id);
+
+                if (_laboratoryAppointment == null)
+                {
+                    return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
+                }
+                _laboratoryAppointment.State = LaboratoryAppointmentState.Finished; //wysłane do pacjenta
+                var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
+                scope.Complete();
+                return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
+
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating laboratory appointment: {ex.Message}");
+            }
+        }
+
+
+
+
 
         public async Task<(bool Confirmed, string Response)> CancelPlannedAppointment(int id)
         {

@@ -1,3 +1,4 @@
+import { LaboratoryAppointmentState } from "../model/laboratory-appointment";
 import { LaboratoryTest } from "../model/laboratory-test";
 
 export interface LabAppWithPatientLabTestsMedApp{
@@ -9,7 +10,7 @@ export interface LabAppWithPatientLabTestsMedApp{
     laboratoryAppointmentId: number;
     laboratoryWorkerId: number;
     supervisorId: number;
-    state: string;
+    state: LaboratoryAppointmentState; // wczesniej byl string
     dateTime: string;
     cancelComment: string | null;
     patientId: number;

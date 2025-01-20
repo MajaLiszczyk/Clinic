@@ -95,6 +95,15 @@ export class ClinicService {
   getComissionedLaboratoryTestsByPatientId(id: number): Observable<GroupWithLabTests[]> {
     return this.http.get<GroupWithLabTests[]>(this.LaboratoryTestUrl + "/GetComissionedLaboratoryTestsWithGroupByPatientId/" + id);
   }
+  getLaboratoryTestsByLabAppId(id: number): Observable<LaboratoryTest[]> {
+    return this.http.get<LaboratoryTest[]>(this.LaboratoryTestUrl + "/GetLaboratoryTestsByLabAppId/" + id);
+  }
+  //saveLaboratoryTestResult(testId: number, resultValue: any){
+  saveLaboratoryTestResult(id: number, resultValue: string): Observable<LaboratoryTest>{
+    const body = { resultValue };
+    return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/SaveLaboratoryTestResult/" + id, body, { headers: { 'Content-Type': 'application/json' } });
+    { responseType: 'text' as 'json' }
+  }
 
 
   //LABORATORY TEST TYPE
@@ -129,10 +138,16 @@ export class ClinicService {
   getAllLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
     return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
   }
-  //ZROBIĆ FAKTYCZNIE AVAILABLE!
+  getLabAppDetailsByLabAppId(id: number): Observable<LabAppWithPatientLabTestsMedApp> {
+    return this.http.get<LabAppWithPatientLabTestsMedApp>(this.LaboratoryAppointmentUrl + "/GetLabAppDetailsByLabAppId/" + id);
+  }
   getAllAvailableLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
     return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/GetAvailableLaboratoryAppointments");
   }
+  isAllLaboratoryTestsResultsCompleted(id: number): Observable<LaboratoryAppointment[]> {
+    return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/IsAllLaboratoryTestsResultsCompleted/" + id);
+  }
+  
   //zrobić
   getPlannedLaboratoryAppointmentsByPatientId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]> {
     return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getPlannedLaboratoryAppointmentsByPatientId/" + id);
@@ -175,6 +190,21 @@ export class ClinicService {
   getCancelledLabAppsByLabWorkerId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]>{
     return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getCancelledLabAppsByLabWorkerId/" + id);
   }
+
+  //Obsługa wizyt przez lab workera
+  makeCancelledLaboratoryAppointment(id: number, cancelComment: string): Observable<LaboratoryAppointment> {
+    return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/makeCancelledLaboratoryAppointment/"+ id, cancelComment);
+  } 
+  finishLaboratoryAppointment(id: number): Observable<LaboratoryAppointment> {
+    return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/FinishLaboratoryAppointment/"+ id, null);
+  } 
+  sendLaboratoryTestsToSupervisor(id: number): Observable<LaboratoryAppointment> {
+    return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/sendLaboratoryTestsToSupervisor/"+ id, null);
+  } 
+  sendLaboratoryTestsResultsToPatient(id: number): Observable<LaboratoryAppointment> {
+    return this.http.put<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/sendLaboratoryTestsResultsToPatient/"+ id, null);
+  } 
+ 
 
 
   //LABORATORY WORKER
