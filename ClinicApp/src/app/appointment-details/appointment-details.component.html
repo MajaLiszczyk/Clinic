@@ -181,6 +181,8 @@
             Laboratory test type: {{pastLaboratoryTest.laboratoryTestTypeName}}
             <br />
             Note: {{pastLaboratoryTest.doctorNote}}
+            <br />
+            Result: {{pastLaboratoryTest.result}}
           </td>
           <td *ngIf="isEditable">
             <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"

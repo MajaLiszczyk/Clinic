@@ -50,7 +50,8 @@
                     <!--<th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor 
                          || laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed 
                          || laboratoryAppointment?.state == LaboratoryAppointmentState.AllAccepted"> -->
-                    <th>
+                    <th *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.AllAccepted
+                        && laboratoryAppointment?.state != LaboratoryAppointmentState.Finished">
                         Reject comment
                     </th>
                     <th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
@@ -81,7 +82,8 @@
                     <td>
                         {{laboratoryTest.state}}
                     </td>
-                    <td>
+                    <td *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.AllAccepted
+                        && laboratoryAppointment?.state != LaboratoryAppointmentState.Finished">
                         <ng-container
                             *ngIf="laboratoryTest.state == LaboratoryTestState.WaitingForSupervisor; else staticRejectComment">
                             <form [formGroup]="getLaboratoryTestFormGroup(i)">
@@ -93,11 +95,13 @@
                         </ng-template>
                     </td>
 
-                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor
+                        && laboratoryTest.state != LaboratoryTestState.Accepted">
                         <button type="button" class="btn  btn-success float-right"
                             (click)="acceptLaboratoryTest(i)">Accept</button>
                     </td>
-                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">
+                    <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor
+                        && laboratoryTest.state != LaboratoryTestState.Accepted">
                         <button type="button" class="btn  btn-success float-right"
                             (click)="rejectLaboratoryTest(i)">Reject</button>
                     </td>

@@ -33,7 +33,7 @@
                         {{waitingForReviewAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/laboratory-appointment-details', waitingForReviewAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details-supervisor', waitingForReviewAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -78,7 +78,7 @@
                         {{sentBackAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/laboratory-appointment-details', sentBackAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details-supervisor', sentBackAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>
@@ -120,7 +120,7 @@
                         {{acceptedAppointment.patientId}}
                     </td>
                     <td class="text-end">
-                        <a [routerLink]="['/laboratory-appointment-details', acceptedAppointment.laboratoryAppointmentId]"
+                        <a [routerLink]="['/laboratory-appointment-details-supervisor', acceptedAppointment.laboratoryAppointmentId]"
                             *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
                     </td>
                 </tr>

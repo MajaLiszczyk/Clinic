@@ -195,6 +195,72 @@ namespace ClinicAPI.Repositories
                 throw;
             }
         }
+
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int patientId)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var result = await (from labApp in _context.LaboratoryAppointment
+                                    where (labApp.State == LaboratoryAppointmentState.ToBeCompleted || labApp.State == LaboratoryAppointmentState.WaitingForSupervisor
+                                    || labApp.State == LaboratoryAppointmentState.ToBeFixed || labApp.State == LaboratoryAppointmentState.AllAccepted)
+                                    join labGroup in _context.LaboratoryTestsGroup
+                                        on labApp.Id equals labGroup.LaboratoryAppointmentId
+                                    join medApp in _context.MedicalAppointment
+                                        on labGroup.MedicalAppointmentId equals medApp.Id
+                                    join patient in _context.Patient
+                                        on medApp.PatientId equals patient.Id
+                                    join doctor in _context.Doctor
+                                        on medApp.DoctorId equals doctor.Id
+                                    where patient.Id == patientId
+                                    select new
+                                    {
+                                        LaboratoryAppointment = labApp,
+                                        Patient = patient,
+                                        MedicalAppointment = medApp,
+                                        Doctor = doctor,
+                                        Tests = (from labTest in _context.LaboratoryTest
+                                                 where labTest.LaboratoryTestsGroupId == labGroup.Id
+                                                 select labTest).ToList()
+                                    })
+                                   .ToListAsync();
+
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                {
+                    // Medical appointment
+                    MedicalAppointmentId = x.MedicalAppointment.Id,
+                    MedicalAppointmentDateTime = x.MedicalAppointment.DateTime,
+                    // Doctor
+                    DoctorId = x.Doctor.Id,
+                    DoctorName = x.Doctor.Name,
+                    DoctorSurname = x.Doctor.Surname,
+                    // Laboratory appointment
+                    LaboratoryAppointmentId = x.LaboratoryAppointment.Id,
+                    LaboratoryWorkerId = x.LaboratoryAppointment.LaboratoryWorkerId,
+                    SupervisorId = x.LaboratoryAppointment.SupervisorId,
+                    State = x.LaboratoryAppointment.State,
+                    DateTime = x.LaboratoryAppointment.DateTime,
+                    CancelComment = x.LaboratoryAppointment.CancelComment,
+                    // Patient
+                    PatientId = x.Patient.Id,
+                    PatientName = x.Patient.Name,
+                    PatientSurname = x.Patient.Surname,
+                    PatientPesel = x.Patient.Pesel,
+                    // Laboratory tests
+                    laboratoryTests = x.Tests
+                }).ToList();
+
+                scope.Complete();
+                return mappedResult;
+            }
+            catch (Exception)
+            {
+                scope.Dispose();
+                throw;
+            }
+        }
         //DLA PACJENTA
 
         //DLA SUPERVISORA
@@ -207,6 +273,72 @@ namespace ClinicAPI.Repositories
             {
                 var result = await (from labApp in _context.LaboratoryAppointment
                                     where labApp.State == labAppState
+                                    where labApp.SupervisorId == id
+                                    join labGroup in _context.LaboratoryTestsGroup
+                                        on labApp.Id equals labGroup.LaboratoryAppointmentId
+                                    join medApp in _context.MedicalAppointment
+                                        on labGroup.MedicalAppointmentId equals medApp.Id
+                                    join patient in _context.Patient
+                                        on medApp.PatientId equals patient.Id
+                                    join doctor in _context.Doctor
+                                        on medApp.DoctorId equals doctor.Id
+                                    select new
+                                    {
+                                        LaboratoryAppointment = labApp,
+                                        Patient = patient,
+                                        MedicalAppointment = medApp,
+                                        Doctor = doctor,
+                                        Tests = (from labTest in _context.LaboratoryTest
+                                                 where labTest.LaboratoryTestsGroupId == labGroup.Id
+                                                 select labTest).ToList()
+                                    })
+                                   .ToListAsync();
+
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                {
+                    // Medical appointment
+                    MedicalAppointmentId = x.MedicalAppointment.Id,
+                    MedicalAppointmentDateTime = x.MedicalAppointment.DateTime,
+                    // Doctor
+                    DoctorId = x.Doctor.Id,
+                    DoctorName = x.Doctor.Name,
+                    DoctorSurname = x.Doctor.Surname,
+                    // Laboratory appointment
+                    LaboratoryAppointmentId = x.LaboratoryAppointment.Id,
+                    LaboratoryWorkerId = x.LaboratoryAppointment.LaboratoryWorkerId,
+                    SupervisorId = x.LaboratoryAppointment.SupervisorId,
+                    State = x.LaboratoryAppointment.State,
+                    DateTime = x.LaboratoryAppointment.DateTime,
+                    CancelComment = x.LaboratoryAppointment.CancelComment,
+                    // Patient
+                    PatientId = x.Patient.Id,
+                    PatientName = x.Patient.Name,
+                    PatientSurname = x.Patient.Surname,
+                    PatientPesel = x.Patient.Pesel,
+                    // Laboratory tests
+                    laboratoryTests = x.Tests
+                }).ToList();
+
+                scope.Complete();
+                return mappedResult;
+            }
+            catch (Exception)
+            {
+                scope.Dispose();
+                throw;
+            }
+        }
+
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetAcceptedAndFinishedLabAppsBySupervisorId(int id)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                                                   TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                var result = await (from labApp in _context.LaboratoryAppointment
+                                    where labApp.State == LaboratoryAppointmentState.AllAccepted 
+                                    || labApp.State == LaboratoryAppointmentState.Finished
                                     where labApp.SupervisorId == id
                                     join labGroup in _context.LaboratoryTestsGroup
                                         on labApp.Id equals labGroup.LaboratoryAppointmentId

@@ -16,25 +16,25 @@ import { LaboratorySupervisor } from '../model/laboratory-supervisor';
   styleUrl: './registrant-laboratory-supervisors.component.css'
 })
 export class RegistrantLaboratorySupervisorsComponent {
-  laboratoryWorkers: LaboratorySupervisor[] = [];
-    laboratoryWorkerForm: FormGroup;
+    laboratorySupervisors: LaboratorySupervisor[] = [];
+    laboratorySupervisorForm: FormGroup;
     isDisable = false;
-    laboratoryWorker: LaboratorySupervisor;
+    laboratorySupervisor: LaboratorySupervisor;
     isEditableMode = false;
     isAddingMode = false; //niepotrzebne?
   
     constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
-      this.laboratoryWorkerForm = this.formBuilder.group({});
-      this.laboratoryWorker = { id: 0, name: '', surname: '', supervisorNumber: '', isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+      this.laboratorySupervisorForm = this.formBuilder.group({});
+      this.laboratorySupervisor = { id: 0, name: '', surname: '', laboratorySupervisorNumber: '', isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     }
   
     ngOnInit() {
-      this.getAllLaboratoryWorkers();
-      this.laboratoryWorkerForm = this.formBuilder.group({
+      this.getAlllaboratorySupervisors();
+      this.laboratorySupervisorForm = this.formBuilder.group({
         id: Number,
         name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
         surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
-        supervisorNumber: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[0-9]{5}$/)] }),
+        laboratorySupervisorNumber: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[0-9]{5}$/)] }),
         email: new FormControl(null, {
           validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
           Validators.maxLength(256)]
@@ -43,16 +43,16 @@ export class RegistrantLaboratorySupervisorsComponent {
       });
     }
   
-    get formId(): FormControl { return this.laboratoryWorkerForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-    get formName(): FormControl { return this.laboratoryWorkerForm?.get("name") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-    get formSurname(): FormControl { return this.laboratoryWorkerForm?.get("surname") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-    get formSupervisorNumber(): FormControl { return this.laboratoryWorkerForm?.get("supervisorNumber") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-    get formEmail(): FormControl { return this.laboratoryWorkerForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-    get formPassword(): FormControl { return this.laboratoryWorkerForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formId(): FormControl { return this.laboratorySupervisorForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formName(): FormControl { return this.laboratorySupervisorForm?.get("name") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formSurname(): FormControl { return this.laboratorySupervisorForm?.get("surname") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formLaboratorySupervisorNumber(): FormControl { return this.laboratorySupervisorForm?.get("laboratorySupervisorNumber") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formEmail(): FormControl { return this.laboratorySupervisorForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+    get formPassword(): FormControl { return this.laboratorySupervisorForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   
     setConditionalValidation() {
-      const emailC = this.laboratoryWorkerForm.get('email');
-      const passwordC = this.laboratoryWorkerForm.get('password');
+      const emailC = this.laboratorySupervisorForm.get('email');
+      const passwordC = this.laboratorySupervisorForm.get('password');
   
       if (this.isAddingMode) {
         emailC?.setValidators([Validators.required]);
@@ -68,24 +68,24 @@ export class RegistrantLaboratorySupervisorsComponent {
       passwordC?.updateValueAndValidity();
     }
 
-    getAllLaboratoryWorkers() {
+    getAlllaboratorySupervisors() {
       this.clinicService.getAllLaboratorySupervisors().subscribe(data => {
-        this.laboratoryWorkers = data;
+        this.laboratorySupervisors = data;
       })
     }
   
-    edit(laboratoryWorker: LaboratorySupervisor) {
-        this.formId.setValue(laboratoryWorker.id);
-        this.formName.setValue(laboratoryWorker.name);
-        this.formSurname.setValue(laboratoryWorker.surname);
-        this.formSupervisorNumber.setValue(laboratoryWorker.supervisorNumber);
+    edit(laboratorySupervisor: LaboratorySupervisor) {
+        this.formId.setValue(laboratorySupervisor.id);
+        this.formName.setValue(laboratorySupervisor.name);
+        this.formSurname.setValue(laboratorySupervisor.surname);
+        this.formLaboratorySupervisorNumber.setValue(laboratorySupervisor.laboratorySupervisorNumber);
         //this.formLaboratoryWorkerNumber.setValue(laboratoryWorker.supervisorNumber);
         this.isEditableMode = true;
         this.isAddingMode = false; //niepotrzebne?
         this.setConditionalValidation();
       }
     
-      addNewLaboratoryWorker() {
+      addNewLaboratorySupervisor() {
         this.isAddingMode = true;
         this.isEditableMode = false;
         this.setConditionalValidation();
@@ -94,27 +94,27 @@ export class RegistrantLaboratorySupervisorsComponent {
       cancelAdding() {
         this.isAddingMode = false;
         this.isEditableMode = false; //niepotrzebne?
-        this.laboratoryWorkerForm.reset();
+        this.laboratorySupervisorForm.reset();
       }
     
       cancelEditing() {
         this.isAddingMode = false;
         this.isEditableMode = false; //niepotrzebne?
-        this.laboratoryWorkerForm.reset();
+        this.laboratorySupervisorForm.reset();
       }
   
-       createLaboratoryWorkerAccount() {
-          if (this.laboratoryWorkerForm.invalid) {
-            this.laboratoryWorkerForm.markAllAsTouched();
+       createLaboratorySupervisorAccount() {
+          if (this.laboratorySupervisorForm.invalid) {
+            this.laboratorySupervisorForm.markAllAsTouched();
             return;
           }
-          this.clinicService.createLaboratorySupervisorAccount(this.laboratoryWorkerForm.getRawValue()) // Bez obiektu opakowującego
+          this.clinicService.createLaboratorySupervisorAccount(this.laboratorySupervisorForm.getRawValue()) // Bez obiektu opakowującego
             .subscribe({
               next: (result: LaboratorySupervisor) => {
-                this.laboratoryWorker = result; // Zwrócony obiekt przypisany do zmiennej
-                this.getAllLaboratoryWorkers();
+                this.laboratorySupervisor = result; // Zwrócony obiekt przypisany do zmiennej
+                this.getAlllaboratorySupervisors();
                 this.isAddingMode = false;
-                this.laboratoryWorkerForm.reset();
+                this.laboratorySupervisorForm.reset();
               },
               error: (err) => {
                 console.error("Error occurred:", err); // Obsługa błędów
@@ -123,18 +123,18 @@ export class RegistrantLaboratorySupervisorsComponent {
         }
   
         update(){
-          if(this.laboratoryWorkerForm.invalid){
-            this.laboratoryWorkerForm.markAllAsTouched(); 
+          if(this.laboratorySupervisorForm.invalid){
+            this.laboratorySupervisorForm.markAllAsTouched(); 
             return;
           }
-          const laboratoryWorkerData = this.laboratoryWorkerForm.getRawValue();
-          this.clinicService.updateLaboratorySupervisor(laboratoryWorkerData)
+          const laboratorySupervisorData = this.laboratorySupervisorForm.getRawValue();
+          this.clinicService.updateLaboratorySupervisor(laboratorySupervisorData)
           .subscribe({
             next: (response) => {
               console.log("Action performed successfully:", response);
-              this.getAllLaboratoryWorkers();
+              this.getAlllaboratorySupervisors();
               this.isEditableMode = false;
-              this.laboratoryWorkerForm.reset();
+              this.laboratorySupervisorForm.reset();
             },
             error: (error) => {
               console.error("Error performing action:", error);
@@ -142,12 +142,12 @@ export class RegistrantLaboratorySupervisorsComponent {
           })
         }
   
-        archive(laboratoryWorkerId: number){
-          this.clinicService.archiveLaboratorySupervisor(laboratoryWorkerId)
+        archive(laboratorySupervisorId: number){
+          this.clinicService.archiveLaboratorySupervisor(laboratorySupervisorId)
           .subscribe({
             next: (response) => {
               console.log("Action performed successfully:", response);
-              this.getAllLaboratoryWorkers();
+              this.getAlllaboratorySupervisors();
             },
             error: (error) => {
               console.error("Error performing action:", error);

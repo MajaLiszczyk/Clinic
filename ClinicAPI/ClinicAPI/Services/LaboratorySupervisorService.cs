@@ -88,7 +88,7 @@ namespace ClinicAPI.Services
                     return (false, string.Join("; ", errorMessages), null);
                 }
 
-                var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.LaboratoryWorker);
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.LaboratorySupervisor);
                 if (!addToRoleResult.Succeeded)
                 {
                     //ReturnLaboratoryWorkerDto? k = null;

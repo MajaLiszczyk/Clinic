@@ -40,6 +40,8 @@ import { AuthorizationGuard } from './authorization/authorization-guard';
 import { PatientLaboratoryAppointmentsComponent } from './patient-laboratory-appointments/patient-laboratory-appointments.component';
 import { LaboratoryWorkerComponent } from './laboratory-worker/laboratory-worker.component';
 import { LaboratoryAppointmentDetailsComponent } from './laboratory-appointment-details/laboratory-appointment-details.component';
+import { LaboratoryAppointmentDetailsSupervisorComponent } from './laboratory-appointment-details-supervisor/laboratory-appointment-details-supervisor.component';
+import { LaboratorySupervisorComponent } from './laboratory-supervisor/laboratory-supervisor.component';
 
 
 export const routes: Routes = [
@@ -79,12 +81,16 @@ export const routes: Routes = [
     { path: 'registrant-laboratory-test-types', component: RegistrantLaboratoryTestTypesComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-laboratory-appointments', component: RegistrantLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'laboratory-worker/:laboratoryWorkerId', component: LaboratoryWorkerComponent, canActivate: [AuthorizationGuard] },
+    { path: 'laboratory-supervisor/:laboratorySupervisorId', component: LaboratorySupervisorComponent, canActivate: [AuthorizationGuard] },
+
 
     
     //{ path: 'doctor', component: DoctorComponent},
     { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent, },
     { path: 'laboratory-appointment-details/:id', component: LaboratoryAppointmentDetailsComponent, },
+    { path: 'laboratory-appointment-details-supervisor/:id', component: LaboratoryAppointmentDetailsSupervisorComponent, },
+
 
 
     { path: '**', redirectTo: '' }, // Przekierowanie na stronę główną dla nieznanych tras

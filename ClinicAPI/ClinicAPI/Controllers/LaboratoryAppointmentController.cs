@@ -144,7 +144,7 @@ namespace ClinicAPI.Controllers
         [Authorize]
         public async Task<IActionResult> GetAcceptedLabAppsBySupervisorId([FromRoute] int id)
         {
-            var result = await _laboratoryAppointmentService.GetAcceptedLabAppsBySupervisorId(id);
+            var result = await _laboratoryAppointmentService.GetAcceptedAndFinishedLabAppsBySupervisorId(id);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -172,6 +172,17 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> getInProcessLaboratoryAppointmentsByPatientId([FromRoute] int id)
+        {
+            var result = await _laboratoryAppointmentService.getInProcessLaboratoryAppointmentsByPatientId(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+        
 
         [HttpPut("{id}")]
         public async Task<IActionResult> cancelPlannedAppointment([FromRoute] int id)

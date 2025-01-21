@@ -24,6 +24,7 @@ export class PatientLaboratoryAppointmentsComponent {
     patientId: number = 0; //ok
     patient: Patient; //ok
     plannedLaboratoryAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
+    inProcessLaboratoryAppointments: LabAppWithPatientLabTestsMedApp[] = [];
     finishedLaboratoryAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
     comissionedLaboratoryTests: GroupWithLabTests[] = []; //ok
     availableLaboratoryAppointments: LaboratoryAppointment[] = []; //ok
@@ -32,6 +33,7 @@ export class PatientLaboratoryAppointmentsComponent {
     laboratoryAppointmentState = LaboratoryAppointmentState;
     isCommisionedTestsMode: boolean = false;
     isPlannedLabAppMode: boolean = false;
+    isInProcessLabAppMode:boolean = false;
     isFinishedLabappMode: boolean = false;
 
     //chooseLaboratoryAppointmentForm: FormGroup;
@@ -131,6 +133,11 @@ export class PatientLaboratoryAppointmentsComponent {
       this.getPlannedLaboratoryAppointments();
     }
 
+    openInProcess(){
+      this.isInProcessLabAppMode = true;
+      this.getInProcessLaboratoryAppointmentsByPatientId();
+    }
+
     openFinished(){
       this.isFinishedLabappMode = true;
       this.getFinishedLaboratoryAppointmentsByPatientId();
@@ -149,6 +156,10 @@ export class PatientLaboratoryAppointmentsComponent {
 
     closePlannedAppointments(){
       this.isPlannedLabAppMode = false;     
+    }
+
+    closeInProcessAppointments(){
+      this.isInProcessLabAppMode = false;     
     }
 
     closeFinishedAppointments(){
@@ -190,11 +201,20 @@ export class PatientLaboratoryAppointmentsComponent {
       })
     }
 
+    getInProcessLaboratoryAppointmentsByPatientId() { //gdy chce zobaczyc zrealizowane
+      this.clinicService.getInProcessLaboratoryAppointmentsByPatientId(this.patientId).subscribe(data => {
+        this.inProcessLaboratoryAppointments = data;
+        //(error) => console.error('Error fetching appointments:', error)
+      })
+    }
+
     getFinishedLaboratoryAppointmentsByPatientId() { //gdy chce zobaczyc zrealizowane
       this.clinicService.getFinishedLaboratoryAppointmentsByPatientId(this.patientId).subscribe(data => {
         this.finishedLaboratoryAppointments = data;
         //(error) => console.error('Error fetching appointments:', error)
       })
     }
+
+    
 
 }

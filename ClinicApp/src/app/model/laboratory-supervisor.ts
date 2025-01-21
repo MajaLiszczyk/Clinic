@@ -2,6 +2,6 @@ export interface LaboratorySupervisor{
     id: number;
     name: string;
     surname: string;
-    supervisorNumber: string;
+    laboratorySupervisorNumber: string;
     isAvailable: boolean;
 }

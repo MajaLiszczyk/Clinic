@@ -120,6 +120,7 @@ export class LaboratoryWorkerComponent {
   closeWaitingForSupervisorLabApp() {
     this.isWaitingForSupervisorMode = false;
   }
+  
   openToBeFixedLabApp() {
     this.isToBeFixedMode = true;
     this.getToBeFixedLabAppsByLabWorkerId();

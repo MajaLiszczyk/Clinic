@@ -194,6 +194,7 @@ namespace ClinicAPI.Services
                     return await Task.FromResult((false, "LaboratoryTest with given id does not exist."));
                 }
                 _laboratoryTest.State = LaboratoryTestState.Accepted;
+                _laboratoryTest.RejectComment = null;
                 var p = await _laboratoryTestRepository.UpdateLaboratoryTest(_laboratoryTest);
                 scope.Complete();
                 return await Task.FromResult((true, "LaboratoryTest succesfully saved"));

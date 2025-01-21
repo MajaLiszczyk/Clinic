@@ -13,6 +13,7 @@ namespace ClinicAPI.Dtos
         public int LaboratoryWorkerId { get; set; }
         public int SupervisorId { get; set; }
         public string? DoctorNote { get; set; }
+        public string? Result { get; set; }
         //GDZIE RESULT?!!
     }
 } 

@@ -109,7 +109,8 @@ export class ClinicService {
     return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/acceptLaboratoryTest/"+ id, null);
   }
   rejectLaboratoryTest(id: number, rejectCommentValue: string): Observable<LaboratoryTest>{
-    return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/rejectLaboratoryTest/"+ id, rejectCommentValue);
+    const rejectCommentDto = { rejectCommentValue };
+    return this.http.put<LaboratoryTest>(this.LaboratoryTestUrl + "/rejectLaboratoryTest/"+ id, rejectCommentDto, { headers: { 'Content-Type': 'application/json' } });
   }
   sendLaboratoryTestsToLaboratoryWorker(laboratoryAppointmentId: number): Observable<LaboratoryTest>{
     return this.http.put<LaboratoryTest>(this.LaboratoryAppointmentUrl + "/sendLaboratoryTestsToLaboratoryWorker/"+ laboratoryAppointmentId, null);
@@ -167,6 +168,9 @@ export class ClinicService {
   //zrobić
   getFinishedLaboratoryAppointmentsByPatientId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]> {
     return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getFinishedLaboratoryAppointmentsByPatientId/" + id);
+  }
+  getInProcessLaboratoryAppointmentsByPatientId(id: number): Observable<LabAppWithPatientLabTestsMedApp[]> {
+    return this.http.get<LabAppWithPatientLabTestsMedApp[]>(this.LaboratoryAppointmentUrl + "/getInProcessLaboratoryAppointmentsByPatientId/" + id);
   }
   addLaboratoryAppointment(appointment: LaboratoryAppointment): Observable<LaboratoryAppointment> {
     return this.http.post<LaboratoryAppointment>(this.LaboratoryAppointmentUrl + "/create", appointment);

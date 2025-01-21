@@ -64,6 +64,8 @@ export class LoginComponent {
               this.router.navigate(['/registrant']);
             } else if (result.role === 'LaboratoryWorker') {
               this.router.navigate(['/laboratory-worker', id]);
+            } else if (result.role === 'LaboratorySupervisor') {
+              this.router.navigate(['/laboratory-supervisor', id]);
             }
 
           },

@@ -39,21 +39,35 @@ namespace ClinicAPI.Repositories
         //public async Task<List<LaboratoryTest>> GetLaboratoryTestsByMedicalAppointmentId(int medicalAppointmentId)
         public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByMedicalAppointmentId(int medicalAppointmentId)
         {
-            /*public int Id { get; set; }
-public int MedicalAppointmentId { get; set; }
-public DateTime date { get; set; }
-//public LaboratoryTestType laboratoryTestType { get; set; }
-public int LaboratoryTestTypeId { get; set; }
-public int LaboratoryTestTypeName { get; set; }
-public int LaboratoryWorkerId { get; set; }
-public int SupervisorId { get; set; }
-public string DoctorNote { get; set; } */
+            var laboratoryTests = await (from labTest in _context.LaboratoryTest
+                                         join labGroup in _context.LaboratoryTestsGroup
+                                         on labTest.LaboratoryTestsGroupId equals labGroup.Id
+                                         where labGroup.MedicalAppointmentId == medicalAppointmentId
+                                         join testType in _context.LaboratoryTestType
+                                         on labTest.LaboratoryTestTypeId equals testType.Id
+                                         join labApp in _context.LaboratoryAppointment
+                                         on labGroup.LaboratoryAppointmentId equals labApp.Id into labAppGroup
+                                         from labApp in labAppGroup.DefaultIfEmpty()
+                                         select new ReturnLaboratoryTestDto
+                                         {
+                                             Id = labTest.Id,
+                                             MedicalAppointmentId = labGroup.MedicalAppointmentId,
+                                             Date = labApp != null ? labApp.DateTime : DateTime.MinValue,
+                                             LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
+                                             LaboratoryTestTypeName = testType.Name,
+                                             LaboratoryWorkerId = labApp != null ? labApp.LaboratoryWorkerId : 0,
+                                             SupervisorId = labApp != null ? labApp.SupervisorId : 0,
+                                             DoctorNote = labTest.DoctorNote,
+                                             Result = labTest.Result
+                                         }).ToListAsync();
+
+            return laboratoryTests;
 
             // Pobierz ID grupy powiązanej z wizytą
             // Jeśli brak grupy, zwróć pustą listę
             // Pobierz testy laboratoryjne powiązane z grupą
 
-            var laboratoryTests = await _context.LaboratoryTest
+            /*var laboratoryTests = await _context.LaboratoryTest
            .Join(
                _context.LaboratoryTestsGroup,
                labTest => labTest.LaboratoryTestsGroupId,
@@ -86,54 +100,9 @@ public string DoctorNote { get; set; } */
            })
            .ToListAsync();
 
-            return laboratoryTests;
+            return laboratoryTests; */
 
 
-            /*var tests = await (from labTest in _context.LaboratoryTest
-                                   join labGroup in _context.LaboratoryTestsGroup
-                                   on labTest.LaboratoryTestsGroupId equals labGroup.Id
-                                   where labGroup.MedicalAppointmentId == medicalAppointmentId
-                                   join testType in _context.LaboratoryTestType
-                                   on labTest.LaboratoryTestTypeId equals testType.Id
-                                   join labApp in _context.LaboratoryAppointment
-                                   on labGroup.LaboratoryAppointmentId equals labApp.Id
-                                   select new ReturnLaboratoryTestDto
-                                   {
-                                       Id = labTest.Id,
-                                       MedicalAppointmentId = medicalAppointmentId,
-                                       Date = labApp.DateTime,
-                                       LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
-                                       LaboratoryTestTypeName = testType.Name,
-                                       LaboratoryWorkerId = labApp.LaboratoryWorkerId,
-                                       SupervisorId = labApp.SupervisorId,
-                                       DoctorNote = labTest.DoctorNote
-
-                                       //groupId = testGroup.Key,
-                                       //laboratoryTests = testGroup.ToList()
-                                   }).ToListAsync(); */
-
-
-
-            //select labTest).ToListAsync();
-
-            //return tests;
-
-
-
-
-            /*var groupId = await _context.LaboratoryTestsGroup
-                .Where(group => group.MedicalAppointmentId == medicalAppointmentId)
-                .Select(group => group.Id)
-                .FirstOrDefaultAsync();
-
-            if (groupId == 0) 
-                return new List<LaboratoryTest>();
-
-            var tests = await _context.LaboratoryTest
-                .Where(test => test.LaboratoryTestsGroupId == groupId)
-                .ToListAsync();
-
-            return tests;*/
         }
 
         //lsta zleconych badań "w grupach" u pacjenta
@@ -237,7 +206,6 @@ public string DoctorNote { get; set; } */
                                                  on labApp.Id equals labGroup.LaboratoryAppointmentId
                                              join labTest in _context.LaboratoryTest
                                                  on labGroup.Id equals labTest.LaboratoryTestsGroupId
-                                             where labTest.Result == null
                                              select labTest)
                                             .ToListAsync();
 
@@ -285,8 +253,11 @@ public string DoctorNote { get; set; } */
 
                 // Zmień stan na ToBeCompleted
                 foreach (var test in laboratoryTests)
-                {
-                    test.State = testState;
+                {   
+                    if(test.State != LaboratoryTestState.Accepted)
+                    {
+                        test.State = testState;
+                    }
                 }
 
                 // Zapisanie zmian w bazie danych

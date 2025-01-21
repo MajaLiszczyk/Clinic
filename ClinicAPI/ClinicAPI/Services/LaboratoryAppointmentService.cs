@@ -57,6 +57,11 @@ namespace ClinicAPI.Services
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getFinishedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id)
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.getInProcessLaboratoryAppointmentsByPatientId(id);
+            return laboratoryAppointments;
+        }
 
         //LAB WORKER
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
@@ -110,10 +115,10 @@ namespace ClinicAPI.Services
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.WaitingForSupervisor);
             return laboratoryAppointments;
         }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetAcceptedLabAppsBySupervisorId(int id)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetAcceptedAndFinishedLabAppsBySupervisorId(int id)
         {
             //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.AllAccepted);
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetAcceptedAndFinishedLabAppsBySupervisorId(id);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetSentBackLabAppsBySupervisorId(int id)
@@ -295,16 +300,16 @@ namespace ClinicAPI.Services
                 int acceptedTestsCounter = 0;
                 foreach (var test in labTests)
                 {
-                    if (test.State != LaboratoryTestState.Accepted)
+                    if (test.State == LaboratoryTestState.Accepted)
                     {
                         acceptedTestsCounter++;
                     }
-                    else if (test.State != LaboratoryTestState.Rejected)
+                    else if (test.State == LaboratoryTestState.Rejected)
                     {
                     }
                     else 
                     {
-                        return;
+                        return await Task.FromResult((false, "laboratory test have not accetable state to send to supervisor"));
                     }
                 }
                 if(acceptedTestsCounter == labTests.Count())

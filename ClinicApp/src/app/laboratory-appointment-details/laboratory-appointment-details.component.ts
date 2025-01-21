@@ -173,9 +173,8 @@ export class LaboratoryAppointmentDetailsComponent {
 
   isAllTestResultsCompleted(){
     for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.state == LaboratoryTestState.Completed || labTest.state == LaboratoryTestState.Rejected
-        || labTest.state == LaboratoryTestState.Accepted){ 
-      //if(labTest.result == null){ //można po stanie sprawdzić 
+      if(labTest.state != LaboratoryTestState.Completed && labTest.state != LaboratoryTestState.Rejected
+        && labTest.state != LaboratoryTestState.Accepted){ 
         this.isAllResultsCompleted = false;
         return;
       }

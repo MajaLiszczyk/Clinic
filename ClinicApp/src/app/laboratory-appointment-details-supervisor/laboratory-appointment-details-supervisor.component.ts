@@ -22,8 +22,8 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
   laboratoryTestsFormArray: FormArray;
   rejectCommentTestForm: FormGroup;
   isAllResultsChecked: boolean = false;
-  
-  
+
+
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder,
     private router: Router, private clinicService: ClinicService) {
@@ -41,9 +41,12 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
     });
   }
 
-  isAllTestResultsChecked(){
-    for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.state == LaboratoryTestState.Accepted || labTest.state == LaboratoryTestState.Rejected){ 
+  get formRejectComment(): FormControl { return this.rejectCommentTestForm.get('rejectComment') as FormControl; }
+
+
+  isAllTestResultsChecked() {
+    for (let labTest of this.laboratoryAppointment?.laboratoryTests!) {
+      if (labTest.state != LaboratoryTestState.Accepted && labTest.state != LaboratoryTestState.Rejected) {
         this.isAllResultsChecked = false;
         return;
       }
@@ -55,7 +58,9 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
     this.clinicService.getLabAppDetailsByLabAppId(this.appointmentId).subscribe(data => {
       this.laboratoryAppointment = data;
       this.initializeLaboratoryTestsFormArray();
+      this.isAllTestResultsChecked();
     })
+
   }
 
   initializeLaboratoryTestsFormArray() {
@@ -63,7 +68,7 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
       this.laboratoryTestsFormArray.clear(); // Wyczyść istniejące kontrolki
       this.laboratoryAppointment.laboratoryTests.forEach(test => {
         this.laboratoryTestsFormArray.push(this.fb.group({
-          result: new FormControl(test.result, [Validators.required]),
+          rejectComment: new FormControl(test.rejectComment),
         }));
       });
     }
@@ -73,84 +78,88 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
     return this.laboratoryTestsFormArray.at(index) as FormGroup;
   }
 
-   acceptLaboratoryTest(index: number) {
-      const form = this.laboratoryTestsFormArray.at(index) as FormGroup;
-      /*if(form.invalid){
-        this.laboratoryTestsFormArray.at(index) as FormGroup;
-        return;
-      } */
-      const rejectCommentValue = form.value.rejectComment;
-      const testId = this.laboratoryAppointment?.laboratoryTests[index].id;
-  
-      if (testId !== undefined) {
-        const updatePayload = { id: testId, rejectComment: rejectCommentValue };
-  
-        //this.clinicService.updateLaboratoryTest(updatePayload).subscribe(() => {
-        this.clinicService.acceptLaboratoryTest(testId)
+  acceptLaboratoryTest(index: number) {
+    const form = this.laboratoryTestsFormArray.at(index) as FormGroup;
+    /*if(form.invalid){
+      this.laboratoryTestsFormArray.at(index) as FormGroup;
+      return;
+    } */
+    const rejectCommentValue = form.value.rejectComment;
+    const testId = this.laboratoryAppointment?.laboratoryTests[index].id;
+
+    if (testId !== undefined) {
+      const updatePayload = { id: testId, rejectComment: rejectCommentValue };
+
+      //this.clinicService.updateLaboratoryTest(updatePayload).subscribe(() => {
+      this.clinicService.acceptLaboratoryTest(testId)
         .subscribe({
           next: (response) => {
             console.log("Operation completed successfully:", response);
             console.log(`Test with ID ${testId} updated with result: ${rejectCommentValue}`);
             this.getLaboratoryAppointmentDetails(); // Odśwież dane po zapisie
-          },
-          error: (error) => {
-            console.error("Error occurred:", error);
-          }  
-        });
-      }
-    }
-
-    rejectLaboratoryTest(index: number) {
-      const form = this.laboratoryTestsFormArray.at(index) as FormGroup;
-      /*if(form.invalid){
-        this.laboratoryTestsFormArray.at(index) as FormGroup;
-        return;
-      } */
-     if((this.laboratoryTestsFormArray.get('rejectComment') as FormControl) == null){
-        this.laboratoryTestsFormArray.markAllAsTouched();
-        //this.laboratoryTestsFormArray.at(index) as FormGroup;
-        return;
-     }
-      const rejectCommentValue = form.value.rejectComment;
-      const testId = this.laboratoryAppointment?.laboratoryTests[index].id;
-  
-      if (testId !== undefined) {
-        const updatePayload = { id: testId, rejectComment: rejectCommentValue };
-  
-        //this.clinicService.updateLaboratoryTest(updatePayload).subscribe(() => {
-        this.clinicService.rejectLaboratoryTest(testId, rejectCommentValue)
-        .subscribe({
-          next: (response) => {
-            console.log("Operation completed successfully:", response);
-            console.log(`Test with ID ${testId} updated with result: ${rejectCommentValue}`);
-            this.getLaboratoryAppointmentDetails(); // Odśwież dane po zapisie
-          },
-          error: (error) => {
-            console.error("Error occurred:", error);
-          }  
-        });
-      }
-    }
-
-    sendToLaboratoryWorker(){
-      for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-        if(labTest.state != LaboratoryTestState.Accepted && labTest.state != LaboratoryTestState.Rejected){
-          this.laboratoryTestsFormArray.markAllAsTouched();
-          return;
-        }
-      }
-      this.clinicService.sendLaboratoryTestsToLaboratoryWorker(this.laboratoryAppointment!.laboratoryAppointmentId)
-        .subscribe({
-          next: (response) => {
-            this.router.navigate(['/laboratory-supervisor/' + this.laboratoryAppointment?.supervisorId]); //ID MOŻE Z SESJI?
           },
           error: (error) => {
             console.error("Error occurred:", error);
           }
         });
     }
+  }
 
-  
+  rejectLaboratoryTest(index: number) {
+    const form = this.laboratoryTestsFormArray.at(index) as FormGroup;
+
+    // Pobranie wartości pola 'rejectComment' dla konkretnego formularza
+    const rejectCommentControl = form.get('rejectComment') as FormControl;
+    // Sprawdzenie, czy wartość 'rejectComment' jest null lub pusta
+    if (!rejectCommentControl || rejectCommentControl.value === null || rejectCommentControl.value.trim() === '') {
+      rejectCommentControl.markAsTouched(); // Podświetlenie jako wymagane
+      return;
+    }
+
+    /*if((this.laboratoryTestsFormArray.get('rejectComment') as FormControl) == null){
+       this.laboratoryTestsFormArray.markAllAsTouched();
+       return;
+    }*/
+    const rejectCommentValue = form.value.rejectComment;
+    const testId = this.laboratoryAppointment?.laboratoryTests[index].id;
+
+    if (testId !== undefined) {
+      const updatePayload = { id: testId, rejectComment: rejectCommentValue };
+
+      //this.clinicService.updateLaboratoryTest(updatePayload).subscribe(() => {
+      this.clinicService.rejectLaboratoryTest(testId, rejectCommentValue)
+        .subscribe({
+          next: (response) => {
+            console.log("Operation completed successfully:", response);
+            console.log(`Test with ID ${testId} updated with result: ${rejectCommentValue}`);
+            this.getLaboratoryAppointmentDetails(); // Odśwież dane po zapisie
+          },
+          error: (error) => {
+            console.error("Error occurred:", error);
+          }
+        });
+    }
+  }
+
+  sendToLaboratoryWorker() {
+    for (let labTest of this.laboratoryAppointment?.laboratoryTests!) {
+      if (labTest.state != LaboratoryTestState.Accepted && labTest.state != LaboratoryTestState.Rejected) {
+        this.laboratoryTestsFormArray.markAllAsTouched();
+        return;
+      }
+    }
+    this.clinicService.sendLaboratoryTestsToLaboratoryWorker(this.laboratoryAppointment!.laboratoryAppointmentId)
+      .subscribe({
+        next: (response) => {
+          this.router.navigate(['/laboratory-supervisor/' + this.laboratoryAppointment?.supervisorId]); //ID MOŻE Z SESJI?
+        },
+        error: (error) => {
+          console.error("Error occurred:", error);
+        }
+      });
+  }
+
+
 
 
 }

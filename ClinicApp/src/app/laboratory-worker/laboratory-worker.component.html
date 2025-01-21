@@ -130,6 +130,47 @@
         <button (click)="closeWaitingForSupervisorLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
+    <div class=" col-12 mb-4 text-center">
+        <button (click)="openToBeFixedLabApp()"
+            class="btn btn-primary ms-2 me-4">To be fixed</button>
+    </div>
+    <div *ngIf="isToBeFixedMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
+        To be fixed
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Time
+                    </th>
+                    <th>
+                        Patient Id
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let toBeFixedAppointment of toBeFixedAppointments">
+                    <td>
+                        {{toBeFixedAppointment.dateTime}}
+                    </td>
+                    <td>
+                        {{toBeFixedAppointment.patientId}}
+                    </td>
+                    <td class="text-end">
+                        <a [routerLink]="['/laboratory-appointment-details', toBeFixedAppointment.laboratoryAppointmentId]"
+                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                    </td>
+                </tr>
+                <tr *ngIf="toBeFixedAppointments.length === 0">
+                    <td colspan="8">No to be fixed tests</td>
+                </tr>
+            </tbody>
+        </table>
+        <button (click)="closeToBeFixedLabApp()" class="btn btn-secondary">Close</button>
+    </div>
+
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openReadyForPatientLabApp()"
