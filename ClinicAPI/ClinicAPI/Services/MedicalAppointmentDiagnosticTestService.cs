@@ -44,9 +44,7 @@ namespace ClinicAPI.Services
                 if (appointment == null)
                 {
                     throw new Exception("Appointment not found");
-                }
-                    
-
+                }                   
                 appointment.DateTime = dto.MedicalAppointmentDto.DateTime;
                 appointment.PatientId = dto.MedicalAppointmentDto.PatientId;
                 appointment.DoctorId = dto.MedicalAppointmentDto.DoctorId;
@@ -57,7 +55,6 @@ namespace ClinicAPI.Services
 
                 var p = await _medicalAppointmentRepository.UpdateMedicalAppointment(appointment);
 
-                // Tworzenie testów diagnostycznych
                 foreach (var testDto in dto.CreateDiagnosticTestDtos)
                 {
                     var diagnosticTest = new DiagnosticTest
@@ -74,37 +71,36 @@ namespace ClinicAPI.Services
                     else
                     {
                         ReturnDiagnosticTestDto? k = null; 
-
                     }
                 }
                 //utworzyc grupe
-                var laboratoryTestsGroup = new LaboratoryTestsGroup
+                if(dto.CreateLaboratoryTestDtos.Any())// jesli zawiera co najmniej jeden element 
                 {
-                    MedicalAppointmentId = appointment.Id
-                };
-                int groupId = await _laboratoryTestsGroupRepository.CreateLaboratoryTestsGroup(laboratoryTestsGroup);
-                //utworzyc testy lab
-                foreach (var testDto in dto.CreateLaboratoryTestDtos)
-                {
-                    var laboratoryTest = new LaboratoryTest
+                    var laboratoryTestsGroup = new LaboratoryTestsGroup
                     {
-                        LaboratoryTestsGroupId = groupId,
-                        LaboratoryTestTypeId = testDto.LaboratoryTestTypeId,
-                        DoctorNote = testDto.DoctorNote,
-                        State = LaboratoryTestState.Comissioned
+                        MedicalAppointmentId = appointment.Id
                     };
-                    LaboratoryTest? r = await _laboratoryTestRepository.CreateLaboratoryTest(laboratoryTest);
-                    if (r != null)
+                    int groupId = await _laboratoryTestsGroupRepository.CreateLaboratoryTestsGroup(laboratoryTestsGroup);
+                    foreach (var testDto in dto.CreateLaboratoryTestDtos)
                     {
-                        ReturnLaboratoryTestDto q = _mapper.Map<ReturnLaboratoryTestDto>(r); //??????????
+                        var laboratoryTest = new LaboratoryTest
+                        {
+                            LaboratoryTestsGroupId = groupId,
+                            LaboratoryTestTypeId = testDto.LaboratoryTestTypeId,
+                            DoctorNote = testDto.DoctorNote,
+                            State = LaboratoryTestState.Comissioned
+                        };
+                        LaboratoryTest? r = await _laboratoryTestRepository.CreateLaboratoryTest(laboratoryTest);
+                        if (r != null)
+                        {
+                            ReturnLaboratoryTestDto q = _mapper.Map<ReturnLaboratoryTestDto>(r); //??????????
+                        }
+                        else
+                        {
+                            ReturnLaboratoryTestDto? k = null;
+                        }
                     }
-                    else
-                    {
-                        ReturnLaboratoryTestDto? k = null;
-
-                    }
-                }
-
+                }  
                 scope.Complete();
                 return "Operation completed successfully.";
             }
@@ -114,10 +110,5 @@ namespace ClinicAPI.Services
                 throw new Exception($"An error occurred: {ex.Message}");
             }
         }
-    
-
-
-
-
     }
 }

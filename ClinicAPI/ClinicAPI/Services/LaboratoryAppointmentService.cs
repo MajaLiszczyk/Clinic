@@ -32,6 +32,12 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
         }
 
+        public async Task<List<ReturnLaboratoryAppointmentWorkerSupervisorDto>> GetAllLaboratoryAppointmentsWorkersSupervisors()
+        {
+            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetAllLaboratoryAppointmentsWorkersSupervisors();
+            return laboratoryAppointments;
+        }
+
         public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetLabAppDetailsByLabAppId(id);

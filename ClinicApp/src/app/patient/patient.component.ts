@@ -11,6 +11,7 @@ import { MedicalAppointment } from '../model/medical-appointment';
 import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ClinicService } from '../services/clinic.service';
 import { AuthorizationService } from '../services/authorization.service';
+import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-patient-doctor-dto';
 
 @Component({
   selector: 'app-patient',
@@ -113,7 +114,7 @@ export class PatientComponent {
     this.chooseSpecialisationForm.reset();
   }
 
-  cancel(medicalAppointment: MedicalAppointment) {
+  cancel(medicalAppointment: MedicalAppointmentPatientDoctorDto) {
     medicalAppointment.patientId = 0;
     this.clinicService.editMedicalAppointment(medicalAppointment)
       .subscribe({

@@ -1,14 +1,16 @@
-﻿using ClinicAPI.Models;
+﻿using ClinicAPI.Dtos;
+using ClinicAPI.Models;
 
 namespace ClinicAPI.Repositories.Interfaces
 {
     public interface IMedicalAppointmentRepository
     {
         public Task<MedicalAppointment?> GetMedicalAppointmentById(int id);
+        public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors();
         public Task<List<MedicalAppointment>> GetAllMedicalAppointments();
         public Task<List<MedicalAppointment>> GetMedicalAppointmentsBySpecialisation(int id);
-        public Task<List<MedicalAppointment>> GetMedicalAppointmentsByDoctorId(int id);
-        public Task<List<MedicalAppointment>> GetMedicalAppointmentsByPatientId(int id);
+        public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByDoctorId(int id);
+        public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByPatientId(int id);
         public Task<MedicalAppointment> CreateMedicalAppointment(MedicalAppointment medicalAppointment);
         public Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment);
         public Task<bool> DeleteMedicalAppointment(int id);

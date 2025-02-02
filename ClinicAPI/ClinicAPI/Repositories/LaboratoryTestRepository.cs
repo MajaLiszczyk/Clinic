@@ -32,7 +32,6 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception){}
             return laboratoryTest;
-
         }
 
         //Zwraca wszystkie testy dla danej wizyty medycznej (dla jednej wizyty zawsze jest jedna grupa).

@@ -41,6 +41,16 @@ namespace ClinicAPI.Controllers
 
         [HttpGet]
         [Authorize]
+        public async Task<IActionResult> GetWithPatientsDoctors()
+        {
+            var result = await _medicalAppointmentService.GetAllMedicalAppointmentsPatientsDoctors();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }    
+
+        [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Get()
         {
             var result = await _medicalAppointmentService.GetAllMedicalAppointments();
@@ -114,11 +124,20 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut]
+        public async Task<IActionResult> UpdatePatientCancel([FromBody] ReturnMedicalAppointmentPatientDoctorDto request)
+        {
+            var result = await _medicalAppointmentService.UpdatePatientCancel(request);
+            if (result.Confirmed)
+                return Ok(new { message = result.Response});
+            else return BadRequest(result.Response);
+        }
+
+        [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateMedicalAppointmentDto request)
         {
             var result = await _medicalAppointmentService.UpdateMedicalAppointment(request);
             if (result.Confirmed)
-                return Ok(new { message = result.Response});
+                return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
 

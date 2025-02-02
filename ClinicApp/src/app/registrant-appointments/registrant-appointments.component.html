@@ -1,7 +1,8 @@
-<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+<div class="container vw-100">
+    <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 
 <div class=" col-12 mb-4 text-center">
-    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary">Add new medical
+    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary w-25">Add new medical
         appointment</button>
 </div>
 
@@ -85,7 +86,7 @@
 
 
 <div class=" col-12 mt-5 mb-5 text-center">
-    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-primary">Show all
+    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-primary w-25">Show all
         appointments</button>
 
 </div>
@@ -99,10 +100,10 @@
                     Medical appointment Id
                 </th>
                 <th>
-                    Doctor Id
+                    Doctor
                 </th>
                 <th>
-                    Patient Id
+                    Patient
                 </th>
                 <th>
                     Time
@@ -120,10 +121,10 @@
                     {{medicalAppointment.id}}
                 </td>
                 <td>
-                    {{medicalAppointment.doctorId}}
+                    {{medicalAppointment.doctorName}} {{medicalAppointment.doctorSurname}}
                 </td>
                 <td>
-                    {{medicalAppointment.patientId}}
+                    {{medicalAppointment.patientName}} {{medicalAppointment.patientSurname}}
                 </td>
                 <td>
                     {{medicalAppointment.dateTime}}
@@ -140,4 +141,5 @@
         </tbody>
     </table>
     <button (click)="closeAllAppointments()" class="btn btn-secondary">Close</button>
+</div>
 </div>

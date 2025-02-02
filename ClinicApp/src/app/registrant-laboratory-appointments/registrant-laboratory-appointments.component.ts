@@ -11,6 +11,7 @@ import { ClinicService } from '../services/clinic.service';
 import { CreateMedicalAppointment } from '../model/create-medical-appointment';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { CreateLaboratoryAppointment } from '../model/create-laboratory-appointment';
+import { LaboratoryAppointmentWorkerSupervisor } from '../dtos/laboratory-appointment-worker-supervisor';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class RegistrantLaboratoryAppointmentsComponent {
     //createdAppointment: CreateLaboratoryAppointment;
     laboratoryAppointmentForm: FormGroup;
     isDisable = false;
-    laboratoryAppointments: LaboratoryAppointment[] = [];
+    laboratoryAppointments: LaboratoryAppointmentWorkerSupervisor[] = [];
     isAddingMode: boolean = false;
     isShowingAllAppointmentsMode: boolean = false;
   
@@ -77,11 +78,9 @@ export class RegistrantLaboratoryAppointmentsComponent {
         today.setHours(0, 0, 0, 0); // Ustawienie godziny na początek dnia
         return selectedDate >= today ? null : { notFutureOrToday: true };
       }
-
-     
       
         getAllLaboratoryAppointments(){
-          this.clinicService.getAllLaboratoryAppointments().subscribe(data =>{
+          this.clinicService.getAllLaboratoryAppointmentsWorkersSupervisors().subscribe(data =>{
             this.laboratoryAppointments=data;
           })
         }

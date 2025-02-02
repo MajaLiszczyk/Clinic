@@ -1,15 +1,16 @@
-<div class="container">
+<div class="container vw-100">
     <div *ngIf="!isRegistrantMode">
         <button [disabled]="!authorizationService.isLoggedIn()" type="button"
-            class="btn  btn-success float-right mx-2 mt-5 " (click)="logout()">Logout</button>
+            class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-supervisors']" class="btn btn-secondary">Return</a>
+
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openWaitingForReviewLabApp()"
-            class="btn btn-primary ms-2 me-4">Waiting for review</button>
+            class="btn btn-primary ms-2 me-4 w-25">Waiting for review</button>
     </div>
     <div *ngIf="isWaitingForReviewMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Waiting for review
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -17,7 +18,7 @@
                         Time
                     </th>
                     <th>
-                        Patient Id
+                        Patient
                     </th>
                     <th>
 
@@ -30,11 +31,11 @@
                         {{waitingForReviewAppointment.dateTime}}
                     </td>
                     <td>
-                        {{waitingForReviewAppointment.patientId}}
+                        {{waitingForReviewAppointment.patientName}} {{waitingForReviewAppointment.patientSurname}}
                     </td>
                     <td class="text-end">
                         <a [routerLink]="['/laboratory-appointment-details-supervisor', waitingForReviewAppointment.laboratoryAppointmentId]"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                            *ngIf="!isRegistrantMode" class="btn btn-primary w-50">Details</a>
                     </td>
                 </tr>
                 <tr *ngIf="waitingForReviewAppointments.length === 0">
@@ -51,10 +52,9 @@
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openSentBackLabApp()"
-            class="btn btn-primary ms-2 me-4">Sent back</button>
+            class="btn btn-primary ms-2 me-4 w-25">Sent back</button>
     </div>
     <div *ngIf="isSentBackMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Sent back
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -62,7 +62,7 @@
                         Time
                     </th>
                     <th>
-                        Patient Id
+                        Patient
                     </th>
                     <th>
 
@@ -75,11 +75,11 @@
                         {{sentBackAppointment.dateTime}}
                     </td>
                     <td>
-                        {{sentBackAppointment.patientId}}
+                        {{sentBackAppointment.patientName}} {{sentBackAppointment.patientSurname}}
                     </td>
                     <td class="text-end">
                         <a [routerLink]="['/laboratory-appointment-details-supervisor', sentBackAppointment.laboratoryAppointmentId]"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                            *ngIf="!isRegistrantMode" class="btn btn-primary w-50">Details</a>
                     </td>
                 </tr>
                 <tr *ngIf="sentBackAppointments.length === 0">
@@ -93,10 +93,9 @@
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openAcceptedLabApp()"
-            class="btn btn-primary ms-2 me-4">Accepted</button>
+            class="btn btn-primary ms-2 me-4 w-25">Accepted</button>
     </div>
     <div *ngIf="isAcceptedMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Accepted
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -104,7 +103,7 @@
                         Time
                     </th>
                     <th>
-                        Patient Id
+                        Patient
                     </th>
                     <th>
 
@@ -117,11 +116,11 @@
                         {{acceptedAppointment.dateTime}}
                     </td>
                     <td>
-                        {{acceptedAppointment.patientId}}
+                        {{acceptedAppointment.patientName}} {{acceptedAppointment.patientSurname}}
                     </td>
                     <td class="text-end">
                         <a [routerLink]="['/laboratory-appointment-details-supervisor', acceptedAppointment.laboratoryAppointmentId]"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
+                            *ngIf="!isRegistrantMode" class="btn btn-primary w-50">Details</a>
                     </td>
                 </tr>
                 <tr *ngIf="acceptedAppointments.length === 0">
@@ -132,6 +131,5 @@
         <button (click)="closeAcceptedLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers']" class="btn btn-secondary">Return</a>
 
 </div>

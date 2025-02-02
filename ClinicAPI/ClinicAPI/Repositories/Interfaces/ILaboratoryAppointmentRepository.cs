@@ -10,6 +10,7 @@ namespace ClinicAPI.Repositories.Interfaces
         //public Task<bool> IsAllLaboratoryTestsResultsCompleted(int laboratoryAppointmentId);
 
         public Task<List<LaboratoryAppointment>> GetAllLaboratoryAppointments();
+        public Task<List<ReturnLaboratoryAppointmentWorkerSupervisorDto>> GetAllLaboratoryAppointmentsWorkersSupervisors();
         public Task<List<LaboratoryAppointment>> GetAvailableLaboratoryAppointments();
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int patientId);
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int patientId);

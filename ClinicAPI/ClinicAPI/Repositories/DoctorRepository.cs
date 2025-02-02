@@ -23,9 +23,6 @@ namespace ClinicAPI.Repositories
             Doctor? doctor = null;
             doctor = await _context.Doctor.Where(r => r.Id == id)
                             .FirstOrDefaultAsync(); 
-
-
-
             return doctor;
         }
 

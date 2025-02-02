@@ -8,6 +8,7 @@ import { CreateMedicalAppointment } from '../model/create-medical-appointment';
 import { Doctor } from '../model/doctor';
 import { MedicalAppointment } from '../model/medical-appointment';
 import { ClinicService } from '../services/clinic.service';
+import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-patient-doctor-dto';
 
 @Component({
   selector: 'app-registrant-appointments',
@@ -25,7 +26,7 @@ export class RegistrantAppointmentsComponent {
   createdAppointment: CreateMedicalAppointment;
   medicalAppointmentForm: FormGroup;
   isDisable = false;
-  medicalAppointments: MedicalAppointment[] = [];
+  medicalAppointments: MedicalAppointmentPatientDoctorDto[] = [];
   isAddingMode: boolean = false;
   isShowingAllAppointmentsMode: boolean = false;
 
@@ -71,7 +72,7 @@ export class RegistrantAppointmentsComponent {
   get timeControl(): FormControl { return this.medicalAppointmentForm.get("time") as FormControl };
 
   getAllMedicalAppointments(){
-    this.clinicService.getAllMedicalAppointments().subscribe(data =>{
+    this.clinicService.getAllMedicalAppointmentsPatientsDoctors().subscribe(data =>{
       this.medicalAppointments=data;
     })
   }
@@ -134,7 +135,7 @@ export class RegistrantAppointmentsComponent {
     })
   }
 
-  edit(medicalAppointment: MedicalAppointment){
+  /*edit(medicalAppointment: MedicalAppointment){
     this.clinicService.editMedicalAppointment(medicalAppointment)
     .subscribe({
       next: (response) => {
@@ -144,7 +145,7 @@ export class RegistrantAppointmentsComponent {
         console.error("Error performing action:", error);
       }
     })
-  }
+  } */
 
   delete(medicalAppointmentId: number){
     this.clinicService.deleteMedicalAppointment(medicalAppointmentId)

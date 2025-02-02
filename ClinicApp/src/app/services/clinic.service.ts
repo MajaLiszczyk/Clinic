@@ -19,6 +19,8 @@ import { LaboratoryTest } from '../model/laboratory-test';
 import { LabAppWithPatientLabTestsMedApp } from '../dtos/labApp-patient-labTests-medApp-dto';
 import { GroupWithLabTests } from '../dtos/group-labTests-dto';
 import { LaboratoryTestsGroup } from '../model/laboratory-tests-group';
+import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-patient-doctor-dto';
+import { LaboratoryAppointmentWorkerSupervisor } from '../dtos/laboratory-appointment-worker-supervisor';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -150,6 +152,9 @@ export class ClinicService {
   //LABORATORY APPOINTMENT
   getAllLaboratoryAppointments(): Observable<LaboratoryAppointment[]> {
     return this.http.get<LaboratoryAppointment[]>(this.LaboratoryAppointmentUrl + "/Get");
+  }
+  getAllLaboratoryAppointmentsWorkersSupervisors(): Observable<LaboratoryAppointmentWorkerSupervisor[]> {
+    return this.http.get<LaboratoryAppointmentWorkerSupervisor[]>(this.LaboratoryAppointmentUrl + "/GetWithWorkersSupervisors");
   }
   getLabAppDetailsByLabAppId(id: number): Observable<LabAppWithPatientLabTestsMedApp> {
     return this.http.get<LabAppWithPatientLabTestsMedApp>(this.LaboratoryAppointmentUrl + "/GetLabAppDetailsByLabAppId/" + id);
@@ -329,6 +334,9 @@ export class ClinicService {
   getAllMedicalAppointments(): Observable<MedicalAppointment[]> {
     return this.http.get<MedicalAppointment[]>(this.MedicalAppointmentUrl + "/Get");
   }
+  getAllMedicalAppointmentsPatientsDoctors(): Observable<MedicalAppointmentPatientDoctorDto[]> {
+    return this.http.get<MedicalAppointmentPatientDoctorDto[]>(this.MedicalAppointmentUrl + "/GetWithPatientsDoctors");
+  }
   getMedicalAppointmentById(appointmentId: number): Observable<MedicalAppointment> {
     return this.http.get<MedicalAppointment>(this.MedicalAppointmentUrl + "/Get/" + appointmentId)
   }
@@ -348,8 +356,8 @@ export class ClinicService {
   addMedicalAppointment(appointment: MedicalAppointment): Observable<MedicalAppointment> {
     return this.http.post<MedicalAppointment>(this.MedicalAppointmentUrl + "/create", appointment);
   }
-  editMedicalAppointment(medicalAppointment: MedicalAppointment): Observable<MedicalAppointment> {
-    return this.http.put<MedicalAppointment>(this.MedicalAppointmentUrl + "/update", medicalAppointment);
+  editMedicalAppointment(medicalAppointment: MedicalAppointmentPatientDoctorDto): Observable<MedicalAppointmentPatientDoctorDto> {
+    return this.http.put<MedicalAppointmentPatientDoctorDto>(this.MedicalAppointmentUrl + "/updatePatientCancel", medicalAppointment);
   }
   editMedicalAppointmentReturnDto(selectedAppointment: ReturnMedicalAppointment): Observable<MedicalAppointment> { //różnie się tylko dto od powyższego edit
     return this.http.put<MedicalAppointment>(this.MedicalAppointmentUrl + "/update", selectedAppointment)

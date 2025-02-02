@@ -38,7 +38,7 @@ namespace ClinicAPI.Services
         }
         public async Task<ReturnDoctorDto?> GetDoctor(int id)
         {
-            Doctor doctor = await _doctorRepository.GetDoctorById(id);
+            var doctor = await _doctorRepository.GetDoctorById(id);
             return _mapper.Map<ReturnDoctorDto>(doctor);
         }
 

@@ -1,4 +1,5 @@
 ﻿using ClinicAPI.DB;
+using ClinicAPI.Dtos;
 using ClinicAPI.Models;
 using ClinicAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,36 @@ namespace ClinicAPI.Repositories
         {
             return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();           
         }
+
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors()
+        {
+            List<MedicalAppointment> medicalAppointments = new List<MedicalAppointment>();
+
+                var appointments = await (from ma in _context.MedicalAppointment
+                                          join p in _context.Patient on ma.PatientId equals p.Id
+                                          join d in _context.Doctor on ma.DoctorId equals d.Id
+                                          select new ReturnMedicalAppointmentPatientDoctorDto
+                                          {
+                                              Id = ma.Id,
+                                              DateTime = ma.DateTime,
+                                              PatientId = ma.PatientId,
+                                              PatientName = p.Name,
+                                              PatientSurname = p.Surname,
+                                              PatientPesel = p.Pesel,
+                                              DoctorId = ma.DoctorId,
+                                              DoctorName = d.Name,
+                                              DoctorSurname = d.Surname,
+                                              Interview = ma.Interview,
+                                              Diagnosis = ma.Diagnosis,
+                                              IsFinished = ma.IsFinished,
+                                              IsCancelled = ma.IsCancelled,
+                                              CancellingComment = ma.CancellingComment
+                                          }).ToListAsync();
+
+                return appointments;
+
+        }
+        
 
         public async Task<List<MedicalAppointment>> GetAllMedicalAppointments()
         {
@@ -61,19 +92,39 @@ namespace ClinicAPI.Repositories
             }
         }
 
-        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsByDoctorId(int doctorId)
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByDoctorId(int doctorId)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                   TransactionScopeAsyncFlowOption.Enabled);
-            try
-            {
-                var appointments = await _context.MedicalAppointment
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where ma.DoctorId == doctorId
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+
+
+
+            /*var appointments = await _context.MedicalAppointment
                     .Where(ma => ma.DoctorId == doctorId)
                     .ToListAsync();
 
-                scope.Complete();
-                return appointments;
+                return appointments;*/
 
                 /* Jesli bede chciala wiecej danych o pacjencie:
                    var query = from ma in _context.MedicalAppointments
@@ -84,34 +135,41 @@ namespace ClinicAPI.Repositories
                     scope.Complete();
                  */
 
-            }
-            catch (Exception ex)
-            {
-                // Obsłuż wyjątek 
-                return new List<MedicalAppointment>();
-            }
+
         }
 
 
-        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsByPatientId(int patientId)
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByPatientId(int patientId)
         {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                                                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                                                   TransactionScopeAsyncFlowOption.Enabled);
-            try
-            {
-                var appointments = await _context.MedicalAppointment
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where ma.PatientId == patientId
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+
+
+            /*var appointments = await _context.MedicalAppointment
                     .Where(ma => ma.PatientId == patientId)
                     .ToListAsync();
-                scope.Complete();
-                return appointments;
-
-
-            }
-            catch (Exception ex)
-            {
-                return new List<MedicalAppointment>();
-            }
+                return appointments;*/
         }
 
         public async Task<bool> HasPatientMedicalAppointments(int patientId)

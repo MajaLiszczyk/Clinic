@@ -37,6 +37,31 @@ namespace ClinicAPI.Repositories
             return laboratoryAppointments;
         }
 
+        public async Task<List<ReturnLaboratoryAppointmentWorkerSupervisorDto>> GetAllLaboratoryAppointmentsWorkersSupervisors()
+        {
+            var appointments = await(from ma in _context.LaboratoryAppointment
+                                     join d in _context.LaboratoryWorker on ma.LaboratoryWorkerId equals d.Id
+                                     join l in _context.LaboratorySupervisor on ma.SupervisorId equals l.Id
+                                     select new ReturnLaboratoryAppointmentWorkerSupervisorDto
+                                     {
+                                         Id = ma.Id,
+                                         DateTime = ma.DateTime,
+                                         LaboratoryWorkerId = ma.LaboratoryWorkerId,
+                                         LaboratoryWorkerName = d.Name,
+                                         LaboratoryWorkerSurname = d.Surname,
+                                         SupervisorId = ma.SupervisorId,
+                                         SupervisorName = l.Name,
+                                         SupervisorSurname = l.Surname,     
+                                         State = ma.State,
+                                         CancelComment = ma.CancelComment
+                                     }).ToListAsync();
+
+            return appointments;
+
+        }
+
+
+
         public async Task<List<LaboratoryAppointment>> GetAvailableLaboratoryAppointments()
         {
            

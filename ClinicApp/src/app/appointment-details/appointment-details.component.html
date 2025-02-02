@@ -1,7 +1,11 @@
 <div class="container">
+  <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId]" class="btn btn-secondary">Return</a>
+  <br/>
+  <br/>
+
   <h4>MEDICAL APPOINTMENT</h4>
   <p></p>
-  <h5 class="display-7 d-flex justify-content-center mt-5 mb-3 pt-3 pb-3">
+  <h5 class="display-7 d-flex justify-content-center flex-column align-items-center mb-3 pt-3 pb-3 ">
     <div *ngIf="medicalAppointment.isCancelled; else finishBlock">
       status: CANCELLED
     </div>
@@ -12,10 +16,10 @@
     </ng-template>
     <ng-template #awaitBlock>
       status: AWAITING
-    </ng-template> <br />
+    </ng-template>
 
-    Time: {{medicalAppointment.dateTime}} <br />
-    Patient id: {{medicalAppointment.patientId}}
+    <div>Time: {{medicalAppointment.dateTime}} <br /></div>
+    <div>Patient id: {{medicalAppointment.patientId}}</div>
 
   </h5>
 
@@ -208,7 +212,6 @@
     </div>
 
   </div>
-  <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId]" class="btn btn-secondary">Return</a>
 
 
 </div>

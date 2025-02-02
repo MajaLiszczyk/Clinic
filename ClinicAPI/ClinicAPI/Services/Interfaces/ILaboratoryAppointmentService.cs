@@ -5,6 +5,7 @@ namespace ClinicAPI.Services.Interfaces
     public interface ILaboratoryAppointmentService
     {
         public Task<List<ReturnLaboratoryAppointmentDto>> GetAllLaboratoryAppointments();
+        public Task<List<ReturnLaboratoryAppointmentWorkerSupervisorDto>> GetAllLaboratoryAppointmentsWorkersSupervisors();
         public Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id);
         //public Task<bool> IsAllLaboratoryTestsResultsCompleted(int id);
         public Task<List<ReturnLaboratoryAppointmentDto>> GetAvailableLaboratoryAppointments();

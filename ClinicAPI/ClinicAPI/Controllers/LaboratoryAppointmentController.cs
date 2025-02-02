@@ -32,6 +32,18 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetWithWorkersSupervisors()
+        {
+            var result = await _laboratoryAppointmentService.GetAllLaboratoryAppointmentsWorkersSupervisors();
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetLabAppDetailsByLabAppId([FromRoute] int id)

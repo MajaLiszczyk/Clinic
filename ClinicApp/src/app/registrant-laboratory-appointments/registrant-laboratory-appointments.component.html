@@ -1,7 +1,8 @@
-<a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+<div class="container vw-100">
+    <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
 
 <div class=" col-12 mb-4 text-center">
-    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary">Add new laboratory
+    <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary w-25">Add new laboratory
         appointment</button>
 </div>
 
@@ -100,7 +101,7 @@
 
 
 <div class=" col-12 mt-5 mb-5 text-center">
-    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-primary">Show all
+    <button [disabled]="isShowingAllAppointmentsMode" (click)="showAllAppointments()" class="btn btn-primary w-25">Show all
         appointments</button>
 
 </div>
@@ -114,10 +115,10 @@
                     Laboratory appointment Id
                 </th>
                 <th>
-                    Laboratory worker Id
+                    Laboratory worker
                 </th>
                 <th>
-                    Supervisor Id
+                    Supervisor
                 </th>
                 <th>
                     Time
@@ -135,10 +136,10 @@
                     {{laboratoryAppointment.id}}
                 </td>
                 <td>
-                    {{laboratoryAppointment.laboratoryWorkerId}}
+                    {{laboratoryAppointment.laboratoryWorkerName}} {{laboratoryAppointment.laboratoryWorkerSurname}}
                 </td>
                 <td>
-                    {{laboratoryAppointment.supervisorId}}
+                    {{laboratoryAppointment.supervisorName}} {{laboratoryAppointment.supervisorSurname}}
                 </td>
                 <td>
                     {{laboratoryAppointment.dateTime}}
@@ -155,4 +156,5 @@
         </tbody>
     </table>
     <button (click)="closeAllAppointments()" class="btn btn-secondary">Close</button>
+</div>
 </div>

@@ -1,11 +1,13 @@
-<div class="container">
+<div class="container vw-100">
     <div *ngIf="!isRegistrantMode">
         <button [disabled]="!authorizationService.isLoggedIn()" type="button"
-            class="btn  btn-success float-right mx-2 mt-5 " (click)="logout()">Logout</button>
+            class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-doctors']" class="btn btn-secondary">Return</a>
 
+    <br><br>
     <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->
-    Future appointments
+    <h6>Future appointments</h6>
     <div class="d-flex justify-content-center mx-5 px-5 mb-5">
 
         <table class="table table-striped">
@@ -15,10 +17,9 @@
                         Time
                     </th>
                     <th>
-                        Patient Id
+                        Patient
                     </th>
                     <th>
-
                     </th>
                 </tr>
             </thead>
@@ -28,15 +29,12 @@
                         {{futureAppointment.dateTime}}
                     </td>
                     <td>
-                        {{futureAppointment.patientId}}
+                        {{futureAppointment.patientName}} {{futureAppointment.patientSurname}}
                     </td>
                     <td class="text-end">
                         <a [routerLink]="['/appointment-details', futureAppointment.id]"
                             [queryParams]="{ isEditable: true, isAppointmentCancelled: futureAppointment.isCancelled}"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
-
-
-
+                            *ngIf="!isRegistrantMode" class="btn btn-primary w-50">Details</a>
                     </td>
                 </tr>
                 <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
@@ -46,7 +44,7 @@
         </table>
     </div>
 
-    Past appointments:
+    <h6>Past appointments</h6>
     <div class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
             <thead class="thead-dark">
@@ -55,13 +53,11 @@
                         Time
                     </th>
                     <th>
-                        Doctor Id
+                        Patient
                     </th>
                     <th>
-
                     </th>
                 </tr>
-
             </thead>
             <tbody>
                 <tr *ngFor="let pastAppointment of allMedicalAppointments.pastMedicalAppointments">
@@ -69,14 +65,12 @@
                         {{pastAppointment.dateTime}}
                     </td>
                     <td>
-                        {{pastAppointment.patientId}}
+                        {{pastAppointment.patientName}} {{pastAppointment.patientSurname}}
                     </td>
-
                     <td class="text-end">
                         <a [routerLink]="['/appointment-details', pastAppointment.id]"
                             [queryParams]="{ isEditable: false, isAppointmentCancelled: pastAppointment.isCancelled}"
-                            *ngIf="!isRegistrantMode" class="btn btn-success w-50">Details</a>
-                        <!-- <a [routerLink]="['/appointment-details', pastAppointment.id, false]" class="btn btn-success w-50" >Details</a>   -->
+                            *ngIf="!isRegistrantMode" class="btn btn-primary w-50">Details</a>
                     </td>
                 </tr>
                 <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
@@ -85,7 +79,4 @@
             </tbody>
         </table>
     </div>
-
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-doctors']" class="btn btn-secondary">Return</a>
-
 </div>

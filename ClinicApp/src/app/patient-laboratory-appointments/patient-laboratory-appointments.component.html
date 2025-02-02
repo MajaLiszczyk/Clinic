@@ -1,4 +1,6 @@
+<div class="container vw-100">
     <a *ngIf="!isRegistrantMode" [routerLink]="['/patient-menu' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="btn btn-secondary">Return</a>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
 
     <!-- MAKE APPOINTMENT-->
     <!-- <div class=" col-12 mb-4 text-center">
@@ -24,12 +26,11 @@
     
     <div class=" col-12 mb-4 text-center">
         <button (click)="openComissioned()"
-            class="btn btn-primary ms-2 me-4">Comissioned laboratory tests</button>
+            class="btn btn-primary ms-2 me-4 w-25">Comissioned laboratory tests</button>
     </div>
 
     
     <div *ngIf="isCommisionedTestsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Comissioned laboratory tests
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -71,10 +72,9 @@
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openPlanned()"
-            class="btn btn-primary ms-2 me-4">Planned laboratory appointments</button>
+            class="btn btn-primary ms-2 me-4 w-25">Planned laboratory appointments</button>
     </div>
     <div *ngIf="isPlannedLabAppMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Planned laboratory appointments
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -131,10 +131,9 @@
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openInProcess()"
-            class="btn btn-primary ms-2 me-4">In process laboratory appointments</button>
+            class="btn btn-primary ms-2 me-4 w-25">In process laboratory appointments</button>
     </div>
     <div *ngIf="isInProcessLabAppMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        In process laboratory appointments
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -193,10 +192,9 @@
 
     <div class=" col-12 mb-4 text-center">
         <button (click)="openFinished()"
-            class="btn btn-primary ms-2 me-4">Finished laboratory appointments</button>
+            class="btn btn-primary ms-2 me-4 w-25">Finished laboratory appointments</button>
     </div>
     <div *ngIf="isFinishedLabappMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
-        Finished laboratory appointments
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -250,4 +248,5 @@
         </table>
         <button (click)="closeFinishedAppointments()" class="btn btn-secondary">Close</button>
     </div>    
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
+
+</div>

@@ -1,5 +1,8 @@
-<!--<div class="container"> -->
+<div class="container vw-100">
+    <!--<div class="container"> -->
 <a *ngIf="!isRegistrantMode" [routerLink]="['/patient-menu' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="btn btn-secondary">Return</a>
+<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
+
 <!-- <div *ngIf="!isRegistrantMode">
         <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success "
             (click)="logout()">Logout</button>
@@ -8,7 +11,7 @@
 <!-- MAKE APPOINTMENT-->
 <div class=" col-12 mb-4 text-center">
     <button [disabled]="isMakeAnAppointmentMode || patient.isAvailable==false " (click)="openAppointmentForm()"
-        class="btn btn-primary ms-2 me-4">Make an appointment</button>
+        class="btn btn-primary ms-2 me-4 w-25">Make an appointment</button>
 </div>
 <div>
     <h3 class="my-4" *ngIf="isMakeAnAppointmentMode">Make an appointment</h3>
@@ -29,19 +32,19 @@
             <button (click)="cancelAppointmentForm()" class="btn btn-outline-secondary">Cancel</button>
         </div>
 
-        <div *ngFor="let medicalAppointment of medicalAppointments">
+        <div *ngFor="let medicalAppointment of medicalAppointments" class="text-center">
             <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:
                 {{medicalAppointment.dateTime}}</span>
             <button [disabled]="medicalAppointment.patientId != 0" (click)="chooseAppointment(medicalAppointment.id)"
-                class="btn btn-success">Select</button>
+                class="btn btn-primary my-1">Select</button>
         </div>
     </form>
 
 </div>
 
 
-<h3 class="my-4">Your appointments</h3>
-Future appointment
+<h3 class="my-4">Appointments</h3>
+<h6>Future appointment</h6>
 <!-- GET ALL-->
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
 
@@ -53,7 +56,7 @@ Future appointment
 
                 </th>
                 <th>
-                    Doctor Id
+                    Doctor
 
                 </th>
                 <th>
@@ -68,7 +71,7 @@ Future appointment
                     {{futureAppointment.dateTime}}
                 </td>
                 <td>
-                    {{futureAppointment.doctorId}}
+                    {{futureAppointment.doctorName}} {{futureAppointment.doctorSurname}}
                 </td>
                 <td class="text-end">
                     <button type="button" class="btn btn-outline-danger mx-2" [disabled]="isMakeAnAppointmentMode"
@@ -82,7 +85,7 @@ Future appointment
     </table>
 </div>
 
-Past appointment
+<h6>Past appointment</h6>
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead>
@@ -91,7 +94,7 @@ Past appointment
                     Time
                 </th>
                 <th>
-                    Doctor Id
+                    Doctor
                 </th>
             </tr>
         </thead>
@@ -101,7 +104,7 @@ Past appointment
                     {{pastAppointment.dateTime}}
                 </td>
                 <td>
-                    {{pastAppointment.doctorId}}
+                    {{pastAppointment.doctorName}} {{pastAppointment.doctorSurname}}
                 </td>
             </tr>
             <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
@@ -111,5 +114,5 @@ Past appointment
     </table>
 </div>
 
-<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
 <!-- </div> -->
+</div>
