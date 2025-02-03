@@ -2,6 +2,7 @@
 using ClinicAPI.Models;
 using ClinicAPI.Services;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -56,6 +57,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create(CreateDoctorDto request)
         {
 
@@ -75,6 +77,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> TransferToArchive([FromRoute] int id)
         {
             var result = await _doctorService.TransferToArchive(id);
@@ -84,6 +87,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var result = await _doctorService.DeleteDoctor(id);

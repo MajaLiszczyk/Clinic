@@ -55,11 +55,29 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
   }
 
   getLaboratoryAppointmentDetails() {
-    this.clinicService.getLabAppDetailsByLabAppId(this.appointmentId).subscribe(data => {
+    this.clinicService.getLabAppDetailsByLabAppId(this.appointmentId).subscribe({
+      next: (data) => {
+        this.laboratoryAppointment = data;
+        this.initializeLaboratoryTestsFormArray();
+        this.isAllTestResultsChecked();
+      },
+      error: (error) => {
+        if (error.status === 403) {
+          alert("Nie masz uprawnień do tego zasobu."); // Można dodać przekierowanie
+          //this.router.navigate(['/dashboard']); // Przekierowanie np. do głównego panelu
+        } else {
+          console.error("Wystąpił błąd:", error);
+        }
+      }
+    });
+
+
+
+    /*this.clinicService.getLabAppDetailsByLabAppId(this.appointmentId).subscribe(data => {
       this.laboratoryAppointment = data;
       this.initializeLaboratoryTestsFormArray();
       this.isAllTestResultsChecked();
-    })
+    })*/
 
   }
 

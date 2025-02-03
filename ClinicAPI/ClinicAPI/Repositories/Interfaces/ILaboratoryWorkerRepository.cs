@@ -5,6 +5,7 @@ namespace ClinicAPI.Repositories.Interfaces
     public interface ILaboratoryWorkerRepository
     {
         public Task<LaboratoryWorker?> GetLaboratoryWorkerById(int id);
+        public Task<LaboratoryWorker?> GetLaboratoryWorkerByUserId(string userId);
         public Task<List<LaboratoryWorker>> GetAllLaboratoryWorkers();
         public Task<List<LaboratoryWorker>> GetAllAvailableLaboratoryWorkers();
 

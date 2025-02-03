@@ -31,6 +31,15 @@ namespace ClinicAPI.Repositories
             return laboratoryWorker;
         }
 
+        public async Task<LaboratoryWorker?> GetLaboratoryWorkerByUserId(string userId)
+        {
+            var laboratoryWorker = await _context.LaboratoryWorker.Where(r => r.UserId == userId)
+                            .FirstOrDefaultAsync();
+            return laboratoryWorker;
+
+        }
+
+
         public async Task<bool> GetLaboratoryWorkerWithTheSameNumber(string number)
         {
             if (_context.LaboratoryWorker.Any(p => p.LaboratoryWorkerNumber == number))

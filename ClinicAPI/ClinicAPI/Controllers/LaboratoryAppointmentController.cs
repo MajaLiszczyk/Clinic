@@ -5,6 +5,7 @@ using ClinicAPI.Services.Interfaces;
 using ClinicAPI.UserFeatures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ClinicAPI.Controllers
 {
@@ -45,13 +46,31 @@ namespace ClinicAPI.Controllers
         
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = UserRole.LaboratorySupervisor + "," + UserRole.LaboratoryWorker)]
+        //[Authorize]
         public async Task<IActionResult> GetLabAppDetailsByLabAppId([FromRoute] int id)
         {
-            var result = await _laboratoryAppointmentService.GetLabAppDetailsByLabAppId(id);
-            if (result != null)
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                var result = await _laboratoryAppointmentService.GetLabAppDetailsByLabAppId(id, userId, role);
+
                 return Ok(result);
-            return NotFound();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Wystąpił błąd serwera.", details = ex.Message });
+            }
         }
 
         [HttpGet]

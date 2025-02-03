@@ -21,6 +21,7 @@ import { GroupWithLabTests } from '../dtos/group-labTests-dto';
 import { LaboratoryTestsGroup } from '../model/laboratory-tests-group';
 import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-patient-doctor-dto';
 import { LaboratoryAppointmentWorkerSupervisor } from '../dtos/laboratory-appointment-worker-supervisor';
+import { Registrant } from '../model/registrant';
 //import { HttpClientModule } from '@angular/common/http'; // Import modułu
 
 
@@ -35,6 +36,7 @@ export class ClinicService {
   readonly DiagnosticTestTypeUrl = "https://localhost:5001/api/DiagnosticTestType";
   readonly SpecialisationUrl = "https://localhost:5001/api/medicalSpecialisation";
   readonly PatientUrl = "https://localhost:5001/api/patient";
+  readonly RegistrantUrl = "https://localhost:5001/api/registrant";
   readonly DiagnosticTesttUrl = "https://localhost:5001/api/DiagnosticTest";
   readonly LogInUrl = "https://localhost:5001/api/authorization/login";
   readonly RegistrationUrl = "https://localhost:5001/api/Registration";
@@ -44,6 +46,7 @@ export class ClinicService {
   readonly LaboratoryTestUrl = "https://localhost:5001/api/LaboratoryTest";
   readonly LaboratoryAppointmentUrl = "https://localhost:5001/api/LaboratoryAppointment";
   readonly LaboratoryTestsGroupUrl = "https://localhost:5001/api/LaboratoryTestsGroup";
+  
 
   
 
@@ -63,7 +66,15 @@ export class ClinicService {
 
 
 
-
+  //REGISTRANT
+  getAllRegistrants(): Observable<Registrant[]> {
+    return this.http.get<Registrant[]>(this.RegistrantUrl + "/Get");
+  }
+  createRegistrantAccount(registrant: any): Observable<Registrant> {
+    return this.http.post<Registrant>(this.RegistrationUrl + "/RegisterRegistrant", registrant)
+  }
+  
+  
 
   //PATIENT
   getPatientById(patientId: number) {

@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using System.Security.Claims;
 using System.Transactions;
 
 namespace ClinicAPI.Services
@@ -13,16 +14,22 @@ namespace ClinicAPI.Services
         private readonly ILaboratoryAppointmentRepository _laboratoryAppointmentRepository;
         private readonly ILaboratoryTestsGroupRepository _laboratoryTestsGroupRepository;
         private readonly ILaboratoryTestRepository _laboratoryTestsRepository;
+        private readonly ILaboratoryWorkerRepository _laboratoryWorkerRepository;
+        private readonly ILaboratorySupervisorRepository _laboratorySupervisorRepository;
         private readonly IMapper _mapper;
 
         public LaboratoryAppointmentService(ILaboratoryAppointmentRepository laboratoryAppointmentRepository
                                             , ILaboratoryTestsGroupRepository laboratoryTestsGroupRepository
                                             , ILaboratoryTestRepository laboratoryTestRepository
+                                            , ILaboratoryWorkerRepository laboratoryWorkerRepository
+                                            , ILaboratorySupervisorRepository laboratorySupervisorRepository
                                             , IMapper mapper)
         {
             _laboratoryAppointmentRepository = laboratoryAppointmentRepository;
             _laboratoryTestsGroupRepository = laboratoryTestsGroupRepository;
             _laboratoryTestsRepository = laboratoryTestRepository;
+            _laboratoryWorkerRepository = laboratoryWorkerRepository;
+            _laboratorySupervisorRepository = laboratorySupervisorRepository;
             _mapper = mapper;
         }
 
@@ -38,10 +45,36 @@ namespace ClinicAPI.Services
             return laboratoryAppointments;
         }
 
-        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id)
+        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id, string userId, string role)
         {
-            var laboratoryAppointments = await _laboratoryAppointmentRepository.GetLabAppDetailsByLabAppId(id);
-            return laboratoryAppointments;
+            var laboratoryAppointment = await _laboratoryAppointmentRepository.GetLabAppDetailsByLabAppId(id);
+            if (laboratoryAppointment == null)
+            {
+                throw new KeyNotFoundException("Nie znaleziono wizyty laboratoryjnej.");
+            }
+
+            if (role == UserRole.LaboratorySupervisor)
+            {
+                var laboratorySupervisor = await _laboratorySupervisorRepository.GetLaboratorySupervisorByUserId(userId);
+                if (laboratorySupervisor == null || laboratorySupervisor.Id != laboratoryAppointment.SupervisorId)
+                {
+                    throw new UnauthorizedAccessException("Brak dostępu do tej wizyty laboratoryjnej.");
+                }
+            }
+            else if (role == UserRole.LaboratoryWorker)
+            {
+                var laboratoryWorker = await _laboratoryWorkerRepository.GetLaboratoryWorkerByUserId(userId);
+                if (laboratoryWorker == null || laboratoryWorker.Id != laboratoryAppointment.LaboratoryWorkerId)
+                {
+                    throw new UnauthorizedAccessException("Brak dostępu do tej wizyty laboratoryjnej.");
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
+            }
+
+            return laboratoryAppointment;
             //return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
         }
 

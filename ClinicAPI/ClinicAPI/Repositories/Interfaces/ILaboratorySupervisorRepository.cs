@@ -5,6 +5,8 @@ namespace ClinicAPI.Repositories.Interfaces
     public interface ILaboratorySupervisorRepository
     {
         public Task<LaboratorySupervisor?> GetLaboratorySupervisorById(int id);
+        public Task<LaboratorySupervisor?> GetLaboratorySupervisorByUserId(string userId);
+        
         public Task<List<LaboratorySupervisor>> GetAllLaboratorySupervisors();
         public Task<List<LaboratorySupervisor>> GetAllAvailableLAboratorySupervisors();
 
