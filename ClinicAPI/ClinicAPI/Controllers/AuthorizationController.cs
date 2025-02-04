@@ -70,6 +70,8 @@ namespace ClinicAPI.Controllers
                 "Doctor" => _dbContext.Doctor.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
                 "LaboratoryWorker" => _dbContext.LaboratoryWorker.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
                 "LaboratorySupervisor" => _dbContext.LaboratorySupervisor.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
+                "Registrant" => _dbContext.Registrant.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
+                "Admin" => _dbContext.Admin.FirstOrDefault(d => d.UserId == user.Id)?.Id ?? 0,
                 _ => 0
             };
 

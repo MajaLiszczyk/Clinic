@@ -47,10 +47,9 @@ namespace ClinicAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = UserRole.LaboratorySupervisor + "," + UserRole.LaboratoryWorker)]
-        //[Authorize]
         public async Task<IActionResult> GetLabAppDetailsByLabAppId([FromRoute] int id)
         {
-            try
+            try        
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;

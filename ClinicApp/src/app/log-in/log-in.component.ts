@@ -61,12 +61,15 @@ export class LoginComponent {
             } else if (result.role === 'Doctor') {
               this.router.navigate(['/doctor-appointments', id]);
             } else if (result.role === 'Registrant') {
-              this.router.navigate(['/registrant']);
+              this.router.navigate(['/registrant', id]);
             } else if (result.role === 'LaboratoryWorker') {
               this.router.navigate(['/laboratory-worker', id]);
             } else if (result.role === 'LaboratorySupervisor') {
               this.router.navigate(['/laboratory-supervisor', id]);
+            } else if (result.role === 'Admin') {
+              this.router.navigate(['/admin']);
             }
+            
 
           },
           error: (error) => {

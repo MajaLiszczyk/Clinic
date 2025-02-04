@@ -63,10 +63,10 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
       },
       error: (error) => {
         if (error.status === 403) {
-          alert("Nie masz uprawnień do tego zasobu."); // Można dodać przekierowanie
-          //this.router.navigate(['/dashboard']); // Przekierowanie np. do głównego panelu
+          alert("Forbidden access."); 
+          //this.router.navigate(['/laboratory-appointment-details-supervisor' , 16]);
         } else {
-          console.error("Wystąpił błąd:", error);
+          console.error("Error:", error);
         }
       }
     });

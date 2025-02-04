@@ -27,8 +27,7 @@
         <!-- <div class="d-flex justify-content-center mb-4"> -->
         <div class="d-flex justify-content-center mb-5 mt-5">
             <button [disabled]="isDisabled" type="button" class="btn btn-primary float-right mx-2"
-                (click)="search()">Search medical appointments with specilisation id:
-                {{formSpecialisationId.value}}</button>
+                (click)="search()">Search</button>
             <button (click)="cancelAppointmentForm()" class="btn btn-outline-secondary">Cancel</button>
         </div>
 
@@ -36,7 +35,7 @@
             <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:
                 {{medicalAppointment.dateTime}}</span>
             <button [disabled]="medicalAppointment.patientId != 0" (click)="chooseAppointment(medicalAppointment.id)"
-                class="btn btn-primary my-1">Select</button>
+                class="btn btn-primary my-1 mx-1">Select</button>
         </div>
     </form>
 
@@ -44,7 +43,7 @@
 
 
 <h3 class="my-4">Appointments</h3>
-<h6>Future appointment</h6>
+<h6>Future appointments</h6>
 <!-- GET ALL-->
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
 
@@ -85,7 +84,7 @@
     </table>
 </div>
 
-<h6>Past appointment</h6>
+<h6>Past appointments</h6>
 <div class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead>

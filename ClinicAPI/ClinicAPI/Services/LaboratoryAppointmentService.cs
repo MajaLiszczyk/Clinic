@@ -45,7 +45,7 @@ namespace ClinicAPI.Services
             return laboratoryAppointments;
         }
 
-        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto> GetLabAppDetailsByLabAppId(int id, string userId, string role)
+        public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto> GetLabAppDetailsByLabAppId(int id, string userId, string role)
         {
             var laboratoryAppointment = await _laboratoryAppointmentRepository.GetLabAppDetailsByLabAppId(id);
             if (laboratoryAppointment == null)

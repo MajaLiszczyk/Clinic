@@ -42,6 +42,7 @@ import { LaboratoryWorkerComponent } from './laboratory-worker/laboratory-worker
 import { LaboratoryAppointmentDetailsComponent } from './laboratory-appointment-details/laboratory-appointment-details.component';
 import { LaboratoryAppointmentDetailsSupervisorComponent } from './laboratory-appointment-details-supervisor/laboratory-appointment-details-supervisor.component';
 import { LaboratorySupervisorComponent } from './laboratory-supervisor/laboratory-supervisor.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 export const routes: Routes = [
@@ -82,6 +83,7 @@ export const routes: Routes = [
     { path: 'registrant-laboratory-appointments', component: RegistrantLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'laboratory-worker/:laboratoryWorkerId', component: LaboratoryWorkerComponent, canActivate: [AuthorizationGuard] },
     { path: 'laboratory-supervisor/:laboratorySupervisorId', component: LaboratorySupervisorComponent, canActivate: [AuthorizationGuard] },
+    { path: 'admin', component: AdminComponent, canActivate: [AuthorizationGuard] },
 
 
     
