@@ -176,6 +176,12 @@ export class AppointmentDetailsComponent {
     const testTypeName = this.selectedDiagnosticTestType.name;
     this.diagnosticTestForm.get('diagnosticTestTypeName')?.setValue(testTypeName);
   }
+  
+  autoResize(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
 
   selectLaboratoryTestType() {
     this.isLaboratoryTestAddingMode = true;

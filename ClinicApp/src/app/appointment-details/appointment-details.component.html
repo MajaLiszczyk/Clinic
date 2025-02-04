@@ -35,8 +35,8 @@
         </div>
       </div>
       <div *ngIf="isEditable">
-        <button (click)="saveCancelComment()" class="btn btn-success w-50">Save comment</button>
-        <button (click)="cancelCancelComment()" class="btn btn-success w-50">Cancel comment</button>
+        <button (click)="saveCancelComment()" class="btn btn-primary w-50">Save comment</button>
+        <button (click)="cancelCancelComment()" class="btn btn-outline-danger w-50">Cancel comment</button>
       </div>
     </form>
   </div>
@@ -47,8 +47,9 @@
     <form [formGroup]="medicalAppointmentForm">
       <div class="formGroup mb-3">
         <label for="textbox">Interview:</label>
-        <input id="interview" formControlName="interviewText" type="text" class="form-control" aria-label="interview"
+        <textarea id="interview" formControlName="interviewText" type="text" class="form-control" aria-label="interview"  rows="3" (input)="autoResize($event)"
           [class.is-invalid]="formInterview.invalid && (formInterview.touched || formInterview.dirty)">
+        </textarea>
         <div class="invalid-feedback">
           <span *ngIf="formInterview?.errors?.['required']">Required</span>
         </div>
@@ -57,8 +58,9 @@
 
       <div class="formGroup mb-3">
         <label for="textbox">Diagnosis:</label>
-        <input id="textbox" type="text" formControlName="diagnosisText" class="form-control"
-          [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)" />
+        <textarea id="textbox" type="text" formControlName="diagnosisText" class="form-control" rows="3" (input)="autoResize($event)"
+          [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)">
+        </textarea>
         <div class="invalid-feedback">
           <span *ngIf="formDiagnosis?.errors?.['required']">Required</span>
         </div>
@@ -77,7 +79,7 @@
       </div>
       <div>
         <div class="d-flex justify-content-center mb-4">
-          <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+          <button [disabled]="isDisabled" type="button" class="btn  btn-primary float-right mx-2 mt-5 "
             (click)="selectDiagnosticTestType()">Select</button>
         </div>
       </div>
@@ -89,13 +91,14 @@
       <p></p>
 
       <label for="textbox">Description:</label>
-      <input id="description" type="text" formControlName="description" />
+      <textarea id="description" type="text" formControlName="description" rows="1" (input)="autoResize($event)">
+      </textarea>
 
       <div class="d-flex justify-content-center mb-4 mt-5">
-        <button *ngIf="isDiagnosticTestAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+        <button *ngIf="isDiagnosticTestAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
           (click)="saveDiagnosticTest()">Save Diagnostic Test</button>
-        <button (click)="cancelAddingDiagnosticTest()" class="btn btn-secondary">Cancel</button>
-        <button *ngIf="isDiagnosticTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+        <button (click)="cancelAddingDiagnosticTest()" class="btn btn-outline-secondary">Cancel</button>
+        <button *ngIf="isDiagnosticTestEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
           (click)="updateDiagnosticTest()">Save
           etitioned diagnosticTest</button>
       </div>
@@ -121,9 +124,9 @@
           </td>
           <td *ngIf="isEditable">
             <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
-              class="btn  btn-success float-right" (click)="edit(pastDiagnosticTest)">Edit</button>
+              class="btn  btn-primary float-right" (click)="edit(pastDiagnosticTest)">Edit</button>
             <button [disabled]="isDiagnosticTestAddingMode || isDiagnosticTestEditableMode" type="button"
-              class="btn  btn-success float-right" (click)="delete(pastDiagnosticTest.id)">Delete</button>
+              class="btn  btn-outline-danger float-right" (click)="delete(pastDiagnosticTest.id)">Delete</button>
           </td>
         </tr>
         <tr *ngIf="pastDiagnosticTests.length === 0">
@@ -145,7 +148,7 @@
       </div>
       <div>
         <div class="d-flex justify-content-center mb-4">
-          <button [disabled]="isDisabled" type="button" class="btn  btn-success float-right mx-2 mt-5 "
+          <button [disabled]="isDisabled" type="button" class="btn  btn-primary float-right mx-2 mt-5 "
             (click)="selectLaboratoryTestType()">Select</button>
         </div>
       </div>
@@ -157,13 +160,14 @@
       <p></p>
 
       <label for="textbox">Note:</label>
-      <input id="doctorNote" type="text" formControlName="doctorNote" />
+      <textarea id="doctorNote" type="text" formControlName="doctorNote" rows="1" (input)="autoResize($event)">
+      </textarea>
 
       <div class="d-flex justify-content-center mb-4 mt-5">
-        <button *ngIf="isLaboratoryTestAddingMode" type="button" class="btn  btn-success float-right mx-2 "
+        <button *ngIf="isLaboratoryTestAddingMode" type="button" class="btn  btn-primary float-right mx-2 "
           (click)="saveLaboratoryTest()">Save laboratory Test</button>
-        <button (click)="cancelAddingLaboratoryTest()" class="btn btn-secondary">Cancel</button>
-        <button *ngIf="isLaboratoryTestEditableMode" type="button" class="btn  btn-success float-right mx-2 "
+        <button (click)="cancelAddingLaboratoryTest()" class="btn btn-outline-secondary">Cancel</button>
+        <button *ngIf="isLaboratoryTestEditableMode" type="button" class="btn  btn-primary float-right mx-2 "
           (click)="updateLaboratoryTest()">Save etitioned laboratoryTest</button>
       </div>
     </form>
@@ -190,9 +194,9 @@
           </td>
           <td *ngIf="isEditable">
             <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
-              class="btn  btn-success float-right" (click)="editLaboratoryTest(pastLaboratoryTest)">Edit</button>
+              class="btn  btn-primary float-right" (click)="editLaboratoryTest(pastLaboratoryTest)">Edit</button>
             <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
-              class="btn  btn-success float-right" (click)="deleteLaboratoryTest(pastLaboratoryTest.id)">Delete</button>
+              class="btn  btn-outline-danger float-right" (click)="deleteLaboratoryTest(pastLaboratoryTest.id)">Delete</button>
           </td>
         </tr>
         <tr *ngIf="pastDiagnosticTests.length === 0">
@@ -204,9 +208,9 @@
 
     <div *ngIf="isEditable">
       <button [disabled]="medicalAppointment.patientId==0" (click)="saveAnAppointment()"
-        class="btn btn-success w-50">Finish the appointment</button>
+        class="btn btn-primary w-40 mx-2">Finish the appointment</button>
       <button [disabled]="medicalAppointment.patientId==0" (click)="cancelAnAppointment()"
-        class="btn btn-success w-50">Cancel the appointment</button>
+        class="btn btn-outline-danger w-40 mx-2">Cancel the appointment</button>
 
       <!-- <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a> -->
     </div>

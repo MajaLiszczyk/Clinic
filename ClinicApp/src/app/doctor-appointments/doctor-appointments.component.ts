@@ -32,6 +32,8 @@ export class DoctorAppointmentsComponent {
   doctorId: number = 0;
   allMedicalAppointments: AllMedicalAppointments;
   isRegistrantMode: boolean = false;
+  registrantId: number = 0;
+
 
   constructor(private http:HttpClient, private route: ActivatedRoute, private clinicService: ClinicService
             , public authorizationService: AuthorizationService){
@@ -41,6 +43,7 @@ export class DoctorAppointmentsComponent {
   ngOnInit(){
     this.route.params.subscribe(params => {
       this.doctorId = +params['doctorId']; // Przypisanie id z URL
+      this.registrantId = +params['registrantId'];
       console.log('Received doctorId:', this.doctorId);
     });
     this.route.queryParams.subscribe(queryParams => {

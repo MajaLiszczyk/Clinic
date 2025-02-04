@@ -4,7 +4,7 @@
             class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
 
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers']" class="btn btn-secondary">Return</a>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers', registrantId]" class="btn btn-secondary">Return</a>
 
 
     <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->

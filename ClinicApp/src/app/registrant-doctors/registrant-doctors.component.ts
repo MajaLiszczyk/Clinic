@@ -29,6 +29,8 @@ export class RegistrantDoctorsComponent {
   doctorSpecialisationsList: number[] = [];
   specialisationsArray: any;
   registrantId: number = 0;
+  passwordVisible = false;
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.doctorForm = this.formBuilder.group({});
@@ -64,6 +66,10 @@ export class RegistrantDoctorsComponent {
   get formEmail(): FormControl { return this.doctorForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formPassword(): FormControl { return this.doctorForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
 
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+  
   getAllAvailableSpecialisations() {
     this.clinicService.getAllAvailableSpecialisations().subscribe(data => {
       this.specialisations = data;

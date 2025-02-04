@@ -31,6 +31,8 @@ export class LaboratoryWorkerComponent {
   readyForPatientAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
   sentToPatientAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
   cancelledAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok  
+  registrantId: number = 0;
+
 
   constructor(private route: ActivatedRoute, private clinicService: ClinicService
     , public authorizationService: AuthorizationService) { }
@@ -38,6 +40,7 @@ export class LaboratoryWorkerComponent {
   ngOnInit(){
     this.route.params.subscribe(params => {
       this.laboratoryWorkerId = +params['laboratoryWorkerId']; // Przypisanie id z URL
+      this.registrantId = +params['registrantId'];
       console.log('Received doctorId:', this.laboratoryWorkerId);
     });
     this.route.queryParams.subscribe(queryParams => {

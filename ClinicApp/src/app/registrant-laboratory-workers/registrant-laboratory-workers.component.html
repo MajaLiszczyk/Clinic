@@ -60,8 +60,10 @@
 
         <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">Password</label>
-            <input formControlName="password" type="string" class="form-control" aria-label="password"
+            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control" aria-label="password"
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+                <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
+
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
                 <div *ngIf="formPassword?.errors?.['hasNumber']">
@@ -143,7 +145,7 @@
                         class="btn btn-outline-danger mx-2" (click)="archive(laboratoryWorker.id)">Archive</button>
 
                     <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
-                    <a [routerLink]="['/laboratory-worker', laboratoryWorker.id]"
+                    <a [routerLink]="['/laboratory-worker', laboratoryWorker.id, registrantId]"
                         [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
                         class="btn btn-primary ms-2 me-4">Laboratory worker's Appointments</a>
                 </td>

@@ -28,6 +28,8 @@ export class RegistrantPatientsComponent {
   isEditableMode: boolean = false;
   isCreateAccountMode: boolean = false;
   registrantId: number = 0;
+  passwordVisible = false;
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
@@ -58,6 +60,9 @@ export class RegistrantPatientsComponent {
   get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
   get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
 
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
 
   getAllPatients(){
     this.clinicService.getAllPatients().subscribe(data =>{

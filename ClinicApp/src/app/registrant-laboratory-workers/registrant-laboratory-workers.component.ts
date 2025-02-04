@@ -22,6 +22,8 @@ export class RegistrantLaboratoryWorkersComponent {
   isEditableMode = false;
   isAddingMode = false; //niepotrzebne?
   registrantId: number = 0;
+  passwordVisible = false;
+
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.laboratoryWorkerForm = this.formBuilder.group({});
@@ -69,6 +71,10 @@ export class RegistrantLaboratoryWorkersComponent {
     // Uruchom ponowną walidację
     emailC?.updateValueAndValidity();
     passwordC?.updateValueAndValidity();
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
   }
 
   getAllLaboratoryWorkers() {

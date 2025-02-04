@@ -57,8 +57,9 @@
 
         <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">Password</label>
-            <input formControlName="password" type="string" class="form-control" aria-label="password"
+            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control" aria-label="password"
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+                <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
                 <div *ngIf="formPassword?.errors?.['hasNumber']">
@@ -215,7 +216,7 @@
                         (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
 
                     <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
-                    <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id]"
+                    <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id, registrantId]"
                         [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
                         class="btn btn-primary ms-2 me-4">Doctor's Appointments</a>
                 </td>

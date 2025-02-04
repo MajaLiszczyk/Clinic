@@ -3,7 +3,7 @@
         <button [disabled]="!authorizationService.isLoggedIn()" type="button"
             class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-supervisors']" class="btn btn-secondary">Return</a>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-supervisors', registrantId]" class="btn btn-secondary">Return</a>
 
 
     <div class=" col-12 mb-4 text-center">

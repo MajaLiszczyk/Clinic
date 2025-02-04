@@ -22,6 +22,8 @@ export class LaboratorySupervisorComponent {
   waitingForReviewAppointments: LabAppWithPatientLabTestsMedApp[] = [];
   sentBackAppointments: LabAppWithPatientLabTestsMedApp[] = [];
   acceptedAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  registrantId: number = 0;
+
 
   constructor(private route: ActivatedRoute, private clinicService: ClinicService
       , public authorizationService: AuthorizationService) { }
@@ -29,6 +31,7 @@ export class LaboratorySupervisorComponent {
     ngOnInit(){
       this.route.params.subscribe(params => {
         this.laboratorySupervisorId = +params['laboratorySupervisorId']; // Przypisanie id z URL
+        this.registrantId = +params['registrantId']; 
         console.log('Received laboratorySupervisorId:', this.laboratorySupervisorId);
       });
       this.route.queryParams.subscribe(queryParams => {

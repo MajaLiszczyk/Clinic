@@ -23,6 +23,7 @@ export class RegistrantLaboratorySupervisorsComponent {
     isEditableMode = false;
     isAddingMode = false; //niepotrzebne?
     registrantId: number = 0;
+    passwordVisible = false;
   
     constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
       this.laboratorySupervisorForm = this.formBuilder.group({});
@@ -71,6 +72,10 @@ export class RegistrantLaboratorySupervisorsComponent {
       // Uruchom ponowną walidację
       emailC?.updateValueAndValidity();
       passwordC?.updateValueAndValidity();
+    }
+
+    togglePasswordVisibility() {
+      this.passwordVisible = !this.passwordVisible;
     }
 
     getAlllaboratorySupervisors() {

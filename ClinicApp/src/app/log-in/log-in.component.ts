@@ -59,13 +59,13 @@ export class LoginComponent {
             if (result.role === 'Patient') {
               this.router.navigate(['/patient-menu', id], { queryParams: { isRegistrantMode: false } });
             } else if (result.role === 'Doctor') {
-              this.router.navigate(['/doctor-appointments', id]);
+              this.router.navigate(['/doctor-appointments', id, 0]);
             } else if (result.role === 'Registrant') {
               this.router.navigate(['/registrant', id]);
             } else if (result.role === 'LaboratoryWorker') {
-              this.router.navigate(['/laboratory-worker', id]);
+              this.router.navigate(['/laboratory-worker', id, 0]);
             } else if (result.role === 'LaboratorySupervisor') {
-              this.router.navigate(['/laboratory-supervisor', id]);
+              this.router.navigate(['/laboratory-supervisor', id, 0]);
             } else if (result.role === 'Admin') {
               this.router.navigate(['/admin']);
             }

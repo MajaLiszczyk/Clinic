@@ -81,14 +81,14 @@ export const routes: Routes = [
     { path: 'registrant-appointments/:registrantId', component: RegistrantAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-laboratory-test-types/:registrantId', component: RegistrantLaboratoryTestTypesComponent, canActivate: [AuthorizationGuard] },
     { path: 'registrant-laboratory-appointments/:registrantId', component: RegistrantLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
-    { path: 'laboratory-worker/:laboratoryWorkerId', component: LaboratoryWorkerComponent, canActivate: [AuthorizationGuard] },
-    { path: 'laboratory-supervisor/:laboratorySupervisorId', component: LaboratorySupervisorComponent, canActivate: [AuthorizationGuard] },
+    { path: 'laboratory-worker/:laboratoryWorkerId/:registrantId', component: LaboratoryWorkerComponent, canActivate: [AuthorizationGuard] },
+    { path: 'laboratory-supervisor/:laboratorySupervisorId/:registrantId', component: LaboratorySupervisorComponent, canActivate: [AuthorizationGuard] },
     { path: 'admin', component: AdminComponent, canActivate: [AuthorizationGuard] },
 
 
     
     //{ path: 'doctor', component: DoctorComponent},
-    { path: 'doctor-appointments/:doctorId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'doctor-appointments/:doctorId/:registrantId', component: DoctorAppointmentsComponent, canActivate: [AuthorizationGuard] },
     { path: 'appointment-details/:id', component: AppointmentDetailsComponent, },
     { path: 'laboratory-appointment-details/:id', component: LaboratoryAppointmentDetailsComponent, },
     { path: 'laboratory-appointment-details-supervisor/:id', component: LaboratoryAppointmentDetailsSupervisorComponent, },
