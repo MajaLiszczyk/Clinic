@@ -24,6 +24,15 @@ namespace ClinicAPI.Repositories
             return registrant;
         }
 
+        public async Task<bool> GetRegistrantWithTheSameNumber(string number)
+        {
+            if (_context.Registrant.Any(p => p.RegistrantNumber == number))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<List<Registrant>> GetAllRegistrants()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,

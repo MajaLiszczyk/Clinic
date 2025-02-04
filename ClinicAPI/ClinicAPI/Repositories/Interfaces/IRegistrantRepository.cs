@@ -5,6 +5,7 @@ namespace ClinicAPI.Repositories.Interfaces
     public interface IRegistrantRepository
     {
         public Task<Registrant?> GetRegistrantById(int id);
+        public Task<bool> GetRegistrantWithTheSameNumber(string number);
         public Task<List<Registrant>> GetAllRegistrants();
         public Task<Registrant> CreateRegistrant(Registrant registrant);
         public Task<Registrant?> UpdateRegistrant(Registrant registrant);

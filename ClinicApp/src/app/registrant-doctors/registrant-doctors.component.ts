@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Doctor } from '../model/doctor';
 import { Specialisation } from '../model/specialisation';
 import { DoctorWithSpcecialisations } from '../model/doctor-with-specialisations';
@@ -28,14 +28,18 @@ export class RegistrantDoctorsComponent {
   isAddingMode = false; //niepotrzebne?
   doctorSpecialisationsList: number[] = [];
   specialisationsArray: any;
+  registrantId: number = 0;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.doctorForm = this.formBuilder.group({});
     this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [], isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [], isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
     this.getAllDoctors();
     this.getAllAvailableSpecialisations();
     this.doctorForm = this.formBuilder.group({

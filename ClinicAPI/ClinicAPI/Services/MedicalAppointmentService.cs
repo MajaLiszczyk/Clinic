@@ -4,7 +4,10 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using System.Collections.Generic;
+using System.Data;
 using System.Transactions;
+using IsolationLevel = System.Transactions.IsolationLevel;
 
 namespace ClinicAPI.Services
 {
@@ -64,7 +67,62 @@ namespace ClinicAPI.Services
             return allAppointments;
         }
 
-        
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetFutureMedicalAppointmentsByPatientOrUserId(int id, string userId, string role)
+        {
+            if (role == UserRole.Patient)
+            {
+                var medicalAppointments = await _medicalAppointmentRepository.GetFutureMedicalAppointmentsByPatientUserId(userId);
+                if (medicalAppointments == null)
+                {
+                    throw new KeyNotFoundException("Nie znaleziono wizyt lekarskich.");
+                }
+                return medicalAppointments;
+            }
+            else if (role == UserRole.Registrant)
+            {
+                var medicalAppointments = await _medicalAppointmentRepository.GetFutureMedicalAppointmentsByPatientId(id);
+                if (medicalAppointments == null)
+                {
+                    throw new KeyNotFoundException("Nie znaleziono wizyt lekarskich.");
+                }
+                return medicalAppointments;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
+                
+            }
+        }
+
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetPastMedicalAppointmentsByPatientOrUserId(int id, string userId, string role)
+        {
+            if (role == UserRole.Patient)
+            {
+                var medicalAppointments = await _medicalAppointmentRepository.GetPastMedicalAppointmentsByPatientUserId(userId);
+                if (medicalAppointments == null)
+                {
+                    throw new KeyNotFoundException("Nie znaleziono wizyt lekarskich.");
+                }
+                return medicalAppointments;
+            }
+            else if (role == UserRole.Registrant)
+            {
+                var medicalAppointments = await _medicalAppointmentRepository.GetPastMedicalAppointmentsByPatientId(id);
+                if (medicalAppointments == null)
+                {
+                    throw new KeyNotFoundException("Nie znaleziono wizyt lekarskich.");
+                }
+                return medicalAppointments;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
+
+            }
+        }
+
+
+
 
         public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByPatientId(int id)
         {
@@ -98,7 +156,7 @@ namespace ClinicAPI.Services
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAp)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
-                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted },
                                TransactionScopeAsyncFlowOption.Enabled);
             try
             {
@@ -206,8 +264,8 @@ namespace ClinicAPI.Services
         public async Task<(bool Confirmed, string Response)> DeleteMedicalAppointment(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
-                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                TransactionScopeAsyncFlowOption.Enabled);
+                               new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                               TransactionScopeAsyncFlowOption.Enabled);
             try
             {
                 var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(id);

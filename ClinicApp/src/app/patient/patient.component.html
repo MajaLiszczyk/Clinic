@@ -1,7 +1,7 @@
 <div class="container vw-100">
     <!--<div class="container"> -->
 <a *ngIf="!isRegistrantMode" [routerLink]="['/patient-menu' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="btn btn-secondary">Return</a>
-<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
+<a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients', registrantId]" class="btn btn-secondary">Return</a>
 
 <!-- <div *ngIf="!isRegistrantMode">
         <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success "
@@ -45,7 +45,11 @@
 <h3 class="my-4">Appointments</h3>
 <h6>Future appointments</h6>
 <!-- GET ALL-->
-<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+<div class=" col-12 mb-4 text-center">
+    <button (click)="openFutureAppointments()"
+        class="btn btn-primary ms-2 me-4 w-25">Future appointments</button>
+</div>
+<div *ngIf="isFutureAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
 
     <table class="table table-striped">
         <thead>
@@ -65,7 +69,7 @@
 
         </thead>
         <tbody>
-            <tr *ngFor="let futureAppointment of allMedicalAppointments.futureMedicalAppointments">
+            <tr *ngFor="let futureAppointment of futureAppointments">
                 <td>
                     {{futureAppointment.dateTime}}
                 </td>
@@ -77,15 +81,19 @@
                         (click)="cancel(futureAppointment)">Cancel</button>
                 </td>
             </tr>
-            <tr *ngIf="allMedicalAppointments.futureMedicalAppointments.length === 0">
+            <tr *ngIf="futureAppointments.length === 0">
                 <td colspan="8">No future medical appointments</td>
             </tr>
         </tbody>
     </table>
 </div>
 
+<div class=" col-12 mb-4 text-center">
+    <button (click)="openPastAppointments()"
+        class="btn btn-primary ms-2 me-4 w-25">Past appointments</button>
+</div>
 <h6>Past appointments</h6>
-<div class="d-flex justify-content-center mx-5 px-5 mb-5">
+<div *ngIf="isPastAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -98,7 +106,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let pastAppointment of allMedicalAppointments.pastMedicalAppointments">
+            <tr *ngFor="let pastAppointment of pastAppointments">
                 <td>
                     {{pastAppointment.dateTime}}
                 </td>
@@ -106,7 +114,7 @@
                     {{pastAppointment.doctorName}} {{pastAppointment.doctorSurname}}
                 </td>
             </tr>
-            <tr *ngIf="allMedicalAppointments.pastMedicalAppointments.length === 0">
+            <tr *ngIf="pastAppointments.length === 0">
                 <td colspan="8">No past medical appointments</td>
             </tr>
         </tbody>

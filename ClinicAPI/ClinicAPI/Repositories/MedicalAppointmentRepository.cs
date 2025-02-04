@@ -138,6 +138,122 @@ namespace ClinicAPI.Repositories
 
         }
 
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetFutureMedicalAppointmentsByPatientUserId(string userId)
+        {
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where p.UserId == userId
+                                      where ma.IsFinished != true
+                                      where ma.IsCancelled != true
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+        }
+
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetPastMedicalAppointmentsByPatientUserId(string userId)
+        {
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where p.UserId == userId
+                                      where ma.IsFinished == true
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+        }
+
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetFutureMedicalAppointmentsByPatientId(int patientId)
+        {
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where ma.PatientId == patientId
+                                      where ma.IsFinished != true
+                                      where ma.IsCancelled != true
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+        }
+
+        public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetPastMedicalAppointmentsByPatientId(int patientId)
+        {
+            var appointments = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join d in _context.Doctor on ma.DoctorId equals d.Id
+                                      where ma.PatientId == patientId
+                                      where ma.IsFinished == true
+                                      select new ReturnMedicalAppointmentPatientDoctorDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          DoctorName = d.Name,
+                                          DoctorSurname = d.Surname,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).ToListAsync();
+
+            return appointments;
+        }
+
+
+
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByPatientId(int patientId)
         {

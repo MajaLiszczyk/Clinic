@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 //import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
 //import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Specialisation } from '../model/specialisation';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -24,12 +24,17 @@ export class RegistrantSpecialisationsComponent {
   isVisible: boolean = false;
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
+  registrantId: number = 0;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
+
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.specialisationF = this.formBuilder.group({});
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
     this.getAllSpecialisations();
     this.specialisationF = this.formBuilder.group({
       id: Number,

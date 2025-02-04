@@ -6,6 +6,7 @@ using ClinicAPI.UserFeatures;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ClinicAPI.Controllers
 {
@@ -81,13 +82,68 @@ namespace ClinicAPI.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = UserRole.Patient + "," + UserRole.Registrant)]
+        public async Task<IActionResult> GetFutureMedicalAppointmentsByPatientOrUserId([FromRoute] int id)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                var result = await _medicalAppointmentService.GetFutureMedicalAppointmentsByPatientOrUserId(id, userId, role);
+
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Wystąpił błąd serwera.", details = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Patient + "," + UserRole.Registrant)]
+        public async Task<IActionResult> GetPastMedicalAppointmentsByPatientOrUserId([FromRoute] int id)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                var result = await _medicalAppointmentService.GetPastMedicalAppointmentsByPatientOrUserId(id, userId, role);
+
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Wystąpił błąd serwera.", details = ex.Message });
+            }
+        }
+
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = UserRole.Patient + "," + UserRole.Registrant)]
         public async Task<IActionResult> GetByPatientId([FromRoute] int id)
         {
             var currentUserId = _userContext.GetCurrentUserId();
             var currentUserRole = _userContext.GetCurrentUserRole();
             if (currentUserId == null)
             {
-                return Forbid(); // Zwraca 403, jeśli użytkownik próbuje uzyskać dane innego użytkownika
+                return Forbid();
             }
 
             if(currentUserRole == UserRole.Registrant)

@@ -322,6 +322,8 @@ export class ClinicService {
   getAllAvailableSpecialisations(): Observable<Specialisation[]> {
     return this.http.get<Specialisation[]>(this.SpecialisationUrl + "/GetAvailable");
   }
+  
+  
   addSpecialisation(specialisation: any): Observable<Specialisation> { //inny typ
     return this.http.post<Specialisation>(this.SpecialisationUrl + "/create", specialisation) // Bez obiektu opakowującego
   }
@@ -345,6 +347,16 @@ export class ClinicService {
   getAllMedicalAppointments(): Observable<MedicalAppointment[]> {
     return this.http.get<MedicalAppointment[]>(this.MedicalAppointmentUrl + "/Get");
   }
+
+  getFutureMedicalAppointmentsByPatientId(patientId: number): Observable<MedicalAppointmentPatientDoctorDto[]> {
+    return this.http.get<MedicalAppointmentPatientDoctorDto[]>(this.MedicalAppointmentUrl + "/GetFutureMedicalAppointmentsByPatientOrUserId/" + patientId);
+  }
+
+  getPastMedicalAppointmentsByPatientId(patientId: number): Observable<MedicalAppointmentPatientDoctorDto[]> {
+    return this.http.get<MedicalAppointmentPatientDoctorDto[]>(this.MedicalAppointmentUrl + "/GetPastMedicalAppointmentsByPatientOrUserId/" + patientId);
+  }
+
+
   getAllMedicalAppointmentsPatientsDoctors(): Observable<MedicalAppointmentPatientDoctorDto[]> {
     return this.http.get<MedicalAppointmentPatientDoctorDto[]>(this.MedicalAppointmentUrl + "/GetWithPatientsDoctors");
   }

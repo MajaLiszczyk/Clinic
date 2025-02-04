@@ -5,7 +5,7 @@ import { LaboratoryAppointment, LaboratoryAppointmentState } from '../model/labo
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormGroup, FormBuilder, FormControl, AbstractControl, ValidationErrors, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgbModule, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { ClinicService } from '../services/clinic.service';
 import { CreateMedicalAppointment } from '../model/create-medical-appointment';
@@ -35,8 +35,9 @@ export class RegistrantLaboratoryAppointmentsComponent {
     laboratoryAppointments: LaboratoryAppointmentWorkerSupervisor[] = [];
     isAddingMode: boolean = false;
     isShowingAllAppointmentsMode: boolean = false;
+    registrantId: number = 0;
   
-    constructor(private http: HttpClient, private formBuilder: FormBuilder, 
+    constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, 
                 private adapter: NgbDateNativeAdapter, private clinicService: ClinicService) {
       this.laboratoryAppointmentForm = this.formBuilder.group({});
       this.laboratoryAppointment = {
@@ -46,6 +47,9 @@ export class RegistrantLaboratoryAppointmentsComponent {
     }
 
     ngOnInit() {
+      this.route.params.subscribe(params => {
+        this.registrantId = +params['registrantId']; // Przypisanie id z URL
+        });
         this.getAllAvailableLaboratoryWorkers();
         this.getAllAvailableSupervisors();
         this.laboratoryAppointmentForm = this.formBuilder.group({

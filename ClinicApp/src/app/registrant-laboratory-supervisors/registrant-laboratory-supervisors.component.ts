@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ClinicService } from '../services/clinic.service';
 import { LaboratoryWorker } from '../model/laboratory-worker';
 import { passwordValidator } from '../validators';
@@ -22,13 +22,18 @@ export class RegistrantLaboratorySupervisorsComponent {
     laboratorySupervisor: LaboratorySupervisor;
     isEditableMode = false;
     isAddingMode = false; //niepotrzebne?
+    registrantId: number = 0;
   
-    constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
+    constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
       this.laboratorySupervisorForm = this.formBuilder.group({});
       this.laboratorySupervisor = { id: 0, name: '', surname: '', laboratorySupervisorNumber: '', isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     }
   
     ngOnInit() {
+      
+      this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
       this.getAlllaboratorySupervisors();
       this.laboratorySupervisorForm = this.formBuilder.group({
         id: Number,

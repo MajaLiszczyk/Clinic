@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DiagnosticTestType } from '../model/diagnostic-test-type';
 import { ClinicService } from '../services/clinic.service';
 
@@ -23,12 +23,17 @@ export class RegistrantDiagnosticTestTypesComponent {
   isVisible: boolean = false;
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
+  registrantId: number = 0;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
+
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.diagnosticTestTypesForm = this.formBuilder.group({});
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
     this.getAllDiagnosticTestTypes();
     this.diagnosticTestTypesForm = this.formBuilder.group({
       id: Number,

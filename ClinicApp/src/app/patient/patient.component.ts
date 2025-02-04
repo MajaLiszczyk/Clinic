@@ -22,6 +22,8 @@ import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-
 })
 export class PatientComponent {
   patientId: number = 0;
+  isFutureAppointmentsMode: boolean = false;
+  isPastAppointmentsMode: boolean = false;
   //choosePatientForm: FormGroup;
   patient: Patient;
   patients: Patient[] = [];
@@ -34,9 +36,12 @@ export class PatientComponent {
   selectedSpecialisation: number;
   isMakeAnAppointmentMode: boolean = false;
   isRegistrantMode: boolean = false; 
-  allMedicalAppointments: AllMedicalAppointments;
+  //allMedicalAppointments: AllMedicalAppointments;
+  futureAppointments: MedicalAppointmentPatientDoctorDto[] = [];
+  pastAppointments: MedicalAppointmentPatientDoctorDto[] = [];
   isVisible = false;
   selectedPatientId: number = 0;
+  registrantId: number = 0;
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, 
               private route: ActivatedRoute, private clinicService: ClinicService, public authorizationService: AuthorizationService,) {
@@ -44,16 +49,19 @@ export class PatientComponent {
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
     this.selectedAppointment = { id: 0, doctorId: 0, patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0, dateTime: new Date() }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
-    this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
+    //this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
     this.patient = {name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true};
   }
-
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.patientId = +params['patientId']; // Przypisanie id z URL
       console.log('Received patientId:', this.patientId);
       this.getPatientById(this.patientId);
     });
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+    });
+
 
     this.route.queryParams.subscribe(queryParams => {
       this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
@@ -72,7 +80,7 @@ export class PatientComponent {
 
     const userId = this.authorizationService.getUserId(); //NIEPOTRZEBNE, BO BACKEND SAM ODCZYTUJE...
 
-    this.getAllMedicalAppointments()
+    //this.getAllMedicalAppointments()
     /*this.choosePatientForm = this.formBuilder.group({
       patientId: new FormControl(null, { validators: [Validators.required] })
     });*/
@@ -90,19 +98,43 @@ export class PatientComponent {
     })
   }
 
+  getFutureAppointments(){
+    this.clinicService.getFutureMedicalAppointmentsByPatientId(this.patientId).subscribe(data => {
+      this.futureAppointments = data;
+    })
+  }
+
+  getPastAppointments(){
+    this.clinicService.getPastMedicalAppointmentsByPatientId(this.patientId).subscribe(data => {
+      this.pastAppointments = data;
+    })
+
+  }
+
+
+  openFutureAppointments(){
+    this.isFutureAppointmentsMode = true;
+    this.getFutureAppointments();
+  }
+
+  openPastAppointments(){
+    this.isPastAppointmentsMode = true;
+    this.getPastAppointments();
+  }
+
   getPatientById(patientId: number){
     this.clinicService.getPatientById(patientId).subscribe(data => {
       this.patient = data;
     })
   }
 
-  getAllMedicalAppointments() {
+  /*getAllMedicalAppointments() {
     this.clinicService.getMedicalAppointmentsByPatientId(this.patientId).subscribe(data => {
       this.allMedicalAppointments = data;
       console.log(this.allMedicalAppointments.pastMedicalAppointments);
       console.log(this.allMedicalAppointments.pastMedicalAppointments.length);
     })
-  }
+  } */
 
   openAppointmentForm(){
     this.isMakeAnAppointmentMode = true;
@@ -120,7 +152,7 @@ export class PatientComponent {
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
-          this.getAllMedicalAppointments();
+          this.getFutureAppointments();
         },
         error: (error) => {
           console.error("Error performing action:", error);
@@ -154,7 +186,7 @@ export class PatientComponent {
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);
-          this.getAllMedicalAppointments()
+          this.getFutureAppointments()
           this.chooseSpecialisationForm.reset();
         },
         error: (error) => {

@@ -24,13 +24,15 @@ namespace ClinicAPI.Controllers
         private readonly ILaboratoryWorkerService _laboratoryWorkerService;
         private readonly ILaboratorySupervisorService _laboratorySupervisorService;
         private readonly IDoctorService _doctorService;
+        private readonly IRegistrantService _registrantService;
 
 
         public RegistrationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager
                                       , ApplicationDBContext dbContext, IMedicalSpecialisationService medicalSpecialisationService
                                       , IPatientService patientService, IDoctorService doctorService
                                       , ILaboratoryWorkerService laboratoryWorkerService
-                                      , ILaboratorySupervisorService laboratorySupervisorService)
+                                      , ILaboratorySupervisorService laboratorySupervisorService
+                                      , IRegistrantService registrantService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -40,6 +42,8 @@ namespace ClinicAPI.Controllers
             _doctorService = doctorService;
             _laboratoryWorkerService = laboratoryWorkerService;
             _laboratorySupervisorService = laboratorySupervisorService;
+            _registrantService = registrantService;
+            _registrantService = registrantService;
         }
 
         [HttpPost]
@@ -53,6 +57,18 @@ namespace ClinicAPI.Controllers
             }
             return Ok(new { message = result.Response });
         }
+
+        [HttpPost]
+        [Authorize(Roles = UserRole.Admin)]
+        public async Task<IActionResult> RegisterRegistrant(CreateRegisterRegistrantDto request)
+        {
+            var result = await _registrantService.RegisterRegistrant(request);
+            if (!result.Confirmed)
+            {
+                return BadRequest(new { Message = result.Response });
+            }
+            return Ok(new { message = result.Response });
+        }  
 
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]

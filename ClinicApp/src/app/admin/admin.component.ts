@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ClinicService } from '../services/clinic.service';
 import { passwordValidator } from '../validators';
 import { Registrant } from '../model/registrant';
+import { AuthorizationService } from '../services/authorization.service';
 
 @Component({
   selector: 'app-admin',
@@ -22,7 +23,8 @@ export class AdminComponent {
     isEditableMode = false;
     isAddingMode = false; //niepotrzebne?
   
-    constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
+    constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService
+                , public authorizationService: AuthorizationService){
       this.registrantForm = this.formBuilder.group({});
       this.registrant = { id: 0, name: '', surname: '', registrantNumber: '', isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     }
@@ -48,6 +50,10 @@ export class AdminComponent {
     get formRegistrantNumber(): FormControl { return this.registrantForm?.get("registrantNumber") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
     get formEmail(): FormControl { return this.registrantForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
     get formPassword(): FormControl { return this.registrantForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  
+    logout(){
+      this.authorizationService.logout();
+    }
   
     setConditionalValidation() {
       const emailC = this.registrantForm.get('email');

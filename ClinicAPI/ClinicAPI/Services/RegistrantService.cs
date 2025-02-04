@@ -4,6 +4,7 @@ using ClinicAPI.Models;
 using ClinicAPI.Repositories;
 using ClinicAPI.Repositories.Interfaces;
 using ClinicAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System.Numerics;
 using System.Transactions;
 
@@ -12,11 +13,13 @@ namespace ClinicAPI.Services
     public class RegistrantService : IRegistrantService
     {
         private readonly IRegistrantRepository _registantRepository;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public RegistrantService(IRegistrantRepository registantRepository, IMapper mapper)
+        public RegistrantService(IRegistrantRepository registantRepository, UserManager<User> userManager, IMapper mapper)
         {
             _registantRepository = registantRepository;
+            _userManager = userManager;
             _mapper = mapper;
 
         }
@@ -60,10 +63,65 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
             }
-            
-
-
         }
+
+        public async Task<(bool Confirmed, string Response, ReturnRegistrantDto? registrant)> RegisterRegistrant(CreateRegisterRegistrantDto request)
+        {
+            using var scope = new TransactionScope(TransactionScopeOption.Required,
+                              new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                              TransactionScopeAsyncFlowOption.Enabled);
+            try
+            {
+                if (await _registantRepository.GetRegistrantWithTheSameNumber(request.RegistrantNumber))
+                {
+                    return (false, "Registrant with this laboratoryWorkerNumber already exists.", null);
+                }
+
+                var user = new User
+                {
+                    UserName = request.Email,
+                    Email = request.Email
+                };
+
+                var createUserResult = await _userManager.CreateAsync(user, request.Password);
+                if (!createUserResult.Succeeded)
+                {
+                    var errorMessages = createUserResult.Errors.Select(e => e.Description).ToList();
+                    return (false, string.Join("; ", errorMessages), null);
+                }
+
+                var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Registrant);
+                if (!addToRoleResult.Succeeded)
+                {
+                    return (false, "Failed to assign role to the user.", null);
+                }
+
+                var registrant = new Registrant
+                {
+                    UserId = user.Id,
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    RegistrantNumber = request.RegistrantNumber,
+                };
+
+                Registrant? p = await _registantRepository.CreateRegistrant(registrant);
+                if (p == null)
+                {
+                    ReturnRegistrantDto? k = null;
+                    return await Task.FromResult((false, "registrant was not created.", k));
+
+                }
+                ReturnRegistrantDto r = _mapper.Map<ReturnRegistrantDto>(p);
+                scope.Complete();
+                return await Task.FromResult((true, "registrant successfully registered.", r));
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error register in registrant: {ex.Message}", null);
+            }
+        }
+
+
         public async Task<(bool Confirmed, string Response)> UpdateRegistrant(UpdateRegistrantDto registrant)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,

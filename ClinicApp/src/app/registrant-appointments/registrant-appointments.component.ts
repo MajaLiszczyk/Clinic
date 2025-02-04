@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule, ValidationErrors, AbstractControl } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateStruct, NgbDateAdapter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -29,8 +29,9 @@ export class RegistrantAppointmentsComponent {
   medicalAppointments: MedicalAppointmentPatientDoctorDto[] = [];
   isAddingMode: boolean = false;
   isShowingAllAppointmentsMode: boolean = false;
+  registrantId: number = 0;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, 
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, 
               private adapter: NgbDateNativeAdapter, private clinicService: ClinicService) {
     this.medicalAppointmentForm = this.formBuilder.group({});
     this.medicalAppointment = {
@@ -41,6 +42,9 @@ export class RegistrantAppointmentsComponent {
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
     this.getAllDoctors();
     this.medicalAppointmentForm = this.formBuilder.group({
       date: new FormControl(null, [Validators.required, this.futureOrTodayDateValidator]),

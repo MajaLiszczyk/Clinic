@@ -3,7 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Patient } from '../model/patient';
 import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { ClinicService } from '../services/clinic.service';
 import { passwordValidator } from '../validators';
 
@@ -27,12 +27,16 @@ export class RegistrantPatientsComponent {
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
   isCreateAccountMode: boolean = false;
+  registrantId: number = 0;
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
     this.patientForm = this.formBuilder.group({});
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.registrantId = +params['registrantId']; // Przypisanie id z URL
+      });
     this.getAllPatients();
     this.patientForm = this.formBuilder.group({
       id: Number,

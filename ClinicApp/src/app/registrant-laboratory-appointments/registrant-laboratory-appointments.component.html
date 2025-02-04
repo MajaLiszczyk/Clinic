@@ -1,5 +1,5 @@
 <div class="container vw-100">
-    <a [routerLink]="['/registrant']" class="btn btn-secondary my-4">Return</a>
+    <a [routerLink]="['/registrant', registrantId]" class="btn btn-secondary my-4">Return</a>
 
 <div class=" col-12 mb-4 text-center">
     <button [disabled]="isAddingMode" (click)="openAppointmentForm()" class="btn btn-primary w-25">Add new laboratory
