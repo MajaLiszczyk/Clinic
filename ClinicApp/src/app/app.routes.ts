@@ -65,9 +65,9 @@ export const routes: Routes = [
     { path: 'log-in', component: LoginComponent },  
     //{ path: 'make-an-appointment', component: MakeAnAppointmentComponent, canActivate: [AuthorizationGuard] },
     //{ path: 'patient/:patientId', component: PatientComponent},
-    { path: 'patient/:patientId', component: PatientComponent, canActivate: [AuthorizationGuard] },
+    { path: 'patient/:patientId/:registrantId', component: PatientComponent, canActivate: [AuthorizationGuard] },
     { path: 'patient-menu/:patientId', component: PatientMenuComponent, canActivate: [AuthorizationGuard] },
-    { path: 'patient-laboratory-appointments/:patientId', component: PatientLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
+    { path: 'patient-laboratory-appointments/:patientId/:registrantId', component: PatientLaboratoryAppointmentsComponent, canActivate: [AuthorizationGuard] },
 
 
     { path: 'registrant/:registrantId', component: RegistrantComponent, canActivate: [AuthorizationGuard] },

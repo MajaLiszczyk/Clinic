@@ -54,13 +54,12 @@ export class PatientComponent {
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.patientId = +params['patientId']; // Przypisanie id z URL
+      this.patientId = +params['patientId']; 
+      this.registrantId = +params['registrantId']; 
       console.log('Received patientId:', this.patientId);
       this.getPatientById(this.patientId);
     });
-    this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-    });
+    
 
 
     this.route.queryParams.subscribe(queryParams => {

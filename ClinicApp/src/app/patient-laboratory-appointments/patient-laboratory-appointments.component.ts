@@ -49,6 +49,7 @@ export class PatientLaboratoryAppointmentsComponent {
     //allMedicalAppointments: AllMedicalAppointments;
     isVisible = false;
     selectedPatientId: number = 0;
+    registrantId: number = 0;
   
     constructor(private http: HttpClient, private formBuilder: FormBuilder, 
                 private route: ActivatedRoute, private clinicService: ClinicService, public authorizationService: AuthorizationService,) {
@@ -63,6 +64,7 @@ export class PatientLaboratoryAppointmentsComponent {
     ngOnInit() {
       this.route.params.subscribe(params => {
         this.patientId = +params['patientId']; // Przypisanie id z URL
+        this.registrantId = +params['registrantId']; 
         console.log('Received patientId:', this.patientId);
         this.getPatientById(this.patientId);
       });

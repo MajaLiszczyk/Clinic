@@ -1,6 +1,6 @@
 <div class="container vw-100">
     <a *ngIf="!isRegistrantMode" [routerLink]="['/patient-menu' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="btn btn-secondary">Return</a>
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients']" class="btn btn-secondary">Return</a>
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients', registrantId]" class="btn btn-secondary">Return</a>
 
     <!-- MAKE APPOINTMENT-->
     <!-- <div class=" col-12 mb-4 text-center">

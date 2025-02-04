@@ -168,7 +168,7 @@
                         <button [disabled]="isAddingMode || isEditableMode || !patient.isAvailable" type="button"
                             class="btn btn-outline-danger mx-2" (click)="delete(patient.id)">Delete</button>
 
-                        <a [routerLink]="['/patient', patient.id]" [queryParams]="{isRegistrantMode: true }"
+                        <a [routerLink]="['/patient', patient.id, registrantId]" [queryParams]="{isRegistrantMode: true }"
                             class="btn btn-primary ms-2 me-4">Medical Appointments</a>
                         <a [routerLink]="['/patient-laboratory-appointments', patient.id , registrantId]" [queryParams]="{isRegistrantMode: true }"
                              class="btn btn-primary ms-2 me-4">Laboratory Appointments</a>                            
