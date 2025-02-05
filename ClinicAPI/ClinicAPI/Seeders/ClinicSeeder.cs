@@ -8,10 +8,14 @@ namespace ClinicAPI.Seeders
     {
 
         private readonly ApplicationDBContext dbContext;
+        private readonly UserManager<User> _userManager;
 
-        public ClinicSeeder(ApplicationDBContext ddbContext)
+
+        public ClinicSeeder(ApplicationDBContext ddbContext, UserManager<User> userManager)
         {
             dbContext = ddbContext ?? throw new ArgumentNullException(nameof(ddbContext));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
         }
 
         private IEnumerable<IdentityRole> GetRoles()
@@ -55,6 +59,15 @@ namespace ClinicAPI.Seeders
                 dbContext.Roles.AddRange(roles);
                 await dbContext.SaveChangesAsync();
             }
+            var admin = new User
+            {
+                UserName = "admin@admin.com",
+                Email = "admin@admin.com",
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(admin, "Admin123!");
+            var addToRoleResult = await _userManager.AddToRoleAsync(admin, UserRole.Admin);
         }
     }
 }
