@@ -15,9 +15,40 @@ namespace ClinicAPI.Repositories
             _context = context;
         }
 
-        public async Task<MedicalAppointment?> GetMedicalAppointmentById(int id)
+        public async  Task<MedicalAppointment?> GetMedicalAppointmentById(int id)
         {
-            return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();           
+           // Doctor? doctor = null;
+            var medicalAppointment = await _context.MedicalAppointment.Where(r => r.Id == id)
+                            .FirstOrDefaultAsync();
+            return medicalAppointment;
+        }
+
+
+        public async Task<ReturnMedicalAppointmentPatientDto?> GetMedicalAppointmentByIdWithPatient(int id)
+        {
+            var appointment = await (from ma in _context.MedicalAppointment
+                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      where ma.Id == id
+                                      select new ReturnMedicalAppointmentPatientDto
+                                      {
+                                          Id = ma.Id,
+                                          DateTime = ma.DateTime,
+                                          PatientId = ma.PatientId,
+                                          PatientName = p.Name,
+                                          PatientSurname = p.Surname,
+                                          PatientPesel = p.Pesel,
+                                          DoctorId = ma.DoctorId,
+                                          Interview = ma.Interview,
+                                          Diagnosis = ma.Diagnosis,
+                                          IsFinished = ma.IsFinished,
+                                          IsCancelled = ma.IsCancelled,
+                                          CancellingComment = ma.CancellingComment
+                                      }).FirstOrDefaultAsync();
+
+            return appointment;
+
+            //ReturnMedicalAppointmentPatientDto
+            //return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();           
         }
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors()
@@ -67,28 +98,44 @@ namespace ClinicAPI.Repositories
         }
 
 
-        public async Task<List<MedicalAppointment>> GetMedicalAppointmentsBySpecialisation(int specialisationId)
+        public async Task<List<ReturnMedicalAppointmentDoctorDto>> GetMedicalAppointmentsBySpecialisation(int specialisationId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                                                    TransactionScopeAsyncFlowOption.Enabled);
             try
             {
-                // Pobierz listę MedicalAppointment, w której doktor ma daną specjalizację
                 var medicalAppointments = await _context.MedicalAppointment
-                    .Where(ma => _context.Doctor
-                        .Where(d => d.MedicalSpecialisations.Any(ms => ms.Id == specialisationId)) // Filtr lekarzy według specjalizacji
-                        .Select(d => d.Id) // Pobierz ID lekarzy
-                        .Contains(ma.DoctorId)) // Sprawdź, czy DoctorId w MedicalAppointment pasuje
-                    .ToListAsync();
+                .Where(ma => _context.Doctor
+                    .Where(d => d.MedicalSpecialisations.Any(ms => ms.Id == specialisationId))
+                    .Select(d => d.Id)
+                    .Contains(ma.DoctorId))
+                .Join(_context.Doctor,
+                 ma => ma.DoctorId, // Klucz z MedicalAppointment
+                 d => d.Id,         // Klucz z Doctor
+                (ma, d) => new ReturnMedicalAppointmentDoctorDto // Tworzymy nowy obiekt z danymi
+                {
+                    Id = ma.Id,
+                    dateTime =  ma.DateTime,
+                    DoctorName = d.Name,
+                    DoctorSurname = d.Surname,
+                    Interview = ma.Interview,
+                    Diagnosis = ma.Diagnosis,
+                    IsFinished = ma.IsFinished,
+                    IsCancelled = ma.IsCancelled,
+                    CancellingComment = ma.CancellingComment
+                })
+                .ToListAsync();
 
-                scope.Complete();
                 return medicalAppointments;
+
+
+                
             }
             catch (Exception ex)
             {
                 // Obsłuż wyjątek (logowanie, etc.)
-                return new List<MedicalAppointment>();
+                return new List<ReturnMedicalAppointmentDoctorDto>();
             }
         }
 

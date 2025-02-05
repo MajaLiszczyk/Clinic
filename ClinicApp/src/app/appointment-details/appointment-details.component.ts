@@ -11,6 +11,7 @@ import { ClinicService } from '../services/clinic.service';
 import { LaboratoryTestType } from '../model/laboratory-test-type';
 import { LaboratoryTest } from '../model/laboratory-test';
 import { LaboratoryTestState } from '../model/laboratory-test';
+import { MedicalAppointmentPatientDto } from '../dtos/medical-appointment-patient-dto';
 
 
 @Component({
@@ -30,8 +31,9 @@ export class AppointmentDetailsComponent {
   isCancelClicked: boolean = false;
   isAppointmentCancelled: boolean = false;
 
-  medicalAppointment: MedicalAppointment = { id: 0, dateTime: new Date(), patientId: 0, doctorId: 0, interview: '', diagnosis: ''
-                                            , isFinished: false, isCancelled: false, cancellingComment: '' };
+  medicalAppointment: MedicalAppointmentPatientDto = { id: 0, dateTime: new Date(), patientId: 0, patientName: ""
+                      , patientSurname: "", doctorId: 0, interview: '', diagnosis: '', isFinished: false
+                      , isCancelled: false, cancellingComment: '' };
   medicalAppointmentForm: FormGroup;
   cancelAppointmentForm: FormGroup;
 
@@ -311,7 +313,7 @@ export class AppointmentDetailsComponent {
   //------------------------------------------MEDICAL APPOINTMENT------------------------------------------------
   getMedicalAppointmentsDetails(appointmentId: number) {
     //this.http.get<MedicalAppointment>(this.APIUrl + "/Get/" + appointmentId).subscribe(data => {
-    this.clinicService.getMedicalAppointmentById(appointmentId).subscribe(data => {
+    this.clinicService.getMedicalAppointmentByIdPatient(appointmentId).subscribe(data => {
       this.medicalAppointment = data;
       console.log('Wywiad: ', this.medicalAppointment.interview);
       this.fillForm();

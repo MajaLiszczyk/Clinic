@@ -12,6 +12,7 @@ import { AllMedicalAppointments } from '../model/all-medical-appointments';
 import { ClinicService } from '../services/clinic.service';
 import { AuthorizationService } from '../services/authorization.service';
 import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-patient-doctor-dto';
+import { MedicalAppointmentDoctorDto } from '../dtos/medical-appointment-doctor-dto';
 
 @Component({
   selector: 'app-patient',
@@ -28,8 +29,10 @@ export class PatientComponent {
   patient: Patient;
   patients: Patient[] = [];
   isPatientIdSet: boolean = this.patientId !== 0;
-  medicalAppointments: ReturnMedicalAppointment[] = [];
-  selectedAppointment: ReturnMedicalAppointment;
+  //medicalAppointments: ReturnMedicalAppointment[] = [];
+  medicalAppointments: MedicalAppointmentDoctorDto[] = [];
+  //selectedAppointment: ReturnMedicalAppointment;
+  selectedAppointment: MedicalAppointmentDoctorDto;  
   specialisations: Specialisation[] = [];
   chooseSpecialisationForm: FormGroup;
   isDisabled = true;
@@ -48,7 +51,8 @@ export class PatientComponent {
     //this.choosePatientForm = this.formBuilder.group({});
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
-    this.selectedAppointment = { id: 0, doctorId: 0, patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0, dateTime: new Date() }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.selectedAppointment = { id: 0, doctorId: 0, doctorName: "", doctorSurname: "", patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0
+                                , dateTime: new Date(), isCancelled: false, isFinished: false, cancellingComment:""}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
     //this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
     this.patient = {name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true};
   }
@@ -116,9 +120,17 @@ export class PatientComponent {
     this.getFutureAppointments();
   }
 
+  closeFutureAppointments(){
+    this.isFutureAppointmentsMode = false;
+  }
+
   openPastAppointments(){
     this.isPastAppointmentsMode = true;
     this.getPastAppointments();
+  }
+
+  closePastAppointments(){
+    this.isPastAppointmentsMode = false;
   }
 
   getPatientById(patientId: number){
@@ -175,13 +187,30 @@ export class PatientComponent {
       }
     }
     this.selectedAppointment.patientId = this.patientId;
-    this.setPatientToAppointment(this.selectedAppointment);
+    var medApp = this.makeMedicalAppointmentFromDto();
+    //this.setPatientToAppointment(this.selectedAppointment);
+    this.setPatientToAppointment(medApp);
     this.isMakeAnAppointmentMode = false;
     this.medicalAppointments.length = 0;//czyszczenie listy żeby nie było widać starych wyszukiwań
   }
 
-  setPatientToAppointment(selectedAppointment: ReturnMedicalAppointment) {
-    this.clinicService.editMedicalAppointmentReturnDto(this.selectedAppointment)
+  makeMedicalAppointmentFromDto(): MedicalAppointment{
+    var medApp: MedicalAppointment = {
+      id: this.selectedAppointment.id,
+      dateTime: this.selectedAppointment.dateTime,
+      patientId: this.selectedAppointment.patientId,
+      doctorId: this.selectedAppointment.doctorId,
+      interview: this.selectedAppointment.interview,
+      diagnosis: this.selectedAppointment.diagnosis,
+      isFinished: this.selectedAppointment.isFinished,
+      isCancelled: this.selectedAppointment.isCancelled,
+      cancellingComment: this.selectedAppointment.cancellingComment
+    }
+    return medApp;
+  }
+
+  setPatientToAppointment(medApp: MedicalAppointment) {
+    this.clinicService.editMedicalAppointmentReturnDto(medApp)
       .subscribe({
         next: (response) => {
           console.log("Action performed successfully:", response);

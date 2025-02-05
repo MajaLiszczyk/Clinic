@@ -86,17 +86,17 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
         }   
 
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int id)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getPlannedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getFinishedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getInProcessLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;

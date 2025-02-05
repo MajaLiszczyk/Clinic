@@ -1,5 +1,5 @@
 <div class="container">
-  <a [routerLink]="['/laboratory-worker' , laboratoryAppointment?.laboratoryWorkerId]" class="btn btn-secondary my-4">Return</a>
+  <a [routerLink]="['/laboratory-worker' , laboratoryAppointment?.laboratoryWorkerId, 0]" class="btn btn-secondary my-4">Return</a>
 
     <h4>LABORATORY APPOINTMENT</h4>
     <p></p>
@@ -141,7 +141,7 @@
                   </td> -->
                  
                   <td>
-                      {{laboratoryTest.state}}
+                      {{LaboratoryTestState[laboratoryTest.state]}}
                   </td>
                   <td *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed 
                        || laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor">

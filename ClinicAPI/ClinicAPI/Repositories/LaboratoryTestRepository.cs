@@ -109,6 +109,35 @@ namespace ClinicAPI.Repositories
         {
             var groupedTests = await (from labTest in _context.LaboratoryTest
                                       join labGroup in _context.LaboratoryTestsGroup
+                                          on labTest.LaboratoryTestsGroupId equals labGroup.Id
+                                      join testType in _context.LaboratoryTestType
+                                          on labTest.LaboratoryTestTypeId equals testType.Id
+                                      join appointment in _context.MedicalAppointment
+                                          on labGroup.MedicalAppointmentId equals appointment.Id
+                                      where labGroup.LaboratoryAppointmentId == null
+                                            && appointment.PatientId == patientId
+                                      group new { labTest, testType } by labGroup.Id into testGroup
+                                      select new ReturnGroupWithLaboratoryTestsDto
+                                      {
+                                          groupId = testGroup.Key,
+                                          laboratoryTests = testGroup.Select(t => new ReturnLaboratoryTestWithTypeName
+                                          {
+                                              Id = t.labTest.Id,
+                                              LaboratoryTestsGroupId = t.labTest.LaboratoryTestsGroupId,
+                                              State = t.labTest.State,
+                                              LaboratoryTestTypeId = t.labTest.LaboratoryTestTypeId,
+                                              LaboratoryTestTypeName = t.testType.Name, // Pobieramy nazwę typu testu
+                                              Result = t.labTest.Result,
+                                              DoctorNote = t.labTest.DoctorNote,
+                                              RejectComment = t.labTest.RejectComment
+                                          }).ToList()
+                                      }).ToListAsync();
+
+            return groupedTests;
+
+
+            /*var groupedTests = await (from labTest in _context.LaboratoryTest
+                                      join labGroup in _context.LaboratoryTestsGroup
                                       on labTest.LaboratoryTestsGroupId equals labGroup.Id
                                       where labGroup.LaboratoryAppointmentId == null   //czy == 0 ?
                                       join appointment in _context.MedicalAppointment
@@ -122,7 +151,7 @@ namespace ClinicAPI.Repositories
                                           laboratoryTests = testGroup.ToList()
                                       }).ToListAsync();
 
-            return groupedTests;
+            return groupedTests; */
         }
 
 

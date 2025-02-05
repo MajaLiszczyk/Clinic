@@ -96,9 +96,10 @@ export class PatientLaboratoryAppointmentsComponent {
         if(this.isPlannedLabAppMode == true){
           this.getPlannedLaboratoryAppointments();
         }
-        if(this.isMakeAnAppointmentMode == true){
+        this.isMakeAnAppointmentMode = false;
+        /*if(this.isMakeAnAppointmentMode == true){
           this.getAllAvailableLaboratoryAppointments();
-        }
+        } */
       })
 
     }

@@ -22,11 +22,22 @@ namespace ClinicAPI.Services
             _mapper = mapper;
 
         }
-        public async Task<ReturnMedicalAppointmentDto?> GetMedicalAppointment(int id)
+        public async Task<MedicalAppointment?> GetMedicalAppointment(int id)
         {
             var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(id);
-            return _mapper.Map<ReturnMedicalAppointmentDto>(medicalAppointment);
+            return medicalAppointment;
+            //return _mapper.Map<ReturnMedicalAppointmentDto>(medicalAppointment);
         }
+
+
+        public async Task<ReturnMedicalAppointmentPatientDto?> GetMedicalAppointmentByIdWithPatient(int id)
+        {
+            var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentByIdWithPatient(id);
+            return medicalAppointment;
+            //return _mapper.Map<ReturnMedicalAppointmentDto>(medicalAppointment);
+        }
+
+        
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors()
         {
@@ -40,10 +51,11 @@ namespace ClinicAPI.Services
             return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }      
 
-        public async Task<List<ReturnMedicalAppointmentDto>> GetMedicalAppointmentsBySpecialisation(int id)
+        public async Task<List<ReturnMedicalAppointmentDoctorDto>> GetMedicalAppointmentsBySpecialisation(int id)
         {
             var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsBySpecialisation(id);
-            return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
+            return medicalAppointments;
+            //return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }
 
         public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByDoctorId(int id)

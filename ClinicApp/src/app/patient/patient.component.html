@@ -3,6 +3,7 @@
 <a *ngIf="!isRegistrantMode" [routerLink]="['/patient-menu' , patient.id]" [queryParams]="{isRegistrantMode: false }" class="btn btn-secondary">Return</a>
 <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-patients', registrantId]" class="btn btn-secondary">Return</a>
 
+<h3 class="my-4">Medical appointments</h3>
 <!-- <div *ngIf="!isRegistrantMode">
         <button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-success "
             (click)="logout()">Logout</button>
@@ -32,7 +33,7 @@
         </div>
 
         <div *ngFor="let medicalAppointment of medicalAppointments" class="text-center">
-            <span>{{ medicalAppointment.id }} - Doctor ID: {{ medicalAppointment.doctorId }} - Time:
+            <span>Doctor: {{ medicalAppointment.doctorName }} {{ medicalAppointment.doctorSurname }} - Time:
                 {{medicalAppointment.dateTime}}</span>
             <button [disabled]="medicalAppointment.patientId != 0" (click)="chooseAppointment(medicalAppointment.id)"
                 class="btn btn-primary my-1 mx-1">Select</button>
@@ -42,9 +43,7 @@
 </div>
 
 
-<h3 class="my-4">Appointments</h3>
-<h6>Future appointments</h6>
-<!-- GET ALL-->
+<!--<h3 class="my-4">Medical appointments</h3> -->
 <div class=" col-12 mb-4 text-center">
     <button (click)="openFutureAppointments()"
         class="btn btn-primary ms-2 me-4 w-25">Future appointments</button>
@@ -86,13 +85,13 @@
             </tr>
         </tbody>
     </table>
+    <button (click)="closeFutureAppointments()" class="btn btn-secondary">Close</button>
 </div>
 
 <div class=" col-12 mb-4 text-center">
     <button (click)="openPastAppointments()"
         class="btn btn-primary ms-2 me-4 w-25">Past appointments</button>
 </div>
-<h6>Past appointments</h6>
 <div *ngIf="isPastAppointmentsMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
     <table class="table table-striped">
         <thead>
@@ -119,6 +118,7 @@
             </tr>
         </tbody>
     </table>
+    <button (click)="closePastAppointments()" class="btn btn-secondary">Close</button>
 </div>
 
 <!-- </div> -->

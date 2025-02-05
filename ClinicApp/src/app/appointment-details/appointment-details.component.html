@@ -1,5 +1,5 @@
 <div class="container">
-  <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId]" class="btn btn-secondary">Return</a>
+  <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId, 0]" class="btn btn-secondary">Return</a>
   <br/>
   <br/>
 
@@ -19,7 +19,7 @@
     </ng-template>
 
     <div>Time: {{medicalAppointment.dateTime}} <br /></div>
-    <div>Patient id: {{medicalAppointment.patientId}}</div>
+    <div>Patient: {{medicalAppointment.patientName}} {{medicalAppointment.patientSurname}}</div>
 
   </h5>
 

@@ -9,9 +9,9 @@ namespace ClinicAPI.Services.Interfaces
         public Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto> GetLabAppDetailsByLabAppId(int id, string userId, string role);
         //public Task<bool> IsAllLaboratoryTestsResultsCompleted(int id);
         public Task<List<ReturnLaboratoryAppointmentDto>> GetAvailableLaboratoryAppointments();
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int id);
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id);
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int id);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id);
 
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id);
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id);

@@ -40,6 +40,16 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetMedicalAppointmentByIdWithPatient([FromRoute] int id)
+        {
+            var result = await _medicalAppointmentService.GetMedicalAppointmentByIdWithPatient(id);
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetWithPatientsDoctors()

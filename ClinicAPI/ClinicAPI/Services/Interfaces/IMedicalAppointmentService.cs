@@ -5,10 +5,11 @@ namespace ClinicAPI.Services.Interfaces
 {
     public interface IMedicalAppointmentService
     {
-        public Task<ReturnMedicalAppointmentDto?> GetMedicalAppointment(int id);
+        public Task<MedicalAppointment?> GetMedicalAppointment(int id);
+        public Task<ReturnMedicalAppointmentPatientDto?> GetMedicalAppointmentByIdWithPatient(int id);
         public Task<List<ReturnMedicalAppointmentDto>> GetAllMedicalAppointments();
         public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors();
-        public Task<List<ReturnMedicalAppointmentDto>> GetMedicalAppointmentsBySpecialisation(int id);
+        public Task<List<ReturnMedicalAppointmentDoctorDto>> GetMedicalAppointmentsBySpecialisation(int id);
         public Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByDoctorId(int id);
         public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetFutureMedicalAppointmentsByPatientOrUserId(int id, string userId, string role);
         public Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetPastMedicalAppointmentsByPatientOrUserId(int id, string userId, string role);

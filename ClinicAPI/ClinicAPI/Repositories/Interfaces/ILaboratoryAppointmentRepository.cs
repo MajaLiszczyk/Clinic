@@ -12,9 +12,9 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<List<LaboratoryAppointment>> GetAllLaboratoryAppointments();
         public Task<List<ReturnLaboratoryAppointmentWorkerSupervisorDto>> GetAllLaboratoryAppointmentsWorkersSupervisors();
         public Task<List<LaboratoryAppointment>> GetAvailableLaboratoryAppointments();
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int patientId);
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int patientId);
-        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int patientId);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int patientId);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int patientId);
+        public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int patientId);
 
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSomeLabAppsByLabWorkerId(int id, LaboratoryAppointmentState labAppState);
         public Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetSomeLabAppsBySupervisorId(int id, LaboratoryAppointmentState labAppState);

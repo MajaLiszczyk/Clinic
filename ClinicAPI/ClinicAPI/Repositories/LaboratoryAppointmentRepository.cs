@@ -91,7 +91,7 @@ namespace ClinicAPI.Repositories
         }
 
         //DLA PACJENTA
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int patientId)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getPlannedLaboratoryAppointmentsByPatientId(int patientId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -116,12 +116,24 @@ namespace ClinicAPI.Repositories
                                         MedicalAppointment = medApp,
                                         Doctor = doctor,
                                         Tests = (from labTest in _context.LaboratoryTest
+                                                 join testType in _context.LaboratoryTestType
+                                                     on labTest.LaboratoryTestTypeId equals testType.Id
                                                  where labTest.LaboratoryTestsGroupId == labGroup.Id
-                                                 select labTest).ToList()
+                                                 select new ReturnLaboratoryTestWithTypeName
+                                                 {
+                                                     Id = labTest.Id,
+                                                     LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
+                                                     State = labTest.State,
+                                                     LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
+                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     Result = labTest.Result,
+                                                     DoctorNote = labTest.DoctorNote,
+                                                     RejectComment = labTest.RejectComment
+                                                 }).ToList()
                                     })
                                    .ToListAsync();
 
-                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto
                 {
                     // Medical appointment
                     MedicalAppointmentId = x.MedicalAppointment.Id,
@@ -156,7 +168,7 @@ namespace ClinicAPI.Repositories
             }
         }
 
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int patientId)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int patientId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -181,12 +193,24 @@ namespace ClinicAPI.Repositories
                                         MedicalAppointment = medApp,
                                         Doctor = doctor,
                                         Tests = (from labTest in _context.LaboratoryTest
+                                                 join testType in _context.LaboratoryTestType
+                                                     on labTest.LaboratoryTestTypeId equals testType.Id
                                                  where labTest.LaboratoryTestsGroupId == labGroup.Id
-                                                 select labTest).ToList()
+                                                 select new ReturnLaboratoryTestWithTypeName
+                                                 {
+                                                     Id = labTest.Id,
+                                                     LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
+                                                     State = labTest.State,
+                                                     LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
+                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     Result = labTest.Result,
+                                                     DoctorNote = labTest.DoctorNote,
+                                                     RejectComment = labTest.RejectComment
+                                                 }).ToList()
                                     })
                                    .ToListAsync();
 
-                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto
                 {
                     // Medical appointment
                     MedicalAppointmentId = x.MedicalAppointment.Id,
@@ -221,7 +245,7 @@ namespace ClinicAPI.Repositories
             }
         }
 
-        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int patientId)
+        public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int patientId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                    new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
@@ -247,12 +271,24 @@ namespace ClinicAPI.Repositories
                                         MedicalAppointment = medApp,
                                         Doctor = doctor,
                                         Tests = (from labTest in _context.LaboratoryTest
+                                                 join testType in _context.LaboratoryTestType
+                                                     on labTest.LaboratoryTestTypeId equals testType.Id
                                                  where labTest.LaboratoryTestsGroupId == labGroup.Id
-                                                 select labTest).ToList()
+                                                 select new ReturnLaboratoryTestWithTypeName
+                                                 {
+                                                     Id = labTest.Id,
+                                                     LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
+                                                     State = labTest.State,
+                                                     LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
+                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     Result = labTest.Result,
+                                                     DoctorNote = labTest.DoctorNote,
+                                                     RejectComment = labTest.RejectComment
+                                                 }).ToList()
                                     })
                                    .ToListAsync();
 
-                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto
+                var mappedResult = result.Select(x => new ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto
                 {
                     // Medical appointment
                     MedicalAppointmentId = x.MedicalAppointment.Id,

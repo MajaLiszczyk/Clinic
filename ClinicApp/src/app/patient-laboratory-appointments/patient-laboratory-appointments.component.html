@@ -7,14 +7,13 @@
         <button [disabled]="isMakeAnAppointmentMode || patient.isAvailable==false " (click)="openAppointmentForm()"
             class="btn btn-primary ms-2 me-4">Make an appointment</button>
     </div> -->
-    <div *ngIf="isMakeAnAppointmentMode">
+    <div *ngIf="isMakeAnAppointmentMode" class=" col-12 mb-4 text-center">
         <h3 class="my-4">Make a laboratory appointment</h3>
         <!-- <form [formGroup]="chooseLaboratoryAppointmentForm" *ngIf="isMakeAnAppointmentMode">   -->            
             <div *ngFor="let availableLaboratoryAppointment of availableLaboratoryAppointments">
-                <span>Id - {{ availableLaboratoryAppointment.id }} - Time:
-                    {{availableLaboratoryAppointment.dateTime}}</span>
+                <span>Time: {{availableLaboratoryAppointment.dateTime}}</span>
                 <button (click)="chooseLaboratoryAppointment(availableLaboratoryAppointment.id)"
-                    class="btn btn-success">Select</button>
+                    class="btn btn-primary my-1 mx-1">Select</button>
             </div>
             <button (click)="cancelAppointmentForm()" class="btn btn-outline-secondary">Cancel</button>
         <!--</form> -->  
@@ -33,9 +32,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
+                    <!-- <th>
                         Group Id    
-                    </th>
+                    </th> -->
                     <th>
                         Tests 
                     </th>
@@ -46,13 +45,13 @@
             </thead>
             <tbody>
                 <tr *ngFor="let comissionedLaboratoryTest of comissionedLaboratoryTests">
-                    <td>
+                    <!-- <td>
                         {{comissionedLaboratoryTest.groupId}}
-                    </td>
+                    </td> -->
                     <td>
                         <tr *ngFor="let laboratoryTest of comissionedLaboratoryTest.laboratoryTests">
                             <td>
-                                {{laboratoryTest.laboratoryTestTypeId}}
+                                {{laboratoryTest.laboratoryTestTypeName}}
                             </td>
                         </tr>                          
                     </td>
@@ -119,7 +118,7 @@
                             (click)="cancelPlannedAppointment(plannedLaboratoryAppointment.laboratoryAppointmentId)">Cancel</button>
                     </td>
                 </tr>
-                <tr *ngIf="comissionedLaboratoryTests.length === 0">
+                <tr *ngIf="plannedLaboratoryAppointments.length === 0">
                     <td colspan="8">No planned laboratory appointments</td>
                 </tr>
             </tbody>
@@ -159,14 +158,14 @@
                     <td *ngIf="isRegistrantMode">
                         <tr *ngFor="let laboratoryTest of inProcessLaboratoryAppointment.laboratoryTests">
                             <td>
-                                Name{{laboratoryTest.laboratoryTestTypeName}}
+                                Name: {{laboratoryTest.laboratoryTestTypeName}}
                             </td>
                         </tr>                           
                     </td>
                     <td *ngIf="!isRegistrantMode">
                         <tr *ngFor="let laboratoryTest of inProcessLaboratoryAppointment.laboratoryTests">
                             <td>
-                                Name{{laboratoryTest.laboratoryTestTypeName}}
+                                Name: {{laboratoryTest.laboratoryTestTypeName}}
                             </td>
                         </tr>                           
                     </td>
@@ -220,15 +219,15 @@
                     <td *ngIf="isRegistrantMode">
                         <tr *ngFor="let laboratoryTest of finishedLaboratoryAppointment.laboratoryTests">
                             <td>
-                                Name{{laboratoryTest.laboratoryTestTypeName}}
+                                Name: {{laboratoryTest.laboratoryTestTypeName}}
                             </td>
                         </tr>                           
                     </td>
                     <td *ngIf="!isRegistrantMode">
                         <tr *ngFor="let laboratoryTest of finishedLaboratoryAppointment.laboratoryTests">
                             <td>
-                                Name{{laboratoryTest.laboratoryTestTypeName}}
-                                Result{{laboratoryTest.result}}
+                                Name: {{laboratoryTest.laboratoryTestTypeName}} -
+                                Result: {{laboratoryTest.result}}
                             </td>
                         </tr>                           
                     </td>
@@ -240,7 +239,7 @@
                         {{finishedLaboratoryAppointment.doctorSurname}}
                     </td>
                 </tr>
-                <tr *ngIf="comissionedLaboratoryTests.length === 0">
+                <tr *ngIf="finishedLaboratoryAppointments.length === 0">
                     <td colspan="8">No finished laboratory appointments</td>
                 </tr>
             </tbody>
