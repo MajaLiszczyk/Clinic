@@ -34,7 +34,7 @@
 
         <div *ngFor="let medicalAppointment of medicalAppointments" class="text-center">
             <span>Doctor: {{ medicalAppointment.doctorName }} {{ medicalAppointment.doctorSurname }} - Time:
-                {{medicalAppointment.dateTime}}</span>
+                {{medicalAppointment.dateTime}} PatientId:  {{ medicalAppointment.patientId}} </span>
             <button [disabled]="medicalAppointment.patientId != 0" (click)="chooseAppointment(medicalAppointment.id)"
                 class="btn btn-primary my-1 mx-1">Select</button>
         </div>

@@ -27,16 +27,17 @@ namespace ClinicAPI.Repositories
         public async Task<ReturnMedicalAppointmentPatientDto?> GetMedicalAppointmentByIdWithPatient(int id)
         {
             var appointment = await (from ma in _context.MedicalAppointment
-                                      join p in _context.Patient on ma.PatientId equals p.Id
-                                      where ma.Id == id
+                                      join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
+                                     from p in patientJoin.DefaultIfEmpty() // LEFT JOIN
+                                     where ma.Id == id
                                       select new ReturnMedicalAppointmentPatientDto
                                       {
                                           Id = ma.Id,
                                           DateTime = ma.DateTime,
                                           PatientId = ma.PatientId,
-                                          PatientName = p.Name,
-                                          PatientSurname = p.Surname,
-                                          PatientPesel = p.Pesel,
+                                          PatientName = p != null ? p.Name : "No patient", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
+                                          PatientSurname = p != null ? p.Surname : "No patient",
+                                          PatientPesel = p != null ? p.Pesel : "No patient",
                                           DoctorId = ma.DoctorId,
                                           Interview = ma.Interview,
                                           Diagnosis = ma.Diagnosis,
@@ -56,16 +57,17 @@ namespace ClinicAPI.Repositories
             List<MedicalAppointment> medicalAppointments = new List<MedicalAppointment>();
 
                 var appointments = await (from ma in _context.MedicalAppointment
-                                          join p in _context.Patient on ma.PatientId equals p.Id
+                                          join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
+                                          from p in patientJoin.DefaultIfEmpty() //left join zeby zwracalo tez wizyty bez acjentow (patientId ==0)
                                           join d in _context.Doctor on ma.DoctorId equals d.Id
                                           select new ReturnMedicalAppointmentPatientDoctorDto
                                           {
                                               Id = ma.Id,
                                               DateTime = ma.DateTime,
                                               PatientId = ma.PatientId,
-                                              PatientName = p.Name,
-                                              PatientSurname = p.Surname,
-                                              PatientPesel = p.Pesel,
+                                              PatientName = p != null ? p.Name : "No patient", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
+                                              PatientSurname = p != null ? p.Surname : "No patient",
+                                              PatientPesel = p != null ? p.Pesel : "No patient",
                                               DoctorId = ma.DoctorId,
                                               DoctorName = d.Name,
                                               DoctorSurname = d.Surname,
@@ -117,6 +119,8 @@ namespace ClinicAPI.Repositories
                 {
                     Id = ma.Id,
                     dateTime =  ma.DateTime,
+                    PatientId = (int)ma.PatientId,
+                    DoctorId = ma.DoctorId,
                     DoctorName = d.Name,
                     DoctorSurname = d.Surname,
                     Interview = ma.Interview,
@@ -142,7 +146,8 @@ namespace ClinicAPI.Repositories
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByDoctorId(int doctorId)
         {
             var appointments = await (from ma in _context.MedicalAppointment
-                                      join p in _context.Patient on ma.PatientId equals p.Id
+                                      join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
+                                      from p in patientJoin.DefaultIfEmpty() // LEFT JOIN
                                       join d in _context.Doctor on ma.DoctorId equals d.Id
                                       where ma.DoctorId == doctorId
                                       select new ReturnMedicalAppointmentPatientDoctorDto
@@ -150,9 +155,9 @@ namespace ClinicAPI.Repositories
                                           Id = ma.Id,
                                           DateTime = ma.DateTime,
                                           PatientId = ma.PatientId,
-                                          PatientName = p.Name,
-                                          PatientSurname = p.Surname,
-                                          PatientPesel = p.Pesel,
+                                          PatientName = p != null ? p.Name : "Brak pacjenta", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
+                                          PatientSurname = p != null ? p.Surname : "Brak pacjenta",
+                                          PatientPesel = p != null ? p.Pesel : "Brak danych",
                                           DoctorId = ma.DoctorId,
                                           DoctorName = d.Name,
                                           DoctorSurname = d.Surname,

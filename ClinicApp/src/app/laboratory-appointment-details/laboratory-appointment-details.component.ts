@@ -159,7 +159,7 @@ export class LaboratoryAppointmentDetailsComponent {
     this.clinicService.finishLaboratoryAppointment(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]); //ID MOŻE Z SESJI?
         },
         error: (error) => {
           console.error("Error occurred:", error);
@@ -192,7 +192,7 @@ export class LaboratoryAppointmentDetailsComponent {
     this.clinicService.sendLaboratoryTestsToSupervisor(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]); //ID MOŻE Z SESJI?
         },
         error: (error) => {
           console.error("Error occurred:", error);
@@ -210,7 +210,7 @@ export class LaboratoryAppointmentDetailsComponent {
     this.clinicService.sendLaboratoryTestsResultsToPatient(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]); //ID MOŻE Z SESJI?
         },
         error: (error) => {
           console.error("Error occurred:", error);

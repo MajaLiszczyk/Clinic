@@ -19,7 +19,9 @@
     </ng-template>
 
     <div>Time: {{medicalAppointment.dateTime}} <br /></div>
-    <div>Patient: {{medicalAppointment.patientName}} {{medicalAppointment.patientSurname}}</div>
+    <div *ngIf="medicalAppointment.patientId != 0">Patient: {{medicalAppointment.patientName}} {{medicalAppointment.patientSurname}}</div>
+    <div *ngIf="medicalAppointment.patientId == 0"> No patient </div>
+
 
   </h5>
 

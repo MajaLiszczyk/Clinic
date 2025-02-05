@@ -390,7 +390,7 @@ export class AppointmentDetailsComponent {
       .subscribe({
         next: (response) => {
           console.log("Operation completed successfully:", response);
-          this.router.navigate(['/doctor-appointments/' + this.medicalAppointment.doctorId]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/doctor-appointments/' + this.medicalAppointment.doctorId, 0]); //ID MOŻE Z SESJI?
         },
         error: (error) => {
           console.error("Error occurred:", error);

@@ -169,7 +169,7 @@ export class LaboratoryAppointmentDetailsSupervisorComponent {
     this.clinicService.sendLaboratoryTestsToLaboratoryWorker(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-supervisor/' + this.laboratoryAppointment?.supervisorId]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-supervisor/' + this.laboratoryAppointment?.supervisorId, 0]); //ID MOŻE Z SESJI?
         },
         error: (error) => {
           console.error("Error occurred:", error);
