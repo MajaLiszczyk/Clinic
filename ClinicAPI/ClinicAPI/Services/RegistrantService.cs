@@ -21,7 +21,6 @@ namespace ClinicAPI.Services
             _registantRepository = registantRepository;
             _userManager = userManager;
             _mapper = mapper;
-
         }
 
         public async Task<ReturnRegistrantDto?> GetRegistrant(int id)
@@ -33,7 +32,6 @@ namespace ClinicAPI.Services
         {
             var registrants = await _registantRepository.GetAllRegistrants();
             return _mapper.Map<List<ReturnRegistrantDto>>(registrants);
-
         }
 
         public async Task<(bool Confirmed, string Response, ReturnRegistrantDto? registrant)> CreateRegistrant(CreateRegistrantDto registrant)
@@ -57,7 +55,6 @@ namespace ClinicAPI.Services
                 ReturnRegistrantDto r = _mapper.Map<ReturnRegistrantDto>(p);
                 scope.Complete();
                 return await Task.FromResult((true, "Registrant successfully created.", r));
-
             }
             catch (Exception ex)
             {
@@ -121,7 +118,6 @@ namespace ClinicAPI.Services
             }
         }
 
-
         public async Task<(bool Confirmed, string Response)> UpdateRegistrant(UpdateRegistrantDto registrant)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -143,8 +139,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-            
+            }            
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -168,8 +163,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }           
         }
 
         
@@ -193,8 +187,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-            
+            }          
         }
     }
 }

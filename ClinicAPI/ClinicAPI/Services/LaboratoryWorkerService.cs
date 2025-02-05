@@ -16,13 +16,11 @@ namespace ClinicAPI.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-
         public LaboratoryWorkerService(ILaboratoryWorkerRepository laboratoryWorkerRepository, UserManager<User> userManager, IMapper mapper)
         {
             _laboratoryWorkerRepository = laboratoryWorkerRepository;
             _userManager = userManager;
             _mapper = mapper;
-
         }
 
         public async Task<ReturnLaboratoryWorkerDto?> GetLaboratoryWorker(int id)
@@ -91,7 +89,6 @@ namespace ClinicAPI.Services
                 var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.LaboratoryWorker);
                 if (!addToRoleResult.Succeeded)
                 {
-                    //ReturnLaboratoryWorkerDto? k = null;
                     return (false, "Failed to assign role to the user.", null);
                 }
 
@@ -146,8 +143,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }         
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -176,7 +172,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> DeleteLaboratoryWorker(int id)

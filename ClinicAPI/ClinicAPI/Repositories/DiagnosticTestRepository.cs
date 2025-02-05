@@ -21,21 +21,18 @@ namespace ClinicAPI.Repositories
             try
             {
                 diagnosticTest = await _context.DiagnosticTest.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                            .FirstOrDefaultAsync();
 
                 
             }
             catch (Exception)
             {
-                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
+                
             }
-            //return await Task.Run(() => patient);
             return diagnosticTest;
         }
         public async Task<List<DiagnosticTest>> GetAllDiagnosticTests()
         {
-            //TransactionScope tworzy obszar transakcji. Gdy wywołasz scope.Complete(), wszystkie operacje w transakcji zostaną zatwierdzone.
-            //W przeciwnym razie zostaną wycofane.
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                                     new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                                                     TransactionScopeAsyncFlowOption.Enabled);  
@@ -43,14 +40,11 @@ namespace ClinicAPI.Repositories
             try
             {
                 diagnosticTests = await _context.DiagnosticTest.
-                    //Include(m => m.  .ReceivingUser). // Include powodują załadowanie danych powiązanych z innymi tabelami (tzw. eager loading).
-                    //Include(m => m.SendingUser).      //Bez tego domyślnie EF Core nie załaduje tych danych.
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync();
                 scope.Complete();
             }
             catch (Exception) { }
             return diagnosticTests;
-            //return await Task.Run(() => arr);
         }
 
         public async Task<List<ReturnDiagnosticTestDto>> GetByMedicalAppointmentId(int medicalAppointmentId)
@@ -79,13 +73,11 @@ namespace ClinicAPI.Repositories
 
                     scope.Complete();
                     return diagnosticTests;
-
             }
             catch (Exception) {
                 return new List<ReturnDiagnosticTestDto>();
             }
         }
-
 
         
         public async Task<DiagnosticTest> CreateDiagnosticTest(DiagnosticTest diagnosticTest)
@@ -94,7 +86,6 @@ namespace ClinicAPI.Repositories
             await _context.SaveChangesAsync();
             return diagnosticTest;
         }
-
 
         public async Task<DiagnosticTest?> UpdateDiagnosticTest(DiagnosticTest diagnosticTest)
         {
@@ -111,10 +102,8 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception ex)
             {
-                //wyjatek
             }
             return _diagnosticTest;
-        }
-     
+        }     
     }
 }

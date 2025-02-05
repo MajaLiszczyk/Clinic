@@ -21,7 +21,6 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPost("userRole")] //ten endpoint ma sens tylko dla uwierzytelnionych użytkowników, bo dla innego nie istnieje context
-        //[Authorize(Roles = UserRole.Admin)]
         [Authorize]
         public async Task<IActionResult> AssignUserRole(AssignUserRoleCommand command)
         {

@@ -6,12 +6,12 @@ namespace ClinicAPI.Models
     public enum LaboratoryAppointmentState
     {
         Empty = 0,
-        Reserved = 1, //lub NotAssigned , Reserved
+        Reserved = 1,
         ToBeCompleted = 2,
         WaitingForSupervisor = 3,
         ToBeFixed = 4,
         AllAccepted = 5, //ready for patient
-        Finished = 6, //wyslane dopacjenta
+        Finished = 6, //sent to patient
         Cancelled = 7
     }
 
@@ -32,17 +32,4 @@ namespace ClinicAPI.Models
         public DateTime DateTime { get; set; }
         public string? CancelComment { get; set; }
     }
-
-
-
-    /*public static class LaboratoryAppointmentState
-{
-    public const string Commissioned = "Commissioned";
-    public const string ToBeCompleted = "ToBeCompleted";
-    public const string WaitingForSupervisor = "WaitingForSupervisor";
-    public const string ToBeFixed = "ToBeFixed";
-    public const string AllAccepted = "AllAccepted"; //ready for patient
-    public const string Finished = "Finished"; //wyslane dopacjenta
-    public const string Cancelled = "Cancelled";
-} */
 }

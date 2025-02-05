@@ -26,25 +26,6 @@ namespace ClinicAPI.Services
             return _mapper.Map<ReturnLaboratoryTestDto>(laboratoryTest);
         }
 
-        //public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByPatientId(int id)
-       /* public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientId(int id)
-        {
-            using var scope = new TransactionScope(TransactionScopeOption.Required,
-                   new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
-                   TransactionScopeAsyncFlowOption.Enabled);
-            try
-            {
-                List<IGrouping<int, LaboratoryTest>> laboratoryTests = await _laboratoryTestRepository.GetLaboratoryTestsByPatientId(id);
-                return laboratoryTests;
-            }
-            catch (Exception ex)
-            {
-                return new List<IGrouping<int, LaboratoryTest>>();
-            }
-
-
-        }*/
-
         public async Task<List<ReturnGroupWithLaboratoryTestsDto>> GetComissionedLaboratoryTestsWithGroupByPatientId(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -58,12 +39,8 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return new List<ReturnGroupWithLaboratoryTestsDto>();
-                //return (false, $"Error cerating laboratory appointment: {ex.Message}", null);
             }
-
-        }
-
-        
+        }       
 
         public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByMedicalAppointmentId(int id)
         {
@@ -78,11 +55,8 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return new List<ReturnLaboratoryTestDto>();
-                //return (false, $"Error cerating laboratory appointment: {ex.Message}", null);
             }
-
         }
-
 
         public async Task<List<ReturnLaboratoryTestDto>> GetAllLaboratoryTests()
         {
@@ -94,8 +68,6 @@ namespace ClinicAPI.Services
         {
             var laboratoryTests = await _laboratoryTestRepository.GetAllLaboratoryTests();
             return laboratoryTests;
-            //return _mapper.Map<List<ReturnLaboratoryTestDto>>(laboratoryTests);
-
         }
 
         public async Task<(bool Confirmed, string Response, ReturnLaboratoryTestDto? laboratoryTest)> CreateLaboratoryTest(CreateLaboratoryTestDto laboratoryTest)
@@ -123,8 +95,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error cerating laboratory test: {ex.Message}", null);
-            }
-            
+            }            
         }
         public async Task<(bool Confirmed, string Response)> UpdateLaboratoryTest(UpdateLaboratoryTestDto laboratoryTest)
         {
@@ -146,8 +117,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating laboratory test: {ex.Message}");
-            }
-            
+            }           
         }
 
         public async Task<(bool Confirmed, string Response)> SaveLaboratoryTestResult(int id, string resultValue)
@@ -251,12 +221,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error deleting laboratory test: {ex.Message}");
             }
-
-        }
-
-
-
-
-       
+        }      
     }
 }

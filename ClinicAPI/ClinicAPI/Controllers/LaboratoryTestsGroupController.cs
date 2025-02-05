@@ -18,7 +18,6 @@ namespace ClinicAPI.Controllers
             _userContext = userContext;
         }
 
-        //[HttpPut("{groupId}/{laboratoryAppointmentId}")]
         [HttpPut]
         [Route("api/LaboratoryTestsGroup/UpdateLaboratoryAppointmentToGroup/{groupId}/{laboratoryAppointmentId}")]
         public async Task<IActionResult> UpdateLaboratoryAppointmentToGroup(
@@ -31,7 +30,5 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = _testsGroup.Response });
             else return BadRequest(_testsGroup.Response);
         }
-
-
     }
 }

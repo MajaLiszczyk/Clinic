@@ -5,7 +5,6 @@ namespace ClinicAPI.Repositories.Interfaces
 {
     public interface IMedicalSpecialisationRepository
     {
-
         public Task<MedicalSpecialisation?> GetMedicalSpecialisationById(int id);
         public Task<bool> IsSpecilityWithTheSameName(string name);
         public Task<List<MedicalSpecialisation>> GetAllMedicalSpecialisations();
@@ -15,7 +14,5 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<bool> DeleteMedicalSpecialisation(int id);
         public Task<bool> IsLinkedToDoctor(int specialisationId);
         public Task<bool> CanArchiveSpecialisation(int specialisationId);
-
-
     }
 }

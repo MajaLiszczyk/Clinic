@@ -12,6 +12,5 @@ namespace ClinicAPI.Services.Interfaces
         public Task<(bool Confirmed, string Response)> UpdateLaboratorySupervisor(UpdateLaboratorySupervisorDto request);
         public Task<(bool Confirmed, string Response)> DeleteLaboratorySupervisor(int id);
         public Task<(bool Confirmed, string Response)> TransferToArchive(int id);
-
     }
 }

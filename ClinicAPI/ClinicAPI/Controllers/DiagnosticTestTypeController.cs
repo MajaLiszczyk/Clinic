@@ -63,7 +63,6 @@ namespace ClinicAPI.Controllers
         {
             var _testType = await _testService.UpdateDiagnosticTestType(testType);
             if (_testType.Confirmed)
-                //return Ok(_patient.Response);
                 return Ok(new { message = _testType.Response });
             else return BadRequest(_testType.Response);
         }
@@ -79,7 +78,6 @@ namespace ClinicAPI.Controllers
         }
 
 
-
         [HttpDelete("{id}")]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -89,6 +87,5 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
-
     }
 }

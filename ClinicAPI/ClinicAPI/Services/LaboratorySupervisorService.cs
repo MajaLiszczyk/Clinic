@@ -16,8 +16,6 @@ namespace ClinicAPI.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-
-
         public LaboratorySupervisorService(ILaboratorySupervisorRepository laboratorySupervisorRepository, UserManager<User> userManager, IMapper mapper)
         {
             _laboratorySupervisorRepository = laboratorySupervisorRepository;
@@ -91,7 +89,6 @@ namespace ClinicAPI.Services
                 var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.LaboratorySupervisor);
                 if (!addToRoleResult.Succeeded)
                 {
-                    //ReturnLaboratoryWorkerDto? k = null;
                     return (false, "Failed to assign role to the user.", null);
                 }
 
@@ -120,9 +117,6 @@ namespace ClinicAPI.Services
             }
         }
 
-
-
-
         public async Task<(bool Confirmed, string Response)> UpdateLaboratorySupervisor(UpdateLaboratorySupervisorDto laboratorySupervisor)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -130,11 +124,6 @@ namespace ClinicAPI.Services
                                TransactionScopeAsyncFlowOption.Enabled);
             try
             {
-                /*if (await _laboratorySupervisorRepository.GetLaboratorySupervisorWithTheSameNumber(laboratorySupervisor.))
-                {
-                    return (false, "Patient with this PESEL already exists.");
-                } */
-
                 LaboratorySupervisor? _laboratorySupervisor = await _laboratorySupervisorRepository.GetLaboratorySupervisorById(laboratorySupervisor.Id);
 
                 if (_laboratorySupervisor == null)
@@ -153,8 +142,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }        
         }
         
         public async Task<(bool Confirmed, string Response)> DeleteLaboratorySupervisor(int id)
@@ -196,9 +184,5 @@ namespace ClinicAPI.Services
                 return (false, $"Error updating _laboratorySupervisor: {ex.Message}");
             }
         }
-
-
-
-
     }
 }

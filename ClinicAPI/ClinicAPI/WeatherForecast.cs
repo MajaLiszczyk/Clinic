@@ -1,4 +1,4 @@
-namespace ClinicAPI
+/*namespace ClinicAPI
 {
     public class WeatherForecast
     {
@@ -10,4 +10,4 @@ namespace ClinicAPI
 
         public string? Summary { get; set; }
     }
-}
+} */

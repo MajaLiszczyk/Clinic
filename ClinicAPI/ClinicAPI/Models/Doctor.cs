@@ -35,9 +35,6 @@ namespace ClinicAPI.Models
         public string DoctorNumber { get; set; }
         public ICollection<MedicalSpecialisation> MedicalSpecialisations { get; set; } = new List<MedicalSpecialisation>();
         public bool IsAvailable { get; set; } = true;
-
-
-
     }
 }
 

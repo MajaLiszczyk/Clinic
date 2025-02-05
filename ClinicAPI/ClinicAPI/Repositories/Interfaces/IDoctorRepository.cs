@@ -13,7 +13,5 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<Doctor?> UpdateDoctor(Doctor doctor);
         public Task<bool> DeleteDoctor(int id);
         public Task<bool> CanArchiveDoctor(int doctorId);
-
-
     }
 }

@@ -16,7 +16,6 @@ namespace ClinicAPI.Controllers
             _laboratorySupervisorService = service;
         }
 
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -26,7 +25,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -45,7 +43,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-        //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratorySupervisorDto request)
         {
@@ -55,7 +52,6 @@ namespace ClinicAPI.Controllers
             else return BadRequest(result.Response);
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateLaboratorySupervisorDto request)
         {
@@ -74,7 +70,6 @@ namespace ClinicAPI.Controllers
             else return BadRequest(result.Response);
         }
 
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
@@ -83,7 +78,5 @@ namespace ClinicAPI.Controllers
                 return Ok(result.Response);
             else return BadRequest(result.Response);
         }
-
-
     }
 }

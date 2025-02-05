@@ -13,7 +13,6 @@ namespace ClinicAPI.Controllers
 
     {
         private readonly ILaboratoryTestTypeService _testService;
-
         public LaboratoryTestTypeController(ILaboratoryTestTypeService service)
         {
             _testService = service;

@@ -20,7 +20,6 @@ namespace ClinicAPI.Repositories
             return await _context.LaboratoryTestsGroup.Where(r => r.LaboratoryAppointmentId == id).FirstOrDefaultAsync();
         }
 
-
         public async Task<int> CreateLaboratoryTestsGroup(LaboratoryTestsGroup laboratoryTestsGroup)
         {
             await _context.AddAsync(laboratoryTestsGroup);
@@ -39,9 +38,6 @@ namespace ClinicAPI.Repositories
         public async Task<LaboratoryTestsGroup?> GetTestsGroupById(int id)
         {
             return await _context.LaboratoryTestsGroup.Where(r => r.Id == id).FirstOrDefaultAsync();
-        }
-        
-
-
+        }      
     }
 }

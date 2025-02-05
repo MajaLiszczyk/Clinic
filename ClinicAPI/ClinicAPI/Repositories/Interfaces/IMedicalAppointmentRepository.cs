@@ -21,6 +21,5 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<bool> DeleteMedicalAppointment(int id);
         public Task<bool> HasPatientMedicalAppointments(int patientId);
         public Task<bool> HasDoctorMedicalAppointments(int doctorId);
-
     }
 }

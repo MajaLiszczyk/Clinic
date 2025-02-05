@@ -33,8 +33,6 @@ namespace ClinicAPI.Repositories
             return false;
         }
 
-
-
         public async Task<List<MedicalSpecialisation>> GetAllMedicalSpecialisations()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -65,9 +63,7 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception) { }
             return medicalSpecialisations;
-        }
-
-        
+        }      
         
         public async Task<MedicalSpecialisation> CreateMedicalSpecialisation(MedicalSpecialisation medicalSpecialisation)
         {
@@ -108,8 +104,5 @@ namespace ClinicAPI.Repositories
                 .Where(d => d.IsAvailable == true)
                 .AnyAsync(d => d.MedicalSpecialisations.Any(ms => ms.Id == specialisationId));
         }
-
-
-
     }
 }

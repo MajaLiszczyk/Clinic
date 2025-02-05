@@ -73,9 +73,7 @@ namespace ClinicAPI.Services
             {
                 throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
             }
-
             return laboratoryAppointment;
-            //return _mapper.Map<List<ReturnLaboratoryAppointmentDto>>(laboratoryAppointments);
         }
 
 
@@ -91,11 +89,13 @@ namespace ClinicAPI.Services
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getPlannedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
+
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getFinishedLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getFinishedLaboratoryAppointmentsByPatientId(id);
             return laboratoryAppointments;
         }
+
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto>> getInProcessLaboratoryAppointmentsByPatientId(int id)
         {
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getInProcessLaboratoryAppointmentsByPatientId(id);
@@ -105,43 +105,36 @@ namespace ClinicAPI.Services
         //LAB WORKER
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getFutureLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getFutureLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Reserved);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForFillLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForFillLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.ToBeCompleted);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getWaitingForSupervisorLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getWaitingForSupervisorLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.WaitingForSupervisor);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getReadyForPatientLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getReadyForPatientLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.AllAccepted);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getToBeFixedLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getToBeFixedLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.ToBeFixed);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getSentToPatientLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Finished);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> getCancelledLabAppsByLabWorkerId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getCancelledLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.getSomeLabAppsByLabWorkerId(id, LaboratoryAppointmentState.Cancelled);
             return laboratoryAppointments;
         }
@@ -150,25 +143,20 @@ namespace ClinicAPI.Services
         //LAB SUPERVISOR
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetWaitingForReviewLabAppsBySupervisorId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.WaitingForSupervisor);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetAcceptedAndFinishedLabAppsBySupervisorId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetAcceptedAndFinishedLabAppsBySupervisorId(id);
             return laboratoryAppointments;
         }
         public async Task<List<ReturnLaboratoryAppointmentWithPatientWithTestsWithMedAppDto>> GetSentBackLabAppsBySupervisorId(int id)
         {
-            //var laboratoryAppointments = await _laboratoryAppointmentRepository.getSentToPatientLabAppsByLabWorkerId(id);
             var laboratoryAppointments = await _laboratoryAppointmentRepository.GetSomeLabAppsBySupervisorId(id, LaboratoryAppointmentState.ToBeFixed);
             return laboratoryAppointments;
         }
         //LAB SUPERVISOR
-
-
 
         public async Task<(bool Confirmed, string Response, ReturnLaboratoryAppointmentDto? medAppointment)> CreateLaboratoryAppointment(CreateLaboratoryAppointmentDto request)
         {
@@ -201,13 +189,13 @@ namespace ClinicAPI.Services
                 ReturnLaboratoryAppointmentDto r = _mapper.Map<ReturnLaboratoryAppointmentDto>(p);
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment successfully created.", r));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error cerating laboratory appointment: {ex.Message}", null);
             }
         }
+
         public async Task<(bool Confirmed, string Response)> UpdateLaboratoryAppointment(UpdateLaboratoryAppointmentDto request)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -235,7 +223,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> MakeCancelledLaboratoryAppointment(int id, string cancelComment)
@@ -262,7 +249,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> FinishLaboratoryAppointment(int id)
@@ -283,13 +269,11 @@ namespace ClinicAPI.Services
                 var r = await _laboratoryTestsRepository.ChangeLaboratoryTestsStateByLabAppId(id, LaboratoryTestState.ToBeCompleted);
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsToSupervisor(int id)
@@ -359,19 +343,15 @@ namespace ClinicAPI.Services
                 {
                     _laboratoryAppointment.State = LaboratoryAppointmentState.ToBeFixed;
                 }
-
                 var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
-        }
-
-        
+        }      
 
         public async Task<(bool Confirmed, string Response)> SendLaboratoryTestsResultsToPatient(int id)
         {
@@ -390,17 +370,12 @@ namespace ClinicAPI.Services
                 var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
         }
-
-
-
-
 
         public async Task<(bool Confirmed, string Response)> CancelPlannedAppointment(int id)
         {
@@ -428,15 +403,11 @@ namespace ClinicAPI.Services
 
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error updating laboratory appointment: {ex.Message}");
             }
-
-        }
-
-        
+        }       
     }
 }

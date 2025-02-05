@@ -14,8 +14,6 @@ namespace ClinicAPI.Repositories
             _context = context;
         }
 
-
-
         public async Task<Registrant?> GetRegistrantById(int id)
         {
             Registrant? registrant = null;
@@ -80,8 +78,6 @@ namespace ClinicAPI.Repositories
             _context.Registrant.Remove(_registrant);
             await _context.SaveChangesAsync();
             return true;
-        }
-
-        
+        }       
     }
 }

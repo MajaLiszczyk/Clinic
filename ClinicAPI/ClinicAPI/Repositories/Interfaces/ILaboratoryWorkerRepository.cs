@@ -8,7 +8,6 @@ namespace ClinicAPI.Repositories.Interfaces
         public Task<LaboratoryWorker?> GetLaboratoryWorkerByUserId(string userId);
         public Task<List<LaboratoryWorker>> GetAllLaboratoryWorkers();
         public Task<List<LaboratoryWorker>> GetAllAvailableLaboratoryWorkers();
-
         public Task<LaboratoryWorker> CreateLaboratoryWorker(LaboratoryWorker patient);
         public Task<bool>GetLaboratoryWorkerWithTheSameNumber(string number);
         public Task<LaboratoryWorker?> UpdateLaboratoryWorker(LaboratoryWorker patient);

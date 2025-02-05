@@ -55,16 +55,11 @@ namespace ClinicAPI.Repositories
                                          State = ma.State,
                                          CancelComment = ma.CancelComment
                                      }).ToListAsync();
-
             return appointments;
-
         }
 
-
-
         public async Task<List<LaboratoryAppointment>> GetAvailableLaboratoryAppointments()
-        {
-           
+        {          
             List<LaboratoryAppointment> laboratoryAppointments = new List<LaboratoryAppointment>();
 
                 laboratoryAppointments = await _context.LaboratoryAppointment.Where(r => r.State == LaboratoryAppointmentState.Empty).
@@ -125,7 +120,7 @@ namespace ClinicAPI.Repositories
                                                      LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
                                                      State = labTest.State,
                                                      LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
-                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     LaboratoryTestTypeName = testType.Name, 
                                                      Result = labTest.Result,
                                                      DoctorNote = labTest.DoctorNote,
                                                      RejectComment = labTest.RejectComment
@@ -202,7 +197,7 @@ namespace ClinicAPI.Repositories
                                                      LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
                                                      State = labTest.State,
                                                      LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
-                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     LaboratoryTestTypeName = testType.Name,
                                                      Result = labTest.Result,
                                                      DoctorNote = labTest.DoctorNote,
                                                      RejectComment = labTest.RejectComment
@@ -280,7 +275,7 @@ namespace ClinicAPI.Repositories
                                                      LaboratoryTestsGroupId = labTest.LaboratoryTestsGroupId,
                                                      State = labTest.State,
                                                      LaboratoryTestTypeId = labTest.LaboratoryTestTypeId,
-                                                     LaboratoryTestTypeName = testType.Name, // Pobieramy nazwę typu testu
+                                                     LaboratoryTestTypeName = testType.Name, 
                                                      Result = labTest.Result,
                                                      DoctorNote = labTest.DoctorNote,
                                                      RejectComment = labTest.RejectComment
@@ -591,8 +586,6 @@ namespace ClinicAPI.Repositories
             }
         }
 
-        //dla lab workera jak kliknie details przy wizycie
-        //SingleOrDefaultAsync() zamiast ToListAsync(), aby zapytanie zwracało jeden wynik lub null.
         public async Task<ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto?> GetLabAppDetailsByLabAppId(int laboratoryAppointmentId)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -601,7 +594,6 @@ namespace ClinicAPI.Repositories
             try
             {
                 var result = await (from labApp in _context.LaboratoryAppointment
-                                    //where labApp.State == LaboratoryAppointmentState.Reserved
                                     where labApp.Id == laboratoryAppointmentId
                                     join labGroup in _context.LaboratoryTestsGroup
                                         on labApp.Id equals labGroup.LaboratoryAppointmentId
@@ -621,7 +613,6 @@ namespace ClinicAPI.Repositories
                                                  where labTest.LaboratoryTestsGroupId == labGroup.Id
                                                  join labType in _context.LaboratoryTestType
                                                     on labTest.LaboratoryTestTypeId equals labType.Id 
-                                                 //select labTest).ToList()
                                                  select new ReturnLaboratoryTestWithTypeName
                                                  {
                                                      Id = labTest.Id,
@@ -638,7 +629,7 @@ namespace ClinicAPI.Repositories
 
                 if (result == null)
                 {
-                    return null; // Lub rzuć wyjątek, jeśli wymagany jest wynik
+                    return null;
                 }
 
                 var mappedResult = new ReturnLaboratoryAppointmentWithPatientWithTestsWithTypeNameWithMedAppDto
@@ -674,20 +665,14 @@ namespace ClinicAPI.Repositories
                 scope.Dispose();
                 throw;
             }
-        }
-
-        
-
-
+        }    
 
         public async Task<LaboratoryAppointment> CreateLaboratoryAppointment(LaboratoryAppointment laboratoryAppointment)
         {
             await _context.AddAsync(laboratoryAppointment);
             laboratoryAppointment.DateTime = laboratoryAppointment.DateTime.ToUniversalTime();
             await _context.SaveChangesAsync();
-
             return laboratoryAppointment;
-
         }
 
         public async Task<LaboratoryAppointment?> UpdateLaboratoryAppointment(LaboratoryAppointment laboratoryAppointment)

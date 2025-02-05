@@ -18,28 +18,23 @@ namespace ClinicAPI.Services
         {
             _diagnosticTestTypeRepository = diagnosticTestTypeRepository;
             _mapper = mapper;
-
         }
 
         public async Task<DiagnosticTestType?> GetDiagnosticTestType(int id)
         {
             var testType = await _diagnosticTestTypeRepository.GetDiagnosticTestTypeById(id);
-            //return _mapper.Map<ReturnPatientDto>(patient);
             return testType;
-
         }
         
         public async Task<List<DiagnosticTestType>> GetAllDiagnosticTestTypes()
         {
             var testTypes = await _diagnosticTestTypeRepository.GetAllDiagnosticTestTypes();
-            //return _mapper.Map<List<ReturnPatientDto>>(patients);
             return testTypes;
         }
 
         public async Task<List<DiagnosticTestType>> GetAllAvailableDiagnosticTestTypes()
         {
             var testTypes = await _diagnosticTestTypeRepository.GetAllAvailableDiagnosticTestTypes();
-            //return _mapper.Map<List<ReturnPatientDto>>(patients);
             return testTypes;
         }
 
@@ -65,23 +60,15 @@ namespace ClinicAPI.Services
                 {
                     DiagnosticTestType? k = null;
                     return await Task.FromResult((false, "Diagnostic test type was not created.", k));
-                    //return await Task.FromResult((true, "Diagnostic test type successfully created.", p));
                 }
                 scope.Complete();
                 return await Task.FromResult((true, "Diagnostic test type successfully created.", p));
-                /*else
-                {
-                    DiagnosticTestType? k = null;
-                    return await Task.FromResult((false, "Diagnostic test type was not created.", k));
 
-                }*/
             }
             catch (Exception ex)
             {
                 return (false, $"Error creating DiagnosticTestType: {ex.Message}", null);
             }
-
-
         }
         
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTestType(UpdateDiagnosticTestTypeDto testType)
@@ -102,7 +89,6 @@ namespace ClinicAPI.Services
                 {
                     return await Task.FromResult((false, "Patient with given id does not exist."));
                 }
-
                 _testType.Name = testType.Name;
                 var p = await _diagnosticTestTypeRepository.UpdateDiagnosticTestType(_testType);
                 scope.Complete();
@@ -112,7 +98,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating DiagnosticTestType: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -138,7 +123,6 @@ namespace ClinicAPI.Services
             }
         }
 
-
         public async Task<(bool Confirmed, string Response)> DeleteDiagnosticTestType(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -157,14 +141,12 @@ namespace ClinicAPI.Services
                 }
                 await _diagnosticTestTypeRepository.DeleteDiagnosticTestType(id);
                 scope.Complete();
-                return await Task.FromResult((true, "DiagnosticTestType successfully deleted."));
-               
+                return await Task.FromResult((true, "DiagnosticTestType successfully deleted."));              
             }
             catch (Exception ex)
             {
                 return (false, $"Error deleting DiagnosticTestType: {ex.Message}");
             }
-
         }
     }
 }

@@ -17,13 +17,10 @@ namespace ClinicAPI.Services
         public LaboratoryTestsGroupService(ILaboratoryTestsGroupRepository laboratoryTestsGroupRepository
                                            , ILaboratoryAppointmentRepository laboratoryAppointmentRepository, IMapper mapper)
         {
-
             _mapper = mapper;
             _laboratoryTestsGroupRepository = laboratoryTestsGroupRepository;
             _laboratoryAppointmentRepository = laboratoryAppointmentRepository;
-
         }
-
 
         public async Task<(bool Confirmed, string Response)> UpdateMedicalSpecialisation(int groupId, int laboratoryAppointmentId)
         {
@@ -38,7 +35,7 @@ namespace ClinicAPI.Services
                 {
                     return (false, "Tests Group with this id does not exists.");
                 }
-                //sprawdzic czy do grupy nie ma juz jakiegos lab app przypisanego?
+                //sprawdzic czy do grupy nie ma juz jakiegos lab app przypisanego
                 if (updatedGroup.LaboratoryAppointmentId != null)
                 {
                     return (false, "Tests Group already has laboratory appointment assigned.");
@@ -62,7 +59,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating Tests group: {ex.Message}");
             }
-
         }
     }
 }

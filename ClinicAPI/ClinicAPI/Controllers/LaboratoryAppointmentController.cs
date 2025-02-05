@@ -80,9 +80,7 @@ namespace ClinicAPI.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
-        }
-        
-
+        }        
 
         [HttpGet("{id}")]
         [Authorize]
@@ -94,7 +92,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getFutureLabAppsByLabWorkerId([FromRoute] int id)
@@ -104,6 +101,7 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getWaitingForFillLabAppsByLabWorkerId([FromRoute] int id)
@@ -132,6 +130,7 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getReadyForPatientLabAppsByLabWorkerId([FromRoute] int id)
@@ -150,6 +149,7 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> getCancelledLabAppsByLabWorkerId([FromRoute] int id)
@@ -170,6 +170,7 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetAcceptedLabAppsBySupervisorId([FromRoute] int id)
@@ -179,6 +180,7 @@ namespace ClinicAPI.Controllers
                 return Ok(result);
             return NotFound();
         }
+
         [HttpGet("{id}")]
         [Authorize]
         public async Task<IActionResult> GetSentBackLabAppsBySupervisorId([FromRoute] int id)
@@ -189,8 +191,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }                        
         //LAB SUPERVISOR
-
-
 
 
         [HttpGet("{id}")]
@@ -211,8 +211,7 @@ namespace ClinicAPI.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
-        }
-        
+        }       
 
         [HttpPut("{id}")]
         public async Task<IActionResult> cancelPlannedAppointment([FromRoute] int id)
@@ -222,12 +221,7 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
-
-        
-
-
-
-
+       
         [HttpPost]
         [Authorize(Roles = UserRole.Registrant)]
         public async Task<IActionResult> Create([FromBody] CreateLaboratoryAppointmentDto request)
@@ -291,11 +285,5 @@ namespace ClinicAPI.Controllers
                 return Ok(new { message = result.Response });
             else return BadRequest(result.Response);
         }
-
-        
-            
-
-
-
     }
 }

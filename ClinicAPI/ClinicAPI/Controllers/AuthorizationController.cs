@@ -36,15 +36,6 @@ namespace ClinicAPI.Controllers
             _dbContext = dbContext;
         }
 
-
-
-        /*Metoda login zwraca obiekt JSON:
-        {
-            "Token": "string",   // JWT token
-            "Role": "string",    // Rola użytkownika, np. "Patient" lub "Doctor"
-            "UserId": "string",  // Unikalny identyfikator użytkownika
-            "Id": 0              // Id pacjenta lub lekarza (jeśli rola to "Patient" lub "Doctor"), inaczej 0
-        } */
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
@@ -54,10 +45,8 @@ namespace ClinicAPI.Controllers
                 return Unauthorized(new { Message = "Invalid email or password" });
             }
 
-            //var result = await signInManager.PasswordSignInAsync(user.UserName, request.Password, isPersistent: false, lockoutOnFailure: false);
             var result = await userManager.CheckPasswordAsync(user, request.Password);//wersja2
-            //if (!result.Succeeded)
-            if (!result) //wersja 2
+            if (!result)
             {
                 return Unauthorized(new { Message = "Invalid email or password" });
             }
@@ -80,11 +69,9 @@ namespace ClinicAPI.Controllers
             return Ok(new
             {
                 Token = token,
-                //Roles = roles,
                 Role = role,
                 UserId = user.Id,
                 Id = id
-                //Message = "Login successful"
             });
         }
 
@@ -96,13 +83,12 @@ namespace ClinicAPI.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email)
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // Unique token ID // ??
             };
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-            //alternatyw:
+            //alternatywa:
             //new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "User")
             // Dodanie niestandardowego claimu
             /*if (user.PatientId != null)
@@ -111,7 +97,7 @@ namespace ClinicAPI.Controllers
             }*/
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ThisIsA32CharacterLongSecretKey!"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256); //po co?
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
                 issuer: "your_issuer",
                 audience: "your_audience",
@@ -122,7 +108,7 @@ namespace ClinicAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //TESTOWA, DO WYRZUCENIA POTEM
+        //TESTOWA
         [HttpGet("auth")]
         [Authorize]
         public IActionResult GetAuthenticated()

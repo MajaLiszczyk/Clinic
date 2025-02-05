@@ -20,14 +20,12 @@ namespace ClinicAPI.Services
         {
             _laboratoryTestTypeRepository = laboratoryTestTypeRepository;
             _mapper = mapper;
-
         }
 
         public async Task<LaboratoryTestType?> GetLaboratoryTestType(int id)
         {
             var testType = await _laboratoryTestTypeRepository.GetLaboratoryTestTypeById(id);
             return testType;
-
         }
         
         public async Task<List<LaboratoryTestType>> GetAllLaboratoryTestTypes()
@@ -45,12 +43,6 @@ namespace ClinicAPI.Services
             {
                 return (new List<LaboratoryTestType>());
             }
-            /*if (_laboratoryTestTypeRepository == null)
-            {
-                throw new InvalidOperationException("Repository is null");
-            }*/
-
-
         }
         
         public async Task<(bool Confirmed, string Response, LaboratoryTestType? patient)> CreateLaboratoryTestType(CreateLaboratoryTestTypeDto testType)
@@ -69,9 +61,7 @@ namespace ClinicAPI.Services
             {
                 LaboratoryTestType? k = null;
                 return await Task.FromResult((false, "Laboratory test type was not created.", k));
-
             }
-
         }
         
         public async Task<(bool Confirmed, string Response)> UpdateLaboratoryTestType(UpdateLaboratoryTestTypeDto testType)
@@ -79,7 +69,6 @@ namespace ClinicAPI.Services
             using var scope = new TransactionScope(TransactionScopeOption.Required,
                                            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
                                            TransactionScopeAsyncFlowOption.Enabled);
-
             try
             {
                 if (await _laboratoryTestTypeRepository.IsLaboratoryTestTypeWithTheSameName(testType.Name))
@@ -101,8 +90,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating LaboratoryTestType: {ex.Message}");
             }
-
-
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -126,7 +113,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error transfering to archive Laboratory test type: {ex.Message}");
             }
-
         }
 
 
@@ -139,7 +125,6 @@ namespace ClinicAPI.Services
                 await _laboratoryTestTypeRepository.DeleteLaboratoryTestType(id);
                 return await Task.FromResult((true, "LaboratoryTestType successfully deleted."));
             }
-
         }
     }
 }

@@ -36,9 +36,7 @@ namespace ClinicAPI.Repositories
             var laboratoryWorker = await _context.LaboratoryWorker.Where(r => r.UserId == userId)
                             .FirstOrDefaultAsync();
             return laboratoryWorker;
-
         }
-
 
         public async Task<bool> GetLaboratoryWorkerWithTheSameNumber(string number)
         {
@@ -64,7 +62,6 @@ namespace ClinicAPI.Repositories
             catch (Exception) { }
             return laboratoryWorkers;
         }
-
 
         public async Task<List<LaboratoryWorker>> GetAllAvailableLaboratoryWorkers()
         {
@@ -108,7 +105,6 @@ namespace ClinicAPI.Repositories
 
         public async Task<bool> CanArchiveLaboratoryWorker(int laboratoryWorkerId)
         {
-            // Sprawdzenie, czy laboratorySupervisor ma jakąkolwiek wizytę, która nie jest Cancelled ani Finished
             return !await _context.LaboratoryAppointment.AnyAsync(ma =>
                 ma.LaboratoryWorkerId == laboratoryWorkerId &&
                 (ma.State != LaboratoryAppointmentState.Cancelled &&

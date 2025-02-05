@@ -52,37 +52,5 @@ namespace ClinicAPI.Models
         public string? Result {  get; set; }
         public string? DoctorNote { get; set; }
         public string? RejectComment { get; set; }
-    }
-
-
-
-
-    /*public static class LaboratoryTestState
-    {
-
-        public const string ToBeCompleted = "ToBeCompleted";
-        public const string WaitingForSupervisor = "WaitingForSupervisor";
-        public const string Accepted = "Accepted";
-        public const string Rejected = "Rejected";
-    }*/
-
-    /*public class LaboratoryTest
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [ForeignKey("MedicalAppointment")]
-        public int MedicalAppointmentId { get; set; }
-        public DateTime date { get; set; } 
-        public int LaboratoryTestTypeId { get; set; }
-
-        [ForeignKey("LaboratoryWorker")]
-        public int LaboratoryWorkerId { get; set; }
-        [ForeignKey("LaboratorySupervisor")]
-        public int SupervisorId { get; set; } 
-
-
-
-    }*/
+    }  
 }

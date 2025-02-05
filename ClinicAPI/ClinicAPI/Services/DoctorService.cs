@@ -23,8 +23,6 @@ namespace ClinicAPI.Services
         private readonly UserManager<User> _userManager;
         private readonly IMedicalSpecialisationService _medicalSpecialisationService;
 
-
-
         public DoctorService(IDoctorRepository doctorRepository, IMapper mapper, ApplicationDBContext applicationDBContext
                             , UserManager<User> userManager, IMedicalSpecialisationService medicalSpecialisationService
                             , IMedicalAppointmentRepository medicalAppointmentRepository)
@@ -36,6 +34,7 @@ namespace ClinicAPI.Services
             _medicalSpecialisationService = medicalSpecialisationService;
             _medicalAppointmentRepository = medicalAppointmentRepository;
         }
+
         public async Task<ReturnDoctorDto?> GetDoctor(int id)
         {
             var doctor = await _doctorRepository.GetDoctorById(id);
@@ -60,7 +59,6 @@ namespace ClinicAPI.Services
             return doctors;
         }
 
-
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctor(CreateDoctorDto request, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -84,14 +82,11 @@ namespace ClinicAPI.Services
                 ReturnDoctorDto r = _mapper.Map<ReturnDoctorDto>(p);
                 scope.Complete();
                 return await Task.FromResult((true, "doctor successfully created.", r));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error creating doctor: {ex.Message}", null);
             }
-
-
         }
 
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> CreateDoctorWithSpecialisations(CreateDoctorDto request)
@@ -117,7 +112,6 @@ namespace ClinicAPI.Services
             }
         }
 
-
         public async Task<(bool Confirmed, string Response, ReturnDoctorDto? doctor)> RegisterDoctor(CreateRegisterDoctorDto request)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -129,7 +123,6 @@ namespace ClinicAPI.Services
                 {
                     return (false, "Doctor with this PWZ number already exists.", null);
                 }
-                // Tworzenie użytkownika
                 var user = new User
                 {
                     UserName = request.Email,
@@ -143,7 +136,6 @@ namespace ClinicAPI.Services
                     return (false, string.Join("; ", errorMessages), null);
                 }
 
-                // Przypisanie roli Doctor do użytkownika
                 var addToRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Doctor);
                 if (!addToRoleResult.Succeeded)
                 {
@@ -177,15 +169,12 @@ namespace ClinicAPI.Services
                 ReturnDoctorDto r = _mapper.Map<ReturnDoctorDto>(d);
                 scope.Complete();
                 return await Task.FromResult((true, "Doctor successfully registered.", r));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error registering doctor: {ex.Message}", null);
             }
         }
-
-
 
         public async Task<(bool Confirmed, string Response)> UpdateDoctor(UpdateDoctorDto doctor, ICollection<MedicalSpecialisation> medicalSpecialisations)
         {
@@ -209,17 +198,14 @@ namespace ClinicAPI.Services
                 _doctor.DoctorNumber = doctor.DoctorNumber;
                 _doctor.MedicalSpecialisations = medicalSpecialisations;
 
-                //Doctor r = _mapper.Map<Doctor>(doctor);
                 var p = await _doctorRepository.UpdateDoctor(_doctor);
                 scope.Complete();
                 return await Task.FromResult((true, "doctor succesfully uptated"));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error registering doctor: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> UpdateDoctorWithSpecialisations(UpdateDoctorDto request)
@@ -244,7 +230,6 @@ namespace ClinicAPI.Services
                 return (false, $"Error registering doctor: {ex.Message}");
             }
         }
-
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
         {
@@ -275,7 +260,6 @@ namespace ClinicAPI.Services
             }
         }
 
-
         public async Task<(bool Confirmed, string Response)> DeleteDoctor(int id)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -300,7 +284,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error deleting doctor: {ex.Message}");
             }
-
         }
     }
 }

@@ -8,12 +8,10 @@ public class ClinicAuthorizationService(ILogger<ClinicAuthorizationService> logg
     public bool Authorize(DiagnosticTestType diagnosticTestType, ResoureOperation resoureOperation)
     {
         var user = userContext.GetCurrentUser();
-        //var userId = userContext.GetCurrentUserId();
         var email = userContext.GetCurrentUserEmail();
         logger.LogInformation("Authorizing user {UserEmail}, to {Operation} for diagnostic test type {DiagnosticTestType}"
                       , email, resoureOperation, diagnosticTestType.Name);
-        /*logger.LogInformation("Authorizing user {UserEmail}, to {Operation} for diagnostic test type {DiagnosticTestType}"
-                              ,user.Email, resoureOperation, diagnosticTestType.Name); */
+
         if (resoureOperation == ResoureOperation.Read || resoureOperation == ResoureOperation.Create)
         {
             logger.LogInformation("Create/read operation - successful authorization");

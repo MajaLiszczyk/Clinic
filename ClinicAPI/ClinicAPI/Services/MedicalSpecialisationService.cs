@@ -18,7 +18,6 @@ namespace ClinicAPI.Services
         {
             _medicalSpecialisationRepository = medicalSpecialisationRepository;
             _mapper = mapper;
-
         }
 
         public async Task<ReturnMedicalSpecialisationDto?> GetMedicalSpecialisation(int id)
@@ -76,8 +75,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
-            }
-            
+            }          
         }
         
         public async Task<(bool Confirmed, string Response)> UpdateMedicalSpecialisation(UpdateMedicalSpecialisationDto medicalSpecialisation)
@@ -106,8 +104,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }         
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -137,8 +134,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-            
+            }            
         }
 
 
@@ -162,14 +158,11 @@ namespace ClinicAPI.Services
                 await _medicalSpecialisationRepository.DeleteMedicalSpecialisation(id);
                 scope.Complete();
                 return await Task.FromResult((true, "MedicalSpecialisation successfully deleted."));
-
             }
             catch (Exception ex)
             {
                 return (false, $"Error deleting med spec: {ex.Message}");
-            }
-
-            
+            }           
         }
     }
 }

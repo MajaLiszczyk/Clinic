@@ -116,7 +116,7 @@ namespace ClinicAPI.Repositories
         {
             var _doctor = await _context.Doctor.FindAsync(id);
             if (_doctor == null) return false;
-            _doctor.MedicalSpecialisations.Clear(); //usuwa z powiazanej tablicy
+            _doctor.MedicalSpecialisations.Clear();
             _context.Doctor.Remove(_doctor); 
             await _context.SaveChangesAsync();
             return true;

@@ -17,7 +17,6 @@ namespace ClinicAPI.Repositories
 
         public async  Task<MedicalAppointment?> GetMedicalAppointmentById(int id)
         {
-           // Doctor? doctor = null;
             var medicalAppointment = await _context.MedicalAppointment.Where(r => r.Id == id)
                             .FirstOrDefaultAsync();
             return medicalAppointment;
@@ -28,14 +27,14 @@ namespace ClinicAPI.Repositories
         {
             var appointment = await (from ma in _context.MedicalAppointment
                                       join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
-                                     from p in patientJoin.DefaultIfEmpty() // LEFT JOIN
+                                     from p in patientJoin.DefaultIfEmpty() //left join zeby zwracalo tez wizyty bez acjentow (patientId ==0)
                                      where ma.Id == id
                                       select new ReturnMedicalAppointmentPatientDto
                                       {
                                           Id = ma.Id,
                                           DateTime = ma.DateTime,
                                           PatientId = ma.PatientId,
-                                          PatientName = p != null ? p.Name : "No patient", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
+                                          PatientName = p != null ? p.Name : "No patient",
                                           PatientSurname = p != null ? p.Surname : "No patient",
                                           PatientPesel = p != null ? p.Pesel : "No patient",
                                           DoctorId = ma.DoctorId,
@@ -45,11 +44,7 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).FirstOrDefaultAsync();
-
-            return appointment;
-
-            //ReturnMedicalAppointmentPatientDto
-            //return await _context.MedicalAppointment.Where(r => r.Id == id).FirstOrDefaultAsync();           
+            return appointment;         
         }
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors()
@@ -58,14 +53,14 @@ namespace ClinicAPI.Repositories
 
                 var appointments = await (from ma in _context.MedicalAppointment
                                           join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
-                                          from p in patientJoin.DefaultIfEmpty() //left join zeby zwracalo tez wizyty bez acjentow (patientId ==0)
+                                          from p in patientJoin.DefaultIfEmpty()
                                           join d in _context.Doctor on ma.DoctorId equals d.Id
                                           select new ReturnMedicalAppointmentPatientDoctorDto
                                           {
                                               Id = ma.Id,
                                               DateTime = ma.DateTime,
                                               PatientId = ma.PatientId,
-                                              PatientName = p != null ? p.Name : "No patient", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
+                                              PatientName = p != null ? p.Name : "No patient", 
                                               PatientSurname = p != null ? p.Surname : "No patient",
                                               PatientPesel = p != null ? p.Pesel : "No patient",
                                               DoctorId = ma.DoctorId,
@@ -77,9 +72,7 @@ namespace ClinicAPI.Repositories
                                               IsCancelled = ma.IsCancelled,
                                               CancellingComment = ma.CancellingComment
                                           }).ToListAsync();
-
                 return appointments;
-
         }
         
 
@@ -113,9 +106,9 @@ namespace ClinicAPI.Repositories
                     .Select(d => d.Id)
                     .Contains(ma.DoctorId))
                 .Join(_context.Doctor,
-                 ma => ma.DoctorId, // Klucz z MedicalAppointment
-                 d => d.Id,         // Klucz z Doctor
-                (ma, d) => new ReturnMedicalAppointmentDoctorDto // Tworzymy nowy obiekt z danymi
+                 ma => ma.DoctorId, 
+                 d => d.Id,         
+                (ma, d) => new ReturnMedicalAppointmentDoctorDto 
                 {
                     Id = ma.Id,
                     dateTime =  ma.DateTime,
@@ -130,15 +123,10 @@ namespace ClinicAPI.Repositories
                     CancellingComment = ma.CancellingComment
                 })
                 .ToListAsync();
-
-                return medicalAppointments;
-
-
-                
+                return medicalAppointments;                
             }
             catch (Exception ex)
             {
-                // Obsłuż wyjątek (logowanie, etc.)
                 return new List<ReturnMedicalAppointmentDoctorDto>();
             }
         }
@@ -147,7 +135,7 @@ namespace ClinicAPI.Repositories
         {
             var appointments = await (from ma in _context.MedicalAppointment
                                       join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
-                                      from p in patientJoin.DefaultIfEmpty() // LEFT JOIN
+                                      from p in patientJoin.DefaultIfEmpty() 
                                       join d in _context.Doctor on ma.DoctorId equals d.Id
                                       where ma.DoctorId == doctorId
                                       select new ReturnMedicalAppointmentPatientDoctorDto
@@ -155,9 +143,9 @@ namespace ClinicAPI.Repositories
                                           Id = ma.Id,
                                           DateTime = ma.DateTime,
                                           PatientId = ma.PatientId,
-                                          PatientName = p != null ? p.Name : "Brak pacjenta", // Jeśli pacjent nie istnieje, zwracamy domyślną wartość
-                                          PatientSurname = p != null ? p.Surname : "Brak pacjenta",
-                                          PatientPesel = p != null ? p.Pesel : "Brak danych",
+                                          PatientName = p != null ? p.Name : "No patient",
+                                          PatientSurname = p != null ? p.Surname : "No patient",
+                                          PatientPesel = p != null ? p.Pesel : "No patient",
                                           DoctorId = ma.DoctorId,
                                           DoctorName = d.Name,
                                           DoctorSurname = d.Surname,
@@ -167,27 +155,7 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
-
-
-
-            /*var appointments = await _context.MedicalAppointment
-                    .Where(ma => ma.DoctorId == doctorId)
-                    .ToListAsync();
-
-                return appointments;*/
-
-                /* Jesli bede chciala wiecej danych o pacjencie:
-                   var query = from ma in _context.MedicalAppointments
-                    join p in _context.Patients on ma.PatientId equals p.Id
-                    where ma.PatientId == patientId
-                    select new { Appointment = ma, Patient = p };
-                    var result = await query.ToListAsync();
-                    scope.Complete();
-                 */
-
-
         }
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetFutureMedicalAppointmentsByPatientUserId(string userId)
@@ -215,7 +183,6 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
         }
 
@@ -243,7 +210,6 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
         }
 
@@ -272,7 +238,6 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
         }
 
@@ -300,12 +265,8 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
         }
-
-
-
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetMedicalAppointmentsByPatientId(int patientId)
         {
@@ -330,14 +291,7 @@ namespace ClinicAPI.Repositories
                                           IsCancelled = ma.IsCancelled,
                                           CancellingComment = ma.CancellingComment
                                       }).ToListAsync();
-
             return appointments;
-
-
-            /*var appointments = await _context.MedicalAppointment
-                    .Where(ma => ma.PatientId == patientId)
-                    .ToListAsync();
-                return appointments;*/
         }
 
         public async Task<bool> HasPatientMedicalAppointments(int patientId)
@@ -350,9 +304,6 @@ namespace ClinicAPI.Repositories
            return  await _context.MedicalAppointment.AnyAsync(a => a.DoctorId == doctorId);
         }
 
-
-
-
         public async Task<MedicalAppointment> CreateMedicalAppointment(MedicalAppointment medicalAppointment)
         {
                 await _context.AddAsync(medicalAppointment);
@@ -360,7 +311,6 @@ namespace ClinicAPI.Repositories
                 await _context.SaveChangesAsync();         
 
             return medicalAppointment;
-
         }
 
         public async Task<MedicalAppointment?> UpdateMedicalAppointment(MedicalAppointment medicalAppointment)

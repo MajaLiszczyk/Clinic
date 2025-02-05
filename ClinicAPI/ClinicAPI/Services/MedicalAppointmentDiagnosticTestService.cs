@@ -39,7 +39,6 @@ namespace ClinicAPI.Services
 
             try
             {
-                // Aktualizacja wizyty
                 var appointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(dto.MedicalAppointmentDto.Id);
                 if (appointment == null)
                 {
@@ -106,7 +105,6 @@ namespace ClinicAPI.Services
             }
             catch (Exception ex)
             {
-                //transaction.Dispose();
                 throw new Exception($"An error occurred: {ex.Message}");
             }
         }

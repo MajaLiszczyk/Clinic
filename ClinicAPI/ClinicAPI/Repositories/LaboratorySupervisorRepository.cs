@@ -40,8 +40,6 @@ namespace ClinicAPI.Repositories
 
         }
 
-
-
         public async Task<bool> GetLaboratorySupervisorWithTheSameNumber(string number)
         {
             if (_context.LaboratorySupervisor.Any(p => p.LaboratorySupervisorNumber == number))
@@ -50,9 +48,6 @@ namespace ClinicAPI.Repositories
             }
             return false;
         }
-
-
-
 
         public async Task<List<LaboratorySupervisor>> GetAllLaboratorySupervisors()
         {
@@ -84,9 +79,7 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception) { }
             return laboratorySupervisors;
-        }
-        
-
+        }       
 
         public async Task<LaboratorySupervisor> CreateLaboratorySupervisor(LaboratorySupervisor laboratorySupervisor)
         {
@@ -114,12 +107,10 @@ namespace ClinicAPI.Repositories
 
         public async Task<bool> CanArchiveLaboratorySupervisor(int laboratorySupervisorId)
         {
-            // Sprawdzenie, czy laboratorySupervisor ma jakąkolwiek wizytę, która nie jest Cancelled ani Finished
             return !await _context.LaboratoryAppointment.AnyAsync(ma =>
                 ma.SupervisorId == laboratorySupervisorId &&
                 (ma.State != LaboratoryAppointmentState.Cancelled &&
                 ma.State != LaboratoryAppointmentState.Finished));
         }
-
     }
 }

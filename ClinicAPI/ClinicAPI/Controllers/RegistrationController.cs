@@ -10,7 +10,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ClinicAPI.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]/[action]")]
     [Authorize(Roles = (UserRole.Registrant + "," + UserRole.Admin))]

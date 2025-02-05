@@ -12,10 +12,10 @@ public class AssignUserRoleCommandHandler(ILogger<AssignUserRoleCommandHandler> 
     {
         logger.LogInformation("Assigning user role: {@Request}", request);
         var user = await userManager.FindByEmailAsync(request.UserEmail)
-            ?? throw new Exception("User not found"); //jesli uzytkownik nie istnieje. On wyrzuca NotFoundException - jego klasa
+            ?? throw new Exception("User not found");
         var role = await roleManager.FindByNameAsync(request.RoleName)
             ?? throw new Exception("Role not found");
-        await userManager.AddToRoleAsync(user, role.Name!); //jesli uzytkownik juz ma przypisana role, manager sobie sam z tym radzi, nie musimy dodawac logiki
+        await userManager.AddToRoleAsync(user, role.Name!);
     }
 }
 

@@ -21,9 +21,7 @@ namespace ClinicAPI.Repositories
 
             Patient? patient = null;
                 patient = await _context.Patient.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
-
-            //return await Task.Run(() => patient);
+                            .FirstOrDefaultAsync();
             return patient;
         }
 
@@ -36,14 +34,13 @@ namespace ClinicAPI.Repositories
             try
             {
                 patient = await _context.Patient.Where(r => r.UserId == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                            .FirstOrDefaultAsync();
                 scope.Complete();
             }
             catch (Exception)
             {
-                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
             }
-            //return await Task.Run(() => patient);
+
             return patient;
         }
 
@@ -56,8 +53,6 @@ namespace ClinicAPI.Repositories
             return false;
         }
 
-
-
         public async Task<List<Patient>> GetAllPatients()
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -68,7 +63,7 @@ namespace ClinicAPI.Repositories
             {
                 patientList = await _context.Patient.
 
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync();
                 scope.Complete();
             }
             catch (Exception) { }
@@ -84,32 +79,25 @@ namespace ClinicAPI.Repositories
             try
             {
                 patientList = await _context.Patient.Where(r => r.IsAvailable == true).
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync();
                 scope.Complete();
             }
             catch (Exception) { }
             return patientList;
         }
-
         
-
         public async Task<Patient> CreatePatient(Patient patient)
         {
 
                 await _context.AddAsync(patient);
-                await _context.SaveChangesAsync();
-            
-
-
+                await _context.SaveChangesAsync();           
             return patient;
         }
-
 
         public async Task<Patient?> UpdatePatient(Patient patient)
         {
                 _context.Patient.Update(patient);
                 await _context.SaveChangesAsync();
-
             return patient;
         }
 
@@ -117,7 +105,6 @@ namespace ClinicAPI.Repositories
         {
             var _patient = await _context.Patient.FindAsync(id);
             if (_patient == null) return false;
-
             _context.Patient.Remove(_patient);
             await _context.SaveChangesAsync();
             return true;
@@ -131,6 +118,5 @@ namespace ClinicAPI.Repositories
                 ma.IsFinished == false &&
                 ma.IsCancelled == false);
         }
-
     }
 }

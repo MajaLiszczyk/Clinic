@@ -6,7 +6,6 @@ namespace ClinicAPI.Services.Interfaces
     public interface ILaboratoryTestService
     {
         public Task<ReturnLaboratoryTestDto?> GetLaboratoryTest(int id);
-        //public Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientId(int id);
         public Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByMedicalAppointmentId(int id);
         public Task<List<ReturnLaboratoryTestDto>> GetAllLaboratoryTests();
         public Task<List<LaboratoryTest>> GetLaboratoryTestsByLabAppId(int laboratoryAppointmentId);

@@ -20,7 +20,7 @@ namespace ClinicAPI.Repositories
             try
             {
                 testType = await _context.DiagnosticTestType.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                            .FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -69,10 +69,7 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception) { }
             return testTypes;
-        }
-
-
-        
+        }        
 
         public async Task<DiagnosticTestType> CreateDiagnosticTestType(DiagnosticTestType type)
         {
@@ -102,6 +99,5 @@ namespace ClinicAPI.Repositories
         {
             return await _context.DiagnosticTest.AnyAsync(t => t.DiagnosticTestTypeId == testTypeId);
         }
-
     }
 }

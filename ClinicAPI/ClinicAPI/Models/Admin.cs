@@ -7,17 +7,17 @@ namespace ClinicAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } //To samo Id co w ApplicationUserAdmin, bo relacja 1:1
+        public int Id { get; set; }
 
         [ForeignKey("User")]
-        public string? UserId { get; set; } // Nullable klucz obcy do User
-        public User? User { get; set; } // Opcjonalna właściwość nawigacyjna do User
+        public string? UserId { get; set; }
+        public User? User { get; set; }
 
 
         public string Name { get; set; }
         public string Surname { get; set; }
 
-        public User AppUser { get; set; } = default!; //NIE WIEM CZY TO ZOSTAWIĆ? CZY POWINNO BYĆ User?. ... ?
+        public User AppUser { get; set; } = default!;
         public string AppUserId { get; set; } = default!;
     }
 }

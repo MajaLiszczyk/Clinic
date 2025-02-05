@@ -27,7 +27,6 @@ namespace ClinicAPI.Controllers
             _laboratoryTestService = service;
         }
 
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -35,17 +34,7 @@ namespace ClinicAPI.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
-        }
-
-        /*[HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetLaboratoryTestsByPatientId(int id)
-        {
-            var result = await _laboratoryTestService.GetLaboratoryTestsByPatientId(id);
-            if (result != null)
-                return Ok(result);
-            return NotFound();
-        } */
+        }       
 
         [HttpGet("{id}")]
         [Authorize]
@@ -55,9 +44,7 @@ namespace ClinicAPI.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
-        }
-
-        
+        }        
 
         [HttpGet("{id}")]
         [Authorize]
@@ -69,8 +56,6 @@ namespace ClinicAPI.Controllers
             return NotFound();
         }
 
-
-        //[HttpGet, Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -95,7 +80,6 @@ namespace ClinicAPI.Controllers
             }
         }
 
-        //[HttpPost, Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateLaboratoryTestDto request)
         {
@@ -106,7 +90,6 @@ namespace ClinicAPI.Controllers
             else return BadRequest(result.Response);
         }
 
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateLaboratoryTestDto request)
         {
@@ -127,7 +110,6 @@ namespace ClinicAPI.Controllers
             var result = await _laboratoryTestService.SaveLaboratoryTestResult(id, resultDto.ResultValue);
             if (result.Confirmed)
                 return Ok(new { message = result.Response });
-                //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
 
@@ -150,12 +132,9 @@ namespace ClinicAPI.Controllers
             var result = await _laboratoryTestService.RejectLaboratoryTestResult(id, rejectCommentDto.RejectCommentValue);
             if (result.Confirmed)
                 return Ok(new { message = result.Response });
-            //return Ok(result.Response);
             else return BadRequest(result.Response);
         }
-
         
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

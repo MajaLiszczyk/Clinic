@@ -24,6 +24,7 @@ namespace ClinicAPI.Services
             var diagnosticTest = await _diagnosticTestRepository.GetDiagnosticTestById(id);
             return _mapper.Map<ReturnDiagnosticTestDto>(diagnosticTest);
         }
+
         public async Task<List<ReturnDiagnosticTestDto>> GetAllDiagnosticTests()
         {
             var diagnosticTests = await _diagnosticTestRepository.GetAllDiagnosticTests();
@@ -31,12 +32,10 @@ namespace ClinicAPI.Services
         }
 
         public async Task<List<ReturnDiagnosticTestDto>> GetByMedicalAppointmentId(int id)
-        {
-            
+        {          
             var tests = await _diagnosticTestRepository.GetByMedicalAppointmentId(id);
             return tests;
         }
-
 
         public async Task<(bool Confirmed, string Response, ReturnDiagnosticTestDto? diagnosticTest)> CreateDiagnosticTest(CreateDiagnosticTestDto diagnosticTest)
         {
@@ -58,8 +57,8 @@ namespace ClinicAPI.Services
                 return await Task.FromResult((false, "DiagnosticTest was not created.", k));
 
             }
-
         }
+
         public async Task<(bool Confirmed, string Response)> UpdateDiagnosticTest(UpdateDiagnosticTestDto diagnosticTest)
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -76,7 +75,6 @@ namespace ClinicAPI.Services
 
                 DiagnosticTest r = _mapper.Map<DiagnosticTest>(diagnosticTest);
                 var p = await _diagnosticTestRepository.UpdateDiagnosticTest(r);
-                // Zatwierdzenie transakcji
                 scope.Complete();
                 return await Task.FromResult((true, "DiagnosticTest succesfully uptated"));
               
@@ -84,8 +82,6 @@ namespace ClinicAPI.Services
             catch (Exception ex) {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
             }
-
         }
-
     }
 }

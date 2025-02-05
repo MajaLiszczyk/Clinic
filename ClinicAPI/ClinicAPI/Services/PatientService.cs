@@ -31,7 +31,6 @@ namespace ClinicAPI.Services
             _medicalAppointmentRepository = medicalAppointmentRepository;
         }
 
-
         public async Task<ReturnPatientDto?> GetPatient(int id)
         {
             var patient = await _patientRepository.GetPatientById(id);
@@ -48,9 +47,6 @@ namespace ClinicAPI.Services
         {
             var patients = await _patientRepository.GetAllPatients();
             return _mapper.Map<List<ReturnPatientDto>>(patients);
-
-            //return _mapper.Map<List<ReturnMessageDto>>(messages);
-
         }
 
         public async Task<List<ReturnPatientDto>> GetAllAvailablePatients()
@@ -58,8 +54,7 @@ namespace ClinicAPI.Services
             var patients = await _patientRepository.GetAllAvailablePatients();
             return _mapper.Map<List<ReturnPatientDto>>(patients);
         }
-
-        
+    
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> CreatePatient(CreatePatientDto patient) 
         {
             using var scope = new TransactionScope(TransactionScopeOption.Required,
@@ -84,7 +79,6 @@ namespace ClinicAPI.Services
                 {
                     ReturnPatientDto? k = null;
                     return await Task.FromResult((false, "Patient was not created.", k));
-
                 }
                 ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
                 scope.Complete();
@@ -94,7 +88,7 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
             }
-            
+          
         }
 
         public async Task<(bool Confirmed, string Response, ReturnPatientDto? patient)> RegisterPatient(CreateRegisterPatientDto request)
@@ -142,8 +136,7 @@ namespace ClinicAPI.Services
                 if (p == null)
                 {
                     ReturnPatientDto? k = null;
-                    return await Task.FromResult((false, "Patient was not created.", k));
-                   
+                    return await Task.FromResult((false, "Patient was not created.", k));                  
                 }
                 ReturnPatientDto r = _mapper.Map<ReturnPatientDto>(p);
                 scope.Complete();
@@ -154,8 +147,6 @@ namespace ClinicAPI.Services
                 return (false, $"Error updating DiagnosticTest: {ex.Message}", null);
             }
         }
-
-
 
         public async Task<(bool Confirmed, string Response)> UpdatePatient(UpdatePatientDto patient)
         {
@@ -185,8 +176,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-            
+            }           
         }
 
         public async Task<(bool Confirmed, string Response)> TransferToArchive(int id)
@@ -214,11 +204,8 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }        
         }
-
-
 
         public async Task<(bool Confirmed, string Response)> DeletePatient(int id)
         {
@@ -244,8 +231,7 @@ namespace ClinicAPI.Services
             catch (Exception ex)
             {
                 return (false, $"Error updating DiagnosticTest: {ex.Message}");
-            }
-           
+            }       
         }
     }
 }

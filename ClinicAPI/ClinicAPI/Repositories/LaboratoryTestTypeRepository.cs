@@ -22,15 +22,13 @@ namespace ClinicAPI.Repositories
             try
             {
                 testType = await _context.LaboratoryTestType.Where(r => r.Id == id)
-                            .FirstOrDefaultAsync(); //zwróci null, jesli brak wynikow
+                            .FirstOrDefaultAsync();
 
                 scope.Complete();
             }
             catch (Exception)
             {
-                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
             }
-            //return await Task.Run(() => patient);
             return testType;
 
         }
@@ -40,9 +38,8 @@ namespace ClinicAPI.Repositories
 
             List<LaboratoryTestType> testTypes = new List<LaboratoryTestType>();
             testTypes = await _context.LaboratoryTestType.
-                    ToListAsync(); //JESLI BRAK WYNIKOW- ZWROCI PUSTA LISTE
+                    ToListAsync();
             return testTypes;
-
         }
 
         public async Task<bool> IsLaboratoryTestTypeWithTheSameName(string name)

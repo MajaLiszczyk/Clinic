@@ -6,8 +6,6 @@ namespace ClinicAPI.Dtos
 {
     public class CreateLaboratoryTestDto
     {
-        //[Required]
-        //public int? LaboratoryTestsGroupId { get; set; }
         [Required]
         public int LaboratoryTestTypeId { get; set; }
         public string? DoctorNote { get; set; }

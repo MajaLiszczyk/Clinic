@@ -20,13 +20,12 @@ namespace ClinicAPI.Services
         {
             _medicalAppointmentRepository = medicalAppointmentRepository;
             _mapper = mapper;
-
         }
+
         public async Task<MedicalAppointment?> GetMedicalAppointment(int id)
         {
             var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentById(id);
             return medicalAppointment;
-            //return _mapper.Map<ReturnMedicalAppointmentDto>(medicalAppointment);
         }
 
 
@@ -34,10 +33,7 @@ namespace ClinicAPI.Services
         {
             var medicalAppointment = await _medicalAppointmentRepository.GetMedicalAppointmentByIdWithPatient(id);
             return medicalAppointment;
-            //return _mapper.Map<ReturnMedicalAppointmentDto>(medicalAppointment);
-        }
-
-        
+        }       
 
         public async Task<List<ReturnMedicalAppointmentPatientDoctorDto>> GetAllMedicalAppointmentsPatientsDoctors()
         {
@@ -55,21 +51,17 @@ namespace ClinicAPI.Services
         {
             var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsBySpecialisation(id);
             return medicalAppointments;
-            //return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }
 
         public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByDoctorId(int id)
         {
             MedicalAppointmentsOfPatient allAppointments = new MedicalAppointmentsOfPatient(); //zmienic nazwe
             var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsByDoctorId(id);
-            //List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
-            //foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
             foreach (ReturnMedicalAppointmentPatientDoctorDto medicalAppointment in medicalAppointments)
             {
                 if((bool)medicalAppointment.IsFinished || (bool)medicalAppointment.IsCancelled)
                 {
                     allAppointments.pastMedicalAppointments.Add(medicalAppointment);
-
                 }
                 else
                 {
@@ -101,8 +93,7 @@ namespace ClinicAPI.Services
             }
             else
             {
-                throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
-                
+                throw new UnauthorizedAccessException("Nieznana rola użytkownika.");               
             }
         }
 
@@ -129,27 +120,18 @@ namespace ClinicAPI.Services
             else
             {
                 throw new UnauthorizedAccessException("Nieznana rola użytkownika.");
-
             }
         }
-
-
-
 
         public async Task<MedicalAppointmentsOfPatient> GetMedicalAppointmentsByPatientId(int id)
         {
             MedicalAppointmentsOfPatient allAppointments = new MedicalAppointmentsOfPatient();
-
-
             var medicalAppointments = await _medicalAppointmentRepository.GetMedicalAppointmentsByPatientId(id);
-            //List<ReturnMedicalAppointmentDto> mappedAppointments = _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
-            //foreach (ReturnMedicalAppointmentDto medicalAppointment in mappedAppointments)
             foreach (ReturnMedicalAppointmentPatientDoctorDto medicalAppointment in medicalAppointments)
             {
                 if ((bool)medicalAppointment.IsFinished)
                 {
                     allAppointments.pastMedicalAppointments.Add(medicalAppointment);
-
                 }
                 else
                 {
@@ -157,13 +139,7 @@ namespace ClinicAPI.Services
                 }
             }
             return allAppointments;
-
-
-            //return _mapper.Map<List<ReturnMedicalAppointmentDto>>(medicalAppointments);
         }
-
-        
-
 
         public async Task<(bool Confirmed, string Response, ReturnMedicalAppointmentDto? medAppointment)> CreateMedicalAppointment(CreateMedicalAppointmentDto medicalAp)
         {
@@ -178,7 +154,6 @@ namespace ClinicAPI.Services
                 {
                     return (false, "The appointment date cannot be in the past.", null);
                 }
-                //var medicalAppointment = _mapper.Map<MedicalAppointment>(medicalAp);
                 MedicalAppointment _medicalAppointment = new MedicalAppointment
                 {
                     DateTime = new DateTime(medicalAp.Date.Year, medicalAp.Date.Month, medicalAp.Date.Day, medicalAp.Time.Hour, medicalAp.Time.Minute, 0),
@@ -189,14 +164,12 @@ namespace ClinicAPI.Services
                     IsCancelled = false,
                     IsFinished = false,
                     CancellingComment = ""
-
                 };
                 MedicalAppointment? p = await _medicalAppointmentRepository.CreateMedicalAppointment(_medicalAppointment);
                 if (p == null)
                 {
                     ReturnMedicalAppointmentDto? k = null;
                     return await Task.FromResult((false, "medicalAppointment was not created.", k));
-
                 }
                 ReturnMedicalAppointmentDto r = _mapper.Map<ReturnMedicalAppointmentDto>(p);
                 scope.Complete();
@@ -206,7 +179,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error cerating appointmnent: {ex.Message}", null);
             }
-
         }
         
         public async Task<(bool Confirmed, string Response)> UpdatePatientCancel(ReturnMedicalAppointmentPatientDoctorDto medicalAppointment)
@@ -238,7 +210,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating appointmnent: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> UpdateMedicalAppointment(UpdateMedicalAppointmentDto medicalAppointment)
@@ -270,7 +241,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error updating appointmnent: {ex.Message}");
             }
-
         }
 
         public async Task<(bool Confirmed, string Response)> DeleteMedicalAppointment(int id)
@@ -293,7 +263,6 @@ namespace ClinicAPI.Services
             {
                 return (false, $"Error deleting appointmnent: {ex.Message}");
             }
-
         }
     }
 }
