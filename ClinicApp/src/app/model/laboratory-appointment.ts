@@ -9,11 +9,11 @@ export interface LaboratoryAppointment{
 
 export enum LaboratoryAppointmentState {
     Empty = 0,
-    Reserved = 1, //lub NotAssigned , Reserved
+    Reserved = 1,
     ToBeCompleted = 2,
     WaitingForSupervisor = 3,
     ToBeFixed = 4,
     AllAccepted = 5, //ready for patient
-    Finished = 6, //wyslane dopacjenta
+    Finished = 6, //sent to patient
     Cancelled = 7
 }

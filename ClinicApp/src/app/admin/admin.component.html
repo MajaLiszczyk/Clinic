@@ -1,10 +1,8 @@
-<button [disabled]="!authorizationService.isLoggedIn()" type="button"
-    class="btn  btn-outline-danger my-4 " (click)="logout()">Logout</button>
-
-<!-- <div *ngIf="isFormVisible" class="w-100"> -->
+<button [disabled]="!authorizationService.isLoggedIn()" type="button" class="btn  btn-outline-danger my-4 "
+    (click)="logout()">Logout</button>
 
 <div class="col mb-4 d-flex justify-content-between my-4">
-    <h1>Registrants</h1> 
+    <h1>Registrants</h1>
     <button [disabled]="isEditableMode || isAddingMode" (click)="addNewRegistrant()"
         class="btn btn-outline-primary fs-5">
         + Add new registrant</button>
@@ -16,14 +14,12 @@
     <form class="w-25 mx-auto" [formGroup]="registrantForm" *ngIf="isAddingMode || isEditableMode">
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
-            <!-- <div class="input-group"> -->
             <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                 [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formName?.errors?.['required']">Required</span>
                 <span *ngIf="formName?.errors?.['pattern']">Only letters</span>
             </div>
-            <!-- </div> -->
         </div>
 
         <div class="formGroup mb-3">
@@ -38,8 +34,7 @@
 
         <div class="formGroup mb-3">
             <label class="form-label">Registrant number</label>
-            <input formControlName="registrantNumber" type="string" class="form-control"
-                aria-label="registrantNumber"
+            <input formControlName="registrantNumber" type="string" class="form-control" aria-label="registrantNumber"
                 [class.is-invalid]="formRegistrantNumber.invalid && (formRegistrantNumber.touched || formRegistrantNumber.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formRegistrantNumber?.errors?.['required']">Required</span>
@@ -61,8 +56,10 @@
 
         <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">Password</label>
-            <input formControlName="password" type="string" class="form-control" aria-label="password"
+            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control"
+                aria-label="password"
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
+            <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
                 <div *ngIf="formPassword?.errors?.['hasNumber']">
@@ -80,8 +77,6 @@
                 <div *ngIf="formPassword?.errors?.['isValidLength']">
                     {{ formPassword.errors?.['isValidLength'] }}
                 </div>
-                <!-- <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
-                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span> -->
             </div>
         </div>
 
@@ -136,12 +131,6 @@
                     {{!registrant.isAvailable}}
                 </td>
                 <td class="text-end">
-                    <!--<button [disabled]="isAddingMode || isEditableMode || !registrant.isAvailable" type="button"
-                        class="btn btn-outline-primary ms-4 me-2" (click)="edit(registrant)">Edit</button>
-
-                    <button [disabled]="isAddingMode || isEditableMode || !registrant.isAvailable" type="button"
-                        class="btn btn-outline-danger mx-2" (click)="archive(registrant.id)">Archive</button> -->
-                    
                 </td>
             </tr>
             <tr *ngIf="registrants.length === 0">
@@ -150,9 +139,3 @@
         </tbody>
     </table>
 </div>
-
-
-
-
-<!--
-</div>-->

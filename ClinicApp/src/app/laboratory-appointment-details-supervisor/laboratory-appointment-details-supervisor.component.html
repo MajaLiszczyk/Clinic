@@ -27,7 +27,6 @@
     Doctor name: {{laboratoryAppointment?.doctorName}} <br />
     Doctor surname: {{laboratoryAppointment?.doctorSurname}}
 
-
     <div class="mt-4" *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.Cancelled">
         <table class="table table-striped">
             <thead>
@@ -46,10 +45,7 @@
                     </th>
                     <th>
                         State
-                    </th> 
-                    <!--<th *ngIf="laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor 
-                         || laboratoryAppointment?.state == LaboratoryAppointmentState.ToBeFixed 
-                         || laboratoryAppointment?.state == LaboratoryAppointmentState.AllAccepted"> -->
+                    </th>
                     <th *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.AllAccepted
                         && laboratoryAppointment?.state != LaboratoryAppointmentState.Finished">
                         Reject comment
@@ -61,11 +57,8 @@
                         Rejest test
                     </th>
                 </tr>
-
             </thead>
-            <!-- <tr *ngFor="let doctor of doctors"> -->
             <tbody>
-                <!--<tr *ngFor="let laboratoryTest of laboratoryAppointment?.laboratoryTests">-->
                 <tr *ngFor="let laboratoryTest of laboratoryAppointment?.laboratoryTests; let i = index">
                     <td>
                         {{laboratoryTest.id}}
@@ -81,7 +74,7 @@
                     </td>
                     <td>
                         {{LaboratoryTestState[laboratoryTest.state]}}
-                    </td> 
+                    </td>
                     <td *ngIf="laboratoryAppointment?.state != LaboratoryAppointmentState.AllAccepted
                         && laboratoryAppointment?.state != LaboratoryAppointmentState.Finished">
                         <ng-container
@@ -113,12 +106,10 @@
         </table>
 
         <div class="d-flex justify-content-center mb-5 mt-5">
-            <button [disabled]="!isAllResultsChecked" *ngIf="isAllResultsChecked && laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor" type="button"
-                class="btn  btn-primary float-right mx-2 " (click)="sendToLaboratoryWorker()">Send to laboratory worker</button>
+            <button [disabled]="!isAllResultsChecked"
+                *ngIf="isAllResultsChecked && laboratoryAppointment?.state == LaboratoryAppointmentState.WaitingForSupervisor"
+                type="button" class="btn  btn-primary float-right mx-2 " (click)="sendToLaboratoryWorker()">Send to
+                laboratory worker</button>
         </div>
-
-
-
-
     </div>
 </div>

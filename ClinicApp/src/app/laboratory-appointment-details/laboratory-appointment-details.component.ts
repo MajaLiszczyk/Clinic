@@ -5,7 +5,6 @@ import { ClinicService } from '../services/clinic.service';
 import { LabAppWithPatientLabTestsMedApp } from '../dtos/labApp-patient-labTests-medApp-dto';
 import { LaboratoryAppointmentState } from '../model/laboratory-appointment';
 import { LaboratoryTest, LaboratoryTestState } from '../model/laboratory-test';
-
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -19,8 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
 export class LaboratoryAppointmentDetailsComponent {
 
   appointmentId: number = 0;
-  laboratoryAppointment?: LabAppWithPatientLabTestsMedApp; //NIE POWINNO BYC TU ZANMKU ZAPYTANIA
-  LaboratoryAppointmentState = LaboratoryAppointmentState; //tylko po to zeby był dostęp do enuma
+  laboratoryAppointment?: LabAppWithPatientLabTestsMedApp;
+  LaboratoryAppointmentState = LaboratoryAppointmentState;
   LaboratoryTestState = LaboratoryTestState;
   isCancelClicked: boolean = false;
   cancelAppointmentForm: FormGroup;
@@ -28,9 +27,6 @@ export class LaboratoryAppointmentDetailsComponent {
   laboratoryTestsFormArray: FormArray;
   isAllResultsCompleted: boolean = false;
   laboratoryTests: LaboratoryTest[] = [];
-  
-  
-
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder,
     private router: Router, private clinicService: ClinicService) {
@@ -56,21 +52,18 @@ export class LaboratoryAppointmentDetailsComponent {
   }
 
   get formCancelComment(): FormControl { return this.cancelAppointmentForm.get('cancelComment') as FormControl; }
-  //get formResult(): FormControl { return this.resultTestForm.get('result') as FormControl; }
 
   getLaboratoryAppointmentDetails() {
-    //this.http.get<MedicalAppointment>(this.APIUrl + "/Get/" + appointmentId).subscribe(data => {
     this.clinicService.getLabAppDetailsByLabAppId(this.appointmentId).subscribe(data => {
       this.laboratoryAppointment = data;
       this.initializeLaboratoryTestsFormArray();
       this.isAllTestResultsCompleted();
-      //this.fillForm();
     })
   }
 
   initializeLaboratoryTestsFormArray() {
     if (this.laboratoryAppointment?.laboratoryTests) {
-      this.laboratoryTestsFormArray.clear(); // Wyczyść istniejące kontrolki
+      this.laboratoryTestsFormArray.clear();
       this.laboratoryAppointment.laboratoryTests.forEach(test => {
         this.laboratoryTestsFormArray.push(this.fb.group({
           result: new FormControl(test.result, [Validators.required]),
@@ -79,25 +72,9 @@ export class LaboratoryAppointmentDetailsComponent {
     }
   }
 
-
-  /*fetchIncompleteTests() {
-    this.clinicService.getLaboratoryTestsByLabAppId(this.appointmentId).subscribe({
-      next: (tests) => {
-        this.laboratoryTests = tests;
-      },
-      error: (error) => {
-        console.error("Error occurred:", error);
-      }
-    });
-  }*/
-
   saveLaboratoryTest(index: number) {
-    /*if (this.laboratoryTestsFormArray.invalid) {
-      this.laboratoryTestsFormArray.markAllAsTouched();
-      return;
-    } */
     const form = this.laboratoryTestsFormArray.at(index) as FormGroup;
-    if(form.invalid){
+    if (form.invalid) {
       this.laboratoryTestsFormArray.at(index) as FormGroup;
       return;
     }
@@ -107,24 +84,19 @@ export class LaboratoryAppointmentDetailsComponent {
 
     if (testId !== undefined) {
       const updatePayload = { id: testId, result: resultValue };
-
-      //this.clinicService.updateLaboratoryTest(updatePayload).subscribe(() => {
       this.clinicService.saveLaboratoryTestResult(testId, resultValue)
-      .subscribe({
-        next: (response) => {
-          console.log("Operation completed successfully:", response);
-          console.log(`Test with ID ${testId} updated with result: ${resultValue}`);
-          this.getLaboratoryAppointmentDetails(); // Odśwież dane po zapisie
-        },
-        error: (error) => {
-          console.error("Error occurred:", error);
-        }
-
-      });
+        .subscribe({
+          next: (response) => {
+            console.log("Operation completed successfully:", response);
+            console.log(`Test with ID ${testId} updated with result: ${resultValue}`);
+            this.getLaboratoryAppointmentDetails(); // Odśwież dane po zapisie
+          },
+          error: (error) => {
+            console.error("Error occurred:", error);
+          }
+        });
     }
   }
-
-  //editLaboratoryTest(index: number)
 
   saveCancelComment() {
     if (this.cancelAppointmentForm.invalid) {
@@ -132,11 +104,9 @@ export class LaboratoryAppointmentDetailsComponent {
       return;
     }
 
-    //CHYBA BARDZO ŹLE ŻE WYKRZYKNIK:
     this.laboratoryAppointment!.cancelComment = this.cancelAppointmentForm.get('cancelComment')?.value || null;
     this.laboratoryAppointment!.state = LaboratoryAppointmentState.Cancelled;
 
-    //this.clinicService.makeCancelledLaboratoryAppointment(this.laboratoryAppointment)
     this.clinicService.makeCancelledLaboratoryAppointment(this.laboratoryAppointment!.laboratoryAppointmentId
       , this.cancelAppointmentForm.get('cancelComment')?.value || null)
       .subscribe({
@@ -148,7 +118,6 @@ export class LaboratoryAppointmentDetailsComponent {
           console.error("Error occurred:", error);
         }
       });
-    //DOROBIĆ WYSKAKUJĄCE OKIENKO
   }
 
   cancelCancelComment() {
@@ -171,10 +140,10 @@ export class LaboratoryAppointmentDetailsComponent {
     this.isCancelClicked = true;
   }
 
-  isAllTestResultsCompleted(){
-    for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.state != LaboratoryTestState.Completed && labTest.state != LaboratoryTestState.Rejected
-        && labTest.state != LaboratoryTestState.Accepted){ 
+  isAllTestResultsCompleted() {
+    for (let labTest of this.laboratoryAppointment?.laboratoryTests!) {
+      if (labTest.state != LaboratoryTestState.Completed && labTest.state != LaboratoryTestState.Rejected
+        && labTest.state != LaboratoryTestState.Accepted) {
         this.isAllResultsCompleted = false;
         return;
       }
@@ -182,9 +151,9 @@ export class LaboratoryAppointmentDetailsComponent {
     this.isAllResultsCompleted = true;
   }
 
-  sendToSupervisor() { 
-    for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.result == null){
+  sendToSupervisor() {
+    for (let labTest of this.laboratoryAppointment?.laboratoryTests!) {
+      if (labTest.result == null) {
         this.laboratoryTestsFormArray.markAllAsTouched();
         return;
       }
@@ -192,7 +161,7 @@ export class LaboratoryAppointmentDetailsComponent {
     this.clinicService.sendLaboratoryTestsToSupervisor(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]);
         },
         error: (error) => {
           console.error("Error occurred:", error);
@@ -200,22 +169,21 @@ export class LaboratoryAppointmentDetailsComponent {
       });
   }
 
-  sendToPatient() { 
-    for(let labTest of this.laboratoryAppointment?.laboratoryTests!){
-      if(labTest.state != this.LaboratoryTestState.Accepted){
-        this.cancelAppointmentForm.markAllAsTouched(); // i tak mają być readonly
+  sendToPatient() {
+    for (let labTest of this.laboratoryAppointment?.laboratoryTests!) {
+      if (labTest.state != this.LaboratoryTestState.Accepted) {
+        this.cancelAppointmentForm.markAllAsTouched();
         return;
       }
     }
     this.clinicService.sendLaboratoryTestsResultsToPatient(this.laboratoryAppointment!.laboratoryAppointmentId)
       .subscribe({
         next: (response) => {
-          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/laboratory-worker/' + this.laboratoryAppointment?.laboratoryWorkerId, 0]);
         },
         error: (error) => {
           console.error("Error occurred:", error);
         }
       });
   }
-
 }

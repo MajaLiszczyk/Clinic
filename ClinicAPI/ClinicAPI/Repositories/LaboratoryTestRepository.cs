@@ -34,7 +34,6 @@ namespace ClinicAPI.Repositories
             return laboratoryTest;
         }
 
-        //Zwraca wszystkie testy dla danej wizyty medycznej (dla jednej wizyty zawsze jest jedna grupa).
         public async Task<List<ReturnLaboratoryTestDto>> GetLaboratoryTestsByMedicalAppointmentId(int medicalAppointmentId)
         {
             var laboratoryTests = await (from labTest in _context.LaboratoryTest
@@ -91,27 +90,6 @@ namespace ClinicAPI.Repositories
                                       }).ToListAsync();
             return groupedTests;          
         }
-
-
-        //Wynikiem jest lista grup(IGrouping<int, LaboratoryTest>), gdzie:
-        //Kluczem(Key) grupy jest MedicalAppointmentId.
-        //Wartości grupy to lista LaboratoryTest powiązanych z tą wizytą.
-        //grupowanie po medicalAppointment
-        //DO WYRZUCENIA
-        /*public async Task<List<IGrouping<int, LaboratoryTest>>> GetLaboratoryTestsByPatientIdGroupByMedApp(int patientId)
-        {
-            var groupedTests = await (from labTest in _context.LaboratoryTest
-                                      join labGroup in _context.LaboratoryTestsGroup
-                                      on labTest.LaboratoryTestsGroupId equals labGroup.Id
-                                      join appointment in _context.MedicalAppointment
-                                      on labGroup.MedicalAppointmentId equals appointment.Id
-                                      where appointment.PatientId == patientId
-                              group labTest by labGroup.MedicalAppointmentId into testGroup
-                              select testGroup).ToListAsync();
-
-            return groupedTests;
-        } */
-
 
         public async Task<List<LaboratoryTest>> GetAllLaboratoryTests()
         {
@@ -172,7 +150,6 @@ namespace ClinicAPI.Repositories
 
         public async Task<List<LaboratoryTest>> ChangeLaboratoryTestsStateByLabAppId(int laboratoryAppointmentId, LaboratoryTestState testState)
         {
-                // Znalezienie wszystkich testów laboratoryjnych dla podanego laboratoryAppointmentId
                 var laboratoryTests = await (from labApp in _context.LaboratoryAppointment
                                              where labApp.Id == laboratoryAppointmentId
                                              join labGroup in _context.LaboratoryTestsGroup
@@ -182,7 +159,6 @@ namespace ClinicAPI.Repositories
                                              select labTest)
                                             .ToListAsync();
 
-                // Zmień stan
                 foreach (var test in laboratoryTests)
                 {   
                     if(test.State != LaboratoryTestState.Accepted)

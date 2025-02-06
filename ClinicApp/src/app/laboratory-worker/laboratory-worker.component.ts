@@ -24,20 +24,19 @@ export class LaboratoryWorkerComponent {
   isReadyForPatientMode: boolean = false;
   isSentToPatientMode: boolean = false;
   isCancelledLabAppMode: boolean = false;
-  futureAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  waitingForFillAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  waitingForSupervisorAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  toBeFixedAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  readyForPatientAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  sentToPatientAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok
-  cancelledAppointments: LabAppWithPatientLabTestsMedApp[] = []; //ok  
+  futureAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  waitingForFillAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  waitingForSupervisorAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  toBeFixedAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  readyForPatientAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  sentToPatientAppointments: LabAppWithPatientLabTestsMedApp[] = [];
+  cancelledAppointments: LabAppWithPatientLabTestsMedApp[] = [];
   registrantId: number = 0;
-
 
   constructor(private route: ActivatedRoute, private clinicService: ClinicService
     , public authorizationService: AuthorizationService) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.route.params.subscribe(params => {
       this.laboratoryWorkerId = +params['laboratoryWorkerId']; // Przypisanie id z URL
       this.registrantId = +params['registrantId'];
@@ -47,55 +46,53 @@ export class LaboratoryWorkerComponent {
       this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
       console.log('Is registrant mode po params:', this.isRegistrantMode);
     });
-    //this.getMedicalAppointmentsForDoctor()
   }
 
-  getFutureLabAppsByLabWorkerId(){
-    this.clinicService.getFutureLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.futureAppointments=data;
+  getFutureLabAppsByLabWorkerId() {
+    this.clinicService.getFutureLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.futureAppointments = data;
     })
   }
 
-  getWaitingForFillLabAppsByLabWorkerId(){
-    this.clinicService.getWaitingForFillLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.waitingForFillAppointments=data;
+  getWaitingForFillLabAppsByLabWorkerId() {
+    this.clinicService.getWaitingForFillLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.waitingForFillAppointments = data;
     })
   }
 
-  getWaitingForSupervisorLabAppsByLabWorkerId(){
-    this.clinicService.getWaitingForSupervisorLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.waitingForSupervisorAppointments=data;
+  getWaitingForSupervisorLabAppsByLabWorkerId() {
+    this.clinicService.getWaitingForSupervisorLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.waitingForSupervisorAppointments = data;
     })
   }
 
-  getToBeFixedLabAppsByLabWorkerId(){
-    this.clinicService.getToBeFixedLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.toBeFixedAppointments=data;
+  getToBeFixedLabAppsByLabWorkerId() {
+    this.clinicService.getToBeFixedLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.toBeFixedAppointments = data;
     })
   }
 
-  getReadyForPatientLabAppsByLabWorkerId(){
-    this.clinicService.getReadyForPatientLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.readyForPatientAppointments=data;
+  getReadyForPatientLabAppsByLabWorkerId() {
+    this.clinicService.getReadyForPatientLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.readyForPatientAppointments = data;
     })
   }
 
-  getSentToPatientLabAppsByLabWorkerId(){
-    this.clinicService.getSentToPatientLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.sentToPatientAppointments=data;
+  getSentToPatientLabAppsByLabWorkerId() {
+    this.clinicService.getSentToPatientLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.sentToPatientAppointments = data;
     })
   }
 
-  getCancelledLabAppsByLabWorkerId(){
-    this.clinicService.getCancelledLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data =>{
-      this.cancelledAppointments=data;
+  getCancelledLabAppsByLabWorkerId() {
+    this.clinicService.getCancelledLabAppsByLabWorkerId(this.laboratoryWorkerId).subscribe(data => {
+      this.cancelledAppointments = data;
     })
   }
 
-  logout(){
+  logout() {
     this.authorizationService.logout();
   }
-
 
   openFutureLabApp() {
     this.isFutureLabAppMode = true;
@@ -123,7 +120,7 @@ export class LaboratoryWorkerComponent {
   closeWaitingForSupervisorLabApp() {
     this.isWaitingForSupervisorMode = false;
   }
-  
+
   openToBeFixedLabApp() {
     this.isToBeFixedMode = true;
     this.getToBeFixedLabAppsByLabWorkerId();
@@ -156,6 +153,4 @@ export class LaboratoryWorkerComponent {
   closeCancelledLabApp() {
     this.isCancelledLabAppMode = false;
   }
-
-
 }

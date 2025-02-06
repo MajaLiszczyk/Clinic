@@ -289,11 +289,9 @@ namespace ClinicAPI.Services
                 {
                     return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
                 }
-                //TO DO : sprawdzic czy wszystkie wyniki są niepuste. Mozna sprawdzić stanami testów
                 _laboratoryAppointment.State = LaboratoryAppointmentState.WaitingForSupervisor;
                 var p = await _laboratoryAppointmentRepository.UpdateLaboratoryAppointment(_laboratoryAppointment);
                 var r = await _laboratoryTestsRepository.ChangeLaboratoryTestsStateByLabAppId(id, LaboratoryTestState.WaitingForSupervisor);
-                //zmienic status testow
                 scope.Complete();
                 return await Task.FromResult((true, "laboratoryAppointment succesfully uptated"));
 
@@ -318,8 +316,6 @@ namespace ClinicAPI.Services
                     return await Task.FromResult((false, "laboratoryAppointment with given id does not exist."));
                 }
                 var labTests = await _laboratoryTestsRepository.GetLaboratoryTestsByLabAppId(id);
-                //TO DO : sprawdzic czy wszystkie wyniki są niepuste. Mozna sprawdzić stanami testów
-                //sprawdzic czy wszystkie wyniki sa accpted, czy cos jest rejected
                 int acceptedTestsCounter = 0;
                 foreach (var test in labTests)
                 {

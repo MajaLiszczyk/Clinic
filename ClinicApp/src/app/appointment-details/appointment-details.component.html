@@ -1,7 +1,7 @@
 <div class="container">
   <a [routerLink]="['/doctor-appointments' , medicalAppointment.doctorId, 0]" class="btn btn-secondary">Return</a>
-  <br/>
-  <br/>
+  <br />
+  <br />
 
   <h4>MEDICAL APPOINTMENT</h4>
   <p></p>
@@ -19,7 +19,8 @@
     </ng-template>
 
     <div>Time: {{medicalAppointment.dateTime}} <br /></div>
-    <div *ngIf="medicalAppointment.patientId != 0">Patient: {{medicalAppointment.patientName}} {{medicalAppointment.patientSurname}}</div>
+    <div *ngIf="medicalAppointment.patientId != 0">Patient: {{medicalAppointment.patientName}}
+      {{medicalAppointment.patientSurname}}</div>
     <div *ngIf="medicalAppointment.patientId == 0"> No patient </div>
 
 
@@ -49,7 +50,8 @@
     <form [formGroup]="medicalAppointmentForm">
       <div class="formGroup mb-3">
         <label for="textbox">Interview:</label>
-        <textarea id="interview" formControlName="interviewText" type="text" class="form-control" aria-label="interview"  rows="3" (input)="autoResize($event)"
+        <textarea id="interview" formControlName="interviewText" type="text" class="form-control" aria-label="interview"
+          rows="3" (input)="autoResize($event)"
           [class.is-invalid]="formInterview.invalid && (formInterview.touched || formInterview.dirty)">
         </textarea>
         <div class="invalid-feedback">
@@ -60,7 +62,8 @@
 
       <div class="formGroup mb-3">
         <label for="textbox">Diagnosis:</label>
-        <textarea id="textbox" type="text" formControlName="diagnosisText" class="form-control" rows="3" (input)="autoResize($event)"
+        <textarea id="textbox" type="text" formControlName="diagnosisText" class="form-control" rows="3"
+          (input)="autoResize($event)"
           [class.is-invalid]="formDiagnosis.invalid && (formDiagnosis.touched || formDiagnosis.dirty)">
         </textarea>
         <div class="invalid-feedback">
@@ -182,7 +185,6 @@
               Laboratory Test
             </th>
             <th>
-
             </th>
           </tr>
         </thead>
@@ -198,7 +200,8 @@
             <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
               class="btn  btn-primary float-right" (click)="editLaboratoryTest(pastLaboratoryTest)">Edit</button>
             <button [disabled]="isLaboratoryTestAddingMode || isLaboratoryTestEditableMode" type="button"
-              class="btn  btn-outline-danger float-right" (click)="deleteLaboratoryTest(pastLaboratoryTest.id)">Delete</button>
+              class="btn  btn-outline-danger float-right"
+              (click)="deleteLaboratoryTest(pastLaboratoryTest.id)">Delete</button>
           </td>
         </tr>
         <tr *ngIf="pastDiagnosticTests.length === 0">
@@ -213,18 +216,6 @@
         class="btn btn-primary w-40 mx-2">Finish the appointment</button>
       <button [disabled]="medicalAppointment.patientId==0" (click)="cancelAnAppointment()"
         class="btn btn-outline-danger w-40 mx-2">Cancel the appointment</button>
-
-      <!-- <a [routerLink]="['/doctor-appointments', medicalAppointment.doctorId]" class="btn btn-success w-50">Cancel</a> -->
     </div>
-
   </div>
-
-
 </div>
-
-
-
-
-
-<!--<p>Interview: {{ interview }}</p>
-  <p>Diagnosis: {{ interview }}</p> -->

@@ -15,13 +15,11 @@ export class AuthorizationService {
   constructor(private http: HttpClient, private router: Router) { }
 
   logIn(loginRequest: UserLoginRequest): Observable<any> {
-    return this.http.post(this.LogInUrl, loginRequest); //CO TO ZWRACA?
+    return this.http.post(this.LogInUrl, loginRequest);
   }
-  
+
   logout(): void {
-    // Usuń dane autoryzacyjne
     localStorage.removeItem('authToken'); // Usuń token JWT
-    // Przekieruj na stronę logowania
     this.router.navigate(['/log-in']);
   }
 
@@ -47,7 +45,7 @@ export class AuthorizationService {
       const decodedToken: any = jwtDecode(token);
       console.log(decodedToken.sub);
       console.log(decodedToken.userId);
-      return decodedToken.sub || decodedToken.userId || null; //MYSLE, ZE POWINNAM BRAC USERID 'sub' to standardowe pole w JWT
+      return decodedToken.sub || decodedToken.userId || null;
     } catch (error) {
       console.error('Failed to decode token', error);
       return null;

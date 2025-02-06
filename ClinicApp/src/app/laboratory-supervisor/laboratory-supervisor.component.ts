@@ -24,68 +24,58 @@ export class LaboratorySupervisorComponent {
   acceptedAppointments: LabAppWithPatientLabTestsMedApp[] = [];
   registrantId: number = 0;
 
-
   constructor(private route: ActivatedRoute, private clinicService: ClinicService
-      , public authorizationService: AuthorizationService) { }
-  
-    ngOnInit(){
-      this.route.params.subscribe(params => {
-        this.laboratorySupervisorId = +params['laboratorySupervisorId']; // Przypisanie id z URL
-        this.registrantId = +params['registrantId']; 
-        console.log('Received laboratorySupervisorId:', this.laboratorySupervisorId);
-      });
-      this.route.queryParams.subscribe(queryParams => {
-        this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
-        console.log('Is registrant mode po params:', this.isRegistrantMode);
-      });
-      //this.getMedicalAppointmentsForDoctor()
-    }
+    , public authorizationService: AuthorizationService) { }
 
-    logout(){
-      this.authorizationService.logout();
-    }
-    openWaitingForReviewLabApp(){
-      this.isWaitingForReviewMode = true;
-      this.getWaitingForReviewLabAppBySupervisorId();
-    }
-    closeWaitingForReviewLabApp(){
-      this.isWaitingForReviewMode = false;
-    }
-    openSentBackLabApp(){
-      this.isSentBackMode = true;
-      this.getSentBackLabAppBySupervisorId();
-    }
-    closeSentBackLabApp(){
-      this.isSentBackMode = false;
-    }
-    openAcceptedLabApp(){
-      this.isAcceptedMode = true;
-      this.getAcceptedLabAppBySupervisorId();
-    }
-    closeAcceptedLabApp(){
-      this.isAcceptedMode = false;
-    }
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.laboratorySupervisorId = +params['laboratorySupervisorId'];
+      this.registrantId = +params['registrantId'];
+      console.log('Received laboratorySupervisorId:', this.laboratorySupervisorId);
+    });
+    this.route.queryParams.subscribe(queryParams => {
+      this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
+      console.log('Is registrant mode po params:', this.isRegistrantMode);
+    });
+  }
 
-    getWaitingForReviewLabAppBySupervisorId(){
-      this.clinicService.getWaitingForReviewLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data =>{
-        this.waitingForReviewAppointments=data;
-      })
-    }
-    getSentBackLabAppBySupervisorId(){
-      this.clinicService.getSentBackLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data =>{
-        this.sentBackAppointments=data;
-      })
-
-    }
-    getAcceptedLabAppBySupervisorId(){
-      this.clinicService.getAcceptedLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data =>{
-        this.acceptedAppointments=data;
-      })
-
-    }
-
-  
-
-    
-
+  logout() {
+    this.authorizationService.logout();
+  }
+  openWaitingForReviewLabApp() {
+    this.isWaitingForReviewMode = true;
+    this.getWaitingForReviewLabAppBySupervisorId();
+  }
+  closeWaitingForReviewLabApp() {
+    this.isWaitingForReviewMode = false;
+  }
+  openSentBackLabApp() {
+    this.isSentBackMode = true;
+    this.getSentBackLabAppBySupervisorId();
+  }
+  closeSentBackLabApp() {
+    this.isSentBackMode = false;
+  }
+  openAcceptedLabApp() {
+    this.isAcceptedMode = true;
+    this.getAcceptedLabAppBySupervisorId();
+  }
+  closeAcceptedLabApp() {
+    this.isAcceptedMode = false;
+  }
+  getWaitingForReviewLabAppBySupervisorId() {
+    this.clinicService.getWaitingForReviewLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data => {
+      this.waitingForReviewAppointments = data;
+    })
+  }
+  getSentBackLabAppBySupervisorId() {
+    this.clinicService.getSentBackLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data => {
+      this.sentBackAppointments = data;
+    })
+  }
+  getAcceptedLabAppBySupervisorId() {
+    this.clinicService.getAcceptedLabAppsBySupervisorId(this.laboratorySupervisorId).subscribe(data => {
+      this.acceptedAppointments = data;
+    })
+  }
 }

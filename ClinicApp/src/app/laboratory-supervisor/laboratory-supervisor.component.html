@@ -3,12 +3,12 @@
         <button [disabled]="!authorizationService.isLoggedIn()" type="button"
             class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-supervisors', registrantId]" class="btn btn-secondary">Return</a>
-
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-supervisors', registrantId]"
+        class="btn btn-secondary">Return</a>
 
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openWaitingForReviewLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Waiting for review</button>
+        <button (click)="openWaitingForReviewLabApp()" class="btn btn-primary ms-2 me-4 w-25">Waiting for
+            review</button>
     </div>
     <div *ngIf="isWaitingForReviewMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -46,13 +46,8 @@
         <button (click)="closeWaitingForReviewLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
-    
-
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openSentBackLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Sent back</button>
+        <button (click)="openSentBackLabApp()" class="btn btn-primary ms-2 me-4 w-25">Sent back</button>
     </div>
     <div *ngIf="isSentBackMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -65,7 +60,6 @@
                         Patient
                     </th>
                     <th>
-
                     </th>
                 </tr>
             </thead>
@@ -90,10 +84,8 @@
         <button (click)="closeSentBackLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openAcceptedLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Accepted</button>
+        <button (click)="openAcceptedLabApp()" class="btn btn-primary ms-2 me-4 w-25">Accepted</button>
     </div>
     <div *ngIf="isAcceptedMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -106,7 +98,6 @@
                         Patient
                     </th>
                     <th>
-
                     </th>
                 </tr>
             </thead>
@@ -130,6 +121,4 @@
         </table>
         <button (click)="closeAcceptedLabApp()" class="btn btn-secondary">Close</button>
     </div>
-
-
 </div>

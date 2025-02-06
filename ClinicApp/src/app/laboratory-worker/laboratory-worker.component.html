@@ -4,14 +4,11 @@
             class="btn  btn-outline-danger float-right mx-2 mt-5 " (click)="logout()">Logout</button>
     </div>
 
-    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers', registrantId]" class="btn btn-secondary">Return</a>
-
-
-    <!-- <div *ngIf="authorizationService.isLoggedIn()" (click)="logout()">Logout</div> -->
+    <a *ngIf="isRegistrantMode" [routerLink]="['/registrant-laboratory-workers', registrantId]"
+        class="btn btn-secondary">Return</a>
 
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openFutureLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Future laboratory tests</button>
+        <button (click)="openFutureLabApp()" class="btn btn-primary ms-2 me-4 w-25">Future laboratory tests</button>
     </div>
     <div *ngIf="isFutureLabAppMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -24,7 +21,6 @@
                         Patient
                     </th>
                     <th>
-
                     </th>
                 </tr>
             </thead>
@@ -50,8 +46,7 @@
     </div>
 
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openWaitingForFillLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Waiting for fill</button>
+        <button (click)="openWaitingForFillLabApp()" class="btn btn-primary ms-2 me-4 w-25">Waiting for fill</button>
     </div>
     <div *ngIf="isWaitingForFillMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -89,10 +84,9 @@
         <button (click)="closeWaitingForFillLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openWaitingForSupervisorLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Waiting for supervisor</button>
+        <button (click)="openWaitingForSupervisorLabApp()" class="btn btn-primary ms-2 me-4 w-25">Waiting for
+            supervisor</button>
     </div>
     <div *ngIf="isWaitingForSupervisorMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -115,7 +109,8 @@
                         {{waitingForSupervisorAppointment.dateTime}}
                     </td>
                     <td>
-                        {{waitingForSupervisorAppointment.patientName}} {{waitingForSupervisorAppointment.patientSurname}} 
+                        {{waitingForSupervisorAppointment.patientName}}
+                        {{waitingForSupervisorAppointment.patientSurname}}
                     </td>
                     <td class="text-end">
                         <a [routerLink]="['/laboratory-appointment-details', waitingForSupervisorAppointment.laboratoryAppointmentId]"
@@ -131,8 +126,7 @@
     </div>
 
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openToBeFixedLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">To be fixed</button>
+        <button (click)="openToBeFixedLabApp()" class="btn btn-primary ms-2 me-4 w-25">To be fixed</button>
     </div>
     <div *ngIf="isToBeFixedMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -170,10 +164,8 @@
         <button (click)="closeToBeFixedLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openReadyForPatientLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Ready to send</button>
+        <button (click)="openReadyForPatientLabApp()" class="btn btn-primary ms-2 me-4 w-25">Ready to send</button>
     </div>
     <div *ngIf="isReadyForPatientMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -211,10 +203,9 @@
         <button (click)="closeReadyForPatientLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openSentToPatientLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Finished and sent to patient</button>
+        <button (click)="openSentToPatientLabApp()" class="btn btn-primary ms-2 me-4 w-25">Finished and sent to
+            patient</button>
     </div>
     <div *ngIf="isSentToPatientMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -252,10 +243,8 @@
         <button (click)="closeSentToPatientLabApp()" class="btn btn-secondary">Close</button>
     </div>
 
-
     <div class=" col-12 mb-4 text-center">
-        <button (click)="openCancelledLabApp()"
-            class="btn btn-primary ms-2 me-4 w-25">Cancelled appointments</button>
+        <button (click)="openCancelledLabApp()" class="btn btn-primary ms-2 me-4 w-25">Cancelled appointments</button>
     </div>
     <div *ngIf="isCancelledLabAppMode" class="d-flex justify-content-center mx-5 px-5 mb-5">
         <table class="table table-striped">
@@ -292,9 +281,4 @@
         </table>
         <button (click)="closeCancelledLabApp()" class="btn btn-secondary">Close</button>
     </div>
-
-
-
-
-
 </div>

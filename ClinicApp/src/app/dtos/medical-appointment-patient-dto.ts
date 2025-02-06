@@ -10,5 +10,4 @@ export interface MedicalAppointmentPatientDto{
     isFinished: boolean;
     isCancelled: boolean;
     cancellingComment: string;
-
 }

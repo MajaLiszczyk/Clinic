@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Patient } from '../model/patient';
-import { FormBuilder, FormGroup , Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { ClinicService } from '../services/clinic.service';
@@ -30,49 +30,48 @@ export class RegistrantPatientsComponent {
   registrantId: number = 0;
   passwordVisible = false;
 
-
-  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { //formbuilder do formGroup
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) { 
     this.patientForm = this.formBuilder.group({});
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+      this.registrantId = +params['registrantId'];
+    });
     this.getAllPatients();
     this.patientForm = this.formBuilder.group({
       id: Number,
-      name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
-      surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)]}),
-      pesel: new FormControl(null, { validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(/^\d{11}$/)]}),
-      email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
-        Validators.maxLength(256)] }),     
-      /*password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
-        Validators.maxLength(100)] }),*/
+      name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
+      surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
+      pesel: new FormControl(null, { validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern(/^\d{11}$/)] }),
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email,
+        Validators.maxLength(256)]
+      }),
       password: new FormControl(null, { validators: [Validators.required, passwordValidator] }),
     });
   }
 
-  get formId(): FormControl { return this.patientForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl { return this.patientForm?.get("id") as FormControl };
   get formName(): FormControl { return this.patientForm?.get("name") as FormControl };
   get formSurname(): FormControl { return this.patientForm?.get("surname") as FormControl };
   get formPesel(): FormControl { return this.patientForm?.get("pesel") as FormControl };
-  get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formEmail(): FormControl { return this.patientForm?.get("email") as FormControl };
+  get formPassword(): FormControl { return this.patientForm?.get("password") as FormControl };
 
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
 
-  getAllPatients(){
-    this.clinicService.getAllPatients().subscribe(data =>{
-      this.patients=data;
+  getAllPatients() {
+    this.clinicService.getAllPatients().subscribe(data => {
+      this.patients = data;
     })
   }
 
-  edit(patient: Patient){
-    this.isEditableMode = true;  
-    this.isAddingMode = false; //niepotrzebne?
+  edit(patient: Patient) {
+    this.isEditableMode = true;
+    this.isAddingMode = false;
     this.formId.setValue(patient.id);
     this.formName.setValue(patient.name);
     this.formSurname.setValue(patient.surname);
@@ -80,37 +79,37 @@ export class RegistrantPatientsComponent {
     this.setConditionalValidation();
   }
 
-  update(){
-    if(this.patientForm.invalid){
-      this.patientForm.markAllAsTouched(); 
+  update() {
+    if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
       return;
     }
     const patientData = this.patientForm.getRawValue();
     this.clinicService.updatePatient(patientData)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllPatients();
-        this.isEditableMode = false;
-        this.patientForm.reset();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    })
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllPatients();
+          this.isEditableMode = false;
+          this.patientForm.reset();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      })
   }
 
-  delete(patientId: number){
+  delete(patientId: number) {
     this.clinicService.deletePatient(patientId)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllPatients();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllPatients();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      });
   }
 
   addNewPatient() {
@@ -140,11 +139,9 @@ export class RegistrantPatientsComponent {
       passwordC?.setValidators([Validators.required]);
 
     } else {
-      // Usuń walidator `required`
       emailC?.clearValidators();
       passwordC?.clearValidators();
     }
-    // Uruchom ponowną walidację
     emailC?.updateValueAndValidity();
     passwordC?.updateValueAndValidity();
   }
@@ -152,16 +149,16 @@ export class RegistrantPatientsComponent {
   cancelAdding() {
     this.isFormVisible = false;
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.isCreateAccountMode = false;
     this.patientForm.reset();
   }
 
-  cancelEditing() { //do wyrzucenia, kalka powyzszej
+  cancelEditing() {
     this.isFormVisible = false;
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
-    this.isCreateAccountMode = false; 
+    this.isEditableMode = false;
+    this.isCreateAccountMode = false;
     this.patientForm.reset();
   }
 
@@ -170,16 +167,16 @@ export class RegistrantPatientsComponent {
       this.patientForm.markAllAsTouched();
       return;
     }
-    this.clinicService.addPatient(this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    this.clinicService.addPatient(this.patientForm.getRawValue())
       .subscribe({
         next: (result: Patient) => {
-          this.patient = result; // Zwrócony obiekt przypisany do zmiennej
+          this.patient = result;
           this.getAllPatients();
           this.isAddingMode = false;
           this.patientForm.reset();
         },
         error: (err) => {
-          console.error("Error occurred:", err); // Obsługa błędów
+          console.error("Error occurred:", err);
         }
       });
   }
@@ -189,16 +186,16 @@ export class RegistrantPatientsComponent {
       this.patientForm.markAllAsTouched();
       return;
     }
-    this.clinicService.createPatientAccount(this.patientForm.getRawValue()) // Bez obiektu opakowującego
+    this.clinicService.createPatientAccount(this.patientForm.getRawValue())
       .subscribe({
         next: (result: Patient) => {
-          this.patient = result; // Zwrócony obiekt przypisany do zmiennej
+          this.patient = result;
           this.getAllPatients();
           this.isCreateAccountMode = false;
           this.patientForm.reset();
         },
         error: (err) => {
-          console.error("Error occurred:", err); // Obsługa błędów
+          console.error("Error occurred:", err);
         }
       });
   }

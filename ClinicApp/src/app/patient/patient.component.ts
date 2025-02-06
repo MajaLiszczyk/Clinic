@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-//import { MakeAnAppointmentComponent } from '../make-an-appointment/make-an-appointment.component';
 import { Patient } from '../model/patient';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReturnMedicalAppointment } from '../model/return-medical-appointment';
@@ -25,13 +24,10 @@ export class PatientComponent {
   patientId: number = 0;
   isFutureAppointmentsMode: boolean = false;
   isPastAppointmentsMode: boolean = false;
-  //choosePatientForm: FormGroup;
   patient: Patient;
   patients: Patient[] = [];
   isPatientIdSet: boolean = this.patientId !== 0;
-  //medicalAppointments: ReturnMedicalAppointment[] = [];
   medicalAppointments: MedicalAppointmentDoctorDto[] = [];
-  //selectedAppointment: ReturnMedicalAppointment;
   selectedAppointment: MedicalAppointmentDoctorDto;  
   specialisations: Specialisation[] = [];
   chooseSpecialisationForm: FormGroup;
@@ -39,7 +35,6 @@ export class PatientComponent {
   selectedSpecialisation: number;
   isMakeAnAppointmentMode: boolean = false;
   isRegistrantMode: boolean = false; 
-  //allMedicalAppointments: AllMedicalAppointments;
   futureAppointments: MedicalAppointmentPatientDoctorDto[] = [];
   pastAppointments: MedicalAppointmentPatientDoctorDto[] = [];
   isVisible = false;
@@ -48,12 +43,10 @@ export class PatientComponent {
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, 
               private route: ActivatedRoute, private clinicService: ClinicService, public authorizationService: AuthorizationService,) {
-    //this.choosePatientForm = this.formBuilder.group({});
     this.chooseSpecialisationForm = this.formBuilder.group({});
     this.selectedSpecialisation = 0;
     this.selectedAppointment = { id: 0, doctorId: 0, doctorName: "", doctorSurname: "", patientId: 0, interview: '', diagnosis: '', diseaseUnit: 0
-                                , dateTime: new Date(), isCancelled: false, isFinished: false, cancellingComment:""}; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
-    //this.allMedicalAppointments = { pastMedicalAppointments: [], futureMedicalAppointments: [] }
+                                , dateTime: new Date(), isCancelled: false, isFinished: false, cancellingComment:""}; 
     this.patient = {name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true};
   }
   ngOnInit() {
@@ -64,8 +57,6 @@ export class PatientComponent {
       this.getPatientById(this.patientId);
     });
     
-
-
     this.route.queryParams.subscribe(queryParams => {
       this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
       console.log('Is registrant mode po params:', this.isRegistrantMode);
@@ -76,26 +67,17 @@ export class PatientComponent {
       specialisationId: new FormControl(null, { validators: [Validators.required] })
     });
     this.chooseSpecialisationForm.get('specialisationId')?.valueChanges.subscribe(value => {
-      this.isDisabled = !value; // Ustawienie isEnabled na true, jeśli wartość jest wybrana
+      this.isDisabled = !value; 
       console.log('Specialisation selected:', value, 'isDisabled:', this.isDisabled);
     });
     console.log('pacjent id: ', this.patientId);
-
-    const userId = this.authorizationService.getUserId(); //NIEPOTRZEBNE, BO BACKEND SAM ODCZYTUJE...
-
-    //this.getAllMedicalAppointments()
-    /*this.choosePatientForm = this.formBuilder.group({
-      patientId: new FormControl(null, { validators: [Validators.required] })
-    });*/
+    const userId = this.authorizationService.getUserId(); 
   }
 
 
   get formSpecialisationId(): FormControl { return this.chooseSpecialisationForm?.get("specialisationId") as FormControl };
-  //get formPatientId(): FormControl { return this.choosePatientForm?.get("patientId") as FormControl };
-
 
   getAllSpecialisations() {
-    //this.clinicService.getAllSpecialisations().subscribe(data => {
     this.clinicService.getAllAvailableSpecialisations().subscribe(data => {     
       this.specialisations = data;
     })
@@ -111,9 +93,7 @@ export class PatientComponent {
     this.clinicService.getPastMedicalAppointmentsByPatientId(this.patientId).subscribe(data => {
       this.pastAppointments = data;
     })
-
   }
-
 
   openFutureAppointments(){
     this.isFutureAppointmentsMode = true;
@@ -138,14 +118,6 @@ export class PatientComponent {
       this.patient = data;
     })
   }
-
-  /*getAllMedicalAppointments() {
-    this.clinicService.getMedicalAppointmentsByPatientId(this.patientId).subscribe(data => {
-      this.allMedicalAppointments = data;
-      console.log(this.allMedicalAppointments.pastMedicalAppointments);
-      console.log(this.allMedicalAppointments.pastMedicalAppointments.length);
-    })
-  } */
 
   openAppointmentForm(){
     this.isMakeAnAppointmentMode = true;
@@ -188,7 +160,6 @@ export class PatientComponent {
     }
     this.selectedAppointment.patientId = this.patientId;
     var medApp = this.makeMedicalAppointmentFromDto();
-    //this.setPatientToAppointment(this.selectedAppointment);
     this.setPatientToAppointment(medApp);
     this.isMakeAnAppointmentMode = false;
     this.medicalAppointments.length = 0;//czyszczenie listy żeby nie było widać starych wyszukiwań
@@ -222,8 +193,4 @@ export class PatientComponent {
         }
       });
   }
-
-  /*logout(){
-    this.authorizationService.logout();
-  } */
 }

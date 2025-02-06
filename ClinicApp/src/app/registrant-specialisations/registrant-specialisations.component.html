@@ -10,7 +10,6 @@
                 <div class="input-group">
                     <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                         [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
-                    <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
                     <div class="invalid-feedback">
                         <span *ngIf="formName?.errors?.['required']">Required</span>
                     </div>
@@ -61,41 +60,3 @@
         </div>
     </div>
 </div>
-
-<!--
-<div>
-    <div class="d-flex justify-content-center mx-5 px-5 mb-5">
-        <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>
-                        Specialisation
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-
-            </thead>
-            <tr *ngFor="let specialisation of specialisations">
-                <td>
-                    {{specialisation.name}}
-
-                </td>
-                <td>
-
-                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                        (click)="edit(specialisation)">Edit</button>
-                    <button [disabled]="isAddingMode || isEditableMode" type="button" class="btn  btn-success float-right"
-                        (click)="delete(specialisation.id)">Delete</button>
-                </td>
-            </tr>
-
-            <tr *ngIf="specialisations.length === 0">
-                <td colspan="8">No specialisations</td>
-            </tr>
-        </table>
-    </div>
-    <a [routerLink]="['/registrant']" class="btn btn-secondary">Return</a>
-</div>
--->

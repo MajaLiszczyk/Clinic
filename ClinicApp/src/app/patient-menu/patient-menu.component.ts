@@ -4,7 +4,6 @@ import { AuthorizationService } from '../services/authorization.service';
 import { ClinicService } from '../services/clinic.service';
 import { Patient } from '../model/patient';
 
-
 @Component({
   selector: 'app-patient-menu',
   standalone: true,
@@ -14,37 +13,26 @@ import { Patient } from '../model/patient';
 })
 export class PatientMenuComponent {
   patientId: number = 0;
-    patient: Patient;
-  
+  patient: Patient;
 
   constructor(private clinicService: ClinicService, private route: ActivatedRoute, public authorizationService: AuthorizationService,) {
-    this.patient = {name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true};
+    this.patient = { name: '', surname: '', id: 0, pesel: '', patientNumber: '', isAvailable: true };
   }
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.patientId = +params['patientId']; // Przypisanie id z URL
+      this.patientId = +params['patientId'];
       console.log('Received patientId:', this.patientId);
       this.getPatientById(this.patientId);
     });
+  }
 
-    /*this.route.queryParams.subscribe(queryParams => {
-      this.isRegistrantMode = queryParams['isRegistrantMode'] === 'true';
-      console.log('Is registrant mode po params:', this.isRegistrantMode);
-    }); */
-
-
-  }  
-
-  getPatientById(patientId: number){
+  getPatientById(patientId: number) {
     this.clinicService.getPatientById(patientId).subscribe(data => {
       this.patient = data;
     })
   }
 
-  logout(){
+  logout() {
     this.authorizationService.logout();
   }
-
-    
-
 }

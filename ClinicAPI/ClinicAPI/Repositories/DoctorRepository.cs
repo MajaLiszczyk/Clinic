@@ -124,7 +124,6 @@ namespace ClinicAPI.Repositories
 
         public async Task<bool> CanArchiveDoctor(int doctorId)
         {
-            // Sprawdzenie, czy lekarz ma jakąkolwiek "otwartą" wizytę
             return !await _context.MedicalAppointment.AnyAsync(ma =>
                 ma.DoctorId == doctorId &&
                 ma.IsFinished == false &&

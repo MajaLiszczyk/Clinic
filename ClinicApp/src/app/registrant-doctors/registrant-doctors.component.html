@@ -1,7 +1,5 @@
 <a [routerLink]="['/registrant', registrantId]" class="btn btn-secondary my-4">Return</a>
 
-<!-- <div *ngIf="isFormVisible" class="w-100"> -->
-
 <div class="col mb-4 d-flex justify-content-between my-4">
     <h1>Doctor</h1>
     <button [disabled]="isEditableMode || isAddingMode" (click)="addNewDoctor()" class="btn btn-outline-primary fs-5">
@@ -14,14 +12,12 @@
     <form class="w-25 mx-auto" [formGroup]="doctorForm" *ngIf="isAddingMode || isEditableMode">
         <div class="formGroup mb-3">
             <label class="form-label">Name</label>
-            <!-- <div class="input-group"> -->
             <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                 [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formName?.errors?.['required']">Required</span>
                 <span *ngIf="formName?.errors?.['pattern']">Only letters</span>
             </div>
-            <!-- </div> -->
         </div>
 
         <div class="formGroup mb-3">
@@ -40,7 +36,8 @@
                 [class.is-invalid]="formDoctorNumber.invalid && (formDoctorNumber.touched || formDoctorNumber.dirty)">
             <div class="invalid-feedback">
                 <span *ngIf="formDoctorNumber?.errors?.['required']">Required</span>
-                <span *ngIf="formDoctorNumber?.errors?.['pattern']">Doctor number must consist of 7 digits and cannot start with 0</span>
+                <span *ngIf="formDoctorNumber?.errors?.['pattern']">Doctor number must consist of 7 digits and cannot
+                    start with 0</span>
             </div>
         </div>
 
@@ -57,28 +54,27 @@
 
         <div class="formGroup mb-3" *ngIf="isAddingMode && !isEditableMode">
             <label class="form-label">Password</label>
-            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control" aria-label="password"
+            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control"
+                aria-label="password"
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
-                <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
+            <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
                 <div *ngIf="formPassword?.errors?.['hasNumber']">
                     {{ formPassword?.errors?.['hasNumber'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasUppercase']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasUppercase']">
                     {{ formPassword?.errors?.['hasUppercase'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasLowercase']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasLowercase']">
                     {{ formPassword?.errors?.['hasLowercase'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
                     {{ formPassword.errors?.['hasSpecialCharacter'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['isValidLength']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['isValidLength']">
                     {{ formPassword.errors?.['isValidLength'] }}
-                  </div>
-                <!-- <span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
-                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span> -->
+                </div>
             </div>
         </div>
 
@@ -104,10 +100,6 @@
         </div>
 
         <div>
-            <!-- <label>Selected specialisations:</label>
-            <div *ngFor="let selectedSpec of  MedicalSpecialisationsIds">
-                selected specialisations: {{MedicalSpecialisationsIds}}
-            </div> -->
         </div>
 
         <div class="d-flex justify-content-center mb-5 mt-5">
@@ -117,49 +109,9 @@
                 (click)="update()">Save</button>
             <button (click)="cancelAdding()" class="btn btn-outline-secondary">Cancel</button>
         </div>
-
-        <!-- <div>
-            <div class="d-flex justify-content-center mb-4">
-                <button type="button" class="btn  btn-success float-right mx-2" (click)="addDoctor()">Add the new doctor
-                    to system</button>
-            </div>
-        </div>
-        <button type="button" class="btn  btn-secondary float-right" (click)="cancel()">Cancel</button> -->
-
     </form>
 </div>
 
-<!--
-<div class="d-flex justify-content-center mx-5 px-5 mb-5">
-   <div *ngIf="isVisible">
-        <form [formGroup]="doctorForm">
-            <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
-                <input formControlName="name" type="string" class="form-control w-100" aria-label="name"
-                    [class.is-invalid]="formName.invalid">
-                <input formControlName="surname" type="string" class="form-control w-100" aria-label="surname"
-                    [class.is-invalid]="formName.invalid">
-                <input formControlName="doctorNumber" type="number" class="form-control w-100" aria-label="doctorNumber"
-                    [class.is-invalid]="formName.invalid">
-            </div>
-            <div>
-                <label>Specialisations:</label>
-                <div *ngFor="let specialisation of specialisations">
-                    <label>
-                        <input type="checkbox" [value]="specialisation.id" (change)="onSpecialisationChange($event)" />
-                        {{ specialisation.name }}
-                    </label>
-                </div>
-            </div>
-
-            <div>
-                <label>Selected specialisations:</label>
-                <div *ngFor="let selectedSpec of  MedicalSpecialisationsIds">
-                    selected specialisations: {{MedicalSpecialisationsIds}}
-                </div>
-            </div>
-            <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
-        </form>
-    </div> -->
 <div class="mt-4">
     <table class="table table-striped">
         <thead>
@@ -185,7 +137,6 @@
             </tr>
 
         </thead>
-        <!-- <tr *ngFor="let doctor of doctors"> -->
         <tbody>
             <tr *ngFor="let doctorWtihSpecialisations of doctorsWithSpecialisations">
                 <td>
@@ -215,7 +166,6 @@
                         type="button" class="btn btn-outline-danger mx-2"
                         (click)="delete(doctorWtihSpecialisations.id)">Delete</button>
 
-                    <!-- <a [routerLink]="['/doctor', doctor.id]" *ngIf="!isAddingMode" -->
                     <a [routerLink]="['/doctor-appointments', doctorWtihSpecialisations.id, registrantId]"
                         [queryParams]="{isRegistrantMode: true }" *ngIf="!isAddingMode && !isEditableMode"
                         class="btn btn-primary ms-2 me-4">Doctor's Appointments</a>
@@ -227,7 +177,3 @@
         </tbody>
     </table>
 </div>
-
-
-<!--
-</div>-->

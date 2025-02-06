@@ -3,7 +3,6 @@
     <label class="form-label">Email</label>
     <input formControlName="email" type="string" step="0.01" class="form-control" aria-label="email"
         [class.is-invalid]="formEmail.invalid && (formEmail.touched || formEmail.dirty)">
-    <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
     <div class="invalid-feedback">
         <span *ngIf="formEmail?.errors?.['required']">Required</span>
         <span *ngIf="formEmail?.errors?.['email']">Email format required</span>
@@ -13,9 +12,6 @@
     <label class="form-label">Password</label>
     <input [type]="passwordVisible ? 'text' : 'password'" formControlName="password" class="form-control" [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
         <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
-    <!-- <input formControlName="password" type="password" class="form-control" aria-label="password"
-        [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)"> -->
-    <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
     <div class="invalid-feedback">
         <span *ngIf="formPassword?.errors?.['required']">Required</span>
     </div>
@@ -26,6 +22,4 @@
     <button type="button" class="btn  btn-primary float-right mx-2 "
         (click)="logIn()">Log in</button>
 </div>
-
 <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
-

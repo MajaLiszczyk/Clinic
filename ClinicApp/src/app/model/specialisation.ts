@@ -3,5 +3,4 @@ export interface Specialisation{
     name: string;
     checked: boolean;
     isAvailable: boolean;
-
 }

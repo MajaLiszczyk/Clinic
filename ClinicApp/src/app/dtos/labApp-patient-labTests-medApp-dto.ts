@@ -10,7 +10,7 @@ export interface LabAppWithPatientLabTestsMedApp{
     laboratoryAppointmentId: number;
     laboratoryWorkerId: number;
     supervisorId: number;
-    state: LaboratoryAppointmentState; // wczesniej byl string
+    state: LaboratoryAppointmentState;
     dateTime: string;
     cancelComment: string | null;
     patientId: number;

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-//import { AddSpecialisationComponent } from '../add-specialisation/add-specialisation.component';
-//import { GetSpecialisationsComponent } from '../get-specialisations/get-specialisations.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Specialisation } from '../model/specialisation';
@@ -26,15 +24,14 @@ export class RegistrantSpecialisationsComponent {
   isEditableMode: boolean = false;
   registrantId: number = 0;
 
-
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.specialisationF = this.formBuilder.group({});
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+      this.registrantId = +params['registrantId'];
+    });
     this.getAllSpecialisations();
     this.specialisationF = this.formBuilder.group({
       id: Number,
@@ -42,53 +39,53 @@ export class RegistrantSpecialisationsComponent {
     });
   }
 
-  get formId(): FormControl { return this.specialisationF?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl { return this.specialisationF?.get("id") as FormControl };
   get formName(): FormControl { return this.specialisationF?.get("name") as FormControl };
 
-  getAllSpecialisations(){
-    this.clinicService.getAllSpecialisations().subscribe(data =>{
-      this.specialisations=data;
+  getAllSpecialisations() {
+    this.clinicService.getAllSpecialisations().subscribe(data => {
+      this.specialisations = data;
     })
   }
 
-  edit(specialisation: Specialisation){
-    this.isVisible = true;  
-    this.isAddingMode = false; //niepotrzebne?
+  edit(specialisation: Specialisation) {
+    this.isVisible = true;
+    this.isAddingMode = false;
     this.formId.setValue(specialisation.id);
     this.formName.setValue(specialisation.name);
     this.isEditableMode = true;
   }
 
-  update(){
-    if(this.specialisationF.invalid){
-      this.specialisationF.markAllAsTouched(); 
+  update() {
+    if (this.specialisationF.invalid) {
+      this.specialisationF.markAllAsTouched();
       return;
     }
     this.clinicService.updateSpecialisation(this.specialisationF.getRawValue())
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllSpecialisations();
-        this.isEditableMode = false;
-        this.specialisationF.reset();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    })
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllSpecialisations();
+          this.isEditableMode = false;
+          this.specialisationF.reset();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      })
   }
 
-  delete(dspecialisationId: number){
+  delete(dspecialisationId: number) {
     this.clinicService.deleteSpecialisation(dspecialisationId)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllSpecialisations();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllSpecialisations();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      });
   }
 
   addNewSpecialisation() {
@@ -99,31 +96,31 @@ export class RegistrantSpecialisationsComponent {
 
   cancelAdding() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.specialisationF.reset();
   }
 
   cancelEditing() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.specialisationF.reset();
   }
 
   addSpecialisation() {
-    if(this.specialisationF.invalid){
-      this.specialisationF.markAllAsTouched(); 
+    if (this.specialisationF.invalid) {
+      this.specialisationF.markAllAsTouched();
       return;
     }
-    this.clinicService.addSpecialisation(this.specialisationF.getRawValue()) // Bez obiektu opakowującego
+    this.clinicService.addSpecialisation(this.specialisationF.getRawValue())
       .subscribe({
         next: (result: Specialisation) => {
-          this.specialisation = result; // Zwrócony obiekt przypisany do zmiennej
+          this.specialisation = result;
           this.getAllSpecialisations();
           this.isAddingMode = false;
           this.specialisationF.reset();
         },
         error: (err) => {
-          console.error("Error occurred:", err); // Obsługa błędów
+          console.error("Error occurred:", err);
         }
       });
   }

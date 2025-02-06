@@ -11,7 +11,7 @@
 }
 
 .tile:hover {
-    transform: scale(1.05); /* translate(0, -10px) */
+    transform: scale(1.05); 
 }
 
 .line-break {

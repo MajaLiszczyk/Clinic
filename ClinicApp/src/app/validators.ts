@@ -1,7 +1,5 @@
 import { AbstractControl, ValidationErrors, ValidatorFn, FormArray } from '@angular/forms';
 
-/*sprawdza, czy co najmniej jedna kontrolka w tablicy (FormArray) ma wartość true. 
-Jeśli żadna nie jest zaznaczona, zwraca błąd { required: true }*/
 export function atLeastOneSelectedValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const formArray = control as FormArray;
@@ -31,21 +29,5 @@ export function passwordValidator(control: AbstractControl): ValidationErrors | 
     errors.isValidLength = 'Password must be between 6 and 100 characters long.';
   }
 
-  return Object.keys(errors).length ? errors : null; // Zwracaj błędy tylko, jeśli istnieją
+  return Object.keys(errors).length ? errors : null; 
 }
-
-
-/*export function passwordValidator(control: AbstractControl): ValidationErrors | null {
-  const password = control.value;
-  const hasNumber = /\d/.test(password); // Czy zawiera cyfrę
-  const hasUppercase = /[A-Z]/.test(password); // Czy zawiera wielką literę
-  const hasLowercase = /[a-z]/.test(password); // Czy zawiera małą literę
-  const hasSpecialCharacter = /[\W]/.test(password); // Czy zawiera znak specjalny
-  const isValidLength = password?.length >= 6 && password?.length <= 100; // Czy długość jest odpowiednia
-
-  if (hasNumber && hasUppercase && hasLowercase && hasSpecialCharacter && isValidLength) {
-    return null; // Walidacja poprawna
-  }
-
-  return { passwordInvalid: true }; // Walidacja niepoprawna
-}*/

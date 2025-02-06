@@ -11,7 +11,7 @@ namespace ClinicAPI.Controllers
     [Route("api/identity/")]
     public class IdentityController(IMediator mediator) : ControllerBase
     {
-        [HttpPatch("user")] //ten endpoint ma sens tylko dla uwierzytelnionych użytkowników, bo dla innego nie istnieje context
+        [HttpPatch("user")]
         [Authorize]
         public async Task<IActionResult> UpdateUserDetails(UpdateUserDetailsCommand command)
         {
@@ -20,7 +20,7 @@ namespace ClinicAPI.Controllers
 
         }
 
-        [HttpPost("userRole")] //ten endpoint ma sens tylko dla uwierzytelnionych użytkowników, bo dla innego nie istnieje context
+        [HttpPost("userRole")]
         [Authorize]
         public async Task<IActionResult> AssignUserRole(AssignUserRoleCommand command)
         {

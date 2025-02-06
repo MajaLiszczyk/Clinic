@@ -15,16 +15,14 @@ import { ClinicService } from '../services/clinic.service';
 })
 
 export class RegistrantDiagnosticTestTypesComponent {
-  //isAddNewSpecialisationVisible: boolean = false;
   diagnosticTestTypes: DiagnosticTestType[] = [];
   diagnosticTestTypesForm: FormGroup;
-  diagnosticTestType: DiagnosticTestType = { id: 0, name: '' , isAvailable: true};
+  diagnosticTestType: DiagnosticTestType = { id: 0, name: '', isAvailable: true };
   isDisable = false;
   isVisible: boolean = false;
   isAddingMode: boolean = false;
   isEditableMode: boolean = false;
   registrantId: number = 0;
-
 
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.diagnosticTestTypesForm = this.formBuilder.group({});
@@ -33,7 +31,7 @@ export class RegistrantDiagnosticTestTypesComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+    });
     this.getAllDiagnosticTestTypes();
     this.diagnosticTestTypesForm = this.formBuilder.group({
       id: Number,
@@ -41,7 +39,7 @@ export class RegistrantDiagnosticTestTypesComponent {
     });
   }
 
-  get formId(): FormControl { return this.diagnosticTestTypesForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl { return this.diagnosticTestTypesForm?.get("id") as FormControl };
   get formName(): FormControl { return this.diagnosticTestTypesForm?.get("name") as FormControl };
 
   getAllDiagnosticTestTypes() {
@@ -65,30 +63,30 @@ export class RegistrantDiagnosticTestTypesComponent {
     }
     const diagnosticTestTypeData = this.diagnosticTestTypesForm.getRawValue();
     this.clinicService.updateDiagnosticTestType(diagnosticTestTypeData)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllDiagnosticTestTypes();
-        this.isEditableMode = false;
-        this.diagnosticTestTypesForm.reset();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    })
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllDiagnosticTestTypes();
+          this.isEditableMode = false;
+          this.diagnosticTestTypesForm.reset();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      })
   }
 
   delete(testTypeId: number) {
     this.clinicService.deleteDiagnosticTestType(testTypeId)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllDiagnosticTestTypes();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllDiagnosticTestTypes();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      });
   }
 
   addNewDiagnosticTestType() {
@@ -99,33 +97,33 @@ export class RegistrantDiagnosticTestTypesComponent {
 
   cancelAdding() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.diagnosticTestTypesForm.reset();
   }
 
   cancelEditing() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.diagnosticTestTypesForm.reset();
   }
 
   addDiagosticTestType() {
-    if(this.diagnosticTestTypesForm.invalid){ 
+    if (this.diagnosticTestTypesForm.invalid) {
       this.diagnosticTestTypesForm.markAllAsTouched();
       return;
-    } 
+    }
     const diagnosticTestData = this.diagnosticTestTypesForm.getRawValue();
-    this.clinicService.addDiagosticTestType(diagnosticTestData) // Bez obiektu opakowującego
-    .subscribe({
-      next: (result: DiagnosticTestType) => {
-        this.diagnosticTestType = result; // Zwrócony obiekt przypisany do zmiennej
-        this.getAllDiagnosticTestTypes()
-        this.isAddingMode = false;
-        this.diagnosticTestTypesForm.reset();
-      },
-      error: (err) => {
-        console.error("Error occurred:", err); // Obsługa błędów
-      }
-    });
+    this.clinicService.addDiagosticTestType(diagnosticTestData)
+      .subscribe({
+        next: (result: DiagnosticTestType) => {
+          this.diagnosticTestType = result;
+          this.getAllDiagnosticTestTypes()
+          this.isAddingMode = false;
+          this.diagnosticTestTypesForm.reset();
+        },
+        error: (err) => {
+          console.error("Error occurred:", err);
+        }
+      });
   }
 }

@@ -24,7 +24,6 @@ namespace ClinicAPI.Repositories
             }
             catch (Exception)
             {
-                //_logger.LogError(ex, "Error occurred while fetching patient with ID {Id}", id);
             }
             return testType;
         }

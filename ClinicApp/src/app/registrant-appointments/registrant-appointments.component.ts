@@ -13,7 +13,7 @@ import { MedicalAppointmentPatientDoctorDto } from '../dtos/medical-appointment-
 @Component({
   selector: 'app-registrant-appointments',
   standalone: true,
-  imports: [RouterLink, CommonModule, ReactiveFormsModule, NgbModule], //usuniete HttpClientModule, bo globalnie w main.ts
+  imports: [RouterLink, CommonModule, ReactiveFormsModule, NgbModule],
   templateUrl: './registrant-appointments.component.html',
   styleUrl: './registrant-appointments.component.css',
   providers: [NgbDateNativeAdapter]
@@ -31,27 +31,27 @@ export class RegistrantAppointmentsComponent {
   isShowingAllAppointmentsMode: boolean = false;
   registrantId: number = 0;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, 
-              private adapter: NgbDateNativeAdapter, private clinicService: ClinicService) {
+  constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder,
+    private adapter: NgbDateNativeAdapter, private clinicService: ClinicService) {
     this.medicalAppointmentForm = this.formBuilder.group({});
     this.medicalAppointment = {
       id: 0, dateTime: new Date(), doctorId: 0, patientId: 0,
       diagnosis: '', interview: '', isFinished: false, isCancelled: false, cancellingComment: ''
-    }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    };
     this.createdAppointment = { dateTime: new Date(), doctorId: 0 };
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+      this.registrantId = +params['registrantId'];
+    });
     this.getAllDoctors();
     this.medicalAppointmentForm = this.formBuilder.group({
       date: new FormControl(null, [Validators.required, this.futureOrTodayDateValidator]),
       time: new FormControl(null, [Validators.required]),
       doctorId: new FormControl(null, [Validators.required])
-    },{
-      validators: this.dateTimeValidator // Walidator grupowy
+    }, {
+      validators: this.dateTimeValidator
     });
   }
 
@@ -63,11 +63,11 @@ export class RegistrantAppointmentsComponent {
 
   futureOrTodayDateValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
-      return null; // Nie sprawdzaj, jeśli pole jest puste
+      return null;
     }
-    const selectedDate = new Date(control.value.year, control.value.month - 1, control.value.day); // Dostosowanie dla ngbDatepicker
+    const selectedDate = new Date(control.value.year, control.value.month - 1, control.value.day);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ustawienie godziny na początek dnia
+    today.setHours(0, 0, 0, 0);
     return selectedDate >= today ? null : { notFutureOrToday: true };
   }
 
@@ -75,9 +75,9 @@ export class RegistrantAppointmentsComponent {
   get formMedicalAppointmentDate(): FormControl { return this.medicalAppointmentForm.get("date") as FormControl };
   get timeControl(): FormControl { return this.medicalAppointmentForm.get("time") as FormControl };
 
-  getAllMedicalAppointments(){
-    this.clinicService.getAllMedicalAppointmentsPatientsDoctors().subscribe(data =>{
-      this.medicalAppointments=data;
+  getAllMedicalAppointments() {
+    this.clinicService.getAllMedicalAppointmentsPatientsDoctors().subscribe(data => {
+      this.medicalAppointments = data;
     })
   }
 
@@ -85,7 +85,7 @@ export class RegistrantAppointmentsComponent {
     this.isAddNewAppointmentVisible = true;
   }
 
-  openAppointmentForm(){
+  openAppointmentForm() {
     this.isAddingMode = true;
   }
 
@@ -98,15 +98,15 @@ export class RegistrantAppointmentsComponent {
   }
 
   addMedicalAppointment(): void {
-    if(this.medicalAppointmentForm.invalid){ 
+    if (this.medicalAppointmentForm.invalid) {
       this.medicalAppointmentForm.markAllAsTouched();
       return;
     }
-    const appointmentData = this.medicalAppointmentForm.getRawValue(); // Pobranie danych z formularza
+    const appointmentData = this.medicalAppointmentForm.getRawValue();
     this.clinicService.addMedicalAppointment(appointmentData).subscribe({
       next: (result: MedicalAppointment) => {
         this.medicalAppointment = result;
-        if(this.isShowingAllAppointmentsMode == true){
+        if (this.isShowingAllAppointmentsMode == true) {
           this.getAllMedicalAppointments();
         }
         console.log('Wizyta została utworzona:', result);
@@ -118,49 +118,37 @@ export class RegistrantAppointmentsComponent {
     });
   }
 
-  cancelAdding(){
+  cancelAdding() {
     this.isAddingMode = false;
     this.medicalAppointmentForm.reset();
     this.resetForm();
   }
 
-  showAllAppointments(){
+  showAllAppointments() {
     this.getAllMedicalAppointments();
     this.isShowingAllAppointmentsMode = true;
   }
 
-  closeAllAppointments(){
+  closeAllAppointments() {
     this.isShowingAllAppointmentsMode = false;
   }
 
-  getAllDoctors(){
-    this.clinicService.getAllAvailableDoctors().subscribe(data =>{
-      this.doctors=data;
+  getAllDoctors() {
+    this.clinicService.getAllAvailableDoctors().subscribe(data => {
+      this.doctors = data;
     })
   }
 
-  /*edit(medicalAppointment: MedicalAppointment){
-    this.clinicService.editMedicalAppointment(medicalAppointment)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    })
-  } */
-
-  delete(medicalAppointmentId: number){
+  delete(medicalAppointmentId: number) {
     this.clinicService.deleteMedicalAppointment(medicalAppointmentId)
-    .subscribe({
-      next: (response) => {
-        console.log("Action performed successfully:", response);
-        this.getAllMedicalAppointments();
-      },
-      error: (error) => {
-        console.error("Error performing action:", error);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          console.log("Action performed successfully:", response);
+          this.getAllMedicalAppointments();
+        },
+        error: (error) => {
+          console.error("Error performing action:", error);
+        }
+      });
   }
 }

@@ -30,8 +30,8 @@ export class RegistrantLaboratoryTestTypesComponent {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+      this.registrantId = +params['registrantId'];
+    });
     this.getAllLaboratoryTestTypes();
     this.laboratoryTestTypesForm = this.formBuilder.group({
       id: Number,
@@ -39,7 +39,7 @@ export class RegistrantLaboratoryTestTypesComponent {
     });
   }
 
-  get formId(): FormControl { return this.laboratoryTestTypesForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl { return this.laboratoryTestTypesForm?.get("id") as FormControl };
   get formName(): FormControl { return this.laboratoryTestTypesForm?.get("name") as FormControl };
 
   getAllLaboratoryTestTypes() {
@@ -97,13 +97,13 @@ export class RegistrantLaboratoryTestTypesComponent {
 
   cancelAdding() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.laboratoryTestTypesForm.reset();
   }
 
   cancelEditing() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.laboratoryTestTypesForm.reset();
   }
 
@@ -113,18 +113,17 @@ export class RegistrantLaboratoryTestTypesComponent {
       return;
     }
     const diagnosticTestData = this.laboratoryTestTypesForm.getRawValue();
-    this.clinicService.addLaboratoryTestType(diagnosticTestData) // Bez obiektu opakowującego
+    this.clinicService.addLaboratoryTestType(diagnosticTestData)
       .subscribe({
         next: (result: DiagnosticTestType) => {
-          this.laboratoryTestType = result; // Zwrócony obiekt przypisany do zmiennej
+          this.laboratoryTestType = result;
           this.getAllLaboratoryTestTypes()
           this.isAddingMode = false;
           this.laboratoryTestTypesForm.reset();
         },
         error: (err) => {
-          console.error("Error occurred:", err); // Obsługa błędów
+          console.error("Error occurred:", err);
         }
       });
   }
-
 }

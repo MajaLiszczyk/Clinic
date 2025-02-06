@@ -2,9 +2,6 @@ import { MedicalAppointmentPatientDoctorDto } from "../dtos/medical-appointment-
 import { MedicalAppointment } from "./medical-appointment";
 
 export interface AllMedicalAppointments{
-    /*pastMedicalAppointments: MedicalAppointment[];
-    futureMedicalAppointments: MedicalAppointment[];*/
     pastMedicalAppointments: MedicalAppointmentPatientDoctorDto[];
     futureMedicalAppointments: MedicalAppointmentPatientDoctorDto[];
-    
 }

@@ -25,51 +25,50 @@ export class RegistrantDoctorsComponent {
   doctor: Doctor;
   doctorWithSpecialisations: DoctorWithSpcecialisations;
   isEditableMode = false;
-  isAddingMode = false; //niepotrzebne?
+  isAddingMode = false; 
   doctorSpecialisationsList: number[] = [];
   specialisationsArray: any;
   registrantId: number = 0;
   passwordVisible = false;
 
-
   constructor(private route: ActivatedRoute, private http: HttpClient, private formBuilder: FormBuilder, private clinicService: ClinicService) {
     this.doctorForm = this.formBuilder.group({});
-    this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [], isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
-    this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [], isAvailable: true }; //wymaga, bo - "Property 'doctor' has no initializer and is not definitely assigned in the constructor."
+    this.doctorWithSpecialisations = { id: 0, name: '', surname: '', doctorNumber: '', specialisationIds: [], isAvailable: true };
+    this.doctor = { id: 0, name: '', surname: '', doctorNumber: '', specialisation: [], isAvailable: true };
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.registrantId = +params['registrantId']; // Przypisanie id z URL
-      });
+      this.registrantId = +params['registrantId'];
+    });
     this.getAllDoctors();
     this.getAllAvailableSpecialisations();
     this.doctorForm = this.formBuilder.group({
-      medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }), //pusta tablica chyba ok
+      medicalSpecialisationsIds: new FormArray([], { validators: [atLeastOneSelectedValidator()] }),
       id: Number,
       name: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
       surname: new FormControl(null, { validators: [Validators.required, Validators.maxLength(100), Validators.pattern(/^[a-zA-ZąęłńśćżźóĄĘŁŃŚĆŻŹÓ]+$/)] }),
-      doctorNumber: new FormControl(null, {validators: [Validators.required, Validators.pattern(/^[1-9][0-9]{6}$/)]}),
-      email: new FormControl(null, { validators: [Validators.required, Validators.email, // Sprawdza poprawność adresu email
-        Validators.maxLength(256)] }),
-      /*password: new FormControl(null, { validators: [Validators.required, Validators.minLength(6),
-        Validators.maxLength(100)] }),*/
+      doctorNumber: new FormControl(null, { validators: [Validators.required, Validators.pattern(/^[1-9][0-9]{6}$/)] }),
+      email: new FormControl(null, {
+        validators: [Validators.required, Validators.email,
+        Validators.maxLength(256)]
+      }),
       password: new FormControl(null, { validators: [Validators.required, passwordValidator] }),
     });
   }
 
-  get formId(): FormControl { return this.doctorForm?.get("id") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formName(): FormControl { return this.doctorForm?.get("name") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formSurname(): FormControl { return this.doctorForm?.get("surname") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formDoctorNumber(): FormControl { return this.doctorForm?.get("doctorNumber") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formSpecialisations(): FormControl { return this.doctorForm?.get("MedicalSpecialisationsIds") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formEmail(): FormControl { return this.doctorForm?.get("email") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
-  get formPassword(): FormControl { return this.doctorForm?.get("password") as FormControl }; //CZYM GROZI ZNAK ZAPYTANIA TUTAJ?
+  get formId(): FormControl { return this.doctorForm?.get("id") as FormControl };
+  get formName(): FormControl { return this.doctorForm?.get("name") as FormControl };
+  get formSurname(): FormControl { return this.doctorForm?.get("surname") as FormControl };
+  get formDoctorNumber(): FormControl { return this.doctorForm?.get("doctorNumber") as FormControl };
+  get formSpecialisations(): FormControl { return this.doctorForm?.get("MedicalSpecialisationsIds") as FormControl };
+  get formEmail(): FormControl { return this.doctorForm?.get("email") as FormControl };
+  get formPassword(): FormControl { return this.doctorForm?.get("password") as FormControl };
 
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;
   }
-  
+
   getAllAvailableSpecialisations() {
     this.clinicService.getAllAvailableSpecialisations().subscribe(data => {
       this.specialisations = data;
@@ -82,7 +81,7 @@ export class RegistrantDoctorsComponent {
       return;
     }
     const formValue = this.doctorForm.getRawValue();
-    this.clinicService.addDoctor(formValue) // Bez obiektu opakowującego
+    this.clinicService.addDoctor(formValue)
       .subscribe({
         next: (result: Doctor) => {
           this.doctor = result;
@@ -95,10 +94,9 @@ export class RegistrantDoctorsComponent {
           this.formId.setValue('');
           this.doctorForm.reset();
 
-          //CZYSZCZENIE COMBOBOXA:
           const specialisationsArrayTemp = this.doctorForm.get('medicalSpecialisationsIds') as FormArray;
           while (specialisationsArrayTemp.length) {
-            specialisationsArrayTemp.removeAt(0); // Usuwanie każdego kontrolera
+            specialisationsArrayTemp.removeAt(0);
           }
         },
         error: (err) => {
@@ -112,9 +110,9 @@ export class RegistrantDoctorsComponent {
     this.specialisationsArray = this.doctorForm.get('medicalSpecialisationsIds') as FormArray;
 
     if (checkbox.checked) {
-      this.specialisationsArray.push(new FormControl(+checkbox.value)); // Zamiana na number
+      this.specialisationsArray.push(new FormControl(+checkbox.value));
       specialisation.checked = true;
-      this.doctorSpecialisationsList.push(specialisation.id); //lista starych i nowych specek
+      this.doctorSpecialisationsList.push(specialisation.id);
 
     } else {
       const index = this.specialisationsArray.controls.findIndex(
@@ -145,12 +143,12 @@ export class RegistrantDoctorsComponent {
         if (specialisation.id == doctorSpecialisation) {
           specialisation.checked = true;
           this.doctorSpecialisationsList.push(doctorSpecialisation); //dodanie starych specjalizacji
-          this.specialisationsArray.push(new FormControl(doctorSpecialisation)); // Zamiana na number
+          this.specialisationsArray.push(new FormControl(doctorSpecialisation));
         }
       }
     }
     this.isEditableMode = true;
-    this.isAddingMode = false; //niepotrzebne?
+    this.isAddingMode = false;
   }
 
   addNewDoctor() {
@@ -163,13 +161,13 @@ export class RegistrantDoctorsComponent {
 
   cancelAdding() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.doctorForm.reset();
   }
 
   cancelEditing() {
     this.isAddingMode = false;
-    this.isEditableMode = false; //niepotrzebne?
+    this.isEditableMode = false;
     this.doctorForm.reset();
   }
 
@@ -194,7 +192,7 @@ export class RegistrantDoctorsComponent {
           console.log("Action performed successfullyy:", response);
           this.getAllDoctors();
           this.isEditableMode = false;
-          this.doctorSpecialisationsList = []; //czyszczenie listy?
+          this.doctorSpecialisationsList = [];
           this.doctorSpecialisationsList = [];
           this.doctorForm.reset();
         },

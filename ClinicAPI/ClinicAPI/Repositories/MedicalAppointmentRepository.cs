@@ -27,7 +27,7 @@ namespace ClinicAPI.Repositories
         {
             var appointment = await (from ma in _context.MedicalAppointment
                                       join p in _context.Patient on ma.PatientId equals p.Id into patientJoin
-                                     from p in patientJoin.DefaultIfEmpty() //left join zeby zwracalo tez wizyty bez acjentow (patientId ==0)
+                                     from p in patientJoin.DefaultIfEmpty() //left join zeby zwracalo tez wizyty bez pacjentow (patientId ==0)
                                      where ma.Id == id
                                       select new ReturnMedicalAppointmentPatientDto
                                       {

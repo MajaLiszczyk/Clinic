@@ -1,11 +1,3 @@
-<!-- <div>
-    <app-add-patient [isAddingMode]="isAddingMode" 
-    (isAddingModeChange)="updateAddingMode($event)">></app-add-patient>
-</div> 
-<div>
-    <app-get-patients [isAddingMode]="isAddingMode"></app-get-patients>
-</div> -->
-
 <a [routerLink]="['/registrant', registrantId]" class="btn btn-secondary my-4">Return</a>
 <div class="col mb-4 d-flex justify-content-between my-4">
     <h1>Patients</h1>
@@ -27,7 +19,6 @@
             <label class="form-label">Name</label>
             <input formControlName="name" type="string" step="0.01" class="form-control" aria-label="name"
                 [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)">
-            <!-- [class.is-invalid]="formName.invalid && (formName.touched || formName.dirty)"> -->
             <div class="invalid-feedback">
                 <span *ngIf="formName?.errors?.['required']">Required</span>
                 <span *ngIf="formName?.errors?.['pattern']">Only letters</span>
@@ -37,7 +28,6 @@
             <label class="form-label">Surname</label>
             <input formControlName="surname" type="string" class="form-control" aria-label="surname"
                 [class.is-invalid]="formSurname.invalid && (formSurname.touched || formSurname.dirty)">
-            <!-- [class.is-invalid]="formSurname.invalid  && (formSurname.touched || formSurname.dirty)">-->
             <div class="invalid-feedback">
                 <span *ngIf="formSurname?.errors?.['required']">Required</span>
                 <span *ngIf="formSurname?.errors?.['pattern']">Only letters</span>
@@ -47,7 +37,6 @@
             <label class="form-label">PESEL</label>
             <input formControlName="pesel" type="string" class="form-control" aria-label="pesel"
                 [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)">
-            <!-- [class.is-invalid]="formPesel.invalid && (formPesel.touched || formPesel.dirty)"> -->
             <div class="invalid-feedback">
                 <span *ngIf="formPesel?.errors?.['minlength']">Pesel length: 11</span>
                 <span *ngIf="formPesel?.errors?.['maxlength']">Pesel length: 11</span>
@@ -55,8 +44,6 @@
                 <span *ngIf="formPesel?.errors?.['pattern']"> Only digits</span>
             </div>
         </div>
-
-
 
         <div class="formGroup mb-3" *ngIf="isCreateAccountMode">
             <label class="form-label">E-mail address</label>
@@ -71,31 +58,29 @@
 
         <div *ngIf="isCreateAccountMode" class="formGroup mb-3">
             <label class="form-label">Password</label>
-            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control" aria-label="password"
+            <input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" class="form-control"
+                aria-label="password"
                 [class.is-invalid]="formPassword.invalid && (formPassword.touched || formPassword.dirty)">
-                <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
+            <button type="button" (click)="togglePasswordVisibility()">Toggle</button>
             <div class="invalid-feedback">
                 <span *ngIf="formPassword?.errors?.['required']">Required</span>
                 <div *ngIf="formPassword?.errors?.['hasNumber']">
                     {{ formPassword?.errors?.['hasNumber'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasUppercase']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasUppercase']">
                     {{ formPassword?.errors?.['hasUppercase'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasLowercase']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasLowercase']">
                     {{ formPassword?.errors?.['hasLowercase'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['hasSpecialCharacter']">
                     {{ formPassword.errors?.['hasSpecialCharacter'] }}
-                  </div>
-                  <div *ngIf="formPassword?.errors?.['isValidLength']">
+                </div>
+                <div *ngIf="formPassword?.errors?.['isValidLength']">
                     {{ formPassword.errors?.['isValidLength'] }}
-                  </div>
-                <!--<span *ngIf="formPassword?.errors?.['minlength']">Min length: 6</span>
-                <span *ngIf="formPassword?.errors?.['maxlength']">Max length: 100</span> -->
+                </div>
             </div>
         </div>
-
 
         <div>
             <div class="d-flex justify-content-center mb-5 mt-5">
@@ -111,22 +96,6 @@
     </form>
 
     <div class="mt-4">
-        <!--<div *ngIf="isVisible">
-        <form [formGroup]="patientForm" >
-            <div class="formGroup col-md-2 offset-md-5 d-flex justify-content-center w-100">
-                <input formControlName="name" type="string" class="form-control w-100" aria-label="name" 
-                    [class.is-invalid]="formName.invalid">
-                <input formControlName="surname" type="string" class="form-control w-100" aria-label="surname" 
-                    [class.is-invalid]="formSurname.invalid">
-                <input formControlName="pesel" type="string" class="form-control w-100" aria-label="pesel" 
-                    [class.is-invalid]="formPesel.invalid">
-
-            </div>
-            <button type="button" class="btn  btn-success float-right" (click)="update()">Save</button>
-        </form>
-    </div> -->
-
-
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -143,7 +112,6 @@
                         PESEL
                     </th>
                     <th>
-                        <!-- przyciski -->
                     </th>
                 </tr>
             </thead>
@@ -169,10 +137,12 @@
                         <button [disabled]="isAddingMode || isEditableMode || !patient.isAvailable" type="button"
                             class="btn btn-outline-danger mx-2" (click)="delete(patient.id)">Delete</button>
 
-                        <a [routerLink]="['/patient', patient.id, registrantId]" [queryParams]="{isRegistrantMode: true }"
-                            class="btn btn-primary ms-2 me-4">Medical Appointments</a>
-                        <a [routerLink]="['/patient-laboratory-appointments', patient.id , registrantId]" [queryParams]="{isRegistrantMode: true }"
-                             class="btn btn-primary ms-2 me-4">Laboratory Appointments</a>                            
+                        <a [routerLink]="['/patient', patient.id, registrantId]"
+                            [queryParams]="{isRegistrantMode: true }" class="btn btn-primary ms-2 me-4">Medical
+                            Appointments</a>
+                        <a [routerLink]="['/patient-laboratory-appointments', patient.id , registrantId]"
+                            [queryParams]="{isRegistrantMode: true }" class="btn btn-primary ms-2 me-4">Laboratory
+                            Appointments</a>
                     </td>
                 </tr>
                 <tr *ngIf="patients.length === 0">
@@ -181,7 +151,4 @@
             </tbody>
         </table>
     </div>
-
-
-
 </div>

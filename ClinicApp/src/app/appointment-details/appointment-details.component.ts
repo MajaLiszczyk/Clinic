@@ -23,17 +23,17 @@ import { MedicalAppointmentPatientDto } from '../dtos/medical-appointment-patien
 })
 
 export class AppointmentDetailsComponent {
-  //OTRZYMANE Z PARAMETRÓW
   laboratoryTestState = LaboratoryTestState;
-
   appointmentId: number = 0;
   isEditable: boolean = false; // wizyty zakończone/anulowane vs oczekujące 
   isCancelClicked: boolean = false;
   isAppointmentCancelled: boolean = false;
 
-  medicalAppointment: MedicalAppointmentPatientDto = { id: 0, dateTime: new Date(), patientId: 0, patientName: ""
-                      , patientSurname: "", doctorId: 0, interview: '', diagnosis: '', isFinished: false
-                      , isCancelled: false, cancellingComment: '' };
+  medicalAppointment: MedicalAppointmentPatientDto = {
+    id: 0, dateTime: new Date(), patientId: 0, patientName: ""
+    , patientSurname: "", doctorId: 0, interview: '', diagnosis: '', isFinished: false
+    , isCancelled: false, cancellingComment: ''
+  };
   medicalAppointmentForm: FormGroup;
   cancelAppointmentForm: FormGroup;
 
@@ -47,14 +47,14 @@ export class AppointmentDetailsComponent {
   diagnosticTestTypes: DiagnosticTestType[] = [];
   laboratoryTestTypes: LaboratoryTestType[] = [];
 
-  isDisabled: boolean = true; //ZMIENIĆ NAZWĘ przycisk select niedostępny póki nie zostanie wybrany typ badania.
+  isDisabled: boolean = true;
   selectedDiagnosticTestType: DiagnosticTestType;
   selectedLaboratoryTestType: LaboratoryTestType;
 
   isDiagnosticTestVisible: boolean = false;
   isDiagnosticTestAddingMode: boolean = false;
   isDiagnosticTestEditableMode: boolean = false;
-  diagnosticTestsTempList: DiagnosticTest[] = []; //chyba niepotrzebne
+  diagnosticTestsTempList: DiagnosticTest[] = [];
   pastDiagnosticTests: DiagnosticTest[] = [];
   editableDiagnosticTest: DiagnosticTest;
   listCounter: number = 0;
@@ -62,7 +62,7 @@ export class AppointmentDetailsComponent {
   isLaboratoryTestVisible: boolean = false;
   isLaboratoryTestAddingMode: boolean = false;
   isLaboratoryTestEditableMode: boolean = false;
-  laboratoryTestsTempList: LaboratoryTest[] = []; //chyba niepotrzebne
+  laboratoryTestsTempList: LaboratoryTest[] = [];
   pastLaboratoryTests: LaboratoryTest[] = [];
   editableLaboratoryTest: LaboratoryTest;
   listLabotatoryTestCounter: number = 0;
@@ -72,13 +72,17 @@ export class AppointmentDetailsComponent {
     this.selectedDiagnosticTestType = { id: 0, name: '', isAvailable: true };
     this.selectedLaboratoryTestType = { id: 0, name: '', isAvailable: true };
 
-    this.editableDiagnosticTest = { id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0
-                                  , diagnosticTestTypeName: '', description: '' };
-    this.editableLaboratoryTest = { id: 0, laboratoryTestsGroupId: 0, state: LaboratoryTestState.Comissioned, laboratoryTestTypeId: 0
-                                  , laboratoryTestTypeName: '', result: '', doctorNote: '', rejectComment: '' };
+    this.editableDiagnosticTest = {
+      id: 0, medicalAppointmentId: this.appointmentId, diagnosticTestTypeId: 0
+      , diagnosticTestTypeName: '', description: ''
+    };
+    this.editableLaboratoryTest = {
+      id: 0, laboratoryTestsGroupId: 0, state: LaboratoryTestState.Comissioned, laboratoryTestTypeId: 0
+      , laboratoryTestTypeName: '', result: '', doctorNote: '', rejectComment: ''
+    };
 
     this.medicalAppointmentForm = this.fb.group({
-      interviewText: new FormControl(null, { validators: [Validators.required] }), // Domyślna wartość
+      interviewText: new FormControl(null, { validators: [Validators.required] }),
       diagnosisText: new FormControl(null, { validators: [Validators.required] })
     });
     this.cancelAppointmentForm = this.fb.group({
@@ -111,12 +115,12 @@ export class AppointmentDetailsComponent {
       diagnosticTypeTestType: new FormControl(null, { validators: [Validators.required] })
     });
     this.chooseDiagnosticTestTypeForm.get('diagnosticTypeTestType')?.valueChanges.subscribe(value => {
-      this.isDisabled = !value; // Ustawienie isEnabled na true, jeśli wartość jest wybrana
+      this.isDisabled = !value;
       console.log('Diagnostic test type selected:', value, 'isDisabled:', this.isDisabled);
     });
     //DIAGNOSTIC TEST FORM
     this.diagnosticTestForm = this.fb.group({
-      diagnosticTestTypeName: new FormControl(null, { validators: [Validators.required] }), //ZMIENIC NA NULL? //chyba też required?
+      diagnosticTestTypeName: new FormControl(null, { validators: [Validators.required] }),
       description: new FormControl(null, { validators: [Validators.required] }),
     });
 
@@ -125,26 +129,26 @@ export class AppointmentDetailsComponent {
       laboratoryTypeTestType: new FormControl(null, { validators: [Validators.required] })
     });
     this.chooseLaboratoryTestTypeForm.get('laboratoryTypeTestType')?.valueChanges.subscribe(value => {
-      this.isDisabled = !value; // Ustawienie isEnabled na true, jeśli wartość jest wybrana
+      this.isDisabled = !value;
       console.log('Laboratory test type selected:', value, 'isDisabled:', this.isDisabled);
     });
     //LABORATORY TEST FORM
     this.laboratoryTestForm = this.fb.group({
-      laboratoryTestTypeName: new FormControl(null, { validators: [Validators.required] }), //ZMIENIC NA NULL? //chyba też required?
+      laboratoryTestTypeName: new FormControl(null, { validators: [Validators.required] }),
       doctorNote: new FormControl(null, { validators: [Validators.required] }),
     });
 
 
     if (this.isEditable) {
-      this.medicalAppointmentForm.get('interviewText')?.enable(); // Włączanie kontrolki
+      this.medicalAppointmentForm.get('interviewText')?.enable();
       this.medicalAppointmentForm.get('diagnosisText')?.enable();
       this.cancelAppointmentForm.get('cancelComment')?.enable();
       this.diagnosticTestForm.get('diagnosticTestTypeName')?.disable();
       this.laboratoryTestForm.get('laboratoryTestTypeName')?.disable();
     }
     else {
-      this.medicalAppointmentForm.get('interviewText')?.disable(); // Wyłączanie kontrolki
-      this.medicalAppointmentForm.get('diagnosisText')?.disable(); // Wyłączanie kontrolki
+      this.medicalAppointmentForm.get('interviewText')?.disable();
+      this.medicalAppointmentForm.get('diagnosisText')?.disable();
       this.cancelAppointmentForm.get('cancelComment')?.disable();
       this.diagnosticTestForm.get('diagnosticTestTypeName')?.disable();
       this.laboratoryTestForm.get('laboratoryTestTypeName')?.disable();
@@ -153,7 +157,7 @@ export class AppointmentDetailsComponent {
     this.getMedicalAppointmentsDetails(this.appointmentId);
     console.log('Wywiad 2: ', this.medicalAppointment.interview);
     this.getDiagnosticTestsByAppointmentId();
-    this.getLaboratoryTestsByAppointmentId(); //hehe po  grupie trzeba szukać?
+    this.getLaboratoryTestsByAppointmentId();
 
   }
 
@@ -178,7 +182,7 @@ export class AppointmentDetailsComponent {
     const testTypeName = this.selectedDiagnosticTestType.name;
     this.diagnosticTestForm.get('diagnosticTestTypeName')?.setValue(testTypeName);
   }
-  
+
   autoResize(event: Event): void {
     const textarea = event.target as HTMLTextAreaElement;
     textarea.style.height = 'auto';
@@ -203,7 +207,7 @@ export class AppointmentDetailsComponent {
     this.clinicService.getAllLaboratoryTestTypes().subscribe(data => {
       this.laboratoryTestTypes = data;
     })
-  } 
+  }
 
   getDiagnosticTestsByAppointmentId() {
     this.clinicService.getDiagnosticTestsByAppointmentId(this.appointmentId).subscribe(data => {
@@ -220,7 +224,7 @@ export class AppointmentDetailsComponent {
   edit(diagnosticTest: DiagnosticTest) {
     this.editableDiagnosticTest = diagnosticTest;
     this.isDiagnosticTestEditableMode = true;
-    this.isDiagnosticTestAddingMode = false; //niepotrzebne?
+    this.isDiagnosticTestAddingMode = false;
     this.formDescription.setValue(diagnosticTest.description);
     this.formDiagnosticTestType.setValue(diagnosticTest.diagnosticTestTypeName);
   }
@@ -228,7 +232,7 @@ export class AppointmentDetailsComponent {
   editLaboratoryTest(laboratoryTest: LaboratoryTest) {
     this.editableLaboratoryTest = laboratoryTest;
     this.isLaboratoryTestEditableMode = true;
-    this.isLaboratoryTestAddingMode = false; //niepotrzebne?
+    this.isLaboratoryTestAddingMode = false;
     this.formDoctorNote.setValue(laboratoryTest.doctorNote);
     this.formLaboratoryTestType.setValue(laboratoryTest.laboratoryTestTypeName);
   }
@@ -253,19 +257,19 @@ export class AppointmentDetailsComponent {
 
   cancelAddingDiagnosticTest() {
     this.isDiagnosticTestAddingMode = false;
-    this.isDiagnosticTestEditableMode = false; //niepotrzebne?
+    this.isDiagnosticTestEditableMode = false;
     this.diagnosticTestForm.reset();
   }
 
   cancelAddingLaboratoryTest() {
     this.isLaboratoryTestAddingMode = false;
-    this.isLaboratoryTestEditableMode = false; //niepotrzebne?
+    this.isLaboratoryTestEditableMode = false;
     this.laboratoryTestForm.reset();
   }
 
   updateDiagnosticTest() {
     this.isDiagnosticTestAddingMode = false;
-    this.isDiagnosticTestEditableMode = false; //niepotrzebne?
+    this.isDiagnosticTestEditableMode = false;
     const desc: string = this.diagnosticTestForm.get('description')?.value
     for (let i = 0; i < this.pastDiagnosticTests.length; ++i) {
       if (this.pastDiagnosticTests[i].id == this.editableDiagnosticTest.id) {
@@ -276,7 +280,7 @@ export class AppointmentDetailsComponent {
 
   updateLaboratoryTest() {
     this.isLaboratoryTestAddingMode = false;
-    this.isLaboratoryTestEditableMode = false; //niepotrzebne?
+    this.isLaboratoryTestEditableMode = false;
     const desc: string = this.laboratoryTestForm.get('description')?.value
     for (let i = 0; i < this.pastLaboratoryTests.length; ++i) {
       if (this.pastLaboratoryTests[i].id == this.editableLaboratoryTest.id) {
@@ -287,32 +291,35 @@ export class AppointmentDetailsComponent {
 
   saveDiagnosticTest() {
     const desc: string = this.diagnosticTestForm.get('description')?.value
-    const dTest: DiagnosticTest = { id: this.listCounter, medicalAppointmentId: this.appointmentId
-                                  , diagnosticTestTypeId: this.selectedDiagnosticTestType.id
-                                  , diagnosticTestTypeName: this.selectedDiagnosticTestType.name, description: desc };
+    const dTest: DiagnosticTest = {
+      id: this.listCounter, medicalAppointmentId: this.appointmentId
+      , diagnosticTestTypeId: this.selectedDiagnosticTestType.id
+      , diagnosticTestTypeName: this.selectedDiagnosticTestType.name, description: desc
+    };
     this.diagnosticTestsTempList.push(this.diagnosticTestForm.getRawValue());
     this.pastDiagnosticTests.push(dTest);
     this.diagnosticTestForm.reset();
     this.isDiagnosticTestAddingMode = false;
-    this.listCounter++; //MYŚLĘ ŻE BARDZO ZŁA PRAKTYKA WYMYŚLANIA SZTUCZNYCH ID
+    this.listCounter++;
   }
 
   saveLaboratoryTest() {
     const doctorNote: string = this.laboratoryTestForm.get('doctorNote')?.value
-    const dTest: LaboratoryTest = { id: this.listCounter, laboratoryTestsGroupId: 0, state: LaboratoryTestState.Comissioned
-                                  , result: '', rejectComment: '',  laboratoryTestTypeId: this.selectedLaboratoryTestType.id
-                                  , laboratoryTestTypeName: this.selectedLaboratoryTestType.name, doctorNote: doctorNote };
+    const dTest: LaboratoryTest = {
+      id: this.listCounter, laboratoryTestsGroupId: 0, state: LaboratoryTestState.Comissioned
+      , result: '', rejectComment: '', laboratoryTestTypeId: this.selectedLaboratoryTestType.id
+      , laboratoryTestTypeName: this.selectedLaboratoryTestType.name, doctorNote: doctorNote
+    };
     this.laboratoryTestsTempList.push(this.laboratoryTestForm.getRawValue());
     this.pastLaboratoryTests.push(dTest);
     this.laboratoryTestForm.reset();
     this.isLaboratoryTestAddingMode = false;
-    this.listLabotatoryTestCounter++; //MYŚLĘ ŻE BARDZO ZŁA PRAKTYKA WYMYŚLANIA SZTUCZNYCH ID
+    this.listLabotatoryTestCounter++;
   }
 
 
   //------------------------------------------MEDICAL APPOINTMENT------------------------------------------------
   getMedicalAppointmentsDetails(appointmentId: number) {
-    //this.http.get<MedicalAppointment>(this.APIUrl + "/Get/" + appointmentId).subscribe(data => {
     this.clinicService.getMedicalAppointmentByIdPatient(appointmentId).subscribe(data => {
       this.medicalAppointment = data;
       console.log('Wywiad: ', this.medicalAppointment.interview);
@@ -349,7 +356,6 @@ export class AppointmentDetailsComponent {
           console.error("Error occurred:", error);
         }
       });
-    //DOROBIĆ WYSKAKUJĄCE OKIENKO
   }
 
   cancelCancelComment() {
@@ -367,9 +373,9 @@ export class AppointmentDetailsComponent {
         dateTime: this.medicalAppointment.dateTime,
         patientId: this.medicalAppointment.patientId,
         doctorId: this.medicalAppointment.doctorId,
-        interview: this.formInterview.value, //
-        diagnosis: this.formDiagnosis.value, //
-        isFinished: true, //
+        interview: this.formInterview.value,
+        diagnosis: this.formDiagnosis.value,
+        isFinished: true,
         isCancelled: false,
         cancellingComment: this.medicalAppointment.cancellingComment
       },
@@ -385,12 +391,11 @@ export class AppointmentDetailsComponent {
       }))
     };
 
-    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.clinicService.finishMedicalAppointment(finishAppointmentDto)
       .subscribe({
         next: (response) => {
           console.log("Operation completed successfully:", response);
-          this.router.navigate(['/doctor-appointments/' + this.medicalAppointment.doctorId, 0]); //ID MOŻE Z SESJI?
+          this.router.navigate(['/doctor-appointments/' + this.medicalAppointment.doctorId, 0]); 
         },
         error: (error) => {
           console.error("Error occurred:", error);

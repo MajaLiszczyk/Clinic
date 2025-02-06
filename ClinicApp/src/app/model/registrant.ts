@@ -4,5 +4,4 @@ export interface Registrant{
     name: string;
     surname: string;
     isAvailable: boolean;
-
 }
